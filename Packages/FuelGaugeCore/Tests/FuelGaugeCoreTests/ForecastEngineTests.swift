@@ -237,6 +237,20 @@ import Testing
         #expect(ForecastText.learning(forecast, now: now) == "Forecast in about 2h")
     }
 
+    @Test func oldReadingsSayWhenTheyWereTaken() throws {
+        let weekly = [reading(90, minutesAgo: 600, provider: .grokBot, limit: "weekly", minutes: 10080, resetsIn: 30),
+                      reading(99, minutesAgo: 85, provider: .grokBot, limit: "weekly", minutes: 10080, resetsIn: 30)]
+        let stale = try #require(ForecastEngine.forecast(for: weekly, now: now))
+        let asOf = try #require(ForecastText.asOf(stale, now: now))
+        #expect(asOf.hasPrefix("as of "))
+        #expect(ForecastText.usage(stale, now: now).hasSuffix(" · \(asOf)"))
+
+        let recent = [reading(40, minutesAgo: 60), reading(50, minutesAgo: 10)]
+        let fresh = try #require(ForecastEngine.forecast(for: recent, now: now))
+        #expect(ForecastText.asOf(fresh, now: now) == nil)
+        #expect(!ForecastText.usage(fresh, now: now).contains("as of"))
+    }
+
     @Test func chartsZoomToTheRecentStretch() throws {
         let weekly = [reading(30, minutesAgo: 600, limit: "seven_day", minutes: 10080, resetsIn: 100),
                       reading(40, minutesAgo: 0, limit: "seven_day", minutes: 10080, resetsIn: 100)]

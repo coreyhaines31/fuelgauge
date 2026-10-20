@@ -81,7 +81,8 @@ struct WindowRow: View {
 
     /// "Makes it, about 14% by then · resets 2p", or "Learning your pace, forecast in about 2h · resets 2p".
     private var compactLine: String {
-        let resets = "resets \(ForecastText.time(forecast.resetsAt, now: now))"
+        var resets = "resets \(ForecastText.time(forecast.resetsAt, now: now))"
+        if let asOf = ForecastText.asOf(forecast, now: now) { resets += " · \(asOf)" }
         switch forecast.verdict {
         case .learning:
             return "Learning your pace, \(ForecastText.learning(forecast, now: now).lowercased()) · \(resets)"
