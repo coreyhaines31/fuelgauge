@@ -32,7 +32,7 @@ def sources(*links):
     items = "".join(f'<li><a href="{url}">{name}</a></li>' for name, url in links)
     return f"""
         <h2>Sources</h2>
-        <p>Checked on {VERIFIED}. Anthropic changes plans from time to time, so the help pages are the final word.</p>
+        <p>Checked on {VERIFIED}. Plans change from time to time, so the providers' own pages are the final word.</p>
         <ul>{items}</ul>"""
 
 
