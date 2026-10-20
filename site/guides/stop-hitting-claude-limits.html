@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to stop hitting Claude usage limits in Claude Code</title>
+  <meta name="description" content="Why Claude Code burns through your Pro or Max limit and what actually helps: /clear, the right model and effort, fewer MCP tools, subagents, and a forecast.">
+  <link rel="canonical" href="https://fuelgauge.app/guides/stop-hitting-claude-limits">
+  <meta property="og:title" content="How to stop hitting Claude usage limits in Claude Code">
+  <meta property="og:description" content="Why Claude Code burns through your Pro or Max limit and what actually helps: /clear, the right model and effort, fewer MCP tools, subagents, and a forecast.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Fuel Gauge">
+  <meta property="og:image" content="https://fuelgauge.app/images/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://fuelgauge.app/guides/stop-hitting-claude-limits">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to stop hitting Claude usage limits in Claude Code">
+  <meta name="twitter:description" content="Why Claude Code burns through your Pro or Max limit and what actually helps: /clear, the right model and effort, fewer MCP tools, subagents, and a forecast.">
+  <meta name="theme-color" content="#fbe9d6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/images/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/images/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/site.css">
+  <script src="https://cdn.usefathom.com/script.js" data-site="ETCPQLNF" defer></script>
+</head>
+<body>
+  <div class="sky" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="nav">
+    <div class="wrap">
+      <a class="brand" href="/"><img src="/images/icon.svg" alt="" width="28" height="28"> Fuel Gauge</a>
+      <nav>
+        <a href="/#how">How it works</a>
+        <a href="/limits">Limits</a>
+        <a href="/guides">Guides</a>
+        <a href="/compare">Compare</a>
+        <a href="/cli">For agents</a>
+        <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg">Download</a>
+      </nav>
+    </div>
+  </div>
+  <main>
+    <div class="sub-hero">
+      <div class="wrap narrow">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Fuel Gauge</a> <span>›</span> <a href="/guides">Guides</a></nav>
+        <div class="eyebrow">Guide</div>
+        <h1>How to stop hitting your Claude limits</h1>
+        <p class="lede">Most limit trouble in Claude Code comes from a few habits. Here's what uses your limit fastest, what saves the most, and how to see a wall coming.</p>
+        <div class="tldr glass"><h2>The short answer</h2><p>Claude Code sends your whole conversation with every request, so long sessions are the biggest drain. Run <code>/clear</code> between unrelated tasks, match the model and effort level to the job, turn off MCP servers you aren't using, and send noisy work to subagents. Then watch your pace, so you know before a big task whether your limit will last.</p></div>
+      </div>
+    </div>
+    <section class="tight" id="why">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>Why usage climbs in a long session</h2>
+        <p>Claude Code sends the full conversation with every request, and again with each batch of tool results. Caching makes re-reading history cheaper, but it still counts, so a one-line question in a session that's been open all day draws usage for the whole conversation.</p>
+        <p>Other things that add up while you're not looking:</p>
+        <ul>
+          <li><strong>Cache misses:</strong> your first message after a long break reprocesses the full context.</li>
+          <li><strong>Scheduled loops:</strong> a <code>/loop</code> task fires on its interval even while you're idle, sending your full context each time.</li>
+          <li><strong>Subagents and agent teams:</strong> each one sends its own requests. Agent teams can use about 7x the tokens of a normal session when teammates run in plan mode.</li>
+          <li><strong>Compacting a huge context:</strong> <code>/compact</code> reads everything it summarizes, so it's a big request itself.</li>
+        </ul>
+        <p>On Pro and Max, <code>/usage</code> flags any of these that accounts for 10% or more of your recent usage.</p>
+      </div></div>
+    </section>
+    <section class="tight lit" id="fixes">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>What saves the most</h2>
+        <ol class="steps">
+          <li><b>Clear between tasks.</b> <code>/clear</code> starts fresh when you switch to unrelated work. Use <code>/rename</code> first so you can <code>/resume</code> it later.</li>
+          <li><b>Match the model to the job.</b> Sonnet handles most coding tasks and costs less than Opus. Save Opus for hard architecture and multi-step reasoning, and switch with <code>/model</code>.</li>
+          <li><b>Lower the effort for routine work.</b> Extended thinking is billed as output. <code>/effort</code> turns it down for simple tasks.</li>
+          <li><b>Trim MCP servers.</b> Run <code>/mcp</code> and turn off servers you aren't using. A CLI like <code>gh</code> is often cheaper than an MCP server for the same job.</li>
+          <li><b>Move instructions into skills.</b> CLAUDE.md loads into every session. Workflow-specific instructions in skills only load when used. Keep CLAUDE.md under about 200 lines.</li>
+          <li><b>Send noisy work to subagents.</b> Test runs, log digging, and doc fetching stay in the subagent's context, and only a summary comes back. Give simple subagents a smaller model.</li>
+          <li><b>Be specific, and plan first.</b> "Add input validation to the login function in auth.ts" costs far less than "improve this codebase". Plan mode (Shift+Tab) catches a wrong direction before it's expensive.</li>
+        </ol>
+      </div></div>
+    </section>
+    <section class="tight" id="forecast">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>See the wall before you hit it</h2>
+        <p>Habits stretch your limit. Knowing your pace tells you when to use them. <a href="/">Fuel Gauge</a> is a free Mac menu bar app that reads your limits from Claude Code after every reply and says, at your recent pace, whether you'll make it to the reset: "Makes it to reset" or "Runs out around 3:40p, 1h 20m early", with the most you can use per hour and still make it. When it says you won't, that's the moment to switch to Sonnet, clear, or save the big job for after the reset.</p>
+        <p>Agents can check too: <code>fuelgauge status</code> exits with code 2 when a limit will run out before it resets. See <a href="/cli">Fuel Gauge for agents</a>.</p>
+      </div></div>
+    </section>
+    <section class="tight" id="sources">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>Sources</h2>
+        <p>Checked on October 20, 2026. Anthropic changes plans from time to time, so the help pages are the final word.</p>
+        <ul><li><a href="https://code.claude.com/docs/en/costs">Manage costs effectively (Claude Code docs)</a></li><li><a href="https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work">How do usage and length limits work?</a></li></ul>
+      </div></div>
+    </section>
+    <section class="tight lit">
+      <div class="wrap">
+        <div class="head center head-sm"><h2>Questions</h2></div>
+        <div class="faq glass">
+          <details><summary>Why do I hit my Claude limit so fast in Claude Code?</summary><p>Claude Code sends the whole conversation with every request, so long sessions, subagents, scheduled loops, and cache misses after breaks all add up. /usage shows what used it.</p></details>
+          <details><summary>Does switching models help when I hit the limit?</summary><p>Not for the session or weekly limit, which cover every model. It does help after a model-specific message like &quot;You&#x27;ve hit your Opus limit&quot;.</p></details>
+          <details><summary>What&#x27;s the single biggest saver?</summary><p>Running /clear between unrelated tasks, so each request doesn&#x27;t carry a long history it doesn&#x27;t need.</p></details>
+        </div>
+      </div>
+    </section>
+    <section class="tight">
+      <div class="wrap narrow">
+        <h2 class="related-head">Keep reading</h2>
+        <div class="related"><a class="related-card glass" href="/guides/check-claude-usage"><strong>Check your Claude usage</strong><span>Every place to see what&#x27;s left</span></a><a class="related-card glass" href="/limits/claude-code"><strong>Claude Code limits</strong><span>How Claude Code counts against your plan</span></a><a class="related-card glass" href="/compare/claude-pro-vs-max"><strong>Claude Pro vs Max</strong><span>When upgrading is worth it</span></a></div>
+      </div>
+    </section>
+    <section class="cta lit">
+      <div class="wrap">
+        <div class="cta-card glass">
+          <img src="/images/icon.svg" alt="" width="96" height="96" loading="lazy">
+          <h2>Know if you&#39;ll make it to reset.</h2>
+          <p>Free. No account, no subscription.</p>
+          <div class="actions">
+            <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download for Mac</a>
+        <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>View source code</a>
+          </div>
+          <div class="copyline"><code id="brew-cta">brew install --cask coreyhaines31/tap/fuelgauge</code><button type="button" class="copy" data-copy="brew-cta">Copy</button></div>
+          <div class="ask">
+            <p>Or ask your coding agent:</p>
+            <div class="prompt-box">
+              <button type="button" class="copy" data-copy="install-prompt">Copy</button>
+              <pre id="install-prompt">Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`.</pre>
+            </div>
+          </div>
+          <p class="fineprint">macOS 14 Sonoma or later · Apple Silicon and Intel</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="wrap">
+      <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a></nav>
+      <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a><a href="/guides/check-claude-usage">Check your Claude usage</a><a href="/guides/when-does-claude-limit-reset">When Claude limits reset</a><a href="/guides/claude-code-statusline">Claude Code status line</a><a href="/guides/stop-hitting-claude-limits">Stop hitting Claude limits</a></nav>
+      <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a><a href="/compare/claude-pro-vs-max">Claude Pro vs Max</a><a href="/alternatives/codexbar">CodexBar alternative</a><a href="/alternatives/ccusage">ccusage alternative</a><a href="/alternatives/ccstatusline">ccstatusline alternative</a></nav>
+      <nav class="footer-alts" aria-label="More free Mac apps"><a class="label" href="https://github.com/coreyhaines31">More free Mac apps</a><a href="https://midnightoil.app" title="Keep your Mac awake">Midnight Oil</a><a href="https://diskforecast.com" title="Know before your disk is full">Disk Forecast</a><a href="https://spareformac.com" title="See what&#x27;s using your Mac">Spare</a><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?">WiFi or ISP</a><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers">Green Room</a><a href="https://onhandformac.com" title="A clipboard manager for your Mac">On Hand</a><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides">Coat Check</a></nav>
+      <div class="footer-links"><span>© 2026 Corey Haines. Source available under the <a href="https://github.com/coreyhaines31/fuelgauge/blob/main/LICENSE">FSL-1.1-MIT License</a>.</span></div>
+      <div class="footer-links"><a href="https://github.com/coreyhaines31/fuelgauge">GitHub</a><a href="https://github.com/coreyhaines31/fuelgauge/releases">Releases</a><a href="https://github.com/coreyhaines31/fuelgauge/issues">Issues</a><a href="/privacy">Privacy</a><a href="/llms.txt">llms.txt</a></div>
+    </div>
+  </footer>
+  <script>
+    // Copy buttons. Falls back to selecting the text when the clipboard is unavailable.
+    document.querySelectorAll("[data-copy]").forEach(button => {
+      button.addEventListener("click", async () => {
+        const source = document.getElementById(button.dataset.copy);
+        try {
+          await navigator.clipboard.writeText(source.textContent);
+          button.textContent = "Copied";
+          setTimeout(() => { button.textContent = "Copy"; }, 2000);
+        } catch (_) {
+          getSelection().selectAllChildren(source);
+        }
+      });
+    });
+  </script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why do I hit my Claude limit so fast in Claude Code?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code sends the whole conversation with every request, so long sessions, subagents, scheduled loops, and cache misses after breaks all add up. /usage shows what used it."}}, {"@type": "Question", "name": "Does switching models help when I hit the limit?", "acceptedAnswer": {"@type": "Answer", "text": "Not for the session or weekly limit, which cover every model. It does help after a model-specific message like \"You've hit your Opus limit\"."}}, {"@type": "Question", "name": "What's the single biggest saver?", "acceptedAnswer": {"@type": "Answer", "text": "Running /clear between unrelated tasks, so each request doesn't carry a long history it doesn't need."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Fuel Gauge", "item": "https://fuelgauge.app/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://fuelgauge.app/guides"}, {"@type": "ListItem", "position": 3, "name": "Stop hitting Claude limits", "item": "https://fuelgauge.app/guides/stop-hitting-claude-limits"}]}</script>
+</body>
+</html>
