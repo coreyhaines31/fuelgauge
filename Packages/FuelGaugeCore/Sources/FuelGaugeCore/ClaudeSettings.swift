@@ -1,7 +1,7 @@
 import Foundation
 
 /// Turns Fuel Gauge's status line on and off in Claude Code's `settings.json`. If someone already has a
-/// status line command, it's saved and kept running: `fuelgauge statusline` prints its output under the
+/// status line command, it's saved and kept running: `fuelgauge statusline` prints its output above the
 /// forecast strip, and turning Fuel Gauge off puts it back.
 public struct ClaudeSettings: Sendable {
     public enum State: Equatable, Sendable {

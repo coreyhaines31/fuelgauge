@@ -5,24 +5,56 @@ import ServiceManagement
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let updater = Updater()
-    private var statusItem: NSStatusItem?
-    private static let autosaveName = "FuelGauge"
+    private var model: UsageModel?
+    private var statusItemController: StatusItemController?
+    private var settingsWindow: SettingsWindow?
+    private let alerts = Alerts()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        Preferences.registerDefaults()
         #if !DEBUG
         applyLaunchAtLoginDefault()
         #endif
-        // New status items start at the far left on recent macOS, which is off-screen on a crowded menu bar.
-        UserDefaults.standard.register(defaults: ["NSStatusItem Preferred Position \(Self.autosaveName)": 1])
-        let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        item.autosaveName = Self.autosaveName
-        item.button?.image = NSImage(systemSymbolName: "fuelpump", accessibilityDescription: Brand.name)
-        let menu = NSMenu()
-        menu.addItem(ClosureMenuItem("Check for Updates…") { [updater] in updater.checkForUpdates() })
-        menu.addItem(.separator())
-        menu.addItem(ClosureMenuItem("Quit \(Brand.name)", keyEquivalent: "q") { NSApp.terminate(nil) })
-        item.menu = menu
-        statusItem = item
+        let model = makeModel()
+        self.model = model
+        let settingsWindow = SettingsWindow(updater: updater, model: model)
+        self.settingsWindow = settingsWindow
+        statusItemController = StatusItemController(
+            model: model,
+            openSettings: { settingsWindow.show() },
+            checkForUpdates: { [updater] in updater.checkForUpdates() }
+        )
+        model.onChange = { [weak self] in self?.statusItemController?.update() }
+        model.onRefresh = { [weak self] forecasts in
+            #if DEBUG
+            if DemoMode.isOn { return }
+            #endif
+            self?.alerts.check(forecasts)
+        }
+        NotificationCenter.default.addObserver(
+            forName: UserDefaults.didChangeNotification, object: nil, queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated { self?.statusItemController?.update() }
+        }
+        model.start()
+        #if DEBUG
+        if let url = DemoMode.snapshotURL {
+            // Live data needs a moment for the first read of Codex's logs.
+            DispatchQueue.main.asyncAfter(deadline: .now() + (DemoMode.isOn ? 0.5 : 3)) {
+                DemoMode.snapshot(model: model, updater: self.updater, to: url)
+            }
+        }
+        #endif
+    }
+
+    private func makeModel() -> UsageModel {
+        #if DEBUG
+        if DemoMode.isOn {
+            DemoMode.prepare()
+            return UsageModel(supportFolder: DemoMode.folder, readsLiveData: false)
+        }
+        #endif
+        return UsageModel()
     }
 
     /// Turns on launch at login once, so readings keep coming after a restart. Tries again next launch if it fails.
