@@ -13,6 +13,8 @@ final class UsageModel {
     private(set) var claudeStatusLine: ClaudeSettings.State = .off
 
     var onChange: (() -> Void)?
+    /// After each completed refresh, with the new forecasts. Alerts hang off this, not `onChange`.
+    var onRefresh: (([Forecast]) -> Void)?
 
     private let store: ReadingStore
     private var codex: CodexLogReader
@@ -65,27 +67,31 @@ final class UsageModel {
         claudeStatusLine = readsLiveData ? claude.state : .on
         Task {
             let (readings, updatedCodex) = await Task.detached(priority: .utility) {
-                var codex = codex
+                var polled = codex
                 var fresh: [Reading] = []
-                if readsCodex {
-                    fresh += codex.poll()
-                    if let data = try? JSONEncoder().encode(codex.state) {
+                if readsCodex { fresh += polled.poll() }
+                if readsGrokBot { fresh += grokBot.read() }
+                // Move Codex's place in its logs forward only once the readings are saved, so a failed
+                // write is read again next time instead of lost.
+                var kept = codex
+                if (try? store.append(fresh)) != nil {
+                    kept = polled
+                    if readsCodex, let data = try? JSONEncoder().encode(polled.state) {
                         try? FileManager.default.createDirectory(
                             at: codexStateURL.deletingLastPathComponent(), withIntermediateDirectories: true
                         )
                         try? data.write(to: codexStateURL, options: .atomic)
                     }
                 }
-                if readsGrokBot { fresh += grokBot.read() }
-                try? store.append(fresh)
                 let since = Date().addingTimeInterval(-Self.history)
-                return (store.load(since: since).filter { enabled.contains($0.provider) }, codex)
+                return (store.load(since: since).filter { enabled.contains($0.provider) }, kept)
             }.value
             self.codex = updatedCodex
             forecasts = ForecastEngine.forecasts(from: readings).filter { !isStale($0) }
             updatedAt = Date()
             isRefreshing = false
             onChange?()
+            onRefresh?(forecasts)
         }
     }
 
