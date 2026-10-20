@@ -4,7 +4,7 @@
 
 <h1 align="center">Fuel Gauge</h1>
 
-<p align="center">Know if you'll make it to reset. A free menu bar app that forecasts when you'll hit your Claude Code, Codex, and Grok Bot limits.</p>
+<p align="center">Know if you'll make it to reset. A free menu bar app that forecasts when you'll hit your Claude Code, Codex, Grok Bot, and Cursor limits.</p>
 
 <p align="center">
   <a href="https://fuelgauge.app">fuelgauge.app</a> ·
@@ -32,14 +32,14 @@ It's free, the source is on GitHub, and your usage never leaves your Mac.
 
 ## What it does
 
-- **Forecasts each limit.** For every window (Claude Code's 5-hour and weekly, Codex's, Grok Bot's weekly) it measures your pace over the recent stretch and says whether you'll make it to the reset, or when you'll run out.
+- **Forecasts each limit.** For every window (Claude Code's 5-hour and weekly, Codex's, Grok Bot's weekly, Cursor's monthly) it measures your pace over the recent stretch and says whether you'll make it to the reset, or when you'll run out.
 - **Shows a range, not a guess dressed up as a fact.** "Between 2:50p and 4:30p at your recent pace." Until it has about 10 minutes of readings, it says "Learning your pace" instead of making one up.
 - **Tells you your budget.** "You can use up to 9% an hour and still make it." That's the number that changes how you work.
 - **Lives in the menu bar.** The gauge's needle shows the fuel left in whichever limit is closest to running out. It turns orange when one will run out before it resets, and red when one is out.
 - **Shows up inside Claude Code.** A strip under the prompt: `⛽ 5h 55% out ~12:05p · wk 41% ok`. If you already have a status line, it stays, with the forecast under it.
 - **Warns you once.** A notification when a limit will run out at least 30 minutes before it resets, and optionally at 50%, 80%, and 95% used.
 - **Works from Terminal.** The [`fuelgauge` command](#command-line) prints the forecast and exits with code 2 when a limit will run out, so an agent can check before starting a long task.
-- **Reads only what's already on your Mac.** No sign-in, no browser cookies, no Full Disk Access, no keychain, no telemetry. Checking for updates is the only time it goes online.
+- **Reads only what's already on your Mac.** No sign-in, no browser cookies, no Full Disk Access, no keychain, no telemetry. Checking for updates is the only time it goes online, plus Cursor if you turn it on.
 
 ## Install
 
@@ -69,6 +69,7 @@ Click the gauge in the menu bar.
 | Claude Code | Click **Turn On** in the panel (or run `fuelgauge install-statusline`). | Claude Code passes its 5-hour and weekly limits to its status line after each reply. Fuel Gauge becomes the status line, saves each reading, and prints the forecast. Your `settings.json` is backed up first, and an existing status line keeps showing. Claude limits appear for Pro and Max plans. |
 | Codex | Nothing. | Codex records its limits in its session logs in `~/.codex/sessions`. The last 8 days are read on first launch, so weekly forecasts start right away. |
 | Grok Bot | Nothing. | Grok Bot saves its weekly usage on your Mac while it's open. |
+| Cursor | Turn it on in **Settings › Tools** (it's off by default). | Cursor keeps no usage on your Mac, so Fuel Gauge asks cursor.com every 10 minutes, signed in with the Cursor app's own sign-in. Its limit is monthly. |
 
 Forecasts need about 10 minutes of readings while you work. Until then a card says "Learning your pace". Choose which tools to track in **Settings › Tools**.
 
@@ -105,7 +106,7 @@ Before starting a long or expensive task, run `fuelgauge status`. If it exits wi
 
 ## Privacy
 
-Fuel Gauge reads three things, all on your Mac: the JSON Claude Code passes to its status line, Codex's session logs, and Grok Bot's usage cache. It saves readings (tool, limit, percent, reset time) in `~/Library/Application Support/Fuel Gauge/Readings` for about two months. It never signs in to anything, reads browser cookies, or asks for Full Disk Access, and it sends nothing anywhere. The only network request is Sparkle's update check against this repo's releases.
+Fuel Gauge reads three things, all on your Mac: the JSON Claude Code passes to its status line, Codex's session logs, and Grok Bot's usage cache. If you turn on Cursor, it also asks cursor.com for your Cursor usage every 10 minutes, using the sign-in the Cursor app stores; nothing else is sent. It saves readings (tool, limit, percent, reset time) in `~/Library/Application Support/Fuel Gauge/Readings` for about two months. It never signs in to anything, reads browser cookies, or asks for Full Disk Access, and it sends nothing anywhere. Apart from Cursor, the only network request is Sparkle's update check against this repo's releases.
 
 ## Troubleshooting
 

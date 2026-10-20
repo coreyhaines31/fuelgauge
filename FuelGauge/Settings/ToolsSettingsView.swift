@@ -16,8 +16,8 @@ struct ToolsSettingsView: View {
                     row(tool)
                 }
             } footer: {
-                Text("Fuel Gauge reads what these tools already save on your Mac. It never signs in to them, "
-                    + "reads browser cookies, or sends your usage anywhere.")
+                Text("Fuel Gauge reads what these tools already save on your Mac. It never reads browser cookies "
+                    + "or sends your usage anywhere. Cursor is the one exception, and only if you turn it on.")
                     .font(.caption).foregroundStyle(.secondary)
             }
             if installed.contains(.claude) {
@@ -40,13 +40,15 @@ struct ToolsSettingsView: View {
     private static let tools = [
         Tool(provider: .claude, source: "5-hour and weekly limits, from Claude Code's status line."),
         Tool(provider: .codex, source: "Codex's limits, from its session logs in ~/.codex."),
-        Tool(provider: .grokBot, source: "The weekly limit, from the usage Grok Bot saves while it's open.")
+        Tool(provider: .grokBot, source: "The weekly limit, from the usage Grok Bot saves while it's open."),
+        Tool(provider: .cursor, source: "The monthly limit. Off by default: Fuel Gauge asks cursor.com every 10 "
+            + "minutes, signed in with the Cursor app's own sign-in. Nothing else is sent.")
     ]
 
     private func row(_ tool: Tool) -> some View {
         let isInstalled = installed.contains(tool.provider)
         return Toggle(isOn: Binding(
-            get: { isInstalled && (enabled[tool.provider] ?? true) },
+            get: { isInstalled && (enabled[tool.provider] ?? Tracking.isEnabled(tool.provider)) },
             set: { value in
                 enabled[tool.provider] = value
                 Tracking.setEnabled(tool.provider, value)
