@@ -298,13 +298,13 @@ section.tight { padding: clamp(56px, 8vw, 96px) 0 0; }
 .fg-bar { position: relative; height: 6px; border-radius: 3px; background: var(--m-track); margin: 7px 0 8px; overflow: hidden; }
 .fg-bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
 .fg-bar .proj { opacity: 0.28; }
-.fg-card.warn .fg-bar i { background: var(--m-warn-fill); }
-.fg-card.ok .fg-bar i { background: var(--m-ok-fill); }
-.fg-card.learn .fg-bar i { background: var(--m-faint); }
+.fg-row.warn .fg-bar i { background: var(--m-warn-fill); }
+.fg-row.ok .fg-bar i { background: var(--m-ok-fill); }
+.fg-row.learn .fg-bar i { background: var(--m-faint); }
 .fg-verdict { font-weight: 700; font-size: 13px; }
-.fg-card.warn .fg-verdict { color: var(--m-warn); }
-.fg-card.ok .fg-verdict { color: var(--m-ok); }
-.fg-card.learn .fg-verdict { color: var(--m-sub); }
+.fg-row.warn .fg-verdict { color: var(--m-warn); }
+.fg-row.ok .fg-verdict { color: var(--m-ok); }
+.fg-row.learn .fg-verdict { color: var(--m-sub); }
 .fg-line { color: var(--m-sub); font-size: 11.5px; line-height: 1.4; margin-top: 2px; font-variant-numeric: tabular-nums; }
 .fg-chart { margin-top: 10px; }
 .fg-chart svg { width: 100%; height: auto; overflow: visible; }
@@ -400,3 +400,13 @@ section.tight { padding: clamp(56px, 8vw, 96px) 0 0; }
 }
 .prose .prompt-box { max-width: none; margin: 12px 0 18px; }
 .prose .prompt-box pre { padding-right: 76px; }
+
+/* Panel mockup: summary line, a card per tool, a row per window (matches the app since 1.3.0) */
+.fg-summary { font-weight: 700; font-size: 12.5px; color: var(--m-warn); margin: 0 2px 8px; }
+.fg-tool { font-weight: 600; font-size: 13px; margin-bottom: 8px; }
+.fg-row + .fg-row { border-top: 0.5px solid var(--m-sep); margin-top: 10px; padding-top: 10px; }
+.fg-row .fg-top b { font-weight: 500; font-size: 12px; }
+.fg-row .fg-top span { font-size: 12px; color: var(--m-sub); }
+.fg-compact { font-weight: 600; font-size: 11.5px; margin-top: 5px; line-height: 1.35; }
+.fg-row.ok .fg-compact { color: var(--m-ok); }
+.fg-row.learn .fg-compact { color: var(--m-sub); }
