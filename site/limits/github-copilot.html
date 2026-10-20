@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GitHub Copilot limits (October 2026): AI credits, resets</title>
+  <meta name="description" content="How GitHub Copilot limits work since June 2026: monthly AI credits per plan, the reset on the 1st at 00:00 UTC, what happens when they run out, and legacy premium requests.">
+  <link rel="canonical" href="https://fuelgauge.app/limits/github-copilot">
+  <meta property="og:title" content="GitHub Copilot limits (October 2026): AI credits, resets">
+  <meta property="og:description" content="How GitHub Copilot limits work since June 2026: monthly AI credits per plan, the reset on the 1st at 00:00 UTC, what happens when they run out, and legacy premium requests.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Fuel Gauge">
+  <meta property="og:image" content="https://fuelgauge.app/images/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://fuelgauge.app/limits/github-copilot">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="GitHub Copilot limits (October 2026): AI credits, resets">
+  <meta name="twitter:description" content="How GitHub Copilot limits work since June 2026: monthly AI credits per plan, the reset on the 1st at 00:00 UTC, what happens when they run out, and legacy premium requests.">
+  <meta name="theme-color" content="#fbe9d6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/images/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/images/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/site.css">
+  <script src="https://cdn.usefathom.com/script.js" data-site="ETCPQLNF" defer></script>
+</head>
+<body>
+  <div class="sky" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="nav">
+    <div class="wrap">
+      <a class="brand" href="/"><img src="/images/icon.svg" alt="" width="28" height="28"> Fuel Gauge</a>
+      <nav>
+        <a href="/#how">How it works</a>
+        <a href="/limits">Limits</a>
+        <a href="/guides">Guides</a>
+        <a href="/compare">Compare</a>
+        <a href="/cli">For agents</a>
+        <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg">Download</a>
+      </nav>
+    </div>
+  </div>
+  <main>
+    <div class="sub-hero">
+      <div class="wrap narrow">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Fuel Gauge</a> <span>›</span> <a href="/limits">Limits</a></nav>
+        <div class="eyebrow">GitHub Copilot</div>
+        <h1>GitHub Copilot limits</h1>
+        <p class="lede">Copilot replaced premium requests with AI credits on June 1, 2026. Each plan gets a monthly allowance that resets on the 1st, at midnight UTC.</p>
+        <div class="tldr glass"><h2>The short answer</h2><p>GitHub Copilot now meters usage in AI credits ($0.01 each), priced per model by tokens. Pro includes 1,500 a month, Pro+ 7,000, Max 20,000, Business 1,900 per user, and Enterprise 3,900 per user, pooled. Allowances reset at 00:00 UTC on the 1st of each month, whatever your billing date, and unused credits don't carry over. Code completions don't use credits.</p></div>
+      </div>
+    </div>
+    <section class="tight" id="facts">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>Copilot limits at a glance</h2>
+                <div class="table-card glass"><div class="table-scroll"><table class="compare facts"><tbody>
+            <tr><th scope="row">Free</th><td>$0 · 2,000 completions and 50 chat requests a month</td></tr>
+            <tr><th scope="row">Pro</th><td>$10 · 1,500 AI credits a month</td></tr>
+            <tr><th scope="row">Pro+</th><td>$39 · 7,000 AI credits a month</td></tr>
+            <tr><th scope="row">Max</th><td>$100 · 20,000 AI credits a month</td></tr>
+            <tr><th scope="row">Business / Enterprise</th><td>$19 / $39 per user · 1,900 / 3,900 credits per user, pooled</td></tr>
+            <tr><th scope="row">Reset</th><td>00:00:00 UTC on the 1st of each month; unused credits don't carry over</td></tr>
+            <tr><th scope="row">Not counted</th><td>Code completions and next edit suggestions</td></tr>
+            <tr><th scope="row">Check it</th><td>Your Copilot usage dashboard on GitHub</td></tr>
+          </tbody></table></div></div>
+        <p class="table-foot">Each paid allowance is part base, part flex credits; GitHub says flex credits may change over time. 1 AI credit = $0.01.</p>
+      </div></div>
+    </section>
+    <section class="tight lit" id="limit">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>What happens when you run out</h2>
+        <p>On an individual plan you can upgrade, set a budget for additional usage, or wait for the reset on the 1st. For organizations and enterprises, additional usage is on by default; if it isn't allowed, usage is blocked until the next billing cycle. Subscriptions bought through GitHub Mobile can't buy more credits.</p>
+        <h2>Legacy annual plans and premium requests</h2>
+        <p>Annual Pro and Pro+ plans bought before the change keep premium requests until they expire, then move to Copilot Free: 300 a month on Pro and 1,500 on Pro+, reset on the 1st at 00:00 UTC, with extra requests at $0.04 each.</p>
+        <h2>Does Fuel Gauge track Copilot?</h2>
+        <p>Not yet. <a href="/">Fuel Gauge</a> forecasts Claude Code, Codex, Grok Bot, and Cursor limits. Copilot's monthly allowance is a good fit for a forecast, so it's on the list.</p>
+      </div></div>
+    </section>
+    <section class="tight" id="sources">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>Sources</h2>
+        <p>Checked on October 20, 2026. Anthropic changes plans from time to time, so the help pages are the final word.</p>
+        <ul><li><a href="https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/">GitHub Copilot is moving to usage-based billing</a></li><li><a href="https://docs.github.com/en/copilot/concepts/billing/billing-for-individuals">Billing for individuals (GitHub docs)</a></li><li><a href="https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises">Usage-based billing for organizations and enterprises</a></li><li><a href="https://github.com/features/copilot/plans">Copilot plans</a></li><li><a href="https://docs.github.com/en/copilot/concepts/billing/copilot-requests">Copilot requests (legacy plans)</a></li></ul>
+      </div></div>
+    </section>
+    <section class="tight lit">
+      <div class="wrap">
+        <div class="head center head-sm"><h2>Questions</h2></div>
+        <div class="faq glass">
+          <details><summary>Does GitHub Copilot still use premium requests?</summary><p>Only on legacy annual Pro and Pro+ plans. Since June 1, 2026, Copilot meters usage in AI credits.</p></details>
+          <details><summary>When do Copilot credits reset?</summary><p>At 00:00:00 UTC on the 1st of each month, regardless of your billing date. Unused credits don&#x27;t carry over.</p></details>
+          <details><summary>Do code completions use AI credits?</summary><p>No. Code completions and next edit suggestions don&#x27;t use credits.</p></details>
+        </div>
+      </div>
+    </section>
+    <section class="tight">
+      <div class="wrap narrow">
+        <h2 class="related-head">Keep reading</h2>
+        <div class="related"><a class="related-card glass" href="/limits/codex"><strong>Codex limits</strong><span>5-hour and weekly windows</span></a><a class="related-card glass" href="/limits/cursor"><strong>Cursor limits</strong><span>One weekly pool on the new plans</span></a><a class="related-card glass" href="/limits/claude-code"><strong>Claude Code limits</strong><span>How Claude Code counts against your plan</span></a></div>
+      </div>
+    </section>
+    <section class="cta lit">
+      <div class="wrap">
+        <div class="cta-card glass">
+          <img src="/images/icon.svg" alt="" width="96" height="96" loading="lazy">
+          <h2>Know if you&#39;ll make it to reset.</h2>
+          <p>Free. No account, no subscription.</p>
+          <div class="actions">
+            <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download for Mac</a>
+        <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>View source code</a>
+          </div>
+          <div class="copyline"><code id="brew-cta">brew install --cask coreyhaines31/tap/fuelgauge</code><button type="button" class="copy" data-copy="brew-cta">Copy</button></div>
+          <div class="ask">
+            <p>Or ask your coding agent:</p>
+            <div class="prompt-box">
+              <button type="button" class="copy" data-copy="install-prompt">Copy</button>
+              <pre id="install-prompt">Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`.</pre>
+            </div>
+          </div>
+          <p class="fineprint">macOS 14 Sonoma or later · Apple Silicon and Intel</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="wrap">
+      <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a><a href="/limits/codex">Codex limits</a><a href="/limits/cursor">Cursor limits</a><a href="/limits/grok">Grok limits</a><a href="/limits/github-copilot">GitHub Copilot limits</a></nav>
+      <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a><a href="/guides/check-claude-usage">Check your Claude usage</a><a href="/guides/when-does-claude-limit-reset">When Claude limits reset</a><a href="/guides/claude-code-statusline">Claude Code status line</a><a href="/guides/stop-hitting-claude-limits">Stop hitting Claude limits</a></nav>
+      <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a><a href="/compare/claude-pro-vs-max">Claude Pro vs Max</a><a href="/compare/claude-code-vs-codex">Claude Code vs Codex</a><a href="/compare/cursor-vs-claude-code">Cursor vs Claude Code</a><a href="/alternatives/codexbar">CodexBar alternative</a><a href="/alternatives/ccusage">ccusage alternative</a><a href="/alternatives/ccstatusline">ccstatusline alternative</a><a href="/alternatives/claude-code-usage-monitor">Claude-Code-Usage-Monitor alternative</a></nav>
+      <nav class="footer-alts" aria-label="More free Mac apps"><a class="label" href="https://github.com/coreyhaines31">More free Mac apps</a><a href="https://midnightoil.app" title="Keep your Mac awake">Midnight Oil</a><a href="https://diskforecast.com" title="Know before your disk is full">Disk Forecast</a><a href="https://spareformac.com" title="See what&#x27;s using your Mac">Spare</a><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?">WiFi or ISP</a><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers">Green Room</a><a href="https://onhandformac.com" title="A clipboard manager for your Mac">On Hand</a><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides">Coat Check</a></nav>
+      <div class="footer-links"><span>© 2026 Corey Haines. Source available under the <a href="https://github.com/coreyhaines31/fuelgauge/blob/main/LICENSE">FSL-1.1-MIT License</a>.</span></div>
+      <div class="footer-links"><a href="https://github.com/coreyhaines31/fuelgauge">GitHub</a><a href="https://github.com/coreyhaines31/fuelgauge/releases">Releases</a><a href="https://github.com/coreyhaines31/fuelgauge/issues">Issues</a><a href="/privacy">Privacy</a><a href="/llms.txt">llms.txt</a></div>
+    </div>
+  </footer>
+  <script>
+    // Copy buttons. Falls back to selecting the text when the clipboard is unavailable.
+    document.querySelectorAll("[data-copy]").forEach(button => {
+      button.addEventListener("click", async () => {
+        const source = document.getElementById(button.dataset.copy);
+        try {
+          await navigator.clipboard.writeText(source.textContent);
+          button.textContent = "Copied";
+          setTimeout(() => { button.textContent = "Copy"; }, 2000);
+        } catch (_) {
+          getSelection().selectAllChildren(source);
+        }
+      });
+    });
+  </script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does GitHub Copilot still use premium requests?", "acceptedAnswer": {"@type": "Answer", "text": "Only on legacy annual Pro and Pro+ plans. Since June 1, 2026, Copilot meters usage in AI credits."}}, {"@type": "Question", "name": "When do Copilot credits reset?", "acceptedAnswer": {"@type": "Answer", "text": "At 00:00:00 UTC on the 1st of each month, regardless of your billing date. Unused credits don't carry over."}}, {"@type": "Question", "name": "Do code completions use AI credits?", "acceptedAnswer": {"@type": "Answer", "text": "No. Code completions and next edit suggestions don't use credits."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Fuel Gauge", "item": "https://fuelgauge.app/"}, {"@type": "ListItem", "position": 2, "name": "Limits", "item": "https://fuelgauge.app/limits"}, {"@type": "ListItem", "position": 3, "name": "GitHub Copilot limits", "item": "https://fuelgauge.app/limits/github-copilot"}]}</script>
+</body>
+</html>
