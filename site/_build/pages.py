@@ -191,3 +191,62 @@ PRIVACY = {
         <p>Open an issue on <a href="https://github.com/coreyhaines31/fuelgauge/issues">GitHub</a>. The source is public, so you can check every claim on this page yourself.</p>
     """,
 }
+
+CLI = {
+    "path": "/cli",
+    "short": "Fuel Gauge for agents",
+    "title": "fuelgauge command: let AI agents check usage limits first",
+    "description": "The fuelgauge command tells you or an AI agent whether Claude Code, Codex, Grok Bot, and Cursor limits will last until reset, and exits 2 when one won't.",
+    "eyebrow": "For agents",
+    "h1": "Let your agent check <em>before the big job.</em>",
+    "lede": "Fuel Gauge includes a <code>fuelgauge</code> command. It prints the forecast for every limit and exits with code 2 when one will run out before it resets, so a coding agent can ask you before it burns through what's left.",
+    "answer": "Run <code>fuelgauge status</code>. It exits 0 when every limit will last until it resets, and 2 when one won't (or already ran out). Add one line to CLAUDE.md or AGENTS.md and your agent checks before long tasks. Homebrew puts the command on your PATH; otherwise use Settings › General › Install.",
+    "sections": [
+        {"id": "commands", "html": """
+        <h2>Commands</h2>
+        <pre><code>fuelgauge status              # every limit, in plain words; exits 2 if one will run out before it resets
+fuelgauge status --json       # the same, for scripts and agents
+fuelgauge history --days 2    # the readings behind the forecasts
+fuelgauge install-statusline  # make Fuel Gauge Claude Code's status line (keeps yours, backs up settings.json)
+fuelgauge uninstall-statusline</code></pre>
+        <h3>What status prints</h3>
+        <pre><code>Claude Code · 5-hour: Runs out around 11:50a, 1h 30m early
+  55% used · resets 1:20p (in 3h 6m)
+  Using 28% an hour. You can use up to 15% an hour and still make it.
+Claude Code · Weekly: Makes it to reset, about 86% by then
+  41% used · resets Thu 9a (in 2d 22h)</code></pre>"""},
+        {"id": "json", "lit": True, "html": """
+        <h2>The JSON</h2>
+        <p><code>fuelgauge status --json</code> prints one object per limit, with stable snake_case keys:</p>
+        <pre><code>[
+  {
+    "tool": "claude",
+    "window": "5-hour",
+    "used_percent": 55,
+    "resets_at": "2026-10-20T20:20:00Z",
+    "verdict": "runs_out",
+    "runs_out_at": "2026-10-20T18:50:00Z",
+    "rate_per_hour": 28,
+    "budget_per_hour": 15,
+    "summary": "Runs out around 11:50a, 1h 30m early"
+  }
+]</code></pre>
+        <p><code>verdict</code> is one of <code>makes_it</code>, <code>runs_out</code>, <code>out</code>, <code>learning</code>, or <code>reset</code>. Exit code 2 means at least one limit is <code>runs_out</code> or <code>out</code>.</p>"""},
+        {"id": "agents", "html": """
+        <h2>Add it to CLAUDE.md or AGENTS.md</h2>
+        <div class="prompt-box"><button type="button" class="copy" data-copy="agent-rule-cli">Copy</button><pre id="agent-rule-cli">{AGENT_RULE}</pre></div>
+        <p>Then every agent session checks before the expensive stuff, and tells you which limit runs out and when instead of hitting the wall halfway through.</p>
+        <h3>Install it with your agent</h3>
+        <div class="prompt-box"><button type="button" class="copy" data-copy="install-prompt-cli">Copy</button><pre id="install-prompt-cli">{INSTALL_PROMPT}</pre></div>"""},
+    ],
+    "faqs": [
+        ("What does exit code 2 mean?", "At least one tracked limit is forecast to run out before it resets, or has already run out."),
+        ("Does the command need the app running?", "The app collects Codex and Grok Bot readings in the background; Claude Code readings arrive through the status line. Keep the app running for current Codex numbers."),
+        ("Is the JSON stable?", "Yes. Keys are snake_case and new fields are only ever added."),
+    ],
+    "related": [
+        ("Claude Code status line", "Your limits under the prompt", "/guides/claude-code-statusline"),
+        ("Stop hitting Claude limits", "What uses your limit fastest", "/guides/stop-hitting-claude-limits"),
+        ("Claude Code limits", "How Claude Code counts against your plan", "/limits/claude-code"),
+    ],
+}
