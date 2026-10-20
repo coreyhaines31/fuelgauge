@@ -10,7 +10,7 @@ enum MenuBarText: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .none: "Gauge only"
+        case .none: "Pump only"
         case .percentUsed: "Percent used"
         case .timeLeft: "Time to run out"
         }

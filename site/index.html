@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fuel Gauge: will your Claude Code and Codex limits last until reset?</title>
-  <meta name="description" content="A free Mac menu bar app that forecasts whether your Claude Code, Codex, and Grok Bot limits will last until they reset, from your recent pace.">
+  <title>Fuel Gauge: don&#39;t hit your Claude Code or Codex limit mid-task</title>
+  <meta name="description" content="A free Mac menu bar app that watches your Claude Code, Codex, Grok Bot, and Cursor limits and tells you, at your pace, whether they&#39;ll last until they reset.">
   <link rel="canonical" href="https://fuelgauge.app/">
-  <meta property="og:title" content="Fuel Gauge: will your Claude Code and Codex limits last until reset?">
-  <meta property="og:description" content="Free for macOS. Know if you'll make it to reset: a forecast for your Claude Code, Codex, and Grok Bot limits, in the menu bar.">
+  <meta property="og:title" content="Fuel Gauge: don&#39;t hit your limit mid-task">
+  <meta property="og:description" content="Free for macOS. Know if your Claude Code, Codex, Grok Bot, and Cursor limits will last until they reset, from the menu bar.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Fuel Gauge">
   <meta property="og:image" content="https://fuelgauge.app/images/og.png">
@@ -15,8 +15,8 @@
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://fuelgauge.app/">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Fuel Gauge: will your Claude Code and Codex limits last until reset?">
-  <meta name="twitter:description" content="Free for macOS. Know if you'll make it to reset: a forecast for your Claude Code, Codex, and Grok Bot limits, in the menu bar.">
+  <meta name="twitter:title" content="Fuel Gauge: don&#39;t hit your limit mid-task">
+  <meta name="twitter:description" content="Free for macOS. Know if your Claude Code, Codex, Grok Bot, and Cursor limits will last until they reset, from the menu bar.">
   <meta name="theme-color" content="#fbe9d6" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/images/icon.svg" type="image/svg+xml">
@@ -52,10 +52,10 @@
       <div class="wrap">
         <div>
           <div class="badge"><i></i>Free, with the source on GitHub</div>
-          <h1>Know if you&#39;ll make it <em>to reset.</em></h1>
-          <p class="lede">Fuel Gauge watches your Claude Code, Codex, and Grok Bot limits from the menu bar, and tells you if they&#39;ll last until they reset.</p>
+          <h1>Don&#39;t hit your limit <em>mid-task.</em></h1>
+          <p class="lede">Fuel Gauge watches your Claude Code, Codex, Grok Bot, and Cursor limits and tells you, at your current pace, whether you&#39;ll make it to the reset. If you won&#39;t, it tells you when you&#39;ll run out.</p>
           <div class="actions">
-            <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"><svg aria-hidden="true"><use href="#i-download"/></svg>Download free</a>
+            <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"><svg aria-hidden="true"><use href="#i-download"/></svg>Download for Mac</a>
             <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge"><svg aria-hidden="true"><use href="#i-github"/></svg>View source code</a>
           </div>
           <div class="copyline"><code id="brew">brew install --cask coreyhaines31/tap/fuelgauge</code><button type="button" class="copy" data-copy="brew">Copy</button></div>
@@ -70,11 +70,11 @@
         </div>
 
         <!-- mockup:panel -->
-        <div class="desk mk" role="img" aria-label="The Mac menu bar with the Fuel Gauge glyph in orange at 55%, and its panel open. Four cards, most urgent first. Claude Code 5-hour, 55%: Runs out around 11:50a, 1h 30m early, with a chart of usage so far and a dashed projection reaching 100% before the reset. Claude Code weekly, 41%: Makes it to reset, about 86% by then. Codex weekly, 62%: Makes it to reset, about 79% by then. Grok Bot weekly, 12%: Learning your pace.">
+        <div class="desk mk" role="img" aria-label="The Mac menu bar with the Fuel Gauge pump glyph in orange at 55%, and its panel open. Four cards, most urgent first. Claude Code 5-hour, 55%: Runs out around 11:50a, 1h 30m early, with a chart of usage so far and a dashed projection reaching 100% before the reset. Claude Code weekly, 41%: Makes it to reset, about 86% by then. Codex weekly, 62%: Makes it to reset, about 79% by then. Grok Bot weekly, 12%: Learning your pace.">
           <div class="mk-menubar">
             <div class="l"><svg class="apple" viewBox="0 0 14 17"><path d="M11.6 9c0-2 1.6-2.9 1.7-3-1-1.4-2.4-1.6-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7C3.4 4.4 2 5.2 1.3 6.6c-1.5 2.6-.4 6.4 1 8.5.7 1 1.5 2.1 2.6 2.1 1 0 1.4-.7 2.7-.7 1.2 0 1.6.7 2.6.7 1.1 0 1.8-1 2.5-2 .8-1.1 1.1-2.2 1.1-2.3 0 0-2.2-.8-2.2-3.4zM9.6 3c.6-.7 1-1.6.9-2.6-.8 0-1.8.6-2.4 1.3-.5.6-1 1.6-.9 2.5.9.1 1.8-.5 2.4-1.2z"/></svg><b>Terminal</b><span>Shell</span><span>Edit</span><span>View</span></div>
             <div class="r">
-              <span class="item on warn"><svg class="gauge" viewBox="0 0 24 24"><path d="M3.5 17.1A9 9 0 1 1 20.5 17.1"/><path d="M12 14 10.7 7.2"/><circle cx="12" cy="14" r="1.4" fill="currentColor" stroke="none"/></svg>55%</span>
+              <span class="item on warn"><svg class="gauge" viewBox="0 0 24 24"><rect x="3.7" y="3.7" width="11.2" height="16" rx="2.4" fill="none"/><rect x="5.7" y="12.3" width="7.2" height="5.4" rx=".8" fill="currentColor" stroke="none"/><rect x="1.9" y="20.4" width="14.9" height="2" rx="1" fill="currentColor" stroke="none"/><path d="M14.9 8H17.6Q19.5 8 19.5 9.9V16Q20.55 17.5 21.6 16V7.5L19.5 4.8" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>55%</span>
               <svg viewBox="0 0 24 24" class="hide-sm"><path d="M2.5 9.5a14 14 0 0 1 19 0M5.6 13a9.5 9.5 0 0 1 12.8 0M8.8 16.4a5 5 0 0 1 6.4 0"/><circle cx="12" cy="19.5" r="0.8" fill="currentColor"/></svg>
               <svg viewBox="0 0 24 24"><rect x="2" y="7.5" width="18" height="9" rx="2.5"/><path d="M22 10.5v3"/><rect x="4" y="9.5" width="11" height="5" rx="1" fill="currentColor" stroke="none"/></svg>
               <svg viewBox="0 0 24 24" class="hide-sm"><rect x="3" y="4.5" width="18" height="6.5" rx="3.25"/><rect x="3" y="13" width="18" height="6.5" rx="3.25"/><circle cx="16.5" cy="7.75" r="1.6" fill="currentColor"/><circle cx="7.5" cy="16.25" r="1.6" fill="currentColor"/></svg>
@@ -130,13 +130,13 @@
     <section id="glance" class="lit">
       <div class="wrap">
         <div class="head center">
-          <h2>The verdict comes first.</h2>
-          <p>Percent used doesn&#39;t tell you much on its own. 55% with three hours left is fine at one pace and a problem at another. Fuel Gauge does the math and says which.</p>
+          <h2>55% used. Is that a problem?</h2>
+          <p>It depends on how fast you&#39;re going and how long until the reset. Fuel Gauge does that math for every limit and gives you the answer in plain words: “Makes it to reset” or “Runs out around 11:50a.”</p>
         </div>
         <div class="points glass">
-          <div><h3>A glyph that reads at a glance</h3><p>The needle shows the fuel left in whichever limit is closest to running out. It turns orange when a limit is on pace to run out before it resets, and red when one is out.</p></div>
-          <div><h3>One card per limit</h3><p>Claude Code&#39;s 5-hour and weekly limits, Codex weekly, and Grok Bot weekly. The most urgent is on top, with a chart of your usage so far and where it&#39;s headed.</p></div>
-          <div><h3>How much you can still use</h3><p>“Using 28% an hour. You can use up to 15% an hour and still make it.” So you know whether to slow down, and by how much.</p></div>
+          <div><h3>A pump that drains as you work</h3><p>The menu bar pump fills with the fuel left in whichever limit is closest to running out. It turns orange when one won&#39;t make it to the reset, and red when one is out.</p></div>
+          <div><h3>One card per limit</h3><p>Claude Code&#39;s 5-hour and weekly limits, Codex, Grok Bot, and Cursor. The most urgent sits on top, with a chart of your usage so far and where it&#39;s headed.</p></div>
+          <div><h3>Your hourly budget</h3><p>“Using 28% an hour. You can use up to 15% an hour and still make it.” Now you know whether to slow down, and by how much.</p></div>
         </div>
       </div>
     </section>
@@ -179,7 +179,7 @@
           <div><span class="n">2</span><h3>It measures your pace</h3><p>How much usage climbed over the recent stretch: the last hour for 5-hour limits, the last day for weekly ones.</p></div>
           <div><span class="n">3</span><h3>It projects to the reset</h3><p>If that pace holds, do you hit 100% first? You get a verdict and a range, not a fake-precise minute.</p></div>
         </div>
-        <p class="note-line">It needs about 10 minutes of readings before it forecasts, and says “Learning your pace” until then. It&#39;s an estimate from your recent pace, not a promise.</p>
+        <p class="note-line">It waits for enough readings before it forecasts: 10 minutes for a 5-hour limit, 3 hours for a weekly one. Until then it says “Learning your pace.” It&#39;s an estimate from your recent pace, not a promise.</p>
       </div>
     </section>
 
@@ -243,11 +243,11 @@
       <div class="wrap">
         <div class="head center"><h2>Questions</h2></div>
         <div class="faq glass">
-          <details><summary>Is it accurate?</summary><p>It&#39;s an estimate from your recent pace, not a promise. Speed up or slow down and the forecast moves with you. That&#39;s why it shows a range, like “Between 11:31a and 12:14p at your recent pace,” instead of one exact minute, and why it waits for about 10 minutes of readings before it forecasts at all.</p></details>
+          <details><summary>Is it accurate?</summary><p>It&#39;s an estimate from your recent pace, not a promise. Speed up or slow down and the forecast moves with you. That&#39;s why it shows a range, like “Between 11:31a and 12:14p at your recent pace,” instead of one exact minute, and why it waits for enough readings before it forecasts at all: 10 minutes for a 5-hour limit, 3 hours for a weekly one.</p></details>
           <details><summary>Does it work with Claude Pro and Max?</summary><p>Yes. It uses the 5-hour and weekly limits Claude Code reports for your plan, so it works on Pro and Max. The status line is where those readings come from, so turn it on.</p></details>
           <details><summary>Which tools does it track?</summary><p>Claude Code&#39;s 5-hour and weekly limits, Codex&#39;s weekly limit, Grok Bot&#39;s weekly limit, and, if you turn it on, Cursor&#39;s monthly limit. Choose which ones to watch in Settings › Tools.</p></details>
           <details><summary>Does it send my data anywhere?</summary><p>No. It reads only what those tools already save on your Mac. No browser cookies, no Full Disk Access, no keychain, no sign-in, and zero telemetry. The only network request is the check for updates, plus Cursor's usage if you turn Cursor on.</p></details>
-          <details><summary>How is it different from CodexBar?</summary><p>CodexBar covers far more providers, over 100, and leads with percent used. Fuel Gauge covers three tools and leads with the verdict: will you make it to reset. It adds a Claude Code status line and an exit code agents can check, and it reads only local files. <a href="/codexbar-alternative">The full comparison</a>.</p></details>
+          <details><summary>How is it different from CodexBar?</summary><p>CodexBar covers far more providers, over 100, and leads with percent used. Fuel Gauge covers four tools and leads with the verdict: will you make it to reset. It adds a Claude Code status line and an exit code agents can check, and it reads local files (Cursor, which keeps none, is the one opt-in exception). <a href="/codexbar-alternative">The full comparison</a>.</p></details>
           <details><summary>How do I remove it?</summary><p>Run <code>fuelgauge uninstall-statusline</code> first, so your Claude Code status line goes back to how it was. Then run <code>brew uninstall --cask fuelgauge</code>. If you installed from the DMG, drag Fuel Gauge from Applications to the Trash instead.</p></details>
           <details><summary>Is it really free?</summary><p>Yes, at home or at work. No account, no trial, no subscription. The source is on GitHub under the FSL-1.1-MIT license.</p></details>
           <details><summary>Which Macs does it run on?</summary><p>Any Mac with macOS 14 Sonoma or later, Apple Silicon or Intel.</p></details>
@@ -262,7 +262,7 @@
           <h2>Make it to reset.</h2>
           <p>Free. No account, no subscription.</p>
           <div class="actions">
-            <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"><svg aria-hidden="true"><use href="#i-download"/></svg>Download free</a>
+            <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"><svg aria-hidden="true"><use href="#i-download"/></svg>Download for Mac</a>
             <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge"><svg aria-hidden="true"><use href="#i-github"/></svg>View source code</a>
           </div>
           <div class="copyline"><code id="brew-cta">brew install --cask coreyhaines31/tap/fuelgauge</code><button type="button" class="copy" data-copy="brew-cta">Copy</button></div>
@@ -299,7 +299,7 @@
   </script>
   <!-- schema -->
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Fuel Gauge", "operatingSystem": "macOS 14 or later", "applicationCategory": "DeveloperApplication", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "downloadUrl": "https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg", "url": "https://fuelgauge.app/", "image": "https://fuelgauge.app/images/icon.png", "author": {"@type": "Person", "name": "Corey Haines"}}</script>
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is it accurate?", "acceptedAnswer": {"@type": "Answer", "text": "It's an estimate from your recent pace, not a promise. Speed up or slow down and the forecast moves with you. That's why it shows a range, like \u201cBetween 11:31a and 12:14p at your recent pace,\u201d instead of one exact minute, and why it waits for about 10 minutes of readings before it forecasts at all."}}, {"@type": "Question", "name": "Does it work with Claude Pro and Max?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It uses the 5-hour and weekly limits Claude Code reports for your plan, so it works on Pro and Max. The status line is where those readings come from, so turn it on."}}, {"@type": "Question", "name": "Which tools does it track?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code's 5-hour and weekly limits, Codex's weekly limit, Grok Bot's weekly limit, and, if you turn it on, Cursor's monthly limit. Choose which ones to watch in Settings \u203a Tools."}}, {"@type": "Question", "name": "Does it send my data anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. It reads only what those tools already save on your Mac. No browser cookies, no Full Disk Access, no keychain, no sign-in, and zero telemetry. The only network request is the check for updates, plus Cursor's usage if you turn Cursor on."}}, {"@type": "Question", "name": "How is it different from CodexBar?", "acceptedAnswer": {"@type": "Answer", "text": "CodexBar covers far more providers, over 100, and leads with percent used. Fuel Gauge covers three tools and leads with the verdict: will you make it to reset. It adds a Claude Code status line and an exit code agents can check, and it reads only local files. The full comparison."}}, {"@type": "Question", "name": "How do I remove it?", "acceptedAnswer": {"@type": "Answer", "text": "Run fuelgauge uninstall-statusline first, so your Claude Code status line goes back to how it was. Then run brew uninstall --cask fuelgauge. If you installed from the DMG, drag Fuel Gauge from Applications to the Trash instead."}}, {"@type": "Question", "name": "Is it really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, at home or at work. No account, no trial, no subscription. The source is on GitHub under the FSL-1.1-MIT license."}}, {"@type": "Question", "name": "Which Macs does it run on?", "acceptedAnswer": {"@type": "Answer", "text": "Any Mac with macOS 14 Sonoma or later, Apple Silicon or Intel."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is it accurate?", "acceptedAnswer": {"@type": "Answer", "text": "It's an estimate from your recent pace, not a promise. Speed up or slow down and the forecast moves with you. That's why it shows a range, like \u201cBetween 11:31a and 12:14p at your recent pace,\u201d instead of one exact minute, and why it waits for enough readings before it forecasts at all: 10 minutes for a 5-hour limit, 3 hours for a weekly one."}}, {"@type": "Question", "name": "Does it work with Claude Pro and Max?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It uses the 5-hour and weekly limits Claude Code reports for your plan, so it works on Pro and Max. The status line is where those readings come from, so turn it on."}}, {"@type": "Question", "name": "Which tools does it track?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code's 5-hour and weekly limits, Codex's weekly limit, Grok Bot's weekly limit, and, if you turn it on, Cursor's monthly limit. Choose which ones to watch in Settings \u203a Tools."}}, {"@type": "Question", "name": "Does it send my data anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. It reads only what those tools already save on your Mac. No browser cookies, no Full Disk Access, no keychain, no sign-in, and zero telemetry. The only network request is the check for updates, plus Cursor's usage if you turn Cursor on."}}, {"@type": "Question", "name": "How is it different from CodexBar?", "acceptedAnswer": {"@type": "Answer", "text": "CodexBar covers far more providers, over 100, and leads with percent used. Fuel Gauge covers four tools and leads with the verdict: will you make it to reset. It adds a Claude Code status line and an exit code agents can check, and it reads local files (Cursor, which keeps none, is the one opt-in exception). The full comparison."}}, {"@type": "Question", "name": "How do I remove it?", "acceptedAnswer": {"@type": "Answer", "text": "Run fuelgauge uninstall-statusline first, so your Claude Code status line goes back to how it was. Then run brew uninstall --cask fuelgauge. If you installed from the DMG, drag Fuel Gauge from Applications to the Trash instead."}}, {"@type": "Question", "name": "Is it really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, at home or at work. No account, no trial, no subscription. The source is on GitHub under the FSL-1.1-MIT license."}}, {"@type": "Question", "name": "Which Macs does it run on?", "acceptedAnswer": {"@type": "Answer", "text": "Any Mac with macOS 14 Sonoma or later, Apple Silicon or Intel."}}]}</script>
   <!-- /schema -->
 </body>
 </html>

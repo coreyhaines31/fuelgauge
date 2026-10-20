@@ -24,11 +24,11 @@ struct GeneralSettingsView: View {
             Section {
                 Toggle("Launch at login", isOn: $launchesAtLogin)
                     .onChange(of: launchesAtLogin) { _, enabled in setLaunchAtLogin(enabled) }
-                Picker("Next to the gauge", selection: $menuBarText) {
+                Picker("Next to the pump", selection: $menuBarText) {
                     ForEach(MenuBarText.allCases) { Text($0.title).tag($0) }
                 }
             } footer: {
-                Text("The gauge shows the fuel left in whichever limit is closest to running out, and turns "
+                Text("The pump fills with the fuel left in whichever limit is closest to running out, and turns "
                     + "orange when one is forecast to run out before it resets.")
                     .font(.caption).foregroundStyle(.secondary)
             }

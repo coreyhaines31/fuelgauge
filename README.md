@@ -35,7 +35,7 @@ It's free, the source is on GitHub, and your usage never leaves your Mac.
 - **Forecasts each limit.** For every window (Claude Code's 5-hour and weekly, Codex's, Grok Bot's weekly, Cursor's monthly) it measures your pace over the recent stretch and says whether you'll make it to the reset, or when you'll run out.
 - **Shows a range, not a guess dressed up as a fact.** "Between 2:50p and 4:30p at your recent pace." Until it has about 10 minutes of readings, it says "Learning your pace" instead of making one up.
 - **Tells you your budget.** "You can use up to 9% an hour and still make it." That's the number that changes how you work.
-- **Lives in the menu bar.** The gauge's needle shows the fuel left in whichever limit is closest to running out. It turns orange when one will run out before it resets, and red when one is out.
+- **Lives in the menu bar.** A fuel pump fills with the fuel left in whichever limit is closest to running out. It turns orange when one will run out before it resets, and red when one is out.
 - **Shows up inside Claude Code.** A strip under the prompt: `⛽ 5h 55% out ~12:05p · wk 41% ok`. If you already have a status line, it stays, with the forecast under it.
 - **Warns you once.** A notification when a limit will run out at least 30 minutes before it resets, and optionally at 50%, 80%, and 95% used.
 - **Works from Terminal.** The [`fuelgauge` command](#command-line) prints the forecast and exits with code 2 when a limit will run out, so an agent can check before starting a long task.
@@ -62,7 +62,7 @@ Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgau
 
 ## First run
 
-Click the gauge in the menu bar.
+Click the fuel pump in the menu bar.
 
 | Tool | What to do | Where the numbers come from |
 | --- | --- | --- |
