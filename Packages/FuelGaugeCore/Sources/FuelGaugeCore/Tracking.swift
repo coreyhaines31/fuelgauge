@@ -4,6 +4,10 @@ import Foundation
 /// defaults; the `fuelgauge` command reads the same defaults, so both agree.
 public enum Tracking {
     public static let disabledProvidersKey = "disabledProviders"
+    public static let enabledOptInProvidersKey = "enabledOptInProviders"
+
+    /// Tools that go online to read usage stay off until turned on.
+    public static let optIn: Set<Provider> = [.cursor]
 
     /// Tools that look installed on this Mac.
     public static func installed() -> [Provider] {
@@ -11,6 +15,7 @@ public enum Tracking {
         if ClaudeSettings().isInstalled { providers.append(.claude) }
         if CodexLogReader().isInstalled { providers.append(.codex) }
         if GrokBotReader().isInstalled { providers.append(.grokBot) }
+        if CursorReader().isInstalled { providers.append(.cursor) }
         return providers
     }
 
@@ -23,7 +28,10 @@ public enum Tracking {
 
     /// Tools are tracked unless turned off, so a newly installed tool shows up by itself.
     public static func isEnabled(_ provider: Provider) -> Bool {
-        !(defaults.stringArray(forKey: disabledProvidersKey) ?? []).contains(provider.rawValue)
+        if optIn.contains(provider) {
+            return (defaults.stringArray(forKey: enabledOptInProvidersKey) ?? []).contains(provider.rawValue)
+        }
+        return !(defaults.stringArray(forKey: disabledProvidersKey) ?? []).contains(provider.rawValue)
     }
 
     public static func enabled(installed: [Provider] = installed()) -> [Provider] {
@@ -31,12 +39,15 @@ public enum Tracking {
     }
 
     public static func setEnabled(_ provider: Provider, _ enabled: Bool) {
-        var disabled = Set(defaults.stringArray(forKey: disabledProvidersKey) ?? [])
-        if enabled {
-            disabled.remove(provider.rawValue)
+        let key = optIn.contains(provider) ? enabledOptInProvidersKey : disabledProvidersKey
+        // The opt-in list holds tools that are on; the other list holds tools that are off.
+        let listed = optIn.contains(provider) ? enabled : !enabled
+        var names = Set(defaults.stringArray(forKey: key) ?? [])
+        if listed {
+            names.insert(provider.rawValue)
         } else {
-            disabled.insert(provider.rawValue)
+            names.remove(provider.rawValue)
         }
-        defaults.set(disabled.sorted(), forKey: disabledProvidersKey)
+        defaults.set(names.sorted(), forKey: key)
     }
 }
