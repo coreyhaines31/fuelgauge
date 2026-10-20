@@ -13,3 +13,11 @@ for reading in GrokBotReader().read() {
     print("Grok Bot: \(reading.usedPercent)% at \(reading.at), resets \(reading.resetsAt)")
 }
 print("Claude status line: \(ClaudeSettings().state)")
+
+print("\nForecasts:")
+for forecast in ForecastEngine.forecasts(from: codexReadings + GrokBotReader().read()) {
+    print("  \(forecast.key.provider.name) \(forecast.windowName): \(ForecastText.headline(forecast))")
+    print("    \(ForecastText.usage(forecast))")
+    if let pace = ForecastText.pace(forecast) { print("    \(pace)") }
+    if let range = ForecastText.range(forecast) { print("    \(range)") }
+}
