@@ -5,6 +5,7 @@ the homepage nav, footer, and JSON-LD between their markers, and writes sitemap.
     python3 site/_build/render.py
 """
 import datetime
+import glob
 import html
 import json
 import os
@@ -459,6 +460,21 @@ def render_llms():
         f.write(body)
 
 
+def check():
+    """Fails the build when a page's title or description is a length search results cut off or ignore."""
+    problems = []
+    for name in sorted(glob.glob(os.path.join(ROOT, "**", "*.html"), recursive=True)):
+        if "/_build/" in name:
+            continue
+        page = open(name).read()
+        title = html.unescape(re.search(r"<title>(.*?)</title>", page).group(1))
+        desc = html.unescape(re.search(r'name="description" content="(.*?)"', page).group(1))
+        if len(title) > 60 or not 50 <= len(desc) <= 160:
+            problems.append(f"{os.path.relpath(name, ROOT)}: title {len(title)}, description {len(desc)}")
+    if problems:
+        sys.exit("Titles must be 60 characters or fewer and descriptions 50 to 160:\n" + "\n".join(problems))
+
+
 if __name__ == "__main__":
     for p in LIMITS:
         render_page(p, [("Limits", "/limits"), (p["short"], p["path"])])
@@ -471,5 +487,6 @@ if __name__ == "__main__":
     render_homepage()
     render_sitemap()
     render_llms()
+    check()
     print(f"rendered {len(LIMITS)} limits, {len(GUIDES)} guides, {len(COMPARISONS)} comparison pages, 3 hubs, privacy, "
           "homepage nav/footer/schema, sitemap, llms.txt")
