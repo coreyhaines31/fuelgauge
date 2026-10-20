@@ -9,6 +9,8 @@ let package = Package(
     ],
     targets: [
         .target(name: "FuelGaugeCore"),
+        // `swift run fuelgauge-dev` prints what the readers find on this Mac.
+        .executableTarget(name: "fuelgauge-dev", dependencies: ["FuelGaugeCore"]),
         .testTarget(name: "FuelGaugeCoreTests", dependencies: ["FuelGaugeCore"], resources: [.copy("Samples")])
     ]
 )
