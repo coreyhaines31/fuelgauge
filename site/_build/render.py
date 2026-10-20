@@ -372,8 +372,8 @@ def render_hubs():
                     f'<tbody>{rows}</tbody></table></div></div>\n'
                     f'        <p class="table-foot">Checked against each provider\'s own help pages on {VERIFIED}.</p>\n')
     render_hub("/limits", "Limits",
-               "AI coding plan usage limits: Claude Pro, Max, Claude Code",
-               "How the usage limits on Claude Pro, Max, Free, and Claude Code work: the 5-hour session, the weekly limit, when each resets, and how to check what's left.",
+               "AI coding usage limits: Claude, Codex, Cursor, Copilot, Grok",
+               "How usage limits work on Claude Pro and Max, Claude Code, Codex, Cursor, Grok, and GitHub Copilot: the windows, when each resets, and how to check.",
                "Usage limits, <em>plan by plan.</em>",
                "What each plan limits, when it resets, and how to see what you have left. Checked against the official help pages.",
                [(p["short"], p["card"], p["path"]) for p in LIMITS], limits_table)

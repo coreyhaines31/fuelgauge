@@ -6,6 +6,10 @@
   <url><loc>https://fuelgauge.app/limits/claude-max</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://fuelgauge.app/limits/claude-code</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://fuelgauge.app/limits/claude-free</loc><lastmod>2026-10-20</lastmod></url>
+  <url><loc>https://fuelgauge.app/limits/codex</loc><lastmod>2026-10-20</lastmod></url>
+  <url><loc>https://fuelgauge.app/limits/cursor</loc><lastmod>2026-10-20</lastmod></url>
+  <url><loc>https://fuelgauge.app/limits/grok</loc><lastmod>2026-10-20</lastmod></url>
+  <url><loc>https://fuelgauge.app/limits/github-copilot</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://fuelgauge.app/guides</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://fuelgauge.app/guides/check-claude-usage</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://fuelgauge.app/guides/when-does-claude-limit-reset</loc><lastmod>2026-10-20</lastmod></url>
@@ -13,10 +17,13 @@
   <url><loc>https://fuelgauge.app/guides/stop-hitting-claude-limits</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://fuelgauge.app/compare</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://fuelgauge.app/compare/claude-pro-vs-max</loc><lastmod>2026-10-20</lastmod></url>
+  <url><loc>https://fuelgauge.app/compare/claude-code-vs-codex</loc><lastmod>2026-10-20</lastmod></url>
+  <url><loc>https://fuelgauge.app/compare/cursor-vs-claude-code</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://fuelgauge.app/alternatives</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://fuelgauge.app/alternatives/codexbar</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://fuelgauge.app/alternatives/ccusage</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://fuelgauge.app/alternatives/ccstatusline</loc><lastmod>2026-10-20</lastmod></url>
+  <url><loc>https://fuelgauge.app/alternatives/claude-code-usage-monitor</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://fuelgauge.app/cli</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://fuelgauge.app/privacy</loc><lastmod>2026-10-20</lastmod></url>
 </urlset>
