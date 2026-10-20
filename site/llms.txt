@@ -19,11 +19,14 @@
 - [Claude Code limits](https://fuelgauge.app/limits/claude-code): On Pro and Max, Claude Code shares your plan's 5-hour session limit and weekly limit with claude.ai and Claude Desktop, including Claude Code inside VS Code, Cursor, and JetBrains. Run /usage to see your plan usage bars. At the limit you can wait, turn on usage credits, upgrade, or switch to API billing through the Claude Console.
 - [Claude Free limits](https://fuelgauge.app/limits/claude-free): The Claude Free plan has a session-based usage limit that resets every five hours. The number of messages you can send varies with demand, and Anthropic may add other limits to keep access fair. Claude Code isn't included; Pro gives at least 5x Free's usage per session.
 
-## Guides
+## Guides, comparisons, and the command
 
 - [Check your Claude usage](https://fuelgauge.app/guides/check-claude-usage): On claude.ai, open Settings › Usage to see your usage and when your limits reset. In Claude Code, run /usage for your plan usage bars. To see it all the time, put it in Claude Code's status line, or let a menu bar app like Fuel Gauge show it and forecast whether you'll make it to the reset.
 - [When Claude limits reset](https://fuelgauge.app/guides/when-does-claude-limit-reset): Claude's session limit resets every five hours. On paid plans, the weekly limit resets once a week at a fixed time assigned to your account, not a day everyone shares. Settings › Usage on claude.ai shows your next reset, and Claude Code's limit message tells you when the window comes back.
 - [Claude Code status line](https://fuelgauge.app/guides/claude-code-statusline): Set statusLine in ~/.claude/settings.json to a command. After each reply, Claude Code sends that command JSON on stdin, including rate_limits.five_hour and rate_limits.seven_day with used_percentage and resets_at on Pro and Max. Print them, and your limits sit under the prompt.
+- [Stop hitting Claude limits](https://fuelgauge.app/guides/stop-hitting-claude-limits): Claude Code sends your whole conversation with every request, so long sessions are the biggest drain. Run /clear between unrelated tasks, match the model and effort level to the job, turn off MCP servers you aren't using, and send noisy work to subagents. Then watch your pace, so you know before a big task whether your limit will last.
+- [Claude Pro vs Max](https://fuelgauge.app/compare/claude-pro-vs-max): Pro is $20 a month. Max 5x is $100 and gives five times Pro's usage per five-hour session; Max 20x is $200 and gives twenty times. All three have a session limit that resets every five hours and a weekly limit, shared with Claude Code. Upgrade when you hit your limits often enough that waiting costs you more than the difference.
+- [Fuel Gauge for agents](https://fuelgauge.app/cli): Run fuelgauge status. It exits 0 when every limit will last until it resets, and 2 when one won't (or already ran out). Add one line to CLAUDE.md or AGENTS.md and your agent checks before long tasks. Homebrew puts the command on your PATH; otherwise use Settings › General › Install.
 
 ## Compared with other apps
 
