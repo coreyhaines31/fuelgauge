@@ -41,8 +41,12 @@ public struct Forecast: Sendable, Equatable {
 }
 
 public enum ForecastEngine {
-    /// How much history a pace needs before it's shown.
-    public static let minimumCoverage: TimeInterval = 10 * 60
+    /// How much history a pace needs before it's shown: 10 minutes, or an eighth of the stretch it's measured
+    /// over, whichever is longer. One busy hour says little about a whole week, so a weekly window waits for
+    /// 3 hours.
+    public static func minimumCoverage(windowMinutes: Int?) -> TimeInterval {
+        max(10 * 60, lookback(windowMinutes: windowMinutes) / 8)
+    }
 
     /// One forecast per limit in `readings`, in a stable order.
     public static func forecasts(from readings: [Reading], now: Date = Date()) -> [Forecast] {
@@ -80,11 +84,14 @@ public enum ForecastEngine {
 
         let windowStart = latest.windowMinutes.map { latest.resetsAt.addingTimeInterval(-Double($0) * 60) }
         let span = lookback(windowMinutes: latest.windowMinutes)
-        guard let rate = pace(window, windowStart: windowStart, since: now.addingTimeInterval(-span), now: now) else {
+        let coverage = minimumCoverage(windowMinutes: latest.windowMinutes)
+        guard let rate = pace(
+            window, windowStart: windowStart, since: now.addingTimeInterval(-span), now: now, coverage: coverage
+        ) else {
             return make(.learning, budget: budget)
         }
         let others = [span / 2, span * 2].compactMap {
-            pace(window, windowStart: windowStart, since: now.addingTimeInterval(-$0), now: now)
+            pace(window, windowStart: windowStart, since: now.addingTimeInterval(-$0), now: now, coverage: coverage)
         }
         let fastest = ([rate] + others).max() ?? rate
         let slowest = ([rate] + others).min() ?? rate
@@ -105,8 +112,10 @@ public enum ForecastEngine {
 
     /// Percentage points per hour since `start`: the climb from the last known value at `start` to now.
     /// Between readings the percent is assumed flat, since it only moves when the tool is used. Nil when
-    /// the readings cover less than `minimumCoverage`, or there's a single reading and no known window start.
-    static func pace(_ window: [Reading], windowStart: Date?, since start: Date, now: Date) -> Double? {
+    /// the readings cover less than `coverage`, or there's a single reading and no known window start.
+    static func pace(
+        _ window: [Reading], windowStart: Date?, since start: Date, now: Date, coverage: TimeInterval = 10 * 60
+    ) -> Double? {
         guard let latest = window.last else { return nil }
         let from: Date
         let baseline: Double
@@ -124,7 +133,7 @@ public enum ForecastEngine {
             return nil
         }
         let elapsed = now.timeIntervalSince(from)
-        guard elapsed >= minimumCoverage else { return nil }
+        guard elapsed >= coverage else { return nil }
         return max(0, latest.usedPercent - baseline) / (elapsed / 3600)
     }
 }
