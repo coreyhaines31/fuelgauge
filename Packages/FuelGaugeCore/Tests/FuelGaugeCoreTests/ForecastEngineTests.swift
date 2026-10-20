@@ -184,10 +184,65 @@ import Testing
         #expect(ForecastText.pace(forecast, now: now) == "Using 2.0% an hour. 88% left for the 45m until the reset.")
     }
 
+    @Test func aBudgetTooSmallToShowSaysWhatsLeft() throws {
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        let readings = [
+            Reading(provider: .grokBot, limit: "weekly", windowMinutes: 10080, usedPercent: 97,
+                    resetsAt: now.addingTimeInterval(32 * 3600), at: now.addingTimeInterval(-6 * 3600)),
+            Reading(provider: .grokBot, limit: "weekly", windowMinutes: 10080, usedPercent: 99,
+                    resetsAt: now.addingTimeInterval(32 * 3600), at: now)
+        ]
+        let forecast = try #require(ForecastEngine.forecast(for: readings, now: now))
+        #expect(ForecastText.pace(forecast, now: now)?.hasSuffix("Only 1% left until the reset.") == true)
+    }
+
     @Test func formatsPercents() {
         #expect(ForecastText.percent(0.4) == "<1%")
         #expect(ForecastText.percent(23.5) == "24%")
         #expect(ForecastText.shortName(300) == "5h")
         #expect(ForecastText.shortName(10080) == "wk")
+    }
+}
+
+@Suite struct PanelTextTests {
+    let now = Date(timeIntervalSince1970: 1_800_000_000)
+
+    func reading(_ used: Double, minutesAgo: Double, provider: Provider = .claude, limit: String = "five_hour",
+                 minutes: Int? = 300, resetsIn: Double = 3) -> Reading {
+        Reading(provider: provider, limit: limit, windowMinutes: minutes, usedPercent: used,
+                resetsAt: now.addingTimeInterval(resetsIn * 3600), at: now.addingTimeInterval(-minutesAgo * 60))
+    }
+
+    @Test func summaryNamesTheLimitThatRunsOutFirst() {
+        let forecasts = ForecastEngine.forecasts(from: [
+            reading(40, minutesAgo: 60), reading(70, minutesAgo: 0),
+            reading(10, minutesAgo: 60, provider: .codex, limit: "codex-10080", minutes: 10080, resetsIn: 100),
+            reading(10, minutesAgo: 0, provider: .codex, limit: "codex-10080", minutes: 10080, resetsIn: 100)
+        ], now: now)
+        #expect(ForecastText.summary(forecasts, now: now).hasPrefix("Claude Code runs out"))
+    }
+
+    @Test func summaryWhenAllIsWell() {
+        let readings = [reading(10, minutesAgo: 60), reading(11, minutesAgo: 0)]
+        let forecasts = ForecastEngine.forecasts(from: readings, now: now)
+        #expect(ForecastText.summary(forecasts, now: now) == "Everything makes it to reset")
+        #expect(ForecastText.summary([], now: now) == "No readings yet")
+    }
+
+    @Test func learningCountsDownToTheForecast() throws {
+        // A weekly window with readings that began an hour ago needs 3 hours: 2 hours to go.
+        let weekly = [reading(30, minutesAgo: 60, limit: "seven_day", minutes: 10080, resetsIn: 50),
+                      reading(31, minutesAgo: 0, limit: "seven_day", minutes: 10080, resetsIn: 50)]
+        let forecast = try #require(ForecastEngine.forecast(for: weekly, now: now))
+        #expect(ForecastText.learning(forecast, now: now) == "Forecast in about 2h")
+    }
+
+    @Test func chartsZoomToTheRecentStretch() throws {
+        let weekly = [reading(30, minutesAgo: 600, limit: "seven_day", minutes: 10080, resetsIn: 100),
+                      reading(40, minutesAgo: 0, limit: "seven_day", minutes: 10080, resetsIn: 100)]
+        let forecast = try #require(ForecastEngine.forecast(for: weekly, now: now))
+        let range = ForecastEngine.chartRange(forecast, now: now)
+        #expect(range.lowerBound == now.addingTimeInterval(-24 * 3600))
+        #expect(range.upperBound <= forecast.resetsAt)
     }
 }

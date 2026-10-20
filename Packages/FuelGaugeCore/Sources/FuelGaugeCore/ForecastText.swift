@@ -25,6 +25,37 @@ public enum ForecastText {
         }
     }
 
+    /// One line for the top of the panel and the command: the limit that matters most, or that all is well.
+    public static func summary(_ forecasts: [Forecast], now: Date = Date()) -> String {
+        let active = forecasts.filter { $0.verdict != .reset }
+        if let out = active.first(where: { $0.verdict == .limitReached }) {
+            let until = time(out.resetsAt, now: now)
+            return "\(out.key.provider.name)'s \(out.windowName.lowercased()) limit is out until \(until)"
+        }
+        let short = active.compactMap { forecast -> (Forecast, Date)? in
+            guard case .runsOut(let at, _, _) = forecast.verdict else { return nil }
+            return (forecast, at)
+        }.sorted { $0.1 < $1.1 }
+        if let (first, at) = short.first {
+            let name = first.key.provider.name
+            let today = Calendar.current.isDate(at, inSameDayAs: now)
+            let when = today ? "today at \(time(at, now: now))" : time(at, now: now)
+            let more = short.count > 1 ? " · \(short.count - 1) more running short" : ""
+            return "\(name) runs out \(when)\(more)"
+        }
+        if active.isEmpty { return "No readings yet" }
+        if active.allSatisfy({ $0.verdict == .learning }) { return "Learning your pace" }
+        return "Everything makes it to reset"
+    }
+
+    /// "Forecast in about 2h 15m" while a forecast is learning.
+    public static func learning(_ forecast: Forecast, now: Date = Date()) -> String {
+        guard let remaining = ForecastEngine.forecastIn(forecast, now: now) else {
+            return "Forecast after the next reading while you work"
+        }
+        return remaining < 60 ? "Forecast at the next reading" : "Forecast in about \(duration(remaining))"
+    }
+
     /// "23% used · resets 5:00p (in 3h 7m)".
     public static func usage(_ forecast: Forecast, now: Date = Date()) -> String {
         if forecast.verdict == .reset { return "Was \(percent(forecast.usedPercent)) before the reset" }
@@ -56,6 +87,9 @@ public enum ForecastText {
             if budget >= left {
                 let untilReset = duration(forecast.resetsAt.timeIntervalSince(now))
                 return "\(using) \(percent(left)) left for the \(untilReset) until the reset."
+            }
+            if budget < 0.1 {
+                return "\(using) Only \(percent(left)) left until the reset."
             }
             return "\(using) You can use up to \(rate: budget) an hour and still make it."
         }
