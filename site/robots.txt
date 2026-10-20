@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://fuelgauge.app/sitemap.xml

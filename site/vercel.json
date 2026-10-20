@@ -1,0 +1,12 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.fuelgauge.app" }],
+      "destination": "https://fuelgauge.app/:path*",
+      "permanent": true
+    }
+  ]
+}
