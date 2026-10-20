@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CodexBar alternative: Fuel Gauge, a free usage forecast for Mac</title>
-  <meta name="description" content="CodexBar shows usage for over 100 AI providers. Fuel Gauge is a free Mac alternative that forecasts whether your Claude Code, Codex, and Grok Bot limits last until reset.">
+  <meta name="description" content="CodexBar shows usage for over 100 AI providers. Fuel Gauge is a free Mac alternative that forecasts whether your Claude Code, Codex, Grok Bot, and Cursor limits last until reset.">
   <link rel="canonical" href="https://fuelgauge.app/codexbar-alternative">
   <meta property="og:title" content="CodexBar alternative: Fuel Gauge, a free usage forecast for Mac">
-  <meta property="og:description" content="CodexBar shows usage for over 100 AI providers. Fuel Gauge is a free Mac alternative that forecasts whether your Claude Code, Codex, and Grok Bot limits last until reset.">
+  <meta property="og:description" content="CodexBar shows usage for over 100 AI providers. Fuel Gauge is a free Mac alternative that forecasts whether your Claude Code, Codex, Grok Bot, and Cursor limits last until reset.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Fuel Gauge">
   <meta property="og:image" content="https://fuelgauge.app/images/og.png">
@@ -16,7 +16,7 @@
   <meta property="og:url" content="https://fuelgauge.app/codexbar-alternative">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="CodexBar alternative: Fuel Gauge, a free usage forecast for Mac">
-  <meta name="twitter:description" content="CodexBar shows usage for over 100 AI providers. Fuel Gauge is a free Mac alternative that forecasts whether your Claude Code, Codex, and Grok Bot limits last until reset.">
+  <meta name="twitter:description" content="CodexBar shows usage for over 100 AI providers. Fuel Gauge is a free Mac alternative that forecasts whether your Claude Code, Codex, Grok Bot, and Cursor limits last until reset.">
   <meta name="theme-color" content="#fbe9d6" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/images/icon.svg" type="image/svg+xml">
@@ -47,7 +47,7 @@
       <div class="wrap narrow">
         <div class="eyebrow">CodexBar alternative</div>
         <h1>CodexBar shows how much you&#39;ve used. Fuel Gauge says if you&#39;ll <em>make it to reset.</em></h1>
-        <p class="lede">CodexBar is a good free menu bar app that tracks usage across a huge list of AI providers. Fuel Gauge does less, on purpose: three tools, and one answer for each.</p>
+        <p class="lede">CodexBar is a good free menu bar app that tracks usage across a huge list of AI providers. Fuel Gauge does less, on purpose: four tools, and one answer for each.</p>
         <div class="actions">
           <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download free</a>
         <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>View source code</a>
@@ -100,7 +100,7 @@
         <ol class="steps">
           <li><b>Install Fuel Gauge.</b> <code>brew install --cask coreyhaines31/tap/fuelgauge</code>, or download the app from GitHub and drag it to Applications.</li>
           <li><b>Turn on the status line.</b> From the app, or with <code>fuelgauge install-statusline</code>. It keeps your existing status line and backs up <code>settings.json</code>.</li>
-          <li><b>Work for 10 minutes.</b> It needs about that many readings before it forecasts. Until then it says “Learning your pace.”</li>
+          <li><b>Keep working.</b> A 5-hour limit gets a forecast after about 10 minutes of readings, a weekly one after 3 hours. Until then it says “Learning your pace.”</li>
           <li><b>Keep CodexBar if you use its other providers.</b> The two don&#39;t conflict.</li>
         </ol>
             
@@ -111,7 +111,7 @@
         <div class="head center head-sm"><h2>Questions</h2></div>
         <div class="faq glass">
           <details><summary>Is CodexBar free?</summary><p>Yes. CodexBar is free and MIT licensed. Fuel Gauge is free too, with the source on GitHub under the FSL-1.1-MIT license.</p></details>
-          <details><summary>Does Fuel Gauge track as many providers as CodexBar?</summary><p>No. CodexBar lists over 100 providers. Fuel Gauge tracks Claude Code, Codex, and Grok Bot, and puts its effort into forecasting those.</p></details>
+          <details><summary>Does Fuel Gauge track as many providers as CodexBar?</summary><p>No. CodexBar lists over 100 providers. Fuel Gauge tracks Claude Code, Codex, Grok Bot, and Cursor, and puts its effort into forecasting those.</p></details>
           <details><summary>Why doesn&#x27;t Fuel Gauge use browser cookies?</summary><p>It reads only what Claude Code, Codex, and Grok Bot already save on your Mac. That means no browser cookies, no Full Disk Access, no keychain, and no sign-in.</p></details>
           <details><summary>Can I run both?</summary><p>Yes. They don&#x27;t conflict. Some people keep CodexBar for its breadth and Fuel Gauge for the forecast.</p></details>
         </div>
@@ -163,7 +163,7 @@
       });
     });
   </script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is CodexBar free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. CodexBar is free and MIT licensed. Fuel Gauge is free too, with the source on GitHub under the FSL-1.1-MIT license."}}, {"@type": "Question", "name": "Does Fuel Gauge track as many providers as CodexBar?", "acceptedAnswer": {"@type": "Answer", "text": "No. CodexBar lists over 100 providers. Fuel Gauge tracks Claude Code, Codex, and Grok Bot, and puts its effort into forecasting those."}}, {"@type": "Question", "name": "Why doesn't Fuel Gauge use browser cookies?", "acceptedAnswer": {"@type": "Answer", "text": "It reads only what Claude Code, Codex, and Grok Bot already save on your Mac. That means no browser cookies, no Full Disk Access, no keychain, and no sign-in."}}, {"@type": "Question", "name": "Can I run both?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. They don't conflict. Some people keep CodexBar for its breadth and Fuel Gauge for the forecast."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is CodexBar free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. CodexBar is free and MIT licensed. Fuel Gauge is free too, with the source on GitHub under the FSL-1.1-MIT license."}}, {"@type": "Question", "name": "Does Fuel Gauge track as many providers as CodexBar?", "acceptedAnswer": {"@type": "Answer", "text": "No. CodexBar lists over 100 providers. Fuel Gauge tracks Claude Code, Codex, Grok Bot, and Cursor, and puts its effort into forecasting those."}}, {"@type": "Question", "name": "Why doesn't Fuel Gauge use browser cookies?", "acceptedAnswer": {"@type": "Answer", "text": "It reads only what Claude Code, Codex, and Grok Bot already save on your Mac. That means no browser cookies, no Full Disk Access, no keychain, and no sign-in."}}, {"@type": "Question", "name": "Can I run both?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. They don't conflict. Some people keep CodexBar for its breadth and Fuel Gauge for the forecast."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Fuel Gauge", "item": "https://fuelgauge.app/"}, {"@type": "ListItem", "position": 2, "name": "CodexBar alternative", "item": "https://fuelgauge.app/codexbar-alternative"}]}</script>
 </body>
 </html>

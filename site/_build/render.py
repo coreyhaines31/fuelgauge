@@ -304,11 +304,11 @@ def render_llms():
     compare = "\n".join(f"- [Fuel Gauge vs {p['competitor']}]({SITE}/{p['slug']}): {html.unescape(p['tldr'])}" for p in COMPARISONS)
     body = f"""# Fuel Gauge
 
-> Fuel Gauge is a free, source-available macOS menu bar app (macOS 14 Sonoma or later) that forecasts whether your Claude Code, Codex, and Grok Bot plan limits will last until they reset. It reads only what those tools already save on your Mac, and sends nothing anywhere.
+> Fuel Gauge is a free, source-available macOS menu bar app (macOS 14 Sonoma or later) that forecasts whether your Claude Code, Codex, Grok Bot, and Cursor plan limits will last until they reset. It reads only what those tools already save on your Mac, and sends nothing anywhere.
 
 - Install: `{BREW}`, or download {DOWNLOAD}
 - Source: {REPO} (FSL-1.1-MIT)
-- Limits tracked: Claude Code 5-hour and weekly, Codex weekly, Grok Bot weekly, and Cursor monthly (opt-in: asks cursor.com with the Cursor app's sign-in). Choose which in Settings › Tools.
+- Limits tracked: Claude Code 5-hour and weekly, Codex, Grok Bot weekly, and Cursor monthly (opt-in: asks cursor.com with the Cursor app's sign-in). Choose which in Settings › Tools.
 - How it forecasts: readings come from Claude Code's status line (every time Claude Code replies), Codex's session logs (`~/.codex/sessions`), and Grok Bot's local usage cache. Pace is the climb over the last hour for 5-hour windows and the last day for weekly ones. It needs about 10 minutes of readings first, and shows a range, not an exact minute. It's an estimate from recent pace, not a promise.
 - Command line: `fuelgauge status` prints the verdict for each limit and exits with code 2 when a limit is forecast to run out before it resets. `fuelgauge status --json` has the details. `fuelgauge history` shows the readings. `fuelgauge install-statusline` adds the forecast under Claude Code's prompt (keeping any existing status line and backing up settings.json), and `fuelgauge uninstall-statusline` removes it.
 - Install prompt for a coding agent: "{INSTALL_PROMPT}"

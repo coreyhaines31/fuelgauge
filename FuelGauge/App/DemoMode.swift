@@ -58,7 +58,7 @@ enum DemoMode {
             NSColor.white.setFill()
             NSRect(origin: .zero, size: size).fill()
             for (index, glyph) in glyphs.enumerated() {
-                GaugeGlyph.image(fuelLeft: glyph.0, tint: glyph.1, size: 72)
+                FuelGlyph.image(fuelLeft: glyph.0, tint: glyph.1, size: 72)
                     .draw(in: NSRect(x: CGFloat(index) * 104, y: 0, width: 72, height: 72))
             }
             return true
