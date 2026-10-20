@@ -1,30 +1,66 @@
 import FuelGaugeCore
 import SwiftUI
 
-/// One limit: the verdict first, then the numbers behind it, then the chart.
-struct LimitCard: View {
-    let forecast: Forecast
+/// One tool's limits in a card: a row per window, shortest window first.
+struct ToolCard: View {
+    let provider: Provider
+    let forecasts: [Forecast]
     let now: Date
-    var showsChart = true
+    /// The one window in the whole panel that gets a chart: the most urgent one that's running short.
+    let chartKey: LimitKey?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(provider.name)
+                .font(.system(size: 13, weight: .semibold))
+            ForEach(Array(forecasts.enumerated()), id: \.element.key) { index, forecast in
+                if index > 0 { Divider() }
+                WindowRow(forecast: forecast, now: now, showsChart: forecast.key == chartKey)
+            }
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 10))
+    }
+}
+
+/// One window. Compact when it's fine or still learning; the full story when it's running short.
+struct WindowRow: View {
+    let forecast: Forecast
+    let now: Date
+    let showsChart: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
             HStack(alignment: .firstTextBaseline) {
-                Text("\(forecast.key.provider.name) · \(forecast.windowName)")
-                    .font(.system(size: 12, weight: .semibold))
+                Text(forecast.windowName)
+                    .font(.system(size: 12, weight: .medium))
                 Spacer()
                 Text(ForecastText.percent(forecast.usedPercent))
                     .font(.system(size: 12, weight: .semibold).monospacedDigit())
                     .foregroundStyle(.secondary)
             }
             UsageBar(used: forecast.usedPercent, projected: projected, tint: tint)
+            if forecast.isShort {
+                expanded
+            } else {
+                Text(compactLine)
+                    .font(.system(size: 11.5, weight: .medium))
+                    .foregroundStyle(tint)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+
+    private var expanded: some View {
+        VStack(alignment: .leading, spacing: 4) {
             Text(ForecastText.headline(forecast, now: now))
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(tint)
             Text(ForecastText.usage(forecast, now: now))
                 .font(.system(size: 11))
                 .foregroundStyle(.secondary)
-            if let pace = ForecastText.pace(forecast) {
+            if let pace = ForecastText.pace(forecast, now: now) {
                 Text(pace)
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
@@ -37,12 +73,23 @@ struct LimitCard: View {
             }
             if showsChart, forecast.history.count >= 2 {
                 ForecastChart(forecast: forecast, now: now, tint: tint)
-                    .frame(height: 64)
-                    .padding(.top, 2)
+                    .frame(height: 76)
+                    .padding(.top, 4)
             }
         }
-        .padding(12)
-        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 10))
+    }
+
+    /// "Makes it, about 14% by then · resets 2p", or "Learning your pace, forecast in about 2h · resets 2p".
+    private var compactLine: String {
+        let resets = "resets \(ForecastText.time(forecast.resetsAt, now: now))"
+        switch forecast.verdict {
+        case .learning:
+            return "Learning your pace, \(ForecastText.learning(forecast, now: now).lowercased()) · \(resets)"
+        case .reset:
+            return ForecastText.headline(forecast, now: now)
+        default:
+            return "\(ForecastText.headline(forecast, now: now)) · \(resets)"
+        }
     }
 
     /// Where the bar's faint extension ends: the projected percent at reset.
@@ -55,7 +102,7 @@ struct LimitCard: View {
     }
 
     private var tint: Color {
-        Self.tint(for: forecast.verdict)
+        WindowRow.tint(for: forecast.verdict)
     }
 
     static func tint(for verdict: Forecast.Verdict) -> Color {
@@ -84,9 +131,9 @@ struct UsageBar: View {
                         .frame(width: width * min(projected, 100) / 100)
                 }
                 Capsule().fill(tint == .secondary ? Color.gray : tint)
-                    .frame(width: max(6, width * min(used, 100) / 100))
+                    .frame(width: max(5, width * min(used, 100) / 100))
             }
         }
-        .frame(height: 6)
+        .frame(height: 5)
     }
 }

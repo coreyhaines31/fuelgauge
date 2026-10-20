@@ -24,7 +24,7 @@ It's free, the source is on GitHub, and your usage never leaves your Mac.
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset=".github/images/panel-dark.png">
-    <img src=".github/images/panel-light.png" width="380" alt="The Fuel Gauge panel. Claude Code 5-hour at 55%: runs out around 12:05p, 1h 30m early, using 28% an hour when 15% an hour would make it, with a chart of usage and a dashed line to 100%. Grok Bot weekly at 89%: runs out 22 hours early. Claude Code weekly at 41% and Codex weekly at 9%: makes it to reset.">
+    <img src=".github/images/panel-light.png" width="380" alt="The Fuel Gauge panel. Summary: Claude Code runs out today at 2:56p, 1 more running short. Claude Code card: 5-hour at 55%, runs out around 2:56p, 1h 30m early, with a chart from now to the run-out; weekly at 41%, makes it to reset. Grok Bot weekly at 89%, runs out early. Codex weekly at 9%, makes it.">
   </picture>
 </p>
 

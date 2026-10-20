@@ -104,6 +104,33 @@ public enum ForecastEngine {
         return make(.runsOut(at: runsOut, earliest: earliest, latest: latestRunOut), rate: rate, budget: budget)
     }
 
+    /// How long until a learning forecast has enough readings, or nil if it's waiting for a second reading
+    /// rather than for time to pass.
+    public static func forecastIn(_ forecast: Forecast, now: Date = Date()) -> TimeInterval? {
+        guard forecast.verdict == .learning else { return nil }
+        let span = lookback(windowMinutes: forecast.windowMinutes)
+        let windowStart = forecast.windowMinutes.map { forecast.resetsAt.addingTimeInterval(-Double($0) * 60) }
+        var starts = forecast.history.count >= 2 ? [forecast.history[0].at] : []
+        if let windowStart, windowStart >= now.addingTimeInterval(-span) { starts.append(windowStart) }
+        guard let start = starts.min() else { return nil }
+        return max(0, minimumCoverage(windowMinutes: forecast.windowMinutes) - now.timeIntervalSince(start))
+    }
+
+    /// The stretch a chart should show: from the start of the recent stretch (or the window, if it began
+    /// later) to the run-out time with a little room after it, or to the reset.
+    public static func chartRange(_ forecast: Forecast, now: Date = Date()) -> ClosedRange<Date> {
+        let span = lookback(windowMinutes: forecast.windowMinutes)
+        var start = now.addingTimeInterval(-span)
+        if let minutes = forecast.windowMinutes {
+            start = max(start, forecast.resetsAt.addingTimeInterval(-Double(minutes) * 60))
+        }
+        var end = forecast.resetsAt
+        if case .runsOut(let at, _, _) = forecast.verdict {
+            end = min(forecast.resetsAt, at.addingTimeInterval(max(at.timeIntervalSince(now), 0) * 0.25 + 600))
+        }
+        return start...max(end, now.addingTimeInterval(60))
+    }
+
     /// When the limit hits 100% at `rate`, or nil if it isn't climbing.
     static func runOut(used: Double, rate: Double, now: Date) -> Date? {
         guard rate > 0 else { return nil }
@@ -119,14 +146,19 @@ public enum ForecastEngine {
         guard let latest = window.last else { return nil }
         let from: Date
         let baseline: Double
+        // What the climb is divided by. Usually the same as `from`.
+        var divideFrom: Date?
         let windowStartsInside = windowStart.map { $0 >= start } ?? false
         // One reading says nothing about pace unless the window's zero point is known.
         guard window.count >= 2 || windowStartsInside else { return nil }
         if let before = window.last(where: { $0.at <= start }) {
             (from, baseline) = (start, before.usedPercent)
         } else if let windowStart, windowStart >= start {
-            // The window began inside the stretch, at zero.
+            // The window began inside the stretch, at zero. Over a day-long stretch (weekly windows), the hours
+            // before it opened count as unused, so the pace is a daily average rather than the first burst of a
+            // fresh window projected across the whole week.
             (from, baseline) = (windowStart, 0)
+            if now.timeIntervalSince(start) >= 12 * 3600 { divideFrom = start }
         } else if let first = window.first {
             (from, baseline) = (first.at, first.usedPercent)
         } else {
@@ -134,6 +166,7 @@ public enum ForecastEngine {
         }
         let elapsed = now.timeIntervalSince(from)
         guard elapsed >= coverage else { return nil }
-        return max(0, latest.usedPercent - baseline) / (elapsed / 3600)
+        let hours = now.timeIntervalSince(divideFrom ?? from) / 3600
+        return max(0, latest.usedPercent - baseline) / hours
     }
 }
