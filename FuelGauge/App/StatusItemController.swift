@@ -42,7 +42,7 @@ final class StatusItemController {
         case .runsOut: .systemOrange
         default: nil
         }
-        item.button?.image = GaugeGlyph.image(fuelLeft: urgent.map { 1 - $0.usedPercent / 100 }, tint: tint)
+        item.button?.image = FuelGlyph.image(fuelLeft: urgent.map { 1 - $0.usedPercent / 100 }, tint: tint)
         item.button?.title = title(for: urgent)
         item.button?.toolTip = urgent.map { "\($0.key.provider.name) \($0.windowName): \(ForecastText.headline($0))" }
     }
