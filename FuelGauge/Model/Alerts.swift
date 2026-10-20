@@ -11,43 +11,43 @@ final class Alerts {
     /// How much earlier than the reset a run-out has to be before it's worth interrupting for.
     static let minimumMargin: TimeInterval = 30 * 60
 
-    private var shortOnce: Set<String> = []
+    /// Limits that were short at the last refresh; a run-out alert needs two in a row.
+    private var shortOnce: Set<LimitKey> = []
     private var askedPermission = false
     private let center = UNUserNotificationCenter.current()
 
     func check(_ forecasts: [Forecast], now: Date = Date()) {
+        // Each alert kind per limit remembers the reset time of the window it fired for. A reset time
+        // within 10 minutes of that is the same window (reset times drift a little between readings).
         var fired = UserDefaults.standard.dictionary(forKey: Self.firedKey) as? [String: Double] ?? [:]
-        // Forget windows that reset more than a day ago.
-        fired = fired.filter { $0.value > now.addingTimeInterval(-86400).timeIntervalSince1970 }
-        var shortNow: Set<String> = []
+        func hasFired(_ id: String, _ forecast: Forecast) -> Bool {
+            fired[id].map { abs($0 - forecast.resetsAt.timeIntervalSince1970) <= 600 } ?? false
+        }
+        func markFired(_ id: String, _ forecast: Forecast) {
+            fired[id] = forecast.resetsAt.timeIntervalSince1970
+        }
+        var shortNow: Set<LimitKey> = []
 
-        for forecast in forecasts {
-            let window = "\(forecast.key.id)|\(Int(forecast.resetsAt.timeIntervalSince1970 / 600))"
+        for forecast in forecasts where forecast.verdict != .reset {
             if Preferences.alertWhenShort, case .runsOut(let at, _, _) = forecast.verdict,
                forecast.resetsAt.timeIntervalSince(at) >= Self.minimumMargin {
-                shortNow.insert(window)
-                let id = "\(window)|short"
-                if shortOnce.contains(window), fired[id] == nil {
-                    fired[id] = forecast.resetsAt.timeIntervalSince1970
+                shortNow.insert(forecast.key)
+                let id = "\(forecast.key.id)|short"
+                if shortOnce.contains(forecast.key), !hasFired(id, forecast) {
+                    markFired(id, forecast)
                     post(id: id, title: shortTitle(forecast, at: at, now: now), body: shortBody(forecast, now: now))
                 }
             }
-            for threshold in Preferences.alertThresholds where forecast.usedPercent >= Double(threshold) {
-                let id = "\(window)|\(threshold)"
-                guard fired[id] == nil, forecast.verdict != .reset else { continue }
-                // Crossing several at once (say, a first reading at 97%) alerts for the highest only.
-                for lower in Preferences.alertThresholds where lower < threshold {
-                    fired["\(window)|\(lower)"] = forecast.resetsAt.timeIntervalSince1970
-                }
-                fired[id] = forecast.resetsAt.timeIntervalSince1970
-                if threshold == Preferences.alertThresholds.filter({ forecast.usedPercent >= Double($0) }).max() {
-                    post(
-                        id: id,
-                        title: "\(name(forecast)) is \(ForecastText.percent(forecast.usedPercent)) used",
-                        body: ForecastText.headline(forecast, now: now) + ". " + ForecastText.usage(forecast, now: now)
-                    )
-                }
-            }
+            let crossed = Preferences.alertThresholds.filter { forecast.usedPercent >= Double($0) }
+            let unfired = crossed.filter { !hasFired("\(forecast.key.id)|\($0)", forecast) }
+            // Crossing several at once (say, a first reading at 97%) alerts for the highest only.
+            guard let highest = unfired.max() else { continue }
+            crossed.forEach { markFired("\(forecast.key.id)|\($0)", forecast) }
+            post(
+                id: "\(forecast.key.id)|\(highest)",
+                title: "\(name(forecast)) is \(ForecastText.percent(forecast.usedPercent)) used",
+                body: ForecastText.headline(forecast, now: now) + ". " + ForecastText.usage(forecast, now: now)
+            )
         }
         shortOnce = shortNow
         UserDefaults.standard.set(fired, forKey: Self.firedKey)

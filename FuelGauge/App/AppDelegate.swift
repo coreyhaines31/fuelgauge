@@ -24,13 +24,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             openSettings: { settingsWindow.show() },
             checkForUpdates: { [updater] in updater.checkForUpdates() }
         )
-        model.onChange = { [weak self] in
-            guard let self else { return }
-            statusItemController?.update()
+        model.onChange = { [weak self] in self?.statusItemController?.update() }
+        model.onRefresh = { [weak self] forecasts in
             #if DEBUG
             if DemoMode.isOn { return }
             #endif
-            alerts.check(model.forecasts)
+            self?.alerts.check(forecasts)
         }
         NotificationCenter.default.addObserver(
             forName: UserDefaults.didChangeNotification, object: nil, queue: .main
