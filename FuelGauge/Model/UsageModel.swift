@@ -41,6 +41,9 @@ final class UsageModel {
     }
 
     func start() {
+        // Keep about two months of readings.
+        let store = store
+        Task.detached(priority: .background) { store.prune(before: Date().addingTimeInterval(-60 * 86400)) }
         refresh()
         timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
             MainActor.assumeIsolated { self.refresh() }
@@ -58,7 +61,8 @@ final class UsageModel {
         let grokBot = grokBot
         let store = store
         let codexStateURL = codexStateURL
-        claudeStatusLine = claude.state
+        // Demo data stands in for a set-up Mac, so it doesn't ask to set up Claude Code.
+        claudeStatusLine = readsLiveData ? claude.state : .on
         Task {
             let (readings, updatedCodex) = await Task.detached(priority: .utility) {
                 var codex = codex
