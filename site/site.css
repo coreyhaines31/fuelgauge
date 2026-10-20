@@ -315,7 +315,8 @@ section.tight { padding: clamp(56px, 8vw, 96px) 0 0; }
 .fg-chart .proj { fill: none; stroke: var(--m-warn-fill); stroke-width: 2; stroke-dasharray: 3 4; stroke-linecap: round; }
 .fg-chart .reset { stroke: var(--m-sub); stroke-width: 1; stroke-dasharray: 3 3; }
 .fg-chart .dot { fill: var(--m-warn-fill); }
-.fg-axis { display: flex; justify-content: space-between; font-size: 10px; color: var(--m-faint); margin-top: 3px; font-variant-numeric: tabular-nums; }
+.fg-axis { position: relative; height: 14px; font-size: 10px; color: var(--m-faint); margin-top: 3px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fg-axis span { position: absolute; top: 0; transform: translateX(-50%); }
 .fg-foot { display: flex; justify-content: space-between; padding: 8px 6px 2px; font-size: 12px; color: var(--m-sub); }
 
 /* Terminal windows: the status line and the agent check */
@@ -363,6 +364,8 @@ section.tight { padding: clamp(56px, 8vw, 96px) 0 0; }
   .mk-menubar .l span, .mk-menubar .r .hide-sm { display: none; }
   .mk-panel { width: auto; max-width: 372px; margin: 8px 8px 0 auto; }
   .prompt-box pre { padding: 52px 16px 16px; font-size: 12.5px; }
+  .copyline { border-radius: 16px; padding: 10px 8px 10px 14px; }
+  .copyline code { white-space: normal; overflow-wrap: anywhere; font-size: 12.5px; }
   .tldr { padding: 20px; }
   .compare { font-size: 14px; }
   .compare th, .compare td { padding: 12px 10px; }
