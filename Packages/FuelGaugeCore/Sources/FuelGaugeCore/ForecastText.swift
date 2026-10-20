@@ -37,7 +37,8 @@ public enum ForecastText {
     public static func pace(_ forecast: Forecast) -> String? {
         switch forecast.verdict {
         case .learning:
-            return "A forecast needs 10 minutes of readings while you work."
+            let needed = ForecastText.duration(ForecastEngine.minimumCoverage(windowMinutes: forecast.windowMinutes))
+            return "A forecast needs \(needed) of readings while you work."
         case .limitReached, .reset:
             return nil
         case .makesIt, .runsOut:
