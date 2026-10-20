@@ -1,0 +1,54 @@
+name: Bug report
+description: Something isn't working, or a number looks wrong
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting this. Check [Troubleshooting](https://github.com/coreyhaines31/fuelgauge#troubleshooting) first, since it covers the common questions (menu bar icon missing, "Learning your pace" that never goes away, Claude readings that stop).
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead. A screenshot of the menu or window helps.
+    validations:
+      required: true
+  - type: input
+    id: app-version
+    attributes:
+      label: Fuel Gauge version
+      description: Shown in Settings › General.
+      placeholder: "1.2.1"
+    validations:
+      required: true
+  - type: input
+    id: macos-version
+    attributes:
+      label: macOS version
+      placeholder: "macOS 26.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: tools
+    attributes:
+      label: Which tool is it about?
+      options:
+        - Claude Code
+        - Codex
+        - Both
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How did you install it?
+      options:
+        - Homebrew
+        - DMG from GitHub Releases
+        - Built from source
+  - type: textarea
+    id: forecast
+    attributes:
+      label: For a forecast that looks wrong
+      description: Paste the output of `fuelgauge status --json`, and what Claude Code or Codex showed for the same window.
+      render: json

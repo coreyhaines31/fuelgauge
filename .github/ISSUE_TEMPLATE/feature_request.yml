@@ -1,0 +1,16 @@
+name: Idea
+description: Suggest something Fuel Gauge should do
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The problem or question you had, in your own words. "I wanted to know which project burned my weekly limit" is more useful than a feature name.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would help?
+      description: How you'd like Fuel Gauge to handle it, if you have an idea.
