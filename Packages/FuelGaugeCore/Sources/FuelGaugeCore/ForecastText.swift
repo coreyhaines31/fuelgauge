@@ -33,22 +33,31 @@ public enum ForecastText {
             + "(in \(duration(resets.timeIntervalSince(now))))"
     }
 
-    /// "Using 6% an hour. You can use up to 9% an hour and still make it."
-    public static func pace(_ forecast: Forecast) -> String? {
+    /// "Using 6% an hour. You can use up to 9% an hour and still make it." Close to the reset, when more is left
+    /// than an hour could use, it says how much is left instead.
+    public static func pace(_ forecast: Forecast, now: Date = Date()) -> String? {
         switch forecast.verdict {
         case .learning:
-            let needed = ForecastText.duration(ForecastEngine.minimumCoverage(windowMinutes: forecast.windowMinutes))
+            let needed = duration(ForecastEngine.minimumCoverage(windowMinutes: forecast.windowMinutes))
             return "A forecast needs \(needed) of readings while you work."
         case .limitReached, .reset:
             return nil
         case .makesIt, .runsOut:
             guard let rate = forecast.ratePerHour, let budget = forecast.budgetPerHour else { return nil }
+            let left = max(0, 100 - forecast.usedPercent)
+            let using: String
             if rate < 0.05 {
                 let lookback = ForecastEngine.lookback(windowMinutes: forecast.windowMinutes)
                 let stretch = lookback == 3600 ? "hour" : lookback == 86400 ? "day" : duration(lookback)
-                return "Not used in the last \(stretch). You can use up to \(rate: budget) an hour and still make it."
+                using = "Not used in the last \(stretch)."
+            } else {
+                using = "Using \(rate: rate) an hour."
             }
-            return "Using \(rate: rate) an hour. You can use up to \(rate: budget) an hour and still make it."
+            if budget >= left {
+                let untilReset = duration(forecast.resetsAt.timeIntervalSince(now))
+                return "\(using) \(percent(left)) left for the \(untilReset) until the reset."
+            }
+            return "\(using) You can use up to \(rate: budget) an hour and still make it."
         }
     }
 

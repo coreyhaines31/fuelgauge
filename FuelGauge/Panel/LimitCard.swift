@@ -24,7 +24,7 @@ struct LimitCard: View {
             Text(ForecastText.usage(forecast, now: now))
                 .font(.system(size: 11))
                 .foregroundStyle(.secondary)
-            if let pace = ForecastText.pace(forecast) {
+            if let pace = ForecastText.pace(forecast, now: now) {
                 Text(pace)
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
