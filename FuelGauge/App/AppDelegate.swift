@@ -39,8 +39,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         model.start()
         #if DEBUG
-        if DemoMode.isOn, let url = DemoMode.snapshotURL {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        if let url = DemoMode.snapshotURL {
+            // Live data needs a moment for the first read of Codex's logs.
+            DispatchQueue.main.asyncAfter(deadline: .now() + (DemoMode.isOn ? 0.5 : 3)) {
                 DemoMode.snapshot(model: model, updater: self.updater, to: url)
             }
         }

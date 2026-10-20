@@ -13,7 +13,13 @@ public enum ForecastText {
         case .reset:
             "Reset. Fresh window"
         case .makesIt(let projected):
-            projected >= 99.5 ? "Makes it to reset, just" : "Makes it to reset, about \(percent(projected)) by then"
+            if projected >= 99.5 {
+                "Makes it to reset, just"
+            } else if projected < 1 {
+                "Makes it to reset"
+            } else {
+                "Makes it to reset, about \(percent(projected)) by then"
+            }
         case .runsOut(let at, _, _):
             "Runs out around \(time(at, now: now)), \(duration(forecast.resetsAt.timeIntervalSince(at))) early"
         }

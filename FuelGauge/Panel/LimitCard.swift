@@ -83,7 +83,7 @@ struct UsageBar: View {
                     Capsule().fill(tint.opacity(0.25))
                         .frame(width: width * min(projected, 100) / 100)
                 }
-                Capsule().fill(tint == .secondary ? Color.accentColor : tint)
+                Capsule().fill(tint == .secondary ? Color.gray : tint)
                     .frame(width: max(6, width * min(used, 100) / 100))
             }
         }

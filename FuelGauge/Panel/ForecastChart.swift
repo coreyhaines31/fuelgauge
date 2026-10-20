@@ -13,7 +13,7 @@ struct ForecastChart: View {
             ForEach(points, id: \.date) { point in
                 LineMark(x: .value("Time", point.date), y: .value("Used", point.used), series: .value("Line", "used"))
                     .interpolationMethod(.stepEnd)
-                    .foregroundStyle(tint == .secondary ? Color.accentColor : tint)
+                    .foregroundStyle(tint == .secondary ? Color.gray : tint)
             }
             if let projection {
                 ForEach(projection, id: \.date) { point in
@@ -22,7 +22,7 @@ struct ForecastChart: View {
                         series: .value("Line", "projection")
                     )
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [3, 3]))
-                    .foregroundStyle(tint == .secondary ? Color.accentColor : tint)
+                    .foregroundStyle(tint == .secondary ? Color.gray : tint)
                 }
             }
             RuleMark(y: .value("Limit", 100))
