@@ -21,3 +21,9 @@ for forecast in ForecastEngine.forecasts(from: codexReadings + GrokBotReader().r
     if let pace = ForecastText.pace(forecast) { print("    \(pace)") }
     if let range = ForecastText.range(forecast) { print("    \(range)") }
 }
+
+if CommandLine.arguments.contains("--cursor") {
+    for reading in await CursorReader().read() {
+        print("Cursor: \(reading.usedPercent)% of the monthly plan, resets \(reading.resetsAt)")
+    }
+}
