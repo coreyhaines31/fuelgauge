@@ -2,12 +2,13 @@
 #
 # Copy rules: plain and specific, short sentences, no hype. Say "free, source available" and "source on GitHub",
 # never "open source". Fuel Gauge is licensed FSL-1.1-MIT.
-# CodexBar facts come from codexbar.app as of October 2026. Be fair: it covers far more providers.
+# Competitor facts come from their own sites and READMEs as of October 2026. Be fair: say what each does better.
 
 COMPARISONS = [
     {
-        "slug": "codexbar-alternative",
+        "slug": "alternatives/codexbar",
         "competitor": "CodexBar",
+        "card": "Over 100 providers vs a forecast for four",
         "title": "CodexBar alternative: Fuel Gauge, a free usage forecast for Mac",
         "description": "CodexBar shows usage for over 100 AI providers. Fuel Gauge is a free Mac alternative that forecasts whether your Claude Code, Codex, Grok Bot, and Cursor limits last until reset.",
         "eyebrow": "CodexBar alternative",
@@ -58,6 +59,112 @@ COMPARISONS = [
           <li><b>Turn on the status line.</b> From the app, or with <code>fuelgauge install-statusline</code>. It keeps your existing status line and backs up <code>settings.json</code>.</li>
           <li><b>Keep working.</b> A 5-hour limit gets a forecast after about 10 minutes of readings, a weekly one after 3 hours. Until then it says “Learning your pace.”</li>
           <li><b>Keep CodexBar if you use its other providers.</b> The two don&#39;t conflict.</li>
+        </ol>
+            """},
+        ],
+    },
+    {
+        "slug": "alternatives/ccusage",
+        "competitor": "ccusage",
+        "card": "Token and cost reports vs a limit forecast",
+        "title": "ccusage alternative: a menu bar forecast for your Claude Code limits",
+        "description": "ccusage reports Claude Code and Codex token use and cost from local logs. Fuel Gauge forecasts whether your plan limits last until reset, in the menu bar. Free Mac app.",
+        "eyebrow": "ccusage alternative",
+        "h1": "ccusage counts your tokens. Fuel Gauge says if you&#39;ll <em>make it to reset.</em>",
+        "lede": "ccusage is a great command-line report of what your coding agents spent. Fuel Gauge answers a different question: at your pace, will your plan&#39;s limit last until it resets?",
+        "tldr": "Use ccusage to see token use and estimated dollar cost by day, month, session, or 5-hour block, across 18 coding agents. Use Fuel Gauge to see, without running anything, whether your Claude Code, Codex, Grok Bot, or Cursor limit will last until it resets, with an alert when it won&#39;t. They answer different questions, so they work well together.",
+        "card_title": "ccusage",
+        "cta": "Know if you&#39;ll make it.",
+        "faqs": [
+            ("Is ccusage free?", "Yes. ccusage is free and MIT licensed. Fuel Gauge is free too, with the source on GitHub under the FSL-1.1-MIT license."),
+            ("Does Fuel Gauge show dollar costs like ccusage?", "No. Fuel Gauge works in percent of your plan's limit, which is what decides whether you get cut off on Pro or Max. ccusage estimates cost from tokens at API prices."),
+            ("Can I use ccusage and Fuel Gauge together?", "Yes. ccusage is a command you run for reports; Fuel Gauge runs in the menu bar. Neither changes the other."),
+        ],
+        "sections": [
+            {"id": "why", "html": """
+        <h2>What ccusage does well</h2>
+        <p>ccusage reads the usage data coding agents leave on your machine and turns it into reports: <code>daily</code>, <code>weekly</code>, <code>monthly</code>, and <code>session</code>, with tokens and an estimated cost in dollars, plus a <code>blocks</code> report for Claude Code&#39;s 5-hour windows. It covers 18 tools, including Claude Code, Codex, Gemini CLI, and GitHub Copilot CLI, and runs with <code>npx ccusage@latest</code>. It&#39;s free, MIT licensed, and has about 19,000 stars on GitHub.</p>
+        <h3>Where Fuel Gauge is different</h3>
+        <p><strong>It measures the limit, not the tokens.</strong> On Pro and Max, what cuts you off is the percent of your session or weekly limit, and Anthropic doesn&#39;t publish how many tokens that is. Fuel Gauge reads those percentages straight from Claude Code after every reply.</p>
+        <p><strong>It forecasts.</strong> Each limit gets a verdict: "Makes it to reset" or "Runs out around 3:40p, 1h 20m early", with the most you can use per hour and still make it.</p>
+        <p><strong>It&#39;s always on.</strong> A menu bar app with a glyph that turns orange, one alert per window, and a line under your Claude Code prompt. Nothing to run.</p>
+            """},
+            {"id": "compare", "lit": True, "html": """
+        <h2>Fuel Gauge vs ccusage</h2>
+        {{TABLE}}
+        <h3>What ccusage does better</h3>
+        <p>History and cost. If you want to know what last month cost at API prices, or compare usage across many agents, ccusage is the tool.</p>
+        <h3>What Fuel Gauge does better</h3>
+        <p>The next few hours. It tells you whether your current limit will last, while you work, without opening a terminal.</p>
+            """, "table": [
+                ("Price", "Free", "Free"),
+                ("License", "FSL-1.1-MIT, source on GitHub", "MIT"),
+                ("What it measures", "Percent of your plan&#39;s limits", "Tokens and estimated cost in dollars"),
+                ("Forecast to reset", "Yes, with a range", "—"),
+                ("Where it runs", "Mac menu bar, Claude Code status line, CLI", "Command line"),
+                ("Tools", "Claude Code, Codex, Grok Bot, Cursor (opt-in)", "18, including Claude Code, Codex, Gemini CLI"),
+                ("Alerts", "Once per window, plus 50/80/95%", "—"),
+                ("Platforms", "macOS 14+", "Anywhere Node, Bun, or Nix runs"),
+            ]},
+            {"id": "switch", "html": """
+        <h2>Trying it takes a minute</h2>
+        <ol class="steps">
+          <li><b>Install Fuel Gauge.</b> <code>brew install --cask coreyhaines31/tap/fuelgauge</code>, or download the app from GitHub and drag it to Applications.</li>
+          <li><b>Turn on the status line.</b> From the app, or with <code>fuelgauge install-statusline</code>. It keeps your existing status line and backs up <code>settings.json</code>.</li>
+          <li><b>Keep working.</b> A 5-hour limit gets a forecast after about 10 minutes of readings, a weekly one after 3 hours. Until then it says “Learning your pace.”</li>
+          <li><b>Keep ccusage for reports. The two don&#39;t conflict.</b></li>
+        </ol>
+            """},
+        ],
+    },
+    {
+        "slug": "alternatives/ccstatusline",
+        "competitor": "ccstatusline",
+        "card": "A widget-packed status line vs a forecast, and using both",
+        "title": "ccstatusline alternative: add a usage forecast to Claude Code",
+        "description": "ccstatusline is a customizable Claude Code statusline with usage and reset widgets. Fuel Gauge adds a forecast of whether your limits last until reset, and runs alongside it.",
+        "eyebrow": "ccstatusline alternative",
+        "h1": "ccstatusline shows where you are. Fuel Gauge shows <em>where you&#39;re headed.</em>",
+        "lede": "ccstatusline is the most customizable status line for Claude Code. Fuel Gauge adds the one thing it doesn&#39;t do: a forecast. And it can run underneath it.",
+        "tldr": "Keep ccstatusline if you love its widgets: git, tokens, context, cost, and session and weekly usage with reset timers. Add Fuel Gauge for the forecast: whether each limit lasts until it resets at your pace, in the menu bar and as one more line under your status line. Fuel Gauge keeps your existing status line when you turn its line on.",
+        "card_title": "ccstatusline",
+        "cta": "Know if you&#39;ll make it.",
+        "faqs": [
+            ("Is ccstatusline free?", "Yes. ccstatusline is free and MIT licensed. Fuel Gauge is free too, with the source on GitHub under the FSL-1.1-MIT license."),
+            ("Can I use ccstatusline and Fuel Gauge together?", "Yes. When you turn on Fuel Gauge's status line, it saves your current status line command and runs it first, then prints the forecast underneath. Turning it off puts ccstatusline back on its own."),
+            ("Does ccstatusline show usage limits?", "Yes. It has session and weekly usage widgets and reset timers. It doesn't forecast whether you'll run out before the reset; that's what Fuel Gauge adds."),
+        ],
+        "sections": [
+            {"id": "why", "html": """
+        <h2>What ccstatusline does well</h2>
+        <p>Everything you might want under the prompt. ccstatusline has widgets for the model, git branch and status, tokens, context use, cost, cache hit rate, and, for limits, session and weekly usage with reset timers and extra usage. You set it up in an interactive screen with <code>npx -y ccstatusline@latest</code>. It&#39;s free, MIT licensed, and has about 13,000 stars on GitHub.</p>
+        <h3>Where Fuel Gauge is different</h3>
+        <p><strong>It forecasts.</strong> ccstatusline shows how much you&#39;ve used and when it resets. Fuel Gauge works out whether you&#39;ll get there: <code>⛽ 5h 55% out ~11:50a · wk 41% ok</code>.</p>
+        <p><strong>It&#39;s there when Claude Code isn&#39;t.</strong> The menu bar shows the same forecast, warns you once per window, and covers Codex, Grok Bot, and Cursor too.</p>
+        <p><strong>It reads, it doesn&#39;t call.</strong> Fuel Gauge takes the limits Claude Code already passes to the status line, with no extra requests.</p>
+            """},
+            {"id": "compare", "lit": True, "html": """
+        <h2>Fuel Gauge vs ccstatusline</h2>
+        {{TABLE}}
+        <h3>Use both</h3>
+        <p>Claude Code runs one status line command. When you turn on Fuel Gauge&#39;s line, it saves your ccstatusline command and runs it first, with the same input, then prints the forecast under it. <code>fuelgauge uninstall-statusline</code> puts ccstatusline back on its own.</p>
+            """, "table": [
+                ("Price", "Free", "Free"),
+                ("License", "FSL-1.1-MIT, source on GitHub", "MIT"),
+                ("Session and weekly usage", "Yes", "Yes"),
+                ("Reset times", "Yes", "Yes"),
+                ("Forecast to reset", "Yes, with a range", "—"),
+                ("Git, tokens, context, cost widgets", "No", "Yes, dozens"),
+                ("Menu bar app and alerts", "Yes", "—"),
+                ("Codex, Grok Bot, Cursor", "Yes", "—"),
+            ]},
+            {"id": "switch", "html": """
+        <h2>Trying it takes a minute</h2>
+        <ol class="steps">
+          <li><b>Install Fuel Gauge.</b> <code>brew install --cask coreyhaines31/tap/fuelgauge</code>, or download the app from GitHub and drag it to Applications.</li>
+          <li><b>Turn on the status line.</b> From the app, or with <code>fuelgauge install-statusline</code>. It keeps your existing status line and backs up <code>settings.json</code>.</li>
+          <li><b>Keep working.</b> A 5-hour limit gets a forecast after about 10 minutes of readings, a weekly one after 3 hours. Until then it says “Learning your pace.”</li>
+          <li><b>Keep ccstatusline. It keeps running, with the forecast under it.</b></li>
         </ol>
             """},
         ],
