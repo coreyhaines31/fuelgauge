@@ -76,6 +76,16 @@ import Testing
         }
     }
 
+    @Test func aFreshWeeklyWindowWaitsForThreeHours() throws {
+        // A weekly window that began an hour ago with 1% used: too little to project across a week.
+        let weekly = [reading(1, minutesAgo: 5, resetsIn: 7 * 24 - 1, minutes: 10080)]
+        let early = try #require(ForecastEngine.forecast(for: weekly, now: now))
+        #expect(early.verdict == .learning)
+        let later = [reading(3, minutesAgo: 5, resetsIn: 7 * 24 - 4, minutes: 10080)]
+        let forecast = try #require(ForecastEngine.forecast(for: later, now: now))
+        #expect(forecast.ratePerHour != nil)
+    }
+
     @Test func idleTimeSlowsThePace() throws {
         // All the climbing happened 50 minutes ago; since then nothing.
         let readings = [reading(10, minutesAgo: 60), reading(30, minutesAgo: 50)]

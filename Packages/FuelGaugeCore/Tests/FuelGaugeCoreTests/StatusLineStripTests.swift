@@ -17,7 +17,7 @@ import Testing
 
     @Test func putsTheShortWindowFirst() {
         let forecasts = ForecastEngine.forecasts(
-            from: readings("seven_day", minutes: 10080, used: [41, 41, 41], resetsIn: 60)
+            from: readings("seven_day", minutes: 10080, used: Array(repeating: 41, count: 13), resetsIn: 60)
                 + readings("five_hour", minutes: 300, used: [30, 45, 60, 75], resetsIn: 3),
             now: now
         )
