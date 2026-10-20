@@ -151,4 +151,121 @@ COMPARES = [
             ("Claude Code vs Codex", "Limits side by side", "/compare/claude-code-vs-codex"),
         ],
     },
+    {
+        "path": "/compare/claude-code-pricing",
+        "short": "Claude Code pricing",
+        "card": "Pro, Max, Team, Enterprise, or pay per token",
+        "title": "Claude Code pricing (October 2026): every plan and the API",
+        "description": "What Claude Code costs: Pro $20, Max $100 or $200, Team and Enterprise seats, or API billing per token. What each plan's limits mean, and how to pick.",
+        "eyebrow": "Pricing",
+        "h1": "Claude Code pricing",
+        "lede": "There's no separate Claude Code subscription. It comes with every paid Claude plan, or you pay per token through the Claude Console.",
+        "answer": "Claude Code is included with Claude Pro ($20 a month, or $17 billed yearly), Max 5x ($100), Max 20x ($200), Team, and Enterprise. It isn't included in Claude Free. On a plan, Claude Code shares the plan's 5-hour session limit and weekly limit with your Claude chats. You can also skip the plan and pay per token at standard API rates through the Claude Console.",
+        "sections": [
+            {"id": "facts", "facts": [
+                ("Free", "$0 · Claude Code not included"),
+                ("Pro", "$20 a month, or $17 a month billed yearly ($200 up front)"),
+                ("Max 5x", "$100 a month · 5x Pro's usage per session"),
+                ("Max 20x", "$200 a month · 20x Pro's usage per session"),
+                ("Team", "Standard seat $20 billed yearly ($25 monthly) · Premium seat $100 yearly ($125 monthly) · 2 to 150 people"),
+                ("Enterprise", "$20 a seat a month billed yearly, 20-seat minimum, plus usage that scales with model and task"),
+                ("API (Claude Console)", "No subscription; pay per token at standard API rates"),
+            ], "html": """
+        <h2>Every way to pay for Claude Code</h2>
+        {{FACTS}}
+        <p class="table-foot">Prices in US dollars, from Anthropic's pricing page on October 20, 2026.</p>"""},
+            {"id": "limits", "lit": True, "html": """
+        <h2>What the price buys: limits, not messages</h2>
+        <p>Anthropic doesn't sell Claude Code by the message or the token on a subscription. Each plan buys a share of usage, capped two ways: a session limit that resets every five hours, and a weekly limit. Claude, Claude Desktop, and Claude Code all draw from the same limits, so heavy chat use leaves less for coding.</p>
+        <p>That makes the plans hard to compare on paper. Pro gives at least five times the Free plan's usage per session, Max 5x five times Pro's, and Max 20x twenty times Pro's, but none of them comes with a message count. The details are on the <a href="/limits/claude-pro">Pro</a>, <a href="/limits/claude-max">Max</a>, and <a href="/limits/claude-code">Claude Code</a> limits pages.</p>"""},
+            {"id": "pick", "html": """
+        <h2>Which plan to pick</h2>
+        <ul>
+          <li><strong>Start on Pro</strong> unless you already know you work in long agent sessions. It's the cheapest way to find out how fast you use a session.</li>
+          <li><strong>Move to Max 5x</strong> when you hit the 5-hour limit most working days. Upgrading applies right away and is prorated. <a href="/compare/claude-pro-vs-max">Pro vs Max</a> goes through the signs.</li>
+          <li><strong>Max 20x</strong> is for running Claude Code most of the day, with subagents or loops.</li>
+          <li><strong>Pay per token</strong> if you use Claude Code a few times a month, or need it billed to a company API account.</li>
+        </ul>"""},
+            {"id": "api", "lit": True, "html": f"""
+        <h2>Subscription or API billing?</h2>
+        <p>Claude Code can bill API credits at standard API rates instead of your plan. That's useful as overflow, but easy to do by accident: if an <code>ANTHROPIC_API_KEY</code> is set in your environment, Claude Code uses it. To stay on your plan, run <code>claude logout</code>, then <code>claude login</code> and sign in with your Pro or Max account.</p>
+        <p>The monthly API credits that come with Max can't be used in Claude Code or the Claude apps. Usage credits can: turn them on in <a href="{SETTINGS}">Settings › Usage</a> to keep working past a limit at API rates.</p>"""},
+            {"id": "pace", "html": """
+        <h2>Are you on the right plan?</h2>
+        <p>The price you need depends on your pace, not on a spec sheet. <a href="/">Fuel Gauge</a> is a free Mac menu bar app that reads your Claude Code limits after every reply and tells you whether you'll make it to the reset. A week of "runs out early" is a reason to move up; a week of "makes it, about 50% by then" means you could pay less.</p>"""},
+            {"id": "sources", "html": sources(
+                ("Claude pricing", PRICING),
+                ("Use Claude Code with your Pro or Max plan", CODE),
+                ("What is the Max plan?", MAX),
+                ("How do usage and length limits work?", USAGE))},
+        ],
+        "faqs": [
+            ("How much does Claude Code cost?", "Claude Code comes with Claude Pro ($20 a month, or $17 billed yearly), Max ($100 or $200 a month), Team, and Enterprise. Or you can pay per token at API rates through the Claude Console."),
+            ("Is Claude Code free?", "No. Claude Free doesn't include Claude Code. Pro at $20 a month is the cheapest plan that does."),
+            ("Can I use Claude Code with an API key instead of a plan?", "Yes. Claude Code can bill API credits at standard API rates through the Claude Console. If ANTHROPIC_API_KEY is set, Claude Code uses it instead of your subscription."),
+            ("Do the Max plan's API credits work in Claude Code?", "No. The monthly API credits included with Max can't be used in Claude Code or the Claude apps."),
+        ],
+        "related": [
+            ("Claude Pro vs Max", "What the extra usage buys", "/compare/claude-pro-vs-max"),
+            ("Claude Code limits", "How Claude Code counts against your plan", "/limits/claude-code"),
+            ("Codex pricing", "ChatGPT plans, credits, and the API", "/compare/codex-pricing"),
+        ],
+    },
+    {
+        "path": "/compare/codex-pricing",
+        "short": "Codex pricing",
+        "card": "Every ChatGPT plan, credits, or an API key",
+        "title": "Codex pricing (October 2026): ChatGPT plans, credits, API",
+        "description": "What OpenAI Codex costs: included in every ChatGPT plan from Free to Pro, plus credits for extra usage or API billing. What each plan's limits look like.",
+        "eyebrow": "Pricing",
+        "h1": "Codex pricing",
+        "lede": "Codex doesn't have its own price. It comes with every ChatGPT plan, and you can add credits or use an API key when the plan runs out.",
+        "answer": "Codex is included with every ChatGPT plan: Free, Go ($8 a month), Plus ($20), Pro ($100, $200, or $500), Business ($20 a user a month billed yearly, $25 monthly), and Enterprise and Edu. Plus and Business use 5-hour windows and weekly limits may apply; Pro has no 5-hour limit. Past the limit, Plus and Pro can buy credits, or you can sign in with an API key and pay API rates.",
+        "sections": [
+            {"id": "facts", "facts": [
+                ("Free", "$0 · for quick coding tasks"),
+                ("Go", "$8 a month · for lightweight coding tasks"),
+                ("Plus", "$20 a month · 5-hour windows, weekly limits may apply"),
+                ("Pro", "$100, $200, or $500 a month · no 5-hour limit"),
+                ("Business", "$20 a user a month billed yearly, $25 monthly, 2 or more users"),
+                ("Enterprise and Edu", "Contact sales; flexible pricing scales with credits"),
+                ("API key", "Usage-based, at standard API rates"),
+            ], "html": """
+        <h2>Every way to pay for Codex</h2>
+        {{FACTS}}
+        <p class="table-foot">Prices in US dollars, from OpenAI's Codex pricing page on October 20, 2026.</p>"""},
+            {"id": "plus", "lit": True, "html": """
+        <h2>How much Plus gets you</h2>
+        <p>OpenAI publishes rough ranges for Plus and Standard Business: local messages per 5-hour window, by model. They're ranges, not fixed limits, because a message's cost depends on how much code and context it involves. Cloud tasks can use more than local messages, and both share the same allowance.</p>
+        <div class="table-card glass"><div class="table-scroll"><table class="compare">
+          <thead><tr><th scope="col">Model</th><th scope="col">Local messages per 5 hours</th></tr></thead><tbody>
+            <tr><th scope="row">GPT-6 Astra</th><td>5–45</td></tr>
+            <tr><th scope="row">GPT-6.1 Sol</th><td>15–160</td></tr>
+            <tr><th scope="row">GPT-6 Sol</th><td>15–150</td></tr>
+            <tr><th scope="row">GPT-6 Luna</th><td>350–3,000</td></tr>
+          </tbody></table></div></div>
+        <p>Picking a lighter model for routine work stretches a window the furthest. The <a href="/limits/codex">Codex limits page</a> covers the windows and how to check them.</p>"""},
+            {"id": "credits", "html": """
+        <h2>Credits, when the plan runs out</h2>
+        <p>Plus and Pro can buy credits to keep going after a limit, and Business, Edu, and Enterprise workspaces on flexible pricing buy workspace credits. Credits are charged per million tokens, at a rate set per model: GPT-6.1 Sol is 50 credits per million input tokens and 250 per million output, and GPT-6 Luna is 2.5 and 12.5. OpenAI says a typical GPT-5.6 Sol task uses 2 to 15 credits. Fast mode costs twice the standard rate and Ultrafast six times.</p>
+        <p>The other option is an API key: sign Codex in with it and you pay standard API rates, with no plan limits.</p>"""},
+            {"id": "pace", "lit": True, "html": """
+        <h2>Know before you need credits</h2>
+        <p><a href="/">Fuel Gauge</a> is a free Mac menu bar app that reads Codex's limits from its session logs on your Mac, with no sign-in, and forecasts whether each window lasts until it resets. If it says "runs out around 3p" on most days, compare a bigger plan with what you'd spend on credits; if it says "makes it" every day, you might not need the plan you're on.</p>"""},
+            {"id": "sources", "html": sources(
+                ("Codex pricing", CODEX_PRICING),
+                ("Using Codex with your ChatGPT plan", CODEX_HELP))},
+        ],
+        "faqs": [
+            ("How much does Codex cost?", "Codex is included with every ChatGPT plan: Free, Go ($8), Plus ($20), Pro ($100, $200, or $500), Business ($20 a user billed yearly), and Enterprise. You can also pay API rates with an API key."),
+            ("Is Codex free?", "Yes, Codex is included in ChatGPT Free, for quick coding tasks. Paid plans give more usage."),
+            ("Does Codex Pro have a 5-hour limit?", "No. Pro plans currently have no five-hour limit, though weekly limits may apply."),
+            ("What happens when I run out of Codex usage?", "Wait for the window to reset, buy credits on Plus or Pro, upgrade, or switch to an API key."),
+        ],
+        "related": [
+            ("Codex limits", "5-hour and weekly windows", "/limits/codex"),
+            ("Claude Code vs Codex", "Limits side by side", "/compare/claude-code-vs-codex"),
+            ("Claude Code pricing", "Every plan that includes it, and the API", "/compare/claude-code-pricing"),
+        ],
+    },
 ]

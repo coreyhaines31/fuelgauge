@@ -75,6 +75,12 @@ def esc(t):
     return html.escape(t, quote=True)
 
 
+def share_image(path):
+    """The page's own share image from og_pages.py if it has one, else the homepage's."""
+    name = "og/" + path.strip("/").replace("/", "-") + ".png"
+    return f"{SITE}/images/{name}" if path != "/" and os.path.exists(os.path.join(ROOT, "images", name)) else f"{SITE}/images/og.png"
+
+
 def head(title, description, path):
     return f'''<!doctype html>
 <html lang="en">
@@ -88,7 +94,7 @@ def head(title, description, path):
   <meta property="og:description" content="{esc(description)}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Fuel Gauge">
-  <meta property="og:image" content="{SITE}/images/og.png">
+  <meta property="og:image" content="{share_image(path)}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="{SITE}{path}">
