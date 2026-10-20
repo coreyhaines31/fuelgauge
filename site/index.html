@@ -70,7 +70,7 @@
         </div>
 
         <!-- mockup:panel -->
-        <div class="desk mk" role="img" aria-label="The Mac menu bar with the Fuel Gauge pump glyph in orange at 55%, and its panel open. Four cards, most urgent first. Claude Code 5-hour, 55%: Runs out around 11:50a, 1h 30m early, with a chart of usage so far and a dashed projection reaching 100% before the reset. Claude Code weekly, 41%: Makes it to reset, about 86% by then. Codex weekly, 62%: Makes it to reset, about 79% by then. Grok Bot weekly, 12%: Learning your pace.">
+        <div class="desk mk" role="img" aria-label="The Mac menu bar with the Fuel Gauge pump glyph in orange at 55%, and its panel open. A summary line, then a card per tool, most urgent first. Claude Code 5-hour, 55%: Runs out around 11:50a, 1h 30m early, with a chart of usage so far and a dashed projection reaching 100% before the reset. Claude Code weekly, 41%: Makes it to reset, about 86% by then. Codex weekly, 62%: Makes it to reset, about 79% by then. Grok Bot weekly, 12%: Learning your pace.">
           <div class="mk-menubar">
             <div class="l"><svg class="apple" viewBox="0 0 14 17"><path d="M11.6 9c0-2 1.6-2.9 1.7-3-1-1.4-2.4-1.6-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7C3.4 4.4 2 5.2 1.3 6.6c-1.5 2.6-.4 6.4 1 8.5.7 1 1.5 2.1 2.6 2.1 1 0 1.4-.7 2.7-.7 1.2 0 1.6.7 2.6.7 1.1 0 1.8-1 2.5-2 .8-1.1 1.1-2.2 1.1-2.3 0 0-2.2-.8-2.2-3.4zM9.6 3c.6-.7 1-1.6.9-2.6-.8 0-1.8.6-2.4 1.3-.5.6-1 1.6-.9 2.5.9.1 1.8-.5 2.4-1.2z"/></svg><b>Terminal</b><span>Shell</span><span>Edit</span><span>View</span></div>
             <div class="r">
@@ -82,44 +82,50 @@
             </div>
           </div>
           <div class="mk-panel">
-            <div class="fg-card warn">
-              <div class="fg-top"><b>Claude Code · 5-hour</b><span>55%</span></div>
-              <div class="fg-bar"><i class="proj" style="width:100%"></i><i style="width:55%"></i></div>
-              <div class="fg-verdict">Runs out around 11:50a, 1h 30m early</div>
-              <div class="fg-line">55% used · resets 1:20p (in 3h 6m)</div>
-              <div class="fg-line">Using 28% an hour. You can use up to 15% an hour and still make it.</div>
-              <div class="fg-line">Between 11:31a and 12:14p at your recent pace.</div>
-              <div class="fg-chart">
-                <svg viewBox="0 0 300 92" aria-hidden="true">
-                  <line class="full" x1="0" y1="8" x2="300" y2="8"/>
-                  <line class="base" x1="0" y1="88" x2="300" y2="88"/>
-                  <path class="area" d="M0 88 V86.4 H11.4 V84 H22.9 V81.6 H36.2 V78.4 H47.6 V74.4 H59 V68.8 H68.6 V64 H80 V59.2 H91.4 V53.6 H101 V48 H108.6 V44 V88 Z"/>
-                  <path class="used" d="M0 86.4 H11.4 V84 H22.9 V81.6 H36.2 V78.4 H47.6 V74.4 H59 V68.8 H68.6 V64 H80 V59.2 H91.4 V53.6 H101 V48 H108.6 V44"/>
-                  <path class="proj" d="M108.6 44 L200 8"/>
-                  <line class="reset" x1="285.7" y1="2" x2="285.7" y2="88"/>
-                  <circle class="dot" cx="108.6" cy="44" r="3"/>
-                </svg>
-                <div class="fg-axis"><span style="left:0;transform:none">8:20a</span><span style="left:36.2%">Now</span><span style="left:66.7%">~11:50a</span><span style="left:95.2%;transform:translateX(-100%)">Reset 1:20p</span></div>
+            <div class="fg-summary">Claude Code runs out today at 11:50a</div>
+            <div class="fg-card">
+              <div class="fg-tool">Claude Code</div>
+              <div class="fg-row warn">
+                <div class="fg-top"><b>5-hour</b><span>55%</span></div>
+                <div class="fg-bar"><i class="proj" style="width:100%"></i><i style="width:55%"></i></div>
+                <div class="fg-verdict">Runs out around 11:50a, 1h 30m early</div>
+                <div class="fg-line">55% used · resets 1:20p (in 3h 6m)</div>
+                <div class="fg-line">Using 28% an hour. You can use up to 15% an hour and still make it.</div>
+                <div class="fg-line">Between 11:31a and 12:14p at your recent pace.</div>
+                <div class="fg-chart">
+                  <svg viewBox="0 0 300 92" aria-hidden="true">
+                    <line class="full" x1="0" y1="8" x2="300" y2="8"/>
+                    <line class="base" x1="0" y1="88" x2="300" y2="88"/>
+                    <path class="area" d="M0 88 V78.4 H16 V74.4 H32 V68.8 H46 V64 H62 V59.2 H76 V53.6 H88 V48 H95 V44 V88 Z"/>
+                    <path class="used" d="M0 78.4 H16 V74.4 H32 V68.8 H46 V64 H62 V59.2 H76 V53.6 H88 V48 H95 V44"/>
+                    <path class="proj" d="M95 44 L246 8"/>
+                    <line class="reset" x1="95" y1="2" x2="95" y2="88"/>
+                    <circle class="dot" cx="95" cy="44" r="3"/>
+                  </svg>
+                  <div class="fg-axis"><span style="left:31.6%">Now</span><span style="left:82%">Out ~11:50a</span></div>
+                </div>
+              </div>
+              <div class="fg-row ok">
+                <div class="fg-top"><b>Weekly</b><span>41%</span></div>
+                <div class="fg-bar"><i class="proj" style="width:86%"></i><i style="width:41%"></i></div>
+                <div class="fg-compact">Makes it to reset, about 86% by then · resets Thu 9a</div>
               </div>
             </div>
-            <div class="fg-card ok">
-              <div class="fg-top"><b>Claude Code · weekly</b><span>41%</span></div>
-              <div class="fg-bar"><i class="proj" style="width:86%"></i><i style="width:41%"></i></div>
-              <div class="fg-verdict">Makes it to reset, about 86% by then</div>
-              <div class="fg-line">41% used · resets Thu 9a (in 2d 22h)</div>
-              <div class="fg-line">Using 0.6% an hour. You can use up to 0.8% an hour and still make it.</div>
+            <div class="fg-card">
+              <div class="fg-tool">Codex</div>
+              <div class="fg-row ok">
+                <div class="fg-top"><b>Weekly</b><span>62%</span></div>
+                <div class="fg-bar"><i class="proj" style="width:79%"></i><i style="width:62%"></i></div>
+                <div class="fg-compact">Makes it to reset, about 79% by then · resets Sat 6p</div>
+              </div>
             </div>
-            <div class="fg-card ok">
-              <div class="fg-top"><b>Codex · weekly</b><span>62%</span></div>
-              <div class="fg-bar"><i class="proj" style="width:79%"></i><i style="width:62%"></i></div>
-              <div class="fg-verdict">Makes it to reset, about 79% by then</div>
-              <div class="fg-line">62% used · resets Sat 6p (in 5d 8h)</div>
-            </div>
-            <div class="fg-card learn">
-              <div class="fg-top"><b>Grok Bot · weekly</b><span>12%</span></div>
-              <div class="fg-bar"><i style="width:12%"></i></div>
-              <div class="fg-verdict">Learning your pace</div>
-              <div class="fg-line">A forecast needs 10 minutes of readings while you work.</div>
+            <div class="fg-card">
+              <div class="fg-tool">Grok Bot</div>
+              <div class="fg-row learn">
+                <div class="fg-top"><b>Weekly</b><span>12%</span></div>
+                <div class="fg-bar"><i style="width:12%"></i></div>
+                <div class="fg-compact">Learning your pace, forecast in about 40m · resets Sun 2p</div>
+              </div>
             </div>
           </div>
         </div>
@@ -135,7 +141,7 @@
         </div>
         <div class="points glass">
           <div><h3>A pump that drains as you work</h3><p>The menu bar pump fills with the fuel left in whichever limit is closest to running out. It turns orange when one won&#39;t make it to the reset, and red when one is out.</p></div>
-          <div><h3>One card per limit</h3><p>Claude Code&#39;s 5-hour and weekly limits, Codex, Grok Bot, and Cursor. The most urgent sits on top, with a chart of your usage so far and where it&#39;s headed.</p></div>
+          <div><h3>A card per tool</h3><p>Claude Code&#39;s 5-hour and weekly limits together, then Codex, Grok Bot, and Cursor. The most urgent sits on top with a chart; the rest fold to one line until they need you.</p></div>
           <div><h3>Your hourly budget</h3><p>“Using 28% an hour. You can use up to 15% an hour and still make it.” Now you know whether to slow down, and by how much.</p></div>
         </div>
       </div>
