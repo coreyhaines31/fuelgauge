@@ -10,3 +10,6 @@ build/
 # Swift Package Manager
 .build/
 .swiftpm/
+
+# Local agent worktrees and settings
+.claude/

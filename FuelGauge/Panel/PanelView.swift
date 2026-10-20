@@ -1,0 +1,120 @@
+import FuelGaugeCore
+import SwiftUI
+
+/// What opens from the menu bar: a card per limit, most urgent first, plus setup for tools that need it.
+struct PanelView: View {
+    let model: UsageModel
+    let openSettings: () -> Void
+    let checkForUpdates: () -> Void
+    @State private var setupError: String?
+
+    var body: some View {
+        TimelineView(.periodic(from: .now, by: 30)) { context in
+            VStack(alignment: .leading, spacing: 10) {
+                header(now: context.date)
+                if needsClaudeSetup {
+                    claudeSetup
+                }
+                if model.forecasts.isEmpty {
+                    emptyState
+                } else {
+                    // Only the most urgent card gets a chart, so the panel stays short.
+                    ForEach(Array(model.byUrgency.enumerated()), id: \.element.key) { index, forecast in
+                        LimitCard(forecast: forecast, now: context.date, showsChart: index == 0)
+                    }
+                }
+                footer
+            }
+            .padding(14)
+            .frame(width: 360)
+        }
+    }
+
+    private func header(now: Date) -> some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text(Brand.name).font(.system(size: 14, weight: .bold))
+            Spacer()
+            if let updatedAt = model.updatedAt {
+                Text("Updated \(ForecastText.time(updatedAt, now: now))")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private var needsClaudeSetup: Bool {
+        model.installedProviders.contains(.claude) && Tracking.isEnabled(.claude) && model.claudeStatusLine != .on
+    }
+
+    private var claudeSetup: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("See your Claude Code limits").font(.system(size: 12, weight: .semibold))
+            Text(claudeSetupDetail)
+                .font(.system(size: 11))
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            if let setupError {
+                Text(setupError).font(.system(size: 11)).foregroundStyle(.red)
+            }
+            Button("Turn On") {
+                do {
+                    try model.setClaudeStatusLine(on: true)
+                    setupError = nil
+                } catch {
+                    setupError = "Couldn't update Claude Code's settings: \(error.localizedDescription)"
+                }
+            }
+            .controlSize(.small)
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.accentColor.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
+    }
+
+    private var claudeSetupDetail: String {
+        let base = "Claude Code shares its limits with its status line. Fuel Gauge adds a forecast there and "
+            + "reads each update. Nothing goes online."
+        if case .otherCommand = model.claudeStatusLine {
+            return base + " Your current status line keeps showing underneath."
+        }
+        return base
+    }
+
+    private var emptyState: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("No readings yet").font(.system(size: 12, weight: .semibold))
+            Text(emptyDetail)
+                .font(.system(size: 11))
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 10))
+    }
+
+    private var emptyDetail: String {
+        let names = Tracking.enabled(installed: model.installedProviders).map(\.name)
+        guard !names.isEmpty else {
+            return "Fuel Gauge works with Claude Code, Codex, and Grok Bot. Install one, or turn one on in Settings."
+        }
+        return "Readings appear as you use \(ListFormatter.localizedString(byJoining: names))."
+    }
+
+    private var footer: some View {
+        HStack {
+            Spacer()
+            Menu {
+                Button("Settings…", action: openSettings)
+                Button("Check for Updates…", action: checkForUpdates)
+                Divider()
+                Button("Quit \(Brand.name)") { NSApp.terminate(nil) }
+            } label: {
+                Image(systemName: "gearshape")
+            }
+            .menuStyle(.borderlessButton)
+            .menuIndicator(.hidden)
+            .fixedSize()
+        }
+    }
+}

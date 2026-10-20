@@ -10,4 +10,6 @@ opt_in_rules:
   - first_where
   - sorted_imports
 identifier_name:
-  excluded: [x, y, id, i, n]
+  excluded: [x, y, id, i, n, at, on]
+nesting:
+  type_level: 2
