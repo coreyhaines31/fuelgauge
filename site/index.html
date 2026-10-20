@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fuel Gauge: don&#39;t hit your Claude Code or Codex limit mid-task</title>
+  <title>Fuel Gauge: don&#39;t hit your Claude or Codex limit mid-task</title>
   <meta name="description" content="A free Mac menu bar app that watches your Claude Code, Codex, Grok Bot, and Cursor limits and tells you, at your pace, whether they&#39;ll last until they reset.">
   <link rel="canonical" href="https://fuelgauge.app/">
   <meta property="og:title" content="Fuel Gauge: don&#39;t hit your limit mid-task">
@@ -37,11 +37,11 @@
     <div class="wrap">
       <a class="brand" href="/"><img src="/images/icon.svg" alt="" width="28" height="28"> Fuel Gauge</a>
       <nav>
-        <a href="#how">How it works</a>
-        <a href="#statusline">Status line</a>
-        <a href="#agents">For agents</a>
-        <a href="/codexbar-alternative">Compare</a>
-        <a href="#faq">FAQ</a>
+        <a href="/#how">How it works</a>
+        <a href="/limits">Limits</a>
+        <a href="/guides">Guides</a>
+        <a href="/alternatives">Compare</a>
+        <a href="/#agents">For agents</a>
         <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg">Download</a>
       </nav>
     </div>
@@ -247,7 +247,7 @@
           <details><summary>Does it work with Claude Pro and Max?</summary><p>Yes. It uses the 5-hour and weekly limits Claude Code reports for your plan, so it works on Pro and Max. The status line is where those readings come from, so turn it on.</p></details>
           <details><summary>Which tools does it track?</summary><p>Claude Code&#39;s 5-hour and weekly limits, Codex&#39;s weekly limit, Grok Bot&#39;s weekly limit, and, if you turn it on, Cursor&#39;s monthly limit. Choose which ones to watch in Settings › Tools.</p></details>
           <details><summary>Does it send my data anywhere?</summary><p>No. It reads only what those tools already save on your Mac. No browser cookies, no Full Disk Access, no keychain, no sign-in, and zero telemetry. The only network request is the check for updates, plus Cursor's usage if you turn Cursor on.</p></details>
-          <details><summary>How is it different from CodexBar?</summary><p>CodexBar covers far more providers, over 100, and leads with percent used. Fuel Gauge covers four tools and leads with the verdict: will you make it to reset. It adds a Claude Code status line and an exit code agents can check, and it reads local files (Cursor, which keeps none, is the one opt-in exception). <a href="/codexbar-alternative">The full comparison</a>.</p></details>
+          <details><summary>How is it different from CodexBar?</summary><p>CodexBar covers far more providers, over 100, and leads with percent used. Fuel Gauge covers four tools and leads with the verdict: will you make it to reset. It adds a Claude Code status line and an exit code agents can check, and it reads local files (Cursor, which keeps none, is the one opt-in exception). <a href="/alternatives/codexbar">The full comparison</a>.</p></details>
           <details><summary>How do I remove it?</summary><p>Run <code>fuelgauge uninstall-statusline</code> first, so your Claude Code status line goes back to how it was. Then run <code>brew uninstall --cask fuelgauge</code>. If you installed from the DMG, drag Fuel Gauge from Applications to the Trash instead.</p></details>
           <details><summary>Is it really free?</summary><p>Yes, at home or at work. No account, no trial, no subscription. The source is on GitHub under the FSL-1.1-MIT license.</p></details>
           <details><summary>Which Macs does it run on?</summary><p>Any Mac with macOS 14 Sonoma or later, Apple Silicon or Intel.</p></details>
@@ -275,7 +275,9 @@
   <footer>
     <div class="wrap">
       <!-- footer -->
-      <nav class="footer-alts" aria-label="Compare"><a class="label" href="/codexbar-alternative">Compare</a><a href="/codexbar-alternative">CodexBar alternative</a></nav>
+      <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a></nav>
+      <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a><a href="/guides/check-claude-usage">Check your Claude usage</a><a href="/guides/when-does-claude-limit-reset">When Claude limits reset</a><a href="/guides/claude-code-statusline">Claude Code status line</a></nav>
+      <nav class="footer-alts" aria-label="Compare"><a class="label" href="/alternatives">Compare</a><a href="/alternatives/codexbar">CodexBar alternative</a><a href="/alternatives/ccusage">ccusage alternative</a><a href="/alternatives/ccstatusline">ccstatusline alternative</a></nav>
       <nav class="footer-alts" aria-label="More free Mac apps"><a class="label" href="https://github.com/coreyhaines31">More free Mac apps</a><a href="https://midnightoil.app" title="Keep your Mac awake">Midnight Oil</a><a href="https://diskforecast.com" title="Know before your disk is full">Disk Forecast</a><a href="https://spareformac.com" title="See what&#x27;s using your Mac">Spare</a><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?">WiFi or ISP</a><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers">Green Room</a><a href="https://onhandformac.com" title="A clipboard manager for your Mac">On Hand</a><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides">Coat Check</a></nav>
       <div class="footer-links"><span>© 2026 Corey Haines. Source available under the <a href="https://github.com/coreyhaines31/fuelgauge/blob/main/LICENSE">FSL-1.1-MIT License</a>.</span></div>
       <div class="footer-links"><a href="https://github.com/coreyhaines31/fuelgauge">GitHub</a><a href="https://github.com/coreyhaines31/fuelgauge/releases">Releases</a><a href="https://github.com/coreyhaines31/fuelgauge/issues">Issues</a><a href="/privacy">Privacy</a><a href="/llms.txt">llms.txt</a></div>

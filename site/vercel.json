@@ -3,8 +3,18 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/codexbar-alternative",
+      "destination": "/alternatives/codexbar",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.fuelgauge.app" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "www.fuelgauge.app"
+        }
+      ],
       "destination": "https://fuelgauge.app/:path*",
       "permanent": true
     }
