@@ -60,8 +60,19 @@ public enum ForecastText {
     public static func usage(_ forecast: Forecast, now: Date = Date()) -> String {
         if forecast.verdict == .reset { return "Was \(percent(forecast.usedPercent)) before the reset" }
         let resets = forecast.resetsAt
-        return "\(percent(forecast.usedPercent)) used · resets \(time(resets, now: now)) "
+        let line = "\(percent(forecast.usedPercent)) used · resets \(time(resets, now: now)) "
             + "(in \(duration(resets.timeIntervalSince(now))))"
+        return asOf(forecast, now: now).map { "\(line) · \($0)" } ?? line
+    }
+
+    /// Readings older than this get "as of 2:20p", so an old number doesn't pass for a current one. Claude Code
+    /// rewrites an unchanged reading only every 10 minutes, so anything under 15 is still current.
+    static let staleAfter: TimeInterval = 15 * 60
+
+    /// "as of 2:20p" when the latest reading is old (Grok Bot can keep one for a day), else nil.
+    public static func asOf(_ forecast: Forecast, now: Date = Date()) -> String? {
+        guard now.timeIntervalSince(forecast.lastReadingAt) > staleAfter else { return nil }
+        return "as of \(time(forecast.lastReadingAt, now: now))"
     }
 
     /// "Using 6% an hour. You can use up to 9% an hour and still make it." Close to the reset, when more is left
