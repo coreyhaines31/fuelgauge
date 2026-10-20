@@ -37,11 +37,7 @@ final class UsageModel {
 
     /// Tools that look installed on this Mac, whether or not they're turned on.
     var installedProviders: [Provider] {
-        var providers: [Provider] = []
-        if claude.isInstalled { providers.append(.claude) }
-        if codex.isInstalled { providers.append(.codex) }
-        if grokBot.isInstalled { providers.append(.grokBot) }
-        return providers
+        Tracking.installed()
     }
 
     func start() {
@@ -55,7 +51,7 @@ final class UsageModel {
     func refresh() {
         guard !isRefreshing else { return }
         isRefreshing = true
-        let enabled = Preferences.enabledProviders(installed: installedProviders)
+        let enabled = Tracking.enabled(installed: installedProviders)
         let readsCodex = readsLiveData && enabled.contains(.codex)
         let readsGrokBot = readsLiveData && enabled.contains(.grokBot)
         let codex = codex

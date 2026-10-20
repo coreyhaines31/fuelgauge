@@ -43,7 +43,7 @@ struct PanelView: View {
     }
 
     private var needsClaudeSetup: Bool {
-        model.installedProviders.contains(.claude) && Preferences.isEnabled(.claude) && model.claudeStatusLine != .on
+        model.installedProviders.contains(.claude) && Tracking.isEnabled(.claude) && model.claudeStatusLine != .on
     }
 
     private var claudeSetup: some View {
@@ -94,7 +94,7 @@ struct PanelView: View {
     }
 
     private var emptyDetail: String {
-        let names = Preferences.enabledProviders(installed: model.installedProviders).map(\.name)
+        let names = Tracking.enabled(installed: model.installedProviders).map(\.name)
         guard !names.isEmpty else {
             return "Fuel Gauge works with Claude Code, Codex, and Grok Bot. Install one, or turn one on in Settings."
         }
