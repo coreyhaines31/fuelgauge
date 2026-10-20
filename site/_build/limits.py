@@ -199,7 +199,7 @@ LIMITS = [
         "related": [
             ("Check your Claude usage", "Every place to see what's left", "/guides/check-claude-usage"),
             ("Claude Code status line", "Your limits under the prompt", "/guides/claude-code-statusline"),
-            ("Claude Max limits", "5x or 20x Pro's usage", "/limits/claude-max"),
+            ("Claude Code pricing", "Every plan that includes it, and the API", "/compare/claude-code-pricing"),
         ],
     },
     {
@@ -299,7 +299,7 @@ LIMITS = [
         "related": [
             ("Claude Code vs Codex", "Limits side by side", "/compare/claude-code-vs-codex"),
             ("Claude Code limits", "How Claude Code counts against your plan", "/limits/claude-code"),
-            ("Fuel Gauge for agents", "Check limits before a big job", "/cli"),
+            ("Codex pricing", "ChatGPT plans, credits, and the API", "/compare/codex-pricing"),
         ],
     },
     {
