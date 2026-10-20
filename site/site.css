@@ -377,3 +377,24 @@ section.tight { padding: clamp(56px, 8vw, 96px) 0 0; }
   .mk-menubar { padding: 0 10px; }
   .mk-menubar .r { gap: 12px; }
 }
+
+/* Breadcrumbs, related cards, and facts tables on the limits, guides, and compare pages */
+.crumbs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 14px; color: var(--ink-3); margin-bottom: 18px; }
+.crumbs a { color: var(--ink-2); text-decoration: none; }
+.crumbs a:hover { color: var(--ink); text-decoration: underline; }
+.crumbs span { color: var(--ink-3); }
+.related-head { font-size: clamp(24px, 3vw, 30px); margin: 0 0 16px; }
+.related { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.related.hub { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 8px; }
+.related-card { display: flex; flex-direction: column; gap: 6px; padding: 20px 22px; border-radius: 22px; text-decoration: none; color: var(--ink); transition: transform .15s ease; }
+.related-card:hover { transform: translateY(-2px); }
+.related-card strong { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+.related-card span { font-size: 15px; color: var(--ink-2); line-height: 1.45; }
+.prose .facts th { width: 34%; text-align: left; font-weight: 600; color: var(--ink); vertical-align: top; }
+.prose .facts td { text-align: left; color: var(--ink-2); }
+.prose pre { overflow-x: auto; padding: 16px 18px; border-radius: 16px; background: #1d1d1f; color: #f5f5f7; font-size: 13.5px; line-height: 1.55; }
+.prose pre code { background: none; color: inherit; padding: 0; }
+@media (max-width: 760px) {
+  .related, .related.hub { grid-template-columns: 1fr; }
+  .prose .facts th { width: 40%; }
+}

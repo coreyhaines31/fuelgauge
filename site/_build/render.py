@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Renders the comparison pages and /privacy from pages.py, rewrites the homepage footer and JSON-LD between
-their <!-- footer --> and <!-- schema --> markers, and writes sitemap.xml and llms.txt.
+"""Renders the limits, guides, and alternatives pages (with their hubs) and /privacy from the data files, rewrites
+the homepage nav, footer, and JSON-LD between their markers, and writes sitemap.xml and llms.txt.
 
     python3 site/_build/render.py
 """
@@ -13,6 +13,8 @@ import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
+from guides import GUIDES  # noqa: E402
+from limits import LIMITS, VERIFIED  # noqa: E402
 from pages import COMPARISONS, PRIVACY  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
@@ -34,7 +36,7 @@ GITHUB_ICON = ('<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                '.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82'
                '.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 '
                '.21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>')
-CTAS = (f'<a class="btn" href="{DOWNLOAD}">{DOWNLOAD_ICON}Download free</a>\n'
+CTAS = (f'<a class="btn" href="{DOWNLOAD}">{DOWNLOAD_ICON}Download for Mac</a>\n'
         f'        <a class="btn-quiet" href="{REPO}">{GITHUB_ICON}View source code</a>')
 FONTS = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
 
@@ -112,10 +114,10 @@ def nav():
       <a class="brand" href="/"><img src="/images/icon.svg" alt="" width="28" height="28"> Fuel Gauge</a>
       <nav>
         <a href="/#how">How it works</a>
-        <a href="/#statusline">Status line</a>
+        <a href="/limits">Limits</a>
+        <a href="/guides">Guides</a>
+        <a href="/alternatives">Compare</a>
         <a href="/#agents">For agents</a>
-        <a href="/codexbar-alternative">Compare</a>
-        <a href="/#faq">FAQ</a>
         <a class="btn" href="{DOWNLOAD}">Download</a>
       </nav>
     </div>
@@ -124,9 +126,13 @@ def nav():
 
 
 def footer_inner():
+    limits = "".join(f'<a href="{p["path"]}">{esc(p["short"])}</a>' for p in LIMITS)
+    guides = "".join(f'<a href="{p["path"]}">{esc(p["short"])}</a>' for p in GUIDES)
     compare = "".join(f'<a href="/{p["slug"]}">{esc(p["competitor"])} alternative</a>' for p in COMPARISONS)
     family = "".join(f'<a href="{url}" title="{esc(desc)}">{esc(name)}</a>' for name, url, desc in FAMILY)
-    return (f'      <nav class="footer-alts" aria-label="Compare"><a class="label" href="/codexbar-alternative">Compare</a>{compare}</nav>\n'
+    return (f'      <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a>{limits}</nav>\n'
+            f'      <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a>{guides}</nav>\n'
+            f'      <nav class="footer-alts" aria-label="Compare"><a class="label" href="/alternatives">Compare</a>{compare}</nav>\n'
             f'      <nav class="footer-alts" aria-label="More free Mac apps"><a class="label" href="https://github.com/coreyhaines31">More free Mac apps</a>{family}</nav>\n'
             f'      <div class="footer-links"><span>© 2026 Corey Haines. Source available under the <a href="{REPO}/blob/main/LICENSE">FSL-1.1-MIT License</a>.</span></div>\n'
             f'      <div class="footer-links"><a href="{REPO}">GitHub</a><a href="{REPO}/releases">Releases</a><a href="{REPO}/issues">Issues</a><a href="/privacy">Privacy</a><a href="/llms.txt">llms.txt</a></div>\n')
@@ -168,21 +174,32 @@ def render_homepage():
            "author": {"@type": "Person", "name": "Corey Haines"}}
     schema = f'  <script type="application/ld+json">{json.dumps(app)}</script>\n  {faq_schema(faqs)}\n'
     page = replace_between(page, "<!-- footer -->\n", "      <!-- /footer -->", footer_inner())
+    page = re.sub(r'  <div class="nav">.*?\n  </div>\n', nav().split('</div>\n', 1)[1], page, count=1, flags=re.S)
     page = replace_between(page, "<!-- schema -->\n", "  <!-- /schema -->", schema)
     with open(os.path.join(ROOT, "index.html"), "w") as f:
         f.write(page)
 
 
-def breadcrumb_schema(path, name):
-    items = [{"@type": "ListItem", "position": 1, "name": "Fuel Gauge", "item": f"{SITE}/"},
-             {"@type": "ListItem", "position": 2, "name": name, "item": f"{SITE}{path}"}]
+def breadcrumb_schema(crumbs):
+    items = [{"@type": "ListItem", "position": 1, "name": "Fuel Gauge", "item": f"{SITE}/"}]
+    items += [{"@type": "ListItem", "position": i + 2, "name": name, "item": f"{SITE}{path}"}
+              for i, (name, path) in enumerate(crumbs)]
     data = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": items}
     return f'<script type="application/ld+json">{json.dumps(data)}</script>'
 
 
-def write(path, name, body):
-    body = body.replace("</body>", breadcrumb_schema(path, name) + "\n</body>", 1)
-    with open(os.path.join(ROOT, path.strip("/") + ".html"), "w") as f:
+def crumbs_html(crumbs):
+    """The visible trail above a page's title. The last crumb is the page itself, so it isn't a link."""
+    links = [f'<a href="/">Fuel Gauge</a>'] + [f'<a href="{path}">{esc(name)}</a>' for name, path in crumbs[:-1]]
+    return f'<nav class="crumbs" aria-label="Breadcrumb">{" <span>›</span> ".join(links)}</nav>'
+
+
+def write(path, crumbs, body):
+    """Writes /a/b as a/b.html, so Vercel's cleanUrls serves it without the extension."""
+    body = body.replace("</body>", breadcrumb_schema(crumbs) + "\n</body>", 1)
+    target = os.path.join(ROOT, path.strip("/") + ".html")
+    os.makedirs(os.path.dirname(target), exist_ok=True)
+    with open(target, "w") as f:
         f.write(body)
 
 
@@ -236,9 +253,11 @@ def cta(text):
 
 def render_comparison(p):
     path = f"/{p['slug']}"
+    crumbs = [("Compare", "/alternatives"), (p["card_title"] + " alternative", path)]
     parts = [head(p["title"], p["description"], path), nav(), "  <main>\n"]
     parts.append(f'''    <div class="sub-hero">
       <div class="wrap narrow">
+        {crumbs_html(crumbs)}
         <div class="eyebrow">{esc(p["eyebrow"])}</div>
         <h1>{p["h1"]}</h1>
         <p class="lede">{p["lede"]}</p>
@@ -261,7 +280,112 @@ def render_comparison(p):
     parts.append(footer())
     parts.append(COPY_SCRIPT)
     parts.append(faq_schema(p["faqs"]) + "\n</body>\n</html>\n")
-    write(path, p["card_title"] + " alternative", "".join(parts))
+    write(path, crumbs, "".join(parts))
+
+
+def facts_table(rows):
+    """A two-column facts table: the answers a limits page exists to give, in a form AI overviews quote."""
+    out = ['        <div class="table-card glass"><div class="table-scroll"><table class="compare facts"><tbody>']
+    for label, value in rows:
+        out.append(f'            <tr><th scope="row">{label}</th><td>{value}</td></tr>')
+    out.append('          </tbody></table></div></div>')
+    return "\n".join(out)
+
+
+def related_block(links):
+    items = "".join(f'<a class="related-card glass" href="{href}"><strong>{esc(title)}</strong><span>{esc(sub)}</span></a>'
+                    for title, sub, href in links)
+    return f'''    <section class="tight">
+      <div class="wrap narrow">
+        <h2 class="related-head">Keep reading</h2>
+        <div class="related">{items}</div>
+      </div>
+    </section>
+'''
+
+
+def render_page(p, crumbs):
+    """A limits page or a guide: crumbs, title, short answer, sections, FAQ, related links, and the download CTA."""
+    path = p["path"]
+    parts = [head(p["title"], p["description"], path), nav(), "  <main>\n"]
+    answer = f'<div class="tldr glass"><h2>The short answer</h2><p>{p["answer"]}</p></div>' if p.get("answer") else ""
+    parts.append(f'''    <div class="sub-hero">
+      <div class="wrap narrow">
+        {crumbs_html(crumbs)}
+        <div class="eyebrow">{esc(p["eyebrow"])}</div>
+        <h1>{p["h1"]}</h1>
+        <p class="lede">{p["lede"]}</p>
+        {answer}
+      </div>
+    </div>
+''')
+    for sec in p["sections"]:
+        cls = "tight" + (" lit" if sec.get("lit") else "")
+        body = sec["html"]
+        if sec.get("facts"):
+            body = body.replace("{{FACTS}}", facts_table(sec["facts"]))
+        parts.append(f'    <section class="{cls}" id="{sec["id"]}">\n      <div class="wrap narrow"><div class="prose">\n{body}\n      </div></div>\n    </section>\n')
+    if p.get("faqs"):
+        parts.append(faq_block(p["faqs"]))
+    if p.get("related"):
+        parts.append(related_block(p["related"]))
+    parts.append(cta(p.get("cta", "Know if you&#39;ll make it to reset.")))
+    parts.append("  </main>\n")
+    parts.append(footer())
+    parts.append(COPY_SCRIPT)
+    parts.append((faq_schema(p["faqs"]) if p.get("faqs") else "") + "\n</body>\n</html>\n")
+    write(path, crumbs, "".join(parts))
+
+
+def render_hub(path, name, title, description, h1, lede, cards, extra=""):
+    """A section's index page: a card per page in it."""
+    items = "".join(f'<a class="related-card glass" href="{href}"><strong>{esc(t)}</strong><span>{esc(sub)}</span></a>'
+                    for t, sub, href in cards)
+    body = f'''{head(title, description, path)}{nav()}  <main>
+    <div class="sub-hero">
+      <div class="wrap narrow">
+        {crumbs_html([(name, path)])}
+        <h1>{h1}</h1>
+        <p class="lede">{lede}</p>
+      </div>
+    </div>
+    <section class="tight" style="padding-top:0">
+      <div class="wrap narrow">
+{extra}        <div class="related hub">{items}</div>
+      </div>
+    </section>
+{cta("Know if you&#39;ll make it to reset.")}  </main>
+{footer()}{COPY_SCRIPT}</body>
+</html>
+'''
+    write(path, [(name, path)], body)
+
+
+def render_hubs():
+    rows = "".join(f'<tr><th scope="row"><a href="{p["path"]}">{esc(p["short"])}</a></th><td>{p["hub_windows"]}</td>'
+                   f'<td>{p["hub_reset"]}</td></tr>' for p in LIMITS)
+    limits_table = ('        <div class="table-card glass"><div class="table-scroll"><table class="compare">'
+                    '<thead><tr><td></td><th scope="col">Limits</th><th scope="col">Resets</th></tr></thead>'
+                    f'<tbody>{rows}</tbody></table></div></div>\n'
+                    f'        <p class="table-foot">Checked against each provider\'s own help pages on {VERIFIED}.</p>\n')
+    render_hub("/limits", "Limits",
+               "AI coding plan usage limits: Claude Pro, Max, Claude Code",
+               "How the usage limits on Claude Pro, Max, Free, and Claude Code work: the 5-hour session, the weekly limit, when each resets, and how to check what's left.",
+               "Usage limits, <em>plan by plan.</em>",
+               "What each plan limits, when it resets, and how to see what you have left. Checked against the official help pages.",
+               [(p["short"], p["card"], p["path"]) for p in LIMITS], limits_table)
+    render_hub("/guides", "Guides",
+               "Guides: check your Claude usage, limit resets, the status line",
+               "Short guides for staying inside your Claude Code and Claude plan limits: checking usage, when limits reset, and the Claude Code status line.",
+               "Guides for working <em>inside your limits.</em>",
+               "How to check what you have left, when it comes back, and how to keep an eye on it while you work.",
+               [(p["short"], p["card"], p["path"]) for p in GUIDES])
+    render_hub("/alternatives", "Compare",
+               "Fuel Gauge compared: CodexBar, ccusage, ccstatusline",
+               "How Fuel Gauge compares with CodexBar, ccusage, and ccstatusline for keeping an eye on Claude Code and Codex usage.",
+               "How Fuel Gauge <em>compares.</em>",
+               "Other good tools track AI coding usage. Here's what each does best, and where Fuel Gauge is different.",
+               [(p["competitor"] + " alternative", p["card"], "/" + p["slug"]) for p in COMPARISONS])
 
 
 def render_privacy():
@@ -279,7 +403,7 @@ def render_privacy():
 {footer()}</body>
 </html>
 '''
-    write(d["path"], "Privacy", body)
+    write(d["path"], [("Privacy", d["path"])], body)
 
 
 def last_modified(path):
@@ -293,7 +417,8 @@ def last_modified(path):
 
 
 def render_sitemap():
-    paths = ["/"] + [f"/{p['slug']}" for p in COMPARISONS] + [PRIVACY["path"]]
+    paths = (["/", "/limits"] + [p["path"] for p in LIMITS] + ["/guides"] + [p["path"] for p in GUIDES]
+             + ["/alternatives"] + [f"/{p['slug']}" for p in COMPARISONS] + [PRIVACY["path"]])
     urls = "".join(f"  <url><loc>{SITE}{p}</loc><lastmod>{last_modified(p)}</lastmod></url>\n" for p in paths)
     with open(os.path.join(ROOT, "sitemap.xml"), "w") as f:
         f.write(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
@@ -302,6 +427,8 @@ def render_sitemap():
 def render_llms():
     """/llms.txt: a plain summary of the app, for AI agents and AI search (llmstxt.org)."""
     compare = "\n".join(f"- [Fuel Gauge vs {p['competitor']}]({SITE}/{p['slug']}): {html.unescape(p['tldr'])}" for p in COMPARISONS)
+    limits = "\n".join(f"- [{p['short']}]({SITE}{p['path']}): {html.unescape(re.sub(r'<[^>]+>', '', p['answer']))}" for p in LIMITS)
+    guides = "\n".join(f"- [{p['short']}]({SITE}{p['path']}): {html.unescape(re.sub(r'<[^>]+>', '', p['answer']))}" for p in GUIDES)
     body = f"""# Fuel Gauge
 
 > Fuel Gauge is a free, source-available macOS menu bar app (macOS 14 Sonoma or later) that forecasts whether your Claude Code, Codex, Grok Bot, and Cursor plan limits will last until they reset. It reads only what those tools already save on your Mac, and sends nothing anywhere.
@@ -309,12 +436,20 @@ def render_llms():
 - Install: `{BREW}`, or download {DOWNLOAD}
 - Source: {REPO} (FSL-1.1-MIT)
 - Limits tracked: Claude Code 5-hour and weekly, Codex, Grok Bot weekly, and Cursor monthly (opt-in: asks cursor.com with the Cursor app's sign-in). Choose which in Settings › Tools.
-- How it forecasts: readings come from Claude Code's status line (every time Claude Code replies), Codex's session logs (`~/.codex/sessions`), and Grok Bot's local usage cache. Pace is the climb over the last hour for 5-hour windows and the last day for weekly ones. It needs about 10 minutes of readings first, and shows a range, not an exact minute. It's an estimate from recent pace, not a promise.
+- How it forecasts: readings come from Claude Code's status line (every time Claude Code replies), Codex's session logs (`~/.codex/sessions`), and Grok Bot's local usage cache. Pace is the climb over the last hour for 5-hour windows and the last day for weekly ones. It waits for 10 minutes of readings on a 5-hour limit and 3 hours on a weekly one, and shows a range, not an exact minute. It's an estimate from recent pace, not a promise.
 - Command line: `fuelgauge status` prints the verdict for each limit and exits with code 2 when a limit is forecast to run out before it resets. `fuelgauge status --json` has the details. `fuelgauge history` shows the readings. `fuelgauge install-statusline` adds the forecast under Claude Code's prompt (keeping any existing status line and backing up settings.json), and `fuelgauge uninstall-statusline` removes it.
 - Install prompt for a coding agent: "{INSTALL_PROMPT}"
 - Line for CLAUDE.md or AGENTS.md: "{AGENT_RULE}"
 - Uninstall: run `fuelgauge uninstall-statusline` first, then `brew uninstall --cask fuelgauge`.
-- Privacy: no browser cookies, no Full Disk Access, no keychain, no sign-in, zero telemetry. The only network request is the update check. Details: {SITE}/privacy
+- Privacy: no browser cookies, no Full Disk Access, no keychain, no sign-in, zero telemetry. The only network requests are the update check and, if you turn Cursor on, Cursor's usage. Details: {SITE}/privacy
+
+## Plan limits, explained
+
+{limits}
+
+## Guides
+
+{guides}
 
 ## Compared with other apps
 
@@ -325,10 +460,16 @@ def render_llms():
 
 
 if __name__ == "__main__":
+    for p in LIMITS:
+        render_page(p, [("Limits", "/limits"), (p["short"], p["path"])])
+    for p in GUIDES:
+        render_page(p, [("Guides", "/guides"), (p["short"], p["path"])])
     for p in COMPARISONS:
         render_comparison(p)
+    render_hubs()
     render_privacy()
     render_homepage()
     render_sitemap()
     render_llms()
-    print(f"rendered {len(COMPARISONS)} comparison page(s) + privacy + homepage footer and schema + sitemap + llms.txt")
+    print(f"rendered {len(LIMITS)} limits, {len(GUIDES)} guides, {len(COMPARISONS)} comparison pages, 3 hubs, privacy, "
+          "homepage nav/footer/schema, sitemap, llms.txt")
