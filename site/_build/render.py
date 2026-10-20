@@ -375,7 +375,7 @@ def render_hubs():
                "What each plan limits, when it resets, and how to see what you have left. Checked against the official help pages.",
                [(p["short"], p["card"], p["path"]) for p in LIMITS], limits_table)
     render_hub("/guides", "Guides",
-               "Guides: check your Claude usage, limit resets, the status line",
+               "Guides: Claude usage, limit resets, and the status line",
                "Short guides for staying inside your Claude Code and Claude plan limits: checking usage, when limits reset, and the Claude Code status line.",
                "Guides for working <em>inside your limits.</em>",
                "How to check what you have left, when it comes back, and how to keep an eye on it while you work.",
