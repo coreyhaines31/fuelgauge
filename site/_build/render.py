@@ -14,9 +14,10 @@ import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
+from compare import COMPARES  # noqa: E402
 from guides import GUIDES  # noqa: E402
 from limits import LIMITS, VERIFIED  # noqa: E402
-from pages import COMPARISONS, PRIVACY  # noqa: E402
+from pages import CLI, COMPARISONS, PRIVACY  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 SITE = "https://fuelgauge.app"
@@ -117,8 +118,8 @@ def nav():
         <a href="/#how">How it works</a>
         <a href="/limits">Limits</a>
         <a href="/guides">Guides</a>
-        <a href="/alternatives">Compare</a>
-        <a href="/#agents">For agents</a>
+        <a href="/compare">Compare</a>
+        <a href="/cli">For agents</a>
         <a class="btn" href="{DOWNLOAD}">Download</a>
       </nav>
     </div>
@@ -129,11 +130,12 @@ def nav():
 def footer_inner():
     limits = "".join(f'<a href="{p["path"]}">{esc(p["short"])}</a>' for p in LIMITS)
     guides = "".join(f'<a href="{p["path"]}">{esc(p["short"])}</a>' for p in GUIDES)
-    compare = "".join(f'<a href="/{p["slug"]}">{esc(p["competitor"])} alternative</a>' for p in COMPARISONS)
+    compare = "".join(f'<a href="{p["path"]}">{esc(p["short"])}</a>' for p in COMPARES)
+    compare += "".join(f'<a href="/{p["slug"]}">{esc(p["competitor"])} alternative</a>' for p in COMPARISONS)
     family = "".join(f'<a href="{url}" title="{esc(desc)}">{esc(name)}</a>' for name, url, desc in FAMILY)
     return (f'      <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a>{limits}</nav>\n'
             f'      <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a>{guides}</nav>\n'
-            f'      <nav class="footer-alts" aria-label="Compare"><a class="label" href="/alternatives">Compare</a>{compare}</nav>\n'
+            f'      <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a>{compare}</nav>\n'
             f'      <nav class="footer-alts" aria-label="More free Mac apps"><a class="label" href="https://github.com/coreyhaines31">More free Mac apps</a>{family}</nav>\n'
             f'      <div class="footer-links"><span>© 2026 Corey Haines. Source available under the <a href="{REPO}/blob/main/LICENSE">FSL-1.1-MIT License</a>.</span></div>\n'
             f'      <div class="footer-links"><a href="{REPO}">GitHub</a><a href="{REPO}/releases">Releases</a><a href="{REPO}/issues">Issues</a><a href="/privacy">Privacy</a><a href="/llms.txt">llms.txt</a></div>\n')
@@ -254,7 +256,7 @@ def cta(text):
 
 def render_comparison(p):
     path = f"/{p['slug']}"
-    crumbs = [("Compare", "/alternatives"), (p["card_title"] + " alternative", path)]
+    crumbs = [("Alternatives", "/alternatives"), (p["card_title"] + " alternative", path)]
     parts = [head(p["title"], p["description"], path), nav(), "  <main>\n"]
     parts.append(f'''    <div class="sub-hero">
       <div class="wrap narrow">
@@ -370,8 +372,8 @@ def render_hubs():
                     f'<tbody>{rows}</tbody></table></div></div>\n'
                     f'        <p class="table-foot">Checked against each provider\'s own help pages on {VERIFIED}.</p>\n')
     render_hub("/limits", "Limits",
-               "AI coding plan usage limits: Claude Pro, Max, Claude Code",
-               "How the usage limits on Claude Pro, Max, Free, and Claude Code work: the 5-hour session, the weekly limit, when each resets, and how to check what's left.",
+               "AI coding usage limits: Claude, Codex, Cursor, Copilot, Grok",
+               "How usage limits work on Claude Pro and Max, Claude Code, Codex, Cursor, Grok, and GitHub Copilot: the windows, when each resets, and how to check.",
                "Usage limits, <em>plan by plan.</em>",
                "What each plan limits, when it resets, and how to see what you have left. Checked against the official help pages.",
                [(p["short"], p["card"], p["path"]) for p in LIMITS], limits_table)
@@ -381,7 +383,14 @@ def render_hubs():
                "Guides for working <em>inside your limits.</em>",
                "How to check what you have left, when it comes back, and how to keep an eye on it while you work.",
                [(p["short"], p["card"], p["path"]) for p in GUIDES])
-    render_hub("/alternatives", "Compare",
+    render_hub("/compare", "Compare",
+               "Compare AI coding plans: Claude Pro vs Max, and more",
+               "Side-by-side comparisons of AI coding plans and their usage limits, plus how Fuel Gauge compares with other usage trackers.",
+               "Compare plans <em>and tools.</em>",
+               "Which plan gives you enough room, and which tool keeps an eye on it.",
+               [(p["short"], p["card"], p["path"]) for p in COMPARES]
+               + [("Usage tracker alternatives", "CodexBar, ccusage, ccstatusline", "/alternatives")])
+    render_hub("/alternatives", "Alternatives",
                "Fuel Gauge compared: CodexBar, ccusage, ccstatusline",
                "How Fuel Gauge compares with CodexBar, ccusage, and ccstatusline for keeping an eye on Claude Code and Codex usage.",
                "How Fuel Gauge <em>compares.</em>",
@@ -419,7 +428,8 @@ def last_modified(path):
 
 def render_sitemap():
     paths = (["/", "/limits"] + [p["path"] for p in LIMITS] + ["/guides"] + [p["path"] for p in GUIDES]
-             + ["/alternatives"] + [f"/{p['slug']}" for p in COMPARISONS] + [PRIVACY["path"]])
+             + ["/compare"] + [p["path"] for p in COMPARES]
+             + ["/alternatives"] + [f"/{p['slug']}" for p in COMPARISONS] + [CLI["path"], PRIVACY["path"]])
     urls = "".join(f"  <url><loc>{SITE}{p}</loc><lastmod>{last_modified(p)}</lastmod></url>\n" for p in paths)
     with open(os.path.join(ROOT, "sitemap.xml"), "w") as f:
         f.write(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
@@ -429,14 +439,15 @@ def render_llms():
     """/llms.txt: a plain summary of the app, for AI agents and AI search (llmstxt.org)."""
     compare = "\n".join(f"- [Fuel Gauge vs {p['competitor']}]({SITE}/{p['slug']}): {html.unescape(p['tldr'])}" for p in COMPARISONS)
     limits = "\n".join(f"- [{p['short']}]({SITE}{p['path']}): {html.unescape(re.sub(r'<[^>]+>', '', p['answer']))}" for p in LIMITS)
-    guides = "\n".join(f"- [{p['short']}]({SITE}{p['path']}): {html.unescape(re.sub(r'<[^>]+>', '', p['answer']))}" for p in GUIDES)
+    guides = "\n".join(f"- [{p['short']}]({SITE}{p['path']}): {html.unescape(re.sub(r'<[^>]+>', '', p['answer']))}"
+                       for p in GUIDES + COMPARES + [CLI])
     body = f"""# Fuel Gauge
 
 > Fuel Gauge is a free, source-available macOS menu bar app (macOS 14 Sonoma or later) that forecasts whether your Claude Code, Codex, Grok Bot, and Cursor plan limits will last until they reset. It reads only what those tools already save on your Mac, and sends nothing anywhere.
 
 - Install: `{BREW}`, or download {DOWNLOAD}
 - Source: {REPO} (FSL-1.1-MIT)
-- Limits tracked: Claude Code 5-hour and weekly, Codex, Grok Bot weekly, and Cursor monthly (opt-in: asks cursor.com with the Cursor app's sign-in). Choose which in Settings › Tools.
+- Limits tracked: Claude Code 5-hour and weekly, Codex, Grok Bot weekly, and Cursor (opt-in: asks cursor.com with the Cursor app's sign-in). Choose which in Settings › Tools.
 - How it forecasts: readings come from Claude Code's status line (every time Claude Code replies), Codex's session logs (`~/.codex/sessions`), and Grok Bot's local usage cache. Pace is the climb over the last hour for 5-hour windows and the last day for weekly ones. It waits for 10 minutes of readings on a 5-hour limit and 3 hours on a weekly one, and shows a range, not an exact minute. It's an estimate from recent pace, not a promise.
 - Command line: `fuelgauge status` prints the verdict for each limit and exits with code 2 when a limit is forecast to run out before it resets. `fuelgauge status --json` has the details. `fuelgauge history` shows the readings. `fuelgauge install-statusline` adds the forecast under Claude Code's prompt (keeping any existing status line and backing up settings.json), and `fuelgauge uninstall-statusline` removes it.
 - Install prompt for a coding agent: "{INSTALL_PROMPT}"
@@ -448,7 +459,7 @@ def render_llms():
 
 {limits}
 
-## Guides
+## Guides, comparisons, and the command
 
 {guides}
 
@@ -480,13 +491,19 @@ if __name__ == "__main__":
         render_page(p, [("Limits", "/limits"), (p["short"], p["path"])])
     for p in GUIDES:
         render_page(p, [("Guides", "/guides"), (p["short"], p["path"])])
+    for p in COMPARES:
+        render_page(p, [("Compare", "/compare"), (p["short"], p["path"])])
     for p in COMPARISONS:
         render_comparison(p)
+    cli = dict(CLI, sections=[dict(s, html=s["html"].replace("{AGENT_RULE}", esc(AGENT_RULE))
+                                   .replace("{INSTALL_PROMPT}", esc(INSTALL_PROMPT))) for s in CLI["sections"]])
+    render_page(cli, [("For agents", CLI["path"])])
     render_hubs()
     render_privacy()
     render_homepage()
     render_sitemap()
     render_llms()
     check()
-    print(f"rendered {len(LIMITS)} limits, {len(GUIDES)} guides, {len(COMPARISONS)} comparison pages, 3 hubs, privacy, "
+    print(f"rendered {len(LIMITS)} limits, {len(GUIDES)} guides, {len(COMPARES)} plan comparisons, "
+          f"{len(COMPARISONS)} alternatives, /cli, 4 hubs, privacy, "
           "homepage nav/footer/schema, sitemap, llms.txt")

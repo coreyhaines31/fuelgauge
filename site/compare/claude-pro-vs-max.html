@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude Pro vs Max (October 2026): limits and when to upgrade</title>
+  <meta name="description" content="Claude Pro vs Max 5x and 20x: price, per-session usage, weekly limits, Claude Code, and how to tell from your own usage whether upgrading is worth it.">
+  <link rel="canonical" href="https://fuelgauge.app/compare/claude-pro-vs-max">
+  <meta property="og:title" content="Claude Pro vs Max (October 2026): limits and when to upgrade">
+  <meta property="og:description" content="Claude Pro vs Max 5x and 20x: price, per-session usage, weekly limits, Claude Code, and how to tell from your own usage whether upgrading is worth it.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Fuel Gauge">
+  <meta property="og:image" content="https://fuelgauge.app/images/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://fuelgauge.app/compare/claude-pro-vs-max">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Claude Pro vs Max (October 2026): limits and when to upgrade">
+  <meta name="twitter:description" content="Claude Pro vs Max 5x and 20x: price, per-session usage, weekly limits, Claude Code, and how to tell from your own usage whether upgrading is worth it.">
+  <meta name="theme-color" content="#fbe9d6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/images/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/images/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/site.css">
+  <script src="https://cdn.usefathom.com/script.js" data-site="ETCPQLNF" defer></script>
+</head>
+<body>
+  <div class="sky" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="nav">
+    <div class="wrap">
+      <a class="brand" href="/"><img src="/images/icon.svg" alt="" width="28" height="28"> Fuel Gauge</a>
+      <nav>
+        <a href="/#how">How it works</a>
+        <a href="/limits">Limits</a>
+        <a href="/guides">Guides</a>
+        <a href="/compare">Compare</a>
+        <a href="/cli">For agents</a>
+        <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg">Download</a>
+      </nav>
+    </div>
+  </div>
+  <main>
+    <div class="sub-hero">
+      <div class="wrap narrow">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Fuel Gauge</a> <span>›</span> <a href="/compare">Compare</a></nav>
+        <div class="eyebrow">Compare plans</div>
+        <h1>Claude Pro vs Max</h1>
+        <p class="lede">Same features, same two kinds of limits. Max buys you more of each session: five or twenty times Pro's.</p>
+        <div class="tldr glass"><h2>The short answer</h2><p>Pro is $20 a month. Max 5x is $100 and gives five times Pro's usage per five-hour session; Max 20x is $200 and gives twenty times. All three have a session limit that resets every five hours and a weekly limit, shared with Claude Code. Upgrade when you hit your limits often enough that waiting costs you more than the difference.</p></div>
+      </div>
+    </div>
+    <section class="tight" id="facts">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>Pro vs Max at a glance</h2>
+                <div class="table-card glass"><div class="table-scroll"><table class="compare facts"><tbody>
+            <tr><th scope="row">Price</th><td>Pro $20 a month ($17 billed yearly) · Max 5x $100 · Max 20x $200</td></tr>
+            <tr><th scope="row">Usage per 5-hour session</th><td>Pro: at least 5x Free · Max 5x: 5x Pro · Max 20x: 20x Pro</td></tr>
+            <tr><th scope="row">Session limit</th><td>All three reset every five hours</td></tr>
+            <tr><th scope="row">Weekly limit</th><td>All three; Max also has a separate weekly limit for Fable</td></tr>
+            <tr><th scope="row">Claude Code</th><td>Included in all three, sharing the same limits</td></tr>
+            <tr><th scope="row">Wrap-up allowance in Claude Code</th><td>Pro: once per weekly period · Max: each time you reach a 5-hour limit</td></tr>
+            <tr><th scope="row">Billing</th><td>Pro monthly or yearly · Max monthly only</td></tr>
+          </tbody></table></div></div>
+      </div></div>
+    </section>
+    <section class="tight lit" id="decide">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>How to tell if you need Max</h2>
+        <p>Anthropic doesn't publish message counts, so you can't pick a plan from a spec sheet. Your own usage is the better guide:</p>
+        <ul>
+          <li><strong>You hit the 5-hour limit most working days.</strong> Max 5x gives five times the room per session. That's the clearest signal.</li>
+          <li><strong>You run Claude Code for hours, with subagents or loops.</strong> Long agentic sessions are what use plans up fastest.</li>
+          <li><strong>You rarely see a limit warning.</strong> Stay on Pro, and try the habits in <a href="/guides/stop-hitting-claude-limits">how to stop hitting Claude limits</a> first.</li>
+        </ul>
+        <p>Upgrading applies right away, and moving up from Pro is prorated. Usage credits are the in-between option: keep Pro and pay for extra usage only when you go over.</p>
+        <p>To check, open <a href="https://claude.ai/settings/usage">Settings › Usage</a> or run <code>/usage</code> in Claude Code.</p>
+      </div></div>
+    </section>
+    <section class="tight" id="pace">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>Let your pace decide</h2>
+        <p>The question isn't how much you used today. It's whether your usual pace makes it to the reset. <a href="/">Fuel Gauge</a> tracks that for every window and tells you, in the menu bar and under your Claude Code prompt, whether you'll make it. A week of "runs out early" on Pro is a good reason to try Max 5x. A week of "makes it, about 60% by then" means Pro is enough.</p>
+      </div></div>
+    </section>
+    <section class="tight" id="sources">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>Sources</h2>
+        <p>Checked on October 20, 2026. Anthropic changes plans from time to time, so the help pages are the final word.</p>
+        <ul><li><a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">What is the Max plan?</a></li><li><a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Use Claude Code with your Pro or Max plan</a></li><li><a href="https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work">How do usage and length limits work?</a></li><li><a href="https://claude.com/pricing">Claude pricing</a></li></ul>
+      </div></div>
+    </section>
+    <section class="tight lit">
+      <div class="wrap">
+        <div class="head center head-sm"><h2>Questions</h2></div>
+        <div class="faq glass">
+          <details><summary>Is Claude Max worth it over Pro?</summary><p>If you hit Pro&#x27;s 5-hour or weekly limit most days, usually yes: Max 5x gives five times Pro&#x27;s usage per session for $100 a month. If you rarely hit a limit, Pro is enough.</p></details>
+          <details><summary>What&#x27;s the difference between Claude Max 5x and 20x?</summary><p>Max 5x gives five times Pro&#x27;s per-session usage for $100 a month; Max 20x gives twenty times for $200.</p></details>
+          <details><summary>Do Pro and Max have the same weekly reset?</summary><p>Both have a weekly limit that resets at a fixed time assigned to your account. Settings › Usage shows yours.</p></details>
+        </div>
+      </div>
+    </section>
+    <section class="tight">
+      <div class="wrap narrow">
+        <h2 class="related-head">Keep reading</h2>
+        <div class="related"><a class="related-card glass" href="/limits/claude-pro"><strong>Claude Pro limits</strong><span>Session and weekly, shared with Claude Code</span></a><a class="related-card glass" href="/limits/claude-max"><strong>Claude Max limits</strong><span>5x or 20x Pro&#x27;s usage</span></a><a class="related-card glass" href="/guides/stop-hitting-claude-limits"><strong>Stop hitting Claude limits</strong><span>What uses your limit fastest</span></a></div>
+      </div>
+    </section>
+    <section class="cta lit">
+      <div class="wrap">
+        <div class="cta-card glass">
+          <img src="/images/icon.svg" alt="" width="96" height="96" loading="lazy">
+          <h2>Know if you&#39;ll make it to reset.</h2>
+          <p>Free. No account, no subscription.</p>
+          <div class="actions">
+            <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download for Mac</a>
+        <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>View source code</a>
+          </div>
+          <div class="copyline"><code id="brew-cta">brew install --cask coreyhaines31/tap/fuelgauge</code><button type="button" class="copy" data-copy="brew-cta">Copy</button></div>
+          <div class="ask">
+            <p>Or ask your coding agent:</p>
+            <div class="prompt-box">
+              <button type="button" class="copy" data-copy="install-prompt">Copy</button>
+              <pre id="install-prompt">Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`.</pre>
+            </div>
+          </div>
+          <p class="fineprint">macOS 14 Sonoma or later · Apple Silicon and Intel</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="wrap">
+      <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a><a href="/limits/codex">Codex limits</a><a href="/limits/cursor">Cursor limits</a><a href="/limits/grok">Grok limits</a><a href="/limits/github-copilot">GitHub Copilot limits</a></nav>
+      <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a><a href="/guides/check-claude-usage">Check your Claude usage</a><a href="/guides/when-does-claude-limit-reset">When Claude limits reset</a><a href="/guides/claude-code-statusline">Claude Code status line</a><a href="/guides/stop-hitting-claude-limits">Stop hitting Claude limits</a></nav>
+      <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a><a href="/compare/claude-pro-vs-max">Claude Pro vs Max</a><a href="/compare/claude-code-vs-codex">Claude Code vs Codex</a><a href="/compare/cursor-vs-claude-code">Cursor vs Claude Code</a><a href="/alternatives/codexbar">CodexBar alternative</a><a href="/alternatives/ccusage">ccusage alternative</a><a href="/alternatives/ccstatusline">ccstatusline alternative</a><a href="/alternatives/claude-code-usage-monitor">Claude-Code-Usage-Monitor alternative</a></nav>
+      <nav class="footer-alts" aria-label="More free Mac apps"><a class="label" href="https://github.com/coreyhaines31">More free Mac apps</a><a href="https://midnightoil.app" title="Keep your Mac awake">Midnight Oil</a><a href="https://diskforecast.com" title="Know before your disk is full">Disk Forecast</a><a href="https://spareformac.com" title="See what&#x27;s using your Mac">Spare</a><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?">WiFi or ISP</a><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers">Green Room</a><a href="https://onhandformac.com" title="A clipboard manager for your Mac">On Hand</a><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides">Coat Check</a></nav>
+      <div class="footer-links"><span>© 2026 Corey Haines. Source available under the <a href="https://github.com/coreyhaines31/fuelgauge/blob/main/LICENSE">FSL-1.1-MIT License</a>.</span></div>
+      <div class="footer-links"><a href="https://github.com/coreyhaines31/fuelgauge">GitHub</a><a href="https://github.com/coreyhaines31/fuelgauge/releases">Releases</a><a href="https://github.com/coreyhaines31/fuelgauge/issues">Issues</a><a href="/privacy">Privacy</a><a href="/llms.txt">llms.txt</a></div>
+    </div>
+  </footer>
+  <script>
+    // Copy buttons. Falls back to selecting the text when the clipboard is unavailable.
+    document.querySelectorAll("[data-copy]").forEach(button => {
+      button.addEventListener("click", async () => {
+        const source = document.getElementById(button.dataset.copy);
+        try {
+          await navigator.clipboard.writeText(source.textContent);
+          button.textContent = "Copied";
+          setTimeout(() => { button.textContent = "Copy"; }, 2000);
+        } catch (_) {
+          getSelection().selectAllChildren(source);
+        }
+      });
+    });
+  </script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Claude Max worth it over Pro?", "acceptedAnswer": {"@type": "Answer", "text": "If you hit Pro's 5-hour or weekly limit most days, usually yes: Max 5x gives five times Pro's usage per session for $100 a month. If you rarely hit a limit, Pro is enough."}}, {"@type": "Question", "name": "What's the difference between Claude Max 5x and 20x?", "acceptedAnswer": {"@type": "Answer", "text": "Max 5x gives five times Pro's per-session usage for $100 a month; Max 20x gives twenty times for $200."}}, {"@type": "Question", "name": "Do Pro and Max have the same weekly reset?", "acceptedAnswer": {"@type": "Answer", "text": "Both have a weekly limit that resets at a fixed time assigned to your account. Settings \u203a Usage shows yours."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Fuel Gauge", "item": "https://fuelgauge.app/"}, {"@type": "ListItem", "position": 2, "name": "Compare", "item": "https://fuelgauge.app/compare"}, {"@type": "ListItem", "position": 3, "name": "Claude Pro vs Max", "item": "https://fuelgauge.app/compare/claude-pro-vs-max"}]}</script>
+</body>
+</html>

@@ -155,5 +155,57 @@ echo "$line"</code></pre>
             ("Claude Code limits", "How Claude Code counts against your plan", "/limits/claude-code"),
         ],
     },
+    {
+        "path": "/guides/stop-hitting-claude-limits",
+        "short": "Stop hitting Claude limits",
+        "card": "What burns through your limit in Claude Code, and what saves it",
+        "title": "How to stop hitting Claude usage limits in Claude Code",
+        "description": "Why Claude Code burns through your Pro or Max limit and what actually helps: /clear, the right model and effort, fewer MCP tools, subagents, and a forecast.",
+        "eyebrow": "Guide",
+        "h1": "How to stop hitting your Claude limits",
+        "lede": "Most limit trouble in Claude Code comes from a few habits. Here's what uses your limit fastest, what saves the most, and how to see a wall coming.",
+        "answer": "Claude Code sends your whole conversation with every request, so long sessions are the biggest drain. Run <code>/clear</code> between unrelated tasks, match the model and effort level to the job, turn off MCP servers you aren't using, and send noisy work to subagents. Then watch your pace, so you know before a big task whether your limit will last.",
+        "sections": [
+            {"id": "why", "html": """
+        <h2>Why usage climbs in a long session</h2>
+        <p>Claude Code sends the full conversation with every request, and again with each batch of tool results. Caching makes re-reading history cheaper, but it still counts, so a one-line question in a session that's been open all day draws usage for the whole conversation.</p>
+        <p>Other things that add up while you're not looking:</p>
+        <ul>
+          <li><strong>Cache misses:</strong> your first message after a long break reprocesses the full context.</li>
+          <li><strong>Scheduled loops:</strong> a <code>/loop</code> task fires on its interval even while you're idle, sending your full context each time.</li>
+          <li><strong>Subagents and agent teams:</strong> each one sends its own requests. Agent teams can use about 7x the tokens of a normal session when teammates run in plan mode.</li>
+          <li><strong>Compacting a huge context:</strong> <code>/compact</code> reads everything it summarizes, so it's a big request itself.</li>
+        </ul>
+        <p>On Pro and Max, <code>/usage</code> flags any of these that accounts for 10% or more of your recent usage.</p>"""},
+            {"id": "fixes", "lit": True, "html": """
+        <h2>What saves the most</h2>
+        <ol class="steps">
+          <li><b>Clear between tasks.</b> <code>/clear</code> starts fresh when you switch to unrelated work. Use <code>/rename</code> first so you can <code>/resume</code> it later.</li>
+          <li><b>Match the model to the job.</b> Sonnet handles most coding tasks and costs less than Opus. Save Opus for hard architecture and multi-step reasoning, and switch with <code>/model</code>.</li>
+          <li><b>Lower the effort for routine work.</b> Extended thinking is billed as output. <code>/effort</code> turns it down for simple tasks.</li>
+          <li><b>Trim MCP servers.</b> Run <code>/mcp</code> and turn off servers you aren't using. A CLI like <code>gh</code> is often cheaper than an MCP server for the same job.</li>
+          <li><b>Move instructions into skills.</b> CLAUDE.md loads into every session. Workflow-specific instructions in skills only load when used. Keep CLAUDE.md under about 200 lines.</li>
+          <li><b>Send noisy work to subagents.</b> Test runs, log digging, and doc fetching stay in the subagent's context, and only a summary comes back. Give simple subagents a smaller model.</li>
+          <li><b>Be specific, and plan first.</b> "Add input validation to the login function in auth.ts" costs far less than "improve this codebase". Plan mode (Shift+Tab) catches a wrong direction before it's expensive.</li>
+        </ol>"""},
+            {"id": "forecast", "html": """
+        <h2>See the wall before you hit it</h2>
+        <p>Habits stretch your limit. Knowing your pace tells you when to use them. <a href="/">Fuel Gauge</a> is a free Mac menu bar app that reads your limits from Claude Code after every reply and says, at your recent pace, whether you'll make it to the reset: "Makes it to reset" or "Runs out around 3:40p, 1h 20m early", with the most you can use per hour and still make it. When it says you won't, that's the moment to switch to Sonnet, clear, or save the big job for after the reset.</p>
+        <p>Agents can check too: <code>fuelgauge status</code> exits with code 2 when a limit will run out before it resets. See <a href="/cli">Fuel Gauge for agents</a>.</p>"""},
+            {"id": "sources", "html": sources(
+                ("Manage costs effectively (Claude Code docs)", COSTS),
+                ("How do usage and length limits work?", USAGE))},
+        ],
+        "faqs": [
+            ("Why do I hit my Claude limit so fast in Claude Code?", "Claude Code sends the whole conversation with every request, so long sessions, subagents, scheduled loops, and cache misses after breaks all add up. /usage shows what used it."),
+            ("Does switching models help when I hit the limit?", "Not for the session or weekly limit, which cover every model. It does help after a model-specific message like \"You've hit your Opus limit\"."),
+            ("What's the single biggest saver?", "Running /clear between unrelated tasks, so each request doesn't carry a long history it doesn't need."),
+        ],
+        "related": [
+            ("Check your Claude usage", "Every place to see what's left", "/guides/check-claude-usage"),
+            ("Claude Code limits", "How Claude Code counts against your plan", "/limits/claude-code"),
+            ("Claude Pro vs Max", "When upgrading is worth it", "/compare/claude-pro-vs-max"),
+        ],
+    },
 ]
 

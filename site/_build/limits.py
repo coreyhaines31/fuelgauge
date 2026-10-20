@@ -13,6 +13,19 @@ FREE = "https://support.claude.com/en/articles/8602283-about-free-claude-usage"
 PRICING = "https://claude.com/pricing"
 COSTS = "https://code.claude.com/docs/en/costs"
 SETTINGS = "https://claude.ai/settings/usage"
+CODEX_PRICING = "https://learn.chatgpt.com/docs/pricing"
+CODEX_HELP = "https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan"
+CODEX_USAGE = "https://chatgpt.com/codex/settings/usage"
+CURSOR_PRICING = "https://cursor.com/docs/models-and-pricing"
+CURSOR_USAGE = "https://cursor.com/help/models-and-usage/usage-limits"
+CURSOR_LEGACY = "https://cursor.com/docs/account/pricing/legacy-cursor-plans"
+GROK_FAQ = "https://grok.com/faq"
+GROK_BOT_PLANS = "https://cursor.com/help/grok-bot/plans"
+COPILOT_BLOG = "https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/"
+COPILOT_BILLING = "https://docs.github.com/en/copilot/concepts/billing/billing-for-individuals"
+COPILOT_ORGS = "https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises"
+COPILOT_PLANS = "https://github.com/features/copilot/plans"
+COPILOT_LEGACY = "https://docs.github.com/en/copilot/concepts/billing/copilot-requests"
 
 
 def sources(*links):
@@ -232,6 +245,205 @@ LIMITS = [
             ("Claude Pro limits", "At least 5x Free's usage per session", "/limits/claude-pro"),
             ("When do Claude limits reset?", "Session and weekly resets, explained", "/guides/when-does-claude-limit-reset"),
             ("Check your Claude usage", "Every place to see what's left", "/guides/check-claude-usage"),
+        ],
+    },
+    {
+        "path": "/limits/codex",
+        "short": "Codex limits",
+        "card": "5-hour and weekly windows on ChatGPT plans, shared with cloud",
+        "hub_windows": "5-hour and weekly (Pro: weekly only)",
+        "hub_reset": "Shown on your Codex usage dashboard",
+        "title": "Codex usage limits (October 2026): Plus, Pro, Business",
+        "description": "How Codex usage limits work on ChatGPT plans: 5-hour and weekly windows, what Plus and Business get per 5 hours, Pro's weekly-only limit, and how to check.",
+        "eyebrow": "OpenAI Codex",
+        "h1": "Codex usage limits",
+        "lede": "Codex is included in every ChatGPT plan. Paid plans get a 5-hour window and a weekly limit; Pro plans drop the 5-hour limit.",
+        "answer": "Codex comes with every ChatGPT plan, including Free and Go. On Plus and Business, usage is measured in 5-hour windows, and weekly limits may also apply; Pro plans have no 5-hour limit. Local messages and cloud chats share one allowance. Check yours at chatgpt.com/codex/settings/usage, or run /status in the Codex CLI.",
+        "sections": [
+            {"id": "facts", "facts": [
+                ("Plans", "Free, Go ($8), Plus ($20), Pro ($100, $200, or $500), Business ($20/user billed yearly, $25 monthly), Enterprise/Edu"),
+                ("5-hour window", "Plus and Business; Pro plans have no five-hour limit"),
+                ("Weekly limit", "\"Weekly limits may also apply\""),
+                ("Shared", "Local messages and cloud chats use the same allowance"),
+                ("Codex Cloud", "Plus, Pro, Business, Enterprise, Healthcare, Education; not Free or Go"),
+                ("Check it", f'<a href="{CODEX_USAGE}">chatgpt.com/codex/settings/usage</a>, or <code>/status</code> in the Codex CLI'),
+                ("At the limit", "Add credits, apply a banked reset, upgrade, wait, or switch to an API key"),
+            ], "html": """
+        <h2>Codex limits at a glance</h2>
+        {{FACTS}}"""},
+            {"id": "numbers", "lit": True, "html": """
+        <h2>How much fits in 5 hours</h2>
+        <p>OpenAI publishes ranges, not fixed limits, for local messages per 5 hours on Plus and Standard Business. The range is wide because a short question and a long agentic task cost very different amounts:</p>
+        <div class="table-card glass"><div class="table-scroll"><table class="compare facts"><tbody>
+            <tr><th scope="row">GPT-6 Astra</th><td>5–45 local messages per 5 hours</td></tr>
+            <tr><th scope="row">GPT-6.1 Sol</th><td>15–160</td></tr>
+            <tr><th scope="row">GPT-6 Sol</th><td>15–150</td></tr>
+            <tr><th scope="row">GPT-6 Luna</th><td>350–3,000</td></tr>
+        </tbody></table></div></div>
+        <p>OpenAI's words: "These estimates are not fixed message limits." Free and Go numbers aren't published. Enterprise and Edu workspaces with flexible pricing have no fixed rate limits.</p>"""},
+            {"id": "limit", "html": """
+        <h2>What happens when you hit it</h2>
+        <p>If you reach a limit in the middle of a turn, Codex can finish that turn. After that you can add credits (eligible Plus and Pro users can buy them without changing plans), apply a banked reset if you have one, which refreshes your 5-hour and weekly windows and moves your weekly reset date, upgrade, or wait. You can also keep working locally with an OpenAI API key, billed at API rates. OpenAI Support doesn't reset limits.</p>
+        <h2>Will you make it to the reset?</h2>
+        <p>Codex writes its limits to its session logs on your Mac after every turn: each window's percent used, its length, and its reset time. <a href="/">Fuel Gauge</a> reads them, with no sign-in, and tells you whether you'll make it to the reset at your current pace. It reads the last 8 days of logs on first launch, so weekly forecasts start right away.</p>"""},
+            {"id": "sources", "html": sources(
+                ("Codex pricing", CODEX_PRICING),
+                ("Using Codex with your ChatGPT plan", CODEX_HELP))},
+        ],
+        "faqs": [
+            ("Does Codex have a weekly limit?", "OpenAI says weekly limits may apply alongside the 5-hour window. Pro plans have no 5-hour limit. Your usage dashboard shows your current limits and reset times."),
+            ("How do I check my Codex usage?", "Open chatgpt.com/codex/settings/usage, or run /status in an active Codex CLI session."),
+            ("Do Codex cloud tasks have a separate limit?", "No. Local messages and cloud chats share your plan's usage allowance."),
+            ("Is Codex included in ChatGPT Free?", "Yes, Codex is included across ChatGPT plans, including Free and Go. Codex Cloud isn't included with Free or Go."),
+        ],
+        "related": [
+            ("Claude Code vs Codex", "Limits side by side", "/compare/claude-code-vs-codex"),
+            ("Claude Code limits", "How Claude Code counts against your plan", "/limits/claude-code"),
+            ("Fuel Gauge for agents", "Check limits before a big job", "/cli"),
+        ],
+    },
+    {
+        "path": "/limits/cursor",
+        "short": "Cursor limits",
+        "card": "One weekly pool on the new plans, monthly on legacy ones",
+        "hub_windows": "Weekly pool (legacy plans: monthly)",
+        "hub_reset": "Weekly; legacy plans with your billing cycle",
+        "title": "Cursor usage limits (October 2026): weekly pool, legacy plans",
+        "description": "How Cursor usage limits work now: one weekly pool shared with Grok on the new plans, monthly pools on legacy Pro and Ultra, what happens over the limit, and how to check.",
+        "eyebrow": "Cursor",
+        "h1": "Cursor usage limits",
+        "lede": "Cursor's plans changed. New plans have one usage pool that refreshes weekly, shared with Grok Bot and the Grok apps. Legacy plans keep monthly pools.",
+        "answer": "On Cursor's current plans (Free, Plus $8, Premium $30, Super $100, Ultra $200), each paid plan has one pool of usage for Cursor models that refreshes weekly, shared across the editor, CLI, Cloud Agents, Grok Bot, and the Grok apps. Legacy plans (Hobby, Pro, Pro+, Ultra, Teams) have two monthly pools that reset with your billing cycle. Check usage at grok.com/dashboard or in your editor settings.",
+        "sections": [
+            {"id": "facts", "facts": [
+                ("Current plans", "Free · Plus $8 · Premium $30 (4x Plus) · Super $100 (15x Plus) · Ultra $200 (50x Plus) a month"),
+                ("Pool", "One pool for Cursor models, shared with Grok Bot and the Grok apps"),
+                ("Reset", "Weekly; unused usage doesn't roll over"),
+                ("Third-party models", "Claude, GPT, Gemini on Premium and up, at API list price from prepaid credit"),
+                ("Over the limit", "Wait for the reset, use prepaid credit, or upgrade; requests are never downgraded"),
+                ("Check it", "Usage at grok.com/dashboard (used, next reset, credit), or your editor settings"),
+                ("Legacy plans", "Two monthly pools, reset with your billing cycle"),
+            ], "html": """
+        <h2>Cursor limits at a glance</h2>
+        {{FACTS}}"""},
+            {"id": "legacy", "lit": True, "html": """
+        <h2>If you're on a legacy plan</h2>
+        <p>Hobby, Pro ($20), Pro+ ($60), Ultra ($200), and the old Teams plans ($40 and $120 per user) are now legacy. They have two monthly pools, Cursor models and other models, that reset with your billing cycle. On Pro, Pro+, and Ultra, on-demand usage is off until you turn it on under Spending at cursor.com/dashboard/spending, where you can set a monthly spend limit; on Teams it's on by default. On Hobby, AI features pause until the pool resets.</p>
+        <h2>What "Auto" means for your limit</h2>
+        <p>On individual plans, Auto runs in Cost mode: it bills as a Cursor-model request and draws from your weekly pool, whichever model serves it.</p>
+        <h2>Will you make it to the reset?</h2>
+        <p><a href="/">Fuel Gauge</a> forecasts whether your usage lasts until the reset. On Grok Bot it reads the weekly usage Grok Bot saves on your Mac; for Cursor it can ask cursor.com with the Cursor app's own sign-in, which is off until you turn it on.</p>"""},
+            {"id": "sources", "html": sources(
+                ("Models and pricing (Cursor docs)", CURSOR_PRICING),
+                ("Usage limits (Cursor help)", CURSOR_USAGE),
+                ("Legacy Cursor plans", CURSOR_LEGACY))},
+        ],
+        "faqs": [
+            ("Does Cursor have a weekly limit?", "On the current plans, yes: one pool of usage for Cursor models that refreshes weekly. Legacy plans reset monthly with your billing cycle."),
+            ("What happens when I run out of Cursor usage?", "Wait for the weekly reset, use prepaid credit, or upgrade. Cursor says requests are never downgraded in quality or speed."),
+            ("Where do I see my Cursor usage?", "Usage at grok.com/dashboard shows how much of your weekly pool you've used, the next reset, and your prepaid credit. Your editor settings show the same."),
+            ("Does Cursor usage roll over?", "No. Unused included usage doesn't roll over on either kind of plan. Prepaid credit lasts 365 days."),
+        ],
+        "related": [
+            ("Grok limits", "The same weekly pool, from the Grok side", "/limits/grok"),
+            ("Cursor vs Claude Code", "Limits and pricing side by side", "/compare/cursor-vs-claude-code"),
+            ("Codex limits", "5-hour and weekly windows", "/limits/codex"),
+        ],
+    },
+    {
+        "path": "/limits/grok",
+        "short": "Grok limits",
+        "card": "One shared weekly pool, including Grok Bot",
+        "hub_windows": "One weekly pool",
+        "hub_reset": "Weekly, on the schedule in Settings › Usage",
+        "title": "Grok usage limits (October 2026): the weekly pool, Grok Bot",
+        "description": "How Grok usage limits work: one shared weekly usage pool instead of daily limits, how it resets, what pauses when it runs out, and where Grok Bot fits.",
+        "eyebrow": "Grok",
+        "h1": "Grok usage limits",
+        "lede": "Grok replaced separate daily limits with one shared weekly pool, shown as a percentage and reset on a schedule in your settings.",
+        "answer": "Starting in June 2026, Grok moved to one shared weekly usage pool instead of separate daily limits per product. It resets every week on the schedule shown in Settings › Usage, where you see it as a percentage used, broken down by API, Build, Chat, Imagine, and Voice. When it runs out, paid features pause until the reset unless you add Extra Usage Credits.",
+        "sections": [
+            {"id": "facts", "facts": [
+                ("Pool", "One weekly pool shared across Grok products"),
+                ("Reset", "Every week, on the schedule in Settings › Usage"),
+                ("Shown as", "Percent used, broken down by API, Build, Chat, Imagine, and Voice"),
+                ("When it runs out", "Paid features pause until the weekly reset"),
+                ("Extra usage", "Extra Usage Credits from $5, valid one year, with optional Auto Top Up"),
+                ("Free tier", "Chat and Voice limits reset on their own schedule"),
+                ("Published numbers", "None"),
+            ], "html": """
+        <h2>Grok limits at a glance</h2>
+        {{FACTS}}"""},
+            {"id": "bot", "lit": True, "html": """
+        <h2>Grok Bot</h2>
+        <p>Grok Bot is the desktop and iOS agent from Cursor. On the X Subscription, it's included on Premium, Super, and Ultra and draws from the same weekly pool as Cursor and the Grok apps, not a separate Grok Bot meter. On legacy Cursor plans it has its own weekly usage. Grok Bot on macOS and iOS share one usage bucket, and its Usage &amp; Billing settings show weekly included usage and on-demand usage.</p>
+        <h2>Will you make it to the reset?</h2>
+        <p>Grok Bot saves your weekly usage on your Mac while it's open. <a href="/">Fuel Gauge</a> reads it, with no sign-in or network call, and tells you whether you'll make it to the weekly reset at your current pace.</p>"""},
+            {"id": "sources", "html": sources(
+                ("Grok FAQ", GROK_FAQ),
+                ("Grok Bot plans (Cursor help)", GROK_BOT_PLANS),
+                ("Models and pricing (Cursor docs)", CURSOR_PRICING))},
+        ],
+        "faqs": [
+            ("Does Grok have daily limits?", "Not anymore for paid features. Grok moved to one shared weekly usage pool. Free-tier Chat and Voice limits reset on their own schedule."),
+            ("When does the Grok usage limit reset?", "Every week, on the schedule shown in the Usage tab in Settings."),
+            ("Does Grok Bot have its own limit?", "On the X Subscription, no: it draws from the same weekly pool as Cursor and the Grok apps. Legacy Cursor plans give it its own weekly usage."),
+        ],
+        "related": [
+            ("Cursor limits", "The same weekly pool, from the Cursor side", "/limits/cursor"),
+            ("Codex limits", "5-hour and weekly windows", "/limits/codex"),
+            ("Check your Claude usage", "Every place to see what's left", "/guides/check-claude-usage"),
+        ],
+    },
+    {
+        "path": "/limits/github-copilot",
+        "short": "GitHub Copilot limits",
+        "card": "Monthly AI credits since June 2026; premium requests on legacy plans",
+        "hub_windows": "Monthly AI credits",
+        "hub_reset": "1st of the month, 00:00 UTC",
+        "title": "GitHub Copilot limits (October 2026): AI credits, resets",
+        "description": "How GitHub Copilot limits work since June 2026: monthly AI credits per plan, the reset on the 1st at 00:00 UTC, what happens when they run out, and legacy premium requests.",
+        "eyebrow": "GitHub Copilot",
+        "h1": "GitHub Copilot limits",
+        "lede": "Copilot replaced premium requests with AI credits on June 1, 2026. Each plan gets a monthly allowance that resets on the 1st, at midnight UTC.",
+        "answer": "GitHub Copilot now meters usage in AI credits ($0.01 each), priced per model by tokens. Pro includes 1,500 a month, Pro+ 7,000, Max 20,000, Business 1,900 per user, and Enterprise 3,900 per user, pooled. Allowances reset at 00:00 UTC on the 1st of each month, whatever your billing date, and unused credits don't carry over. Code completions don't use credits.",
+        "sections": [
+            {"id": "facts", "facts": [
+                ("Free", "$0 · 2,000 completions and 50 chat requests a month"),
+                ("Pro", "$10 · 1,500 AI credits a month"),
+                ("Pro+", "$39 · 7,000 AI credits a month"),
+                ("Max", "$100 · 20,000 AI credits a month"),
+                ("Business / Enterprise", "$19 / $39 per user · 1,900 / 3,900 credits per user, pooled"),
+                ("Reset", "00:00:00 UTC on the 1st of each month; unused credits don't carry over"),
+                ("Not counted", "Code completions and next edit suggestions"),
+                ("Check it", "Your Copilot usage dashboard on GitHub"),
+            ], "html": """
+        <h2>Copilot limits at a glance</h2>
+        {{FACTS}}
+        <p class="table-foot">Each paid allowance is part base, part flex credits; GitHub says flex credits may change over time. 1 AI credit = $0.01.</p>"""},
+            {"id": "limit", "lit": True, "html": """
+        <h2>What happens when you run out</h2>
+        <p>On an individual plan you can upgrade, set a budget for additional usage, or wait for the reset on the 1st. For organizations and enterprises, additional usage is on by default; if it isn't allowed, usage is blocked until the next billing cycle. Subscriptions bought through GitHub Mobile can't buy more credits.</p>
+        <h2>Legacy annual plans and premium requests</h2>
+        <p>Annual Pro and Pro+ plans bought before the change keep premium requests until they expire, then move to Copilot Free: 300 a month on Pro and 1,500 on Pro+, reset on the 1st at 00:00 UTC, with extra requests at $0.04 each.</p>
+        <h2>Does Fuel Gauge track Copilot?</h2>
+        <p>Not yet. <a href="/">Fuel Gauge</a> forecasts Claude Code, Codex, Grok Bot, and Cursor limits. Copilot's monthly allowance is a good fit for a forecast, so it's on the list.</p>"""},
+            {"id": "sources", "html": sources(
+                ("GitHub Copilot is moving to usage-based billing", COPILOT_BLOG),
+                ("Billing for individuals (GitHub docs)", COPILOT_BILLING),
+                ("Usage-based billing for organizations and enterprises", COPILOT_ORGS),
+                ("Copilot plans", COPILOT_PLANS),
+                ("Copilot requests (legacy plans)", COPILOT_LEGACY))},
+        ],
+        "faqs": [
+            ("Does GitHub Copilot still use premium requests?", "Only on legacy annual Pro and Pro+ plans. Since June 1, 2026, Copilot meters usage in AI credits."),
+            ("When do Copilot credits reset?", "At 00:00:00 UTC on the 1st of each month, regardless of your billing date. Unused credits don't carry over."),
+            ("Do code completions use AI credits?", "No. Code completions and next edit suggestions don't use credits."),
+        ],
+        "related": [
+            ("Codex limits", "5-hour and weekly windows", "/limits/codex"),
+            ("Cursor limits", "One weekly pool on the new plans", "/limits/cursor"),
+            ("Claude Code limits", "How Claude Code counts against your plan", "/limits/claude-code"),
         ],
     },
 ]

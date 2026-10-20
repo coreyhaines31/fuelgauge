@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AI coding plan usage limits: Claude Pro, Max, Claude Code</title>
-  <meta name="description" content="How the usage limits on Claude Pro, Max, Free, and Claude Code work: the 5-hour session, the weekly limit, when each resets, and how to check what&#x27;s left.">
+  <title>AI coding usage limits: Claude, Codex, Cursor, Copilot, Grok</title>
+  <meta name="description" content="How usage limits work on Claude Pro and Max, Claude Code, Codex, Cursor, Grok, and GitHub Copilot: the windows, when each resets, and how to check.">
   <link rel="canonical" href="https://fuelgauge.app/limits">
-  <meta property="og:title" content="AI coding plan usage limits: Claude Pro, Max, Claude Code">
-  <meta property="og:description" content="How the usage limits on Claude Pro, Max, Free, and Claude Code work: the 5-hour session, the weekly limit, when each resets, and how to check what&#x27;s left.">
+  <meta property="og:title" content="AI coding usage limits: Claude, Codex, Cursor, Copilot, Grok">
+  <meta property="og:description" content="How usage limits work on Claude Pro and Max, Claude Code, Codex, Cursor, Grok, and GitHub Copilot: the windows, when each resets, and how to check.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Fuel Gauge">
   <meta property="og:image" content="https://fuelgauge.app/images/og.png">
@@ -15,8 +15,8 @@
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://fuelgauge.app/limits">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AI coding plan usage limits: Claude Pro, Max, Claude Code">
-  <meta name="twitter:description" content="How the usage limits on Claude Pro, Max, Free, and Claude Code work: the 5-hour session, the weekly limit, when each resets, and how to check what&#x27;s left.">
+  <meta name="twitter:title" content="AI coding usage limits: Claude, Codex, Cursor, Copilot, Grok">
+  <meta name="twitter:description" content="How usage limits work on Claude Pro and Max, Claude Code, Codex, Cursor, Grok, and GitHub Copilot: the windows, when each resets, and how to check.">
   <meta name="theme-color" content="#fbe9d6" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/images/icon.svg" type="image/svg+xml">
@@ -36,8 +36,8 @@
         <a href="/#how">How it works</a>
         <a href="/limits">Limits</a>
         <a href="/guides">Guides</a>
-        <a href="/alternatives">Compare</a>
-        <a href="/#agents">For agents</a>
+        <a href="/compare">Compare</a>
+        <a href="/cli">For agents</a>
         <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg">Download</a>
       </nav>
     </div>
@@ -52,9 +52,9 @@
     </div>
     <section class="tight" style="padding-top:0">
       <div class="wrap narrow">
-        <div class="table-card glass"><div class="table-scroll"><table class="compare"><thead><tr><td></td><th scope="col">Limits</th><th scope="col">Resets</th></tr></thead><tbody><tr><th scope="row"><a href="/limits/claude-pro">Claude Pro limits</a></th><td>5-hour session, weekly</td><td>Every 5 hours; weekly at a set time for your account</td></tr><tr><th scope="row"><a href="/limits/claude-max">Claude Max limits</a></th><td>5-hour session, weekly, separate weekly Fable limit</td><td>Every 5 hours; weekly at a set time for your account</td></tr><tr><th scope="row"><a href="/limits/claude-code">Claude Code limits</a></th><td>Your plan's 5-hour session and weekly limits</td><td>Same as your plan</td></tr><tr><th scope="row"><a href="/limits/claude-free">Claude Free limits</a></th><td>5-hour session</td><td>Every 5 hours</td></tr></tbody></table></div></div>
+        <div class="table-card glass"><div class="table-scroll"><table class="compare"><thead><tr><td></td><th scope="col">Limits</th><th scope="col">Resets</th></tr></thead><tbody><tr><th scope="row"><a href="/limits/claude-pro">Claude Pro limits</a></th><td>5-hour session, weekly</td><td>Every 5 hours; weekly at a set time for your account</td></tr><tr><th scope="row"><a href="/limits/claude-max">Claude Max limits</a></th><td>5-hour session, weekly, separate weekly Fable limit</td><td>Every 5 hours; weekly at a set time for your account</td></tr><tr><th scope="row"><a href="/limits/claude-code">Claude Code limits</a></th><td>Your plan's 5-hour session and weekly limits</td><td>Same as your plan</td></tr><tr><th scope="row"><a href="/limits/claude-free">Claude Free limits</a></th><td>5-hour session</td><td>Every 5 hours</td></tr><tr><th scope="row"><a href="/limits/codex">Codex limits</a></th><td>5-hour and weekly (Pro: weekly only)</td><td>Shown on your Codex usage dashboard</td></tr><tr><th scope="row"><a href="/limits/cursor">Cursor limits</a></th><td>Weekly pool (legacy plans: monthly)</td><td>Weekly; legacy plans with your billing cycle</td></tr><tr><th scope="row"><a href="/limits/grok">Grok limits</a></th><td>One weekly pool</td><td>Weekly, on the schedule in Settings › Usage</td></tr><tr><th scope="row"><a href="/limits/github-copilot">GitHub Copilot limits</a></th><td>Monthly AI credits</td><td>1st of the month, 00:00 UTC</td></tr></tbody></table></div></div>
         <p class="table-foot">Checked against each provider's own help pages on October 20, 2026.</p>
-        <div class="related hub"><a class="related-card glass" href="/limits/claude-pro"><strong>Claude Pro limits</strong><span>5-hour session and weekly limits, shared with Claude Code</span></a><a class="related-card glass" href="/limits/claude-max"><strong>Claude Max limits</strong><span>5x or 20x Pro&#x27;s usage per session, plus weekly limits</span></a><a class="related-card glass" href="/limits/claude-code"><strong>Claude Code limits</strong><span>How Claude Code counts against your Pro or Max plan</span></a><a class="related-card glass" href="/limits/claude-free"><strong>Claude Free limits</strong><span>A 5-hour session limit that moves with demand</span></a></div>
+        <div class="related hub"><a class="related-card glass" href="/limits/claude-pro"><strong>Claude Pro limits</strong><span>5-hour session and weekly limits, shared with Claude Code</span></a><a class="related-card glass" href="/limits/claude-max"><strong>Claude Max limits</strong><span>5x or 20x Pro&#x27;s usage per session, plus weekly limits</span></a><a class="related-card glass" href="/limits/claude-code"><strong>Claude Code limits</strong><span>How Claude Code counts against your Pro or Max plan</span></a><a class="related-card glass" href="/limits/claude-free"><strong>Claude Free limits</strong><span>A 5-hour session limit that moves with demand</span></a><a class="related-card glass" href="/limits/codex"><strong>Codex limits</strong><span>5-hour and weekly windows on ChatGPT plans, shared with cloud</span></a><a class="related-card glass" href="/limits/cursor"><strong>Cursor limits</strong><span>One weekly pool on the new plans, monthly on legacy ones</span></a><a class="related-card glass" href="/limits/grok"><strong>Grok limits</strong><span>One shared weekly pool, including Grok Bot</span></a><a class="related-card glass" href="/limits/github-copilot"><strong>GitHub Copilot limits</strong><span>Monthly AI credits since June 2026; premium requests on legacy plans</span></a></div>
       </div>
     </section>
     <section class="cta lit">
@@ -82,9 +82,9 @@
   </main>
   <footer>
     <div class="wrap">
-      <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a></nav>
-      <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a><a href="/guides/check-claude-usage">Check your Claude usage</a><a href="/guides/when-does-claude-limit-reset">When Claude limits reset</a><a href="/guides/claude-code-statusline">Claude Code status line</a></nav>
-      <nav class="footer-alts" aria-label="Compare"><a class="label" href="/alternatives">Compare</a><a href="/alternatives/codexbar">CodexBar alternative</a><a href="/alternatives/ccusage">ccusage alternative</a><a href="/alternatives/ccstatusline">ccstatusline alternative</a></nav>
+      <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a><a href="/limits/codex">Codex limits</a><a href="/limits/cursor">Cursor limits</a><a href="/limits/grok">Grok limits</a><a href="/limits/github-copilot">GitHub Copilot limits</a></nav>
+      <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a><a href="/guides/check-claude-usage">Check your Claude usage</a><a href="/guides/when-does-claude-limit-reset">When Claude limits reset</a><a href="/guides/claude-code-statusline">Claude Code status line</a><a href="/guides/stop-hitting-claude-limits">Stop hitting Claude limits</a></nav>
+      <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a><a href="/compare/claude-pro-vs-max">Claude Pro vs Max</a><a href="/compare/claude-code-vs-codex">Claude Code vs Codex</a><a href="/compare/cursor-vs-claude-code">Cursor vs Claude Code</a><a href="/alternatives/codexbar">CodexBar alternative</a><a href="/alternatives/ccusage">ccusage alternative</a><a href="/alternatives/ccstatusline">ccstatusline alternative</a><a href="/alternatives/claude-code-usage-monitor">Claude-Code-Usage-Monitor alternative</a></nav>
       <nav class="footer-alts" aria-label="More free Mac apps"><a class="label" href="https://github.com/coreyhaines31">More free Mac apps</a><a href="https://midnightoil.app" title="Keep your Mac awake">Midnight Oil</a><a href="https://diskforecast.com" title="Know before your disk is full">Disk Forecast</a><a href="https://spareformac.com" title="See what&#x27;s using your Mac">Spare</a><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?">WiFi or ISP</a><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers">Green Room</a><a href="https://onhandformac.com" title="A clipboard manager for your Mac">On Hand</a><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides">Coat Check</a></nav>
       <div class="footer-links"><span>© 2026 Corey Haines. Source available under the <a href="https://github.com/coreyhaines31/fuelgauge/blob/main/LICENSE">FSL-1.1-MIT License</a>.</span></div>
       <div class="footer-links"><a href="https://github.com/coreyhaines31/fuelgauge">GitHub</a><a href="https://github.com/coreyhaines31/fuelgauge/releases">Releases</a><a href="https://github.com/coreyhaines31/fuelgauge/issues">Issues</a><a href="/privacy">Privacy</a><a href="/llms.txt">llms.txt</a></div>

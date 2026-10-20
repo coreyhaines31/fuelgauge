@@ -169,6 +169,60 @@ COMPARISONS = [
             """},
         ],
     },
+    {
+        "slug": "alternatives/claude-code-usage-monitor",
+        "competitor": "Claude-Code-Usage-Monitor",
+        "card": "A terminal token dashboard vs a forecast from Claude's own percentages",
+        "title": "Claude-Code-Usage-Monitor alternative: Fuel Gauge for Mac",
+        "description": "Claude-Code-Usage-Monitor predicts session token use in your terminal. Fuel Gauge forecasts your Claude Code limits from Claude's own percentages, in the menu bar.",
+        "eyebrow": "Claude-Code-Usage-Monitor alternative",
+        "h1": "Claude-Code-Usage-Monitor watches tokens. Fuel Gauge watches <em>your limit.</em>",
+        "lede": "Claude-Code-Usage-Monitor is a popular terminal dashboard for Claude Code with burn rates and predictions. Fuel Gauge forecasts from the percentages Claude Code itself reports, and lives in the menu bar.",
+        "tldr": "Use Claude-Code-Usage-Monitor if you want a live terminal dashboard of tokens and cost per 5-hour window, on macOS, Linux, or Windows. Use Fuel Gauge if you want a forecast from Claude&#39;s own limit percentages, always visible in the menu bar and under your prompt, with alerts, plus Codex, Grok Bot, and Cursor.",
+        "card_title": "Claude-Code-Usage-Monitor",
+        "cta": "Know if you&#39;ll make it.",
+        "faqs": [
+            ("Is Claude-Code-Usage-Monitor free?", "Yes. It's free and MIT licensed. Fuel Gauge is free too, with the source on GitHub under the FSL-1.1-MIT license."),
+            ("How is Fuel Gauge's forecast different?", "Fuel Gauge works from the percent of your session and weekly limits that Claude Code reports after every reply. Token-based tools estimate limits from token counts, and Anthropic doesn't publish token limits for its plans."),
+            ("Can I use both?", "Yes. One runs in your terminal, the other in the menu bar."),
+        ],
+        "sections": [
+            {"id": "why", "html": """
+        <h2>What Claude-Code-Usage-Monitor does well</h2>
+        <p>It&#39;s a real-time terminal dashboard for Claude Code: tokens and cost in each 5-hour window, a burn-rate view, session forecasting that "predicts when sessions will expire", and warnings. It installs with <code>uv tool install claude-monitor</code>, runs on macOS, Linux, and Windows, and is free and MIT licensed with about 8,700 stars on GitHub.</p>
+        <h3>Where Fuel Gauge is different</h3>
+        <p><strong>It starts from Claude&#39;s own numbers.</strong> Fuel Gauge reads the session and weekly percentages Claude Code reports to its status line after every reply. Token-based tools have to estimate the limit: Claude-Code-Usage-Monitor uses built-in token limits per plan, with a P90-based default, because Anthropic doesn&#39;t publish token counts.</p>
+        <p><strong>It covers the weekly limit.</strong> Each card forecasts its own window, 5-hour and weekly, with a range and the most you can use per hour and still make it.</p>
+        <p><strong>It&#39;s always visible.</strong> A menu bar glyph that turns orange, one alert per window, a line under your Claude Code prompt, and Codex, Grok Bot, and Cursor too.</p>
+            """},
+            {"id": "compare", "lit": True, "html": """
+        <h2>Fuel Gauge vs Claude-Code-Usage-Monitor</h2>
+        {{TABLE}}
+        <h3>What Claude-Code-Usage-Monitor does better</h3>
+        <p>A detailed live terminal view with token and cost numbers, and it runs on Linux and Windows.</p>
+        <h3>What Fuel Gauge does better</h3>
+        <p>Forecasts from the percentages that actually decide when you&#39;re cut off, for both windows and four tools, without keeping a terminal open.</p>
+            """, "table": [
+                ("Price", "Free", "Free"),
+                ("License", "FSL-1.1-MIT, source on GitHub", "MIT"),
+                ("Where it runs", "Mac menu bar, Claude Code status line, CLI", "Terminal dashboard"),
+                ("Measures", "Claude&#39;s own session and weekly percentages", "Tokens and cost per 5-hour window"),
+                ("Forecast", "Each window, with a range", "Session forecasting"),
+                ("Weekly limit forecast", "Yes", "—"),
+                ("Codex, Grok Bot, Cursor", "Yes", "—"),
+                ("Platforms", "macOS 14+", "macOS, Linux, Windows"),
+            ]},
+            {"id": "switch", "html": """
+        <h2>Trying it takes a minute</h2>
+        <ol class="steps">
+          <li><b>Install Fuel Gauge.</b> <code>brew install --cask coreyhaines31/tap/fuelgauge</code>, or download the app from GitHub and drag it to Applications.</li>
+          <li><b>Turn on the status line.</b> From the app, or with <code>fuelgauge install-statusline</code>. It keeps your existing status line and backs up <code>settings.json</code>.</li>
+          <li><b>Keep working.</b> A 5-hour limit gets a forecast after about 10 minutes of readings, a weekly one after 3 hours. Until then it says “Learning your pace.”</li>
+          <li><b>Keep Claude-Code-Usage-Monitor if you like its terminal dashboard.</b> The two don&#39;t conflict.</li>
+        </ol>
+            """},
+        ],
+    },
 ]
 
 PRIVACY = {
@@ -190,4 +244,63 @@ PRIVACY = {
         <h2>Questions</h2>
         <p>Open an issue on <a href="https://github.com/coreyhaines31/fuelgauge/issues">GitHub</a>. The source is public, so you can check every claim on this page yourself.</p>
     """,
+}
+
+CLI = {
+    "path": "/cli",
+    "short": "Fuel Gauge for agents",
+    "title": "fuelgauge command: let AI agents check usage limits first",
+    "description": "The fuelgauge command tells you or an AI agent whether Claude Code, Codex, Grok Bot, and Cursor limits will last until reset, and exits 2 when one won't.",
+    "eyebrow": "For agents",
+    "h1": "Let your agent check <em>before the big job.</em>",
+    "lede": "Fuel Gauge includes a <code>fuelgauge</code> command. It prints the forecast for every limit and exits with code 2 when one will run out before it resets, so a coding agent can ask you before it burns through what's left.",
+    "answer": "Run <code>fuelgauge status</code>. It exits 0 when every limit will last until it resets, and 2 when one won't (or already ran out). Add one line to CLAUDE.md or AGENTS.md and your agent checks before long tasks. Homebrew puts the command on your PATH; otherwise use Settings › General › Install.",
+    "sections": [
+        {"id": "commands", "html": """
+        <h2>Commands</h2>
+        <pre><code>fuelgauge status              # every limit, in plain words; exits 2 if one will run out before it resets
+fuelgauge status --json       # the same, for scripts and agents
+fuelgauge history --days 2    # the readings behind the forecasts
+fuelgauge install-statusline  # make Fuel Gauge Claude Code's status line (keeps yours, backs up settings.json)
+fuelgauge uninstall-statusline</code></pre>
+        <h3>What status prints</h3>
+        <pre><code>Claude Code · 5-hour: Runs out around 11:50a, 1h 30m early
+  55% used · resets 1:20p (in 3h 6m)
+  Using 28% an hour. You can use up to 15% an hour and still make it.
+Claude Code · Weekly: Makes it to reset, about 86% by then
+  41% used · resets Thu 9a (in 2d 22h)</code></pre>"""},
+        {"id": "json", "lit": True, "html": """
+        <h2>The JSON</h2>
+        <p><code>fuelgauge status --json</code> prints one object per limit, with stable snake_case keys:</p>
+        <pre><code>[
+  {
+    "tool": "claude",
+    "window": "5-hour",
+    "used_percent": 55,
+    "resets_at": "2026-10-20T20:20:00Z",
+    "verdict": "runs_out",
+    "runs_out_at": "2026-10-20T18:50:00Z",
+    "rate_per_hour": 28,
+    "budget_per_hour": 15,
+    "summary": "Runs out around 11:50a, 1h 30m early"
+  }
+]</code></pre>
+        <p><code>verdict</code> is one of <code>makes_it</code>, <code>runs_out</code>, <code>out</code>, <code>learning</code>, or <code>reset</code>. Exit code 2 means at least one limit is <code>runs_out</code> or <code>out</code>.</p>"""},
+        {"id": "agents", "html": """
+        <h2>Add it to CLAUDE.md or AGENTS.md</h2>
+        <div class="prompt-box"><button type="button" class="copy" data-copy="agent-rule-cli">Copy</button><pre id="agent-rule-cli">{AGENT_RULE}</pre></div>
+        <p>Then every agent session checks before the expensive stuff, and tells you which limit runs out and when instead of hitting the wall halfway through.</p>
+        <h3>Install it with your agent</h3>
+        <div class="prompt-box"><button type="button" class="copy" data-copy="install-prompt-cli">Copy</button><pre id="install-prompt-cli">{INSTALL_PROMPT}</pre></div>"""},
+    ],
+    "faqs": [
+        ("What does exit code 2 mean?", "At least one tracked limit is forecast to run out before it resets, or has already run out."),
+        ("Does the command need the app running?", "The app collects Codex and Grok Bot readings in the background; Claude Code readings arrive through the status line. Keep the app running for current Codex numbers."),
+        ("Is the JSON stable?", "Yes. Keys are snake_case and new fields are only ever added."),
+    ],
+    "related": [
+        ("Claude Code status line", "Your limits under the prompt", "/guides/claude-code-statusline"),
+        ("Stop hitting Claude limits", "What uses your limit fastest", "/guides/stop-hitting-claude-limits"),
+        ("Claude Code limits", "How Claude Code counts against your plan", "/limits/claude-code"),
+    ],
 }
