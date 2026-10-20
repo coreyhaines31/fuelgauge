@@ -7,6 +7,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let updater = Updater()
     private var model: UsageModel?
     private var statusItemController: StatusItemController?
+    private var settingsWindow: SettingsWindow?
+    private let alerts = Alerts()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         Preferences.registerDefaults()
@@ -15,12 +17,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         #endif
         let model = makeModel()
         self.model = model
+        let settingsWindow = SettingsWindow(updater: updater, model: model)
+        self.settingsWindow = settingsWindow
         statusItemController = StatusItemController(
             model: model,
-            openSettings: {},
+            openSettings: { settingsWindow.show() },
             checkForUpdates: { [updater] in updater.checkForUpdates() }
         )
-        model.onChange = { [weak self] in self?.statusItemController?.update() }
+        model.onChange = { [weak self] in
+            guard let self else { return }
+            statusItemController?.update()
+            #if DEBUG
+            if DemoMode.isOn { return }
+            #endif
+            alerts.check(model.forecasts)
+        }
         NotificationCenter.default.addObserver(
             forName: UserDefaults.didChangeNotification, object: nil, queue: .main
         ) { [weak self] _ in
@@ -29,7 +40,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         model.start()
         #if DEBUG
         if DemoMode.isOn, let url = DemoMode.snapshotURL {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { DemoMode.snapshot(model: model, to: url) }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                DemoMode.snapshot(model: model, updater: self.updater, to: url)
+            }
         }
         #endif
     }

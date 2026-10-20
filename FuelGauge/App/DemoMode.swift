@@ -8,9 +8,10 @@ import SwiftUI
 ///     --demo                    sample readings in a temporary folder; live readers off
 ///     --snapshot <file.png>     draw the panel to a PNG and quit (needs no Screen Recording)
 ///     --dark                    dark appearance
+@MainActor
 enum DemoMode {
-    static let isOn = CommandLine.arguments.contains("--demo")
-    static let folder = FileManager.default.temporaryDirectory.appending(path: "FuelGaugeDemo")
+    nonisolated static let isOn = CommandLine.arguments.contains("--demo")
+    nonisolated static let folder = FileManager.default.temporaryDirectory.appending(path: "FuelGaugeDemo")
 
     static var snapshotURL: URL? {
         guard let index = CommandLine.arguments.firstIndex(of: "--snapshot"),
@@ -69,10 +70,25 @@ enum DemoMode {
 
     /// Draws the panel offscreen and saves it. An app can always draw its own views, so this works without
     /// Screen Recording permission.
-    static func snapshot(model: UsageModel, to url: URL) {
+    static func snapshot(model: UsageModel, updater: Updater, to url: URL) {
+        let panes: [(String, AnyView)] = [
+            ("general", AnyView(GeneralSettingsView(updater: updater))),
+            ("tools", AnyView(ToolsSettingsView(model: model))),
+            ("alerts", AnyView(AlertsSettingsView()))
+        ]
+        for (name, pane) in panes {
+            let paneURL = url.deletingPathExtension().appendingPathExtension("\(name).png")
+            render(pane.frame(width: SettingsWindow.paneWidth), to: paneURL)
+        }
         let view = PanelView(model: model, openSettings: {}, checkForUpdates: {})
-            .background(Color(nsColor: .windowBackgroundColor))
-        let hosting = NSHostingView(rootView: view)
+        render(view, to: url) {
+            saveGlyphs(next: url)
+            NSApp.terminate(nil)
+        }
+    }
+
+    private static func render(_ view: some View, to url: URL, then done: (() -> Void)? = nil) {
+        let hosting = NSHostingView(rootView: view.background(Color(nsColor: .windowBackgroundColor)))
         hosting.frame = NSRect(origin: .zero, size: hosting.fittingSize)
         let window = NSWindow(
             contentRect: NSRect(x: -5000, y: -5000, width: hosting.frame.width, height: hosting.frame.height),
@@ -85,8 +101,8 @@ enum DemoMode {
             guard let rep = hosting.bitmapImageRepForCachingDisplay(in: hosting.bounds) else { return }
             hosting.cacheDisplay(in: hosting.bounds, to: rep)
             try? rep.representation(using: .png, properties: [:])?.write(to: url)
-            saveGlyphs(next: url)
-            NSApp.terminate(nil)
+            window.orderOut(nil)
+            done?()
         }
     }
 }
