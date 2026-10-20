@@ -59,22 +59,27 @@ public struct CodexLogReader: Sendable {
         return files
     }
 
-    /// Complete lines after `offset`, and where the next read should start. A half-written last line is
-    /// left for the next poll.
-    static func newLines(in url: URL, from offset: UInt64) -> ([Data], UInt64) {
+    /// Complete lines after `offset` that mention `rate_limits`, and where the next read should start. Reads
+    /// in chunks, since a long session's log can pass 80 MB. A half-written last line is left for the next poll.
+    static func newLines(in url: URL, from offset: UInt64, chunkSize: Int = 4 << 20) -> ([Data], UInt64) {
         guard let handle = try? FileHandle(forReadingFrom: url) else { return ([], offset) }
         defer { try? handle.close() }
         guard let size = try? handle.seekToEnd() else { return ([], offset) }
         // A file that shrank was replaced: start over.
-        let start = offset > size ? 0 : offset
-        guard size > start else { return ([], start) }
-        try? handle.seek(toOffset: start)
-        guard let data = try? handle.readToEnd(), let lastNewline = data.lastIndex(of: 0x0A) else {
-            return ([], start)
+        var position = offset > size ? 0 : offset
+        guard size > position else { return ([], position) }
+        try? handle.seek(toOffset: position)
+        var lines: [Data] = []
+        var pending = Data()
+        while let chunk = try? handle.read(upToCount: chunkSize), !chunk.isEmpty {
+            pending.append(chunk)
+            guard let lastNewline = pending.lastIndex(of: 0x0A) else { continue }
+            let complete = pending[pending.startIndex...lastNewline]
+            lines += complete.split(separator: 0x0A).filter { $0.range(of: marker) != nil }.map { Data($0) }
+            position += UInt64(complete.count)
+            pending = Data(pending[pending.index(after: lastNewline)...])
         }
-        let complete = data[data.startIndex...lastNewline]
-        let lines = complete.split(separator: 0x0A).map { Data($0) }
-        return (lines, start + UInt64(complete.count))
+        return (lines, position)
     }
 
     private static let marker = Data("\"rate_limits\"".utf8)

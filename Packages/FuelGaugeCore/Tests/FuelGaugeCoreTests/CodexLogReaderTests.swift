@@ -37,4 +37,13 @@ import Testing
         try handle.close()
         #expect(reader.poll(now: now).map(\.usedPercent) == [5])
     }
+
+    @Test func readsTheSameLinesInSmallChunks() throws {
+        let url = try sample("codex-session.jsonl")
+        let (whole, end) = CodexLogReader.newLines(in: url, from: 0)
+        let (chunked, chunkedEnd) = CodexLogReader.newLines(in: url, from: 0, chunkSize: 17)
+        #expect(whole == chunked)
+        #expect(whole.count == 3)
+        #expect(end == chunkedEnd)
+    }
 }
