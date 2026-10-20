@@ -119,14 +119,19 @@ public enum ForecastEngine {
         guard let latest = window.last else { return nil }
         let from: Date
         let baseline: Double
+        // What the climb is divided by. Usually the same as `from`.
+        var divideFrom: Date?
         let windowStartsInside = windowStart.map { $0 >= start } ?? false
         // One reading says nothing about pace unless the window's zero point is known.
         guard window.count >= 2 || windowStartsInside else { return nil }
         if let before = window.last(where: { $0.at <= start }) {
             (from, baseline) = (start, before.usedPercent)
         } else if let windowStart, windowStart >= start {
-            // The window began inside the stretch, at zero.
+            // The window began inside the stretch, at zero. Over a day-long stretch (weekly windows), the hours
+            // before it opened count as unused, so the pace is a daily average rather than the first burst of a
+            // fresh window projected across the whole week.
             (from, baseline) = (windowStart, 0)
+            if now.timeIntervalSince(start) >= 12 * 3600 { divideFrom = start }
         } else if let first = window.first {
             (from, baseline) = (first.at, first.usedPercent)
         } else {
@@ -134,6 +139,7 @@ public enum ForecastEngine {
         }
         let elapsed = now.timeIntervalSince(from)
         guard elapsed >= coverage else { return nil }
-        return max(0, latest.usedPercent - baseline) / (elapsed / 3600)
+        let hours = now.timeIntervalSince(divideFrom ?? from) / 3600
+        return max(0, latest.usedPercent - baseline) / hours
     }
 }

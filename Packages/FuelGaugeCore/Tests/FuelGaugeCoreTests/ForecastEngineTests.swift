@@ -86,6 +86,22 @@ import Testing
         #expect(forecast.ratePerHour != nil)
     }
 
+    @Test func aFreshWeeklyWindowUsesADailyAverage() throws {
+        // A weekly window that opened 3 hours ago, already at 9% from one heavy burst. Spread over the day,
+        // that's about 0.4% an hour, which lasts the week; projected as-is it would "run out" in days.
+        let weekly = [
+            reading(3, minutesAgo: 170, resetsIn: 7 * 24 - 3, minutes: 10080),
+            reading(9, minutesAgo: 5, resetsIn: 7 * 24 - 3, minutes: 10080)
+        ]
+        let forecast = try #require(ForecastEngine.forecast(for: weekly, now: now))
+        let rate = try #require(forecast.ratePerHour)
+        #expect(abs(rate - 9.0 / 24) < 0.01)
+        guard case .makesIt = forecast.verdict else {
+            Issue.record("expected makesIt, got \(forecast.verdict)")
+            return
+        }
+    }
+
     @Test func idleTimeSlowsThePace() throws {
         // All the climbing happened 50 minutes ago; since then nothing.
         let readings = [reading(10, minutesAgo: 60), reading(30, minutesAgo: 50)]
@@ -154,6 +170,18 @@ import Testing
         #expect(ForecastText.duration(45 * 60) == "45m")
         #expect(ForecastText.duration(3 * 3600 + 7 * 60) == "3h 7m")
         #expect(ForecastText.duration(2 * 86400 + 16 * 3600) == "2d 16h")
+    }
+
+    @Test func nearTheResetItSaysWhatsLeftInsteadOfAnHourlyBudget() throws {
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        let readings = [
+            Reading(provider: .claude, limit: "five_hour", windowMinutes: 300, usedPercent: 10,
+                    resetsAt: now.addingTimeInterval(45 * 60), at: now.addingTimeInterval(-3600)),
+            Reading(provider: .claude, limit: "five_hour", windowMinutes: 300, usedPercent: 12,
+                    resetsAt: now.addingTimeInterval(45 * 60), at: now)
+        ]
+        let forecast = try #require(ForecastEngine.forecast(for: readings, now: now))
+        #expect(ForecastText.pace(forecast, now: now) == "Using 2.0% an hour. 88% left for the 45m until the reset.")
     }
 
     @Test func formatsPercents() {
