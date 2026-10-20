@@ -77,7 +77,7 @@ PRIVACY = {
         <p>If you turn on the Claude Code status line, Fuel Gauge backs up your Claude Code <code>settings.json</code> before changing it. <code>fuelgauge uninstall-statusline</code> puts it back.</p>
         <p>The app&#39;s only network request is the check for updates, which fetches a small update feed from GitHub. GitHub sees that request like any other web request, including your IP address.</p>
         <h2>fuelgauge.app</h2>
-        <p>This website has no analytics and sets no cookies. It&#39;s static pages hosted on Vercel, which keeps standard server logs, and it loads fonts from Google Fonts, which sees that request like any other web request.</p>
+        <p>This website counts visits with <a href="https://usefathom.com">Fathom Analytics</a>, which uses no cookies and collects no personal data. It&#39;s static pages hosted on Vercel, which keeps standard server logs, and it loads fonts from Google Fonts, which sees that request like any other web request.</p>
         <h2>Downloads</h2>
         <p>The app is downloaded from GitHub Releases, or through Homebrew, which downloads it from GitHub. Their privacy policies cover those downloads.</p>
         <h2>Questions</h2>
