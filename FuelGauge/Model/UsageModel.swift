@@ -19,6 +19,9 @@ final class UsageModel {
     private let store: ReadingStore
     private var codex: CodexLogReader
     private let grokBot = GrokBotReader()
+    private let cursor = CursorReader()
+    /// Cursor is asked over the network, so at most every 10 minutes.
+    private var cursorReadAt: Date?
     private let claude = ClaudeSettings()
     private let codexStateURL: URL
     private var timer: Timer?
@@ -59,6 +62,10 @@ final class UsageModel {
         let enabled = Tracking.enabled(installed: installedProviders)
         let readsCodex = readsLiveData && enabled.contains(.codex)
         let readsGrokBot = readsLiveData && enabled.contains(.grokBot)
+        let readsCursor = readsLiveData && enabled.contains(.cursor)
+            && (cursorReadAt.map { Date().timeIntervalSince($0) >= 600 } ?? true)
+        if readsCursor { cursorReadAt = Date() }
+        let cursor = cursor
         let codex = codex
         let grokBot = grokBot
         let store = store
@@ -71,6 +78,7 @@ final class UsageModel {
                 var fresh: [Reading] = []
                 if readsCodex { fresh += polled.poll() }
                 if readsGrokBot { fresh += grokBot.read() }
+                if readsCursor { fresh += await cursor.read() }
                 // Move Codex's place in its logs forward only once the readings are saved, so a failed
                 // write is read again next time instead of lost.
                 var kept = codex
