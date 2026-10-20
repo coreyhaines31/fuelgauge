@@ -96,7 +96,8 @@ struct PanelView: View {
     private var emptyDetail: String {
         let names = Tracking.enabled(installed: model.installedProviders).map(\.name)
         guard !names.isEmpty else {
-            return "Fuel Gauge works with Claude Code, Codex, and Grok Bot. Install one, or turn one on in Settings."
+            return "Fuel Gauge works with Claude Code, Codex, Grok Bot, and Cursor. Install one, or turn one on in "
+                + "Settings."
         }
         return "Readings appear as you use \(ListFormatter.localizedString(byJoining: names))."
     }

@@ -13,3 +13,4 @@ build/
 
 # Local agent worktrees and settings
 .claude/
+__pycache__/

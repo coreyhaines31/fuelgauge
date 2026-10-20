@@ -43,7 +43,7 @@ COMPARISONS = [
             """, "table": [
                 ("Price", "Free", "Free"),
                 ("License", "FSL-1.1-MIT, source on GitHub", "MIT"),
-                ("Providers", "Claude Code, Codex, Grok Bot", "Over 100"),
+                ("Providers", "Claude Code, Codex, Grok Bot, Cursor (opt-in)", "Over 100"),
                 ("Leads with", "The verdict: makes it, or runs out early", "Percent used, plus a “runs out in” line"),
                 ("Claude Code status line", "Yes", "—"),
                 ("Exit code for agents", "Yes, <code>fuelgauge status</code> exits 2", "—"),
