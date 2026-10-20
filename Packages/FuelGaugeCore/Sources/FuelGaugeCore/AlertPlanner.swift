@@ -92,7 +92,7 @@ public struct AlertPlanner: Sendable {
     static func shortBody(_ forecast: Forecast, at: Date, now: Date) -> String {
         let early = ForecastText.duration(forecast.resetsAt.timeIntervalSince(at))
         var body = "That's \(early) before it resets at \(ForecastText.time(forecast.resetsAt, now: now))"
-        if let pace = ForecastText.pace(forecast) { body += ". " + pace }
+        if let pace = ForecastText.pace(forecast, now: now) { body += ". " + pace }
         return body
     }
 }

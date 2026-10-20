@@ -18,9 +18,9 @@ struct PanelView: View {
                 if model.forecasts.isEmpty {
                     emptyState
                 } else {
-                    // Only the most urgent card gets a chart, so the panel stays short.
-                    ForEach(Array(model.byUrgency.enumerated()), id: \.element.key) { index, forecast in
-                        LimitCard(forecast: forecast, now: context.date, showsChart: index == 0)
+                    ForEach(groups, id: \.provider) { group in
+                        ToolCard(provider: group.provider, forecasts: group.forecasts, now: context.date,
+                                 chartKey: chartKey)
                     }
                 }
                 footer
@@ -31,15 +31,50 @@ struct PanelView: View {
     }
 
     private func header(now: Date) -> some View {
-        HStack(alignment: .firstTextBaseline) {
-            Text(Brand.name).font(.system(size: 14, weight: .bold))
-            Spacer()
-            if let updatedAt = model.updatedAt {
-                Text("Updated \(ForecastText.time(updatedAt, now: now))")
-                    .font(.system(size: 11))
-                    .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 3) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(Brand.name).font(.system(size: 14, weight: .bold))
+                Spacer()
+                if let updatedAt = model.updatedAt {
+                    Text("Updated \(ForecastText.time(updatedAt, now: now))")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                }
+            }
+            if !model.forecasts.isEmpty {
+                Text(ForecastText.summary(model.forecasts, now: now))
+                    .font(.system(size: 12.5, weight: .semibold))
+                    .foregroundStyle(summaryTint)
             }
         }
+    }
+
+    private var summaryTint: Color {
+        guard let urgent = model.mostUrgent else { return .secondary }
+        return urgent.isShort ? WindowRow.tint(for: urgent.verdict) : .secondary
+    }
+
+    private struct Group {
+        let provider: Provider
+        let forecasts: [Forecast]
+    }
+
+    /// A card per tool, the tool with the most urgent limit first; inside, the shortest window first.
+    private var groups: [Group] {
+        var order: [Provider] = []
+        for forecast in model.byUrgency where !order.contains(forecast.key.provider) {
+            order.append(forecast.key.provider)
+        }
+        return order.map { provider in
+            Group(provider: provider, forecasts: model.forecasts
+                .filter { $0.key.provider == provider }
+                .sorted { ($0.windowMinutes ?? .max) < ($1.windowMinutes ?? .max) })
+        }
+    }
+
+    /// Only the most urgent window that's running short gets a chart, so the panel stays short.
+    private var chartKey: LimitKey? {
+        model.byUrgency.first(where: \.isShort)?.key
     }
 
     private var needsClaudeSetup: Bool {
