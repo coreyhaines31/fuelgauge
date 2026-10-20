@@ -30,6 +30,10 @@ func fail(_ message: String) -> Never {
     exit(1)
 }
 
+// A wrapped status line command that exits without reading its input would otherwise kill this process
+// with SIGPIPE when the input is written, blanking Claude Code's status line.
+signal(SIGPIPE, SIG_IGN)
+
 let arguments = Array(CommandLine.arguments.dropFirst())
 let wantsJSON = arguments.contains("--json")
 let store = ReadingStore()
@@ -119,24 +123,65 @@ func statusLine() -> Never {
     exit(0)
 }
 
-/// Runs the status line command Fuel Gauge replaced, with the same input, for up to 3 seconds.
+/// Runs the status line command Fuel Gauge replaced, with the same input, for up to 3 seconds. It runs in
+/// its own process group, so a timeout stops everything it started, not just the shell.
 func run(_ command: String, input: Data) -> String? {
-    let process = Process()
-    process.executableURL = URL(filePath: "/bin/sh")
-    process.arguments = ["-c", command]
-    let stdin = Pipe()
-    let stdout = Pipe()
-    process.standardInput = stdin
-    process.standardOutput = stdout
-    process.standardError = FileHandle.nullDevice
-    do { try process.run() } catch { return nil }
-    stdin.fileHandleForWriting.write(input)
-    try? stdin.fileHandleForWriting.close()
-    let deadline = Date().addingTimeInterval(3)
-    while process.isRunning && Date() < deadline { usleep(10_000) }
-    if process.isRunning { process.terminate() }
-    let data = stdout.fileHandleForReading.readDataToEndOfFile()
-    return data.isEmpty ? nil : String(bytes: data, encoding: .utf8)
+    var stdinPipe: [Int32] = [0, 0]
+    var stdoutPipe: [Int32] = [0, 0]
+    guard pipe(&stdinPipe) == 0, pipe(&stdoutPipe) == 0 else { return nil }
+    var actions: posix_spawn_file_actions_t?
+    posix_spawn_file_actions_init(&actions)
+    defer { posix_spawn_file_actions_destroy(&actions) }
+    posix_spawn_file_actions_adddup2(&actions, stdinPipe[0], STDIN_FILENO)
+    posix_spawn_file_actions_adddup2(&actions, stdoutPipe[1], STDOUT_FILENO)
+    posix_spawn_file_actions_addopen(&actions, STDERR_FILENO, "/dev/null", O_WRONLY, 0)
+    for descriptor in stdinPipe + stdoutPipe { posix_spawn_file_actions_addclose(&actions, descriptor) }
+    var attributes: posix_spawnattr_t?
+    posix_spawnattr_init(&attributes)
+    defer { posix_spawnattr_destroy(&attributes) }
+    posix_spawnattr_setflags(&attributes, Int16(POSIX_SPAWN_SETPGROUP))
+    posix_spawnattr_setpgroup(&attributes, 0)
+
+    var pid: pid_t = 0
+    let argv: [UnsafeMutablePointer<CChar>?] = [strdup("/bin/sh"), strdup("-c"), strdup(command), nil]
+    defer { argv.forEach { free($0) } }
+    let spawned = posix_spawn(&pid, "/bin/sh", &actions, &attributes, argv, environ)
+    close(stdinPipe[0])
+    close(stdoutPipe[1])
+    guard spawned == 0 else {
+        close(stdinPipe[1])
+        close(stdoutPipe[0])
+        return nil
+    }
+
+    // Write and read on other threads, so a command that ignores its input or prints a lot can't block
+    // this one past the timeout.
+    let writer = FileHandle(fileDescriptor: stdinPipe[1], closeOnDealloc: true)
+    DispatchQueue.global().async {
+        try? writer.write(contentsOf: input)
+        try? writer.close()
+    }
+    let output = OutputBox()
+    let reader = FileHandle(fileDescriptor: stdoutPipe[0], closeOnDealloc: true)
+    let done = DispatchSemaphore(value: 0)
+    DispatchQueue.global().async {
+        output.data = (try? reader.readToEnd()) ?? Data()
+        done.signal()
+    }
+    let timedOut = done.wait(timeout: .now() + 3) == .timedOut
+    if timedOut {
+        kill(-pid, SIGTERM)
+        usleep(200_000)
+        kill(-pid, SIGKILL)
+    }
+    var status: Int32 = 0
+    waitpid(pid, &status, 0)
+    if timedOut { return nil }
+    return output.data.isEmpty ? nil : String(bytes: output.data, encoding: .utf8)
+}
+
+final class OutputBox: @unchecked Sendable {
+    var data = Data()
 }
 
 func installStatusLine() -> Never {
