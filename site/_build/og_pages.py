@@ -84,9 +84,13 @@ def main():
         image = os.path.join(out_dir, slug.replace("/", "-") + ".png")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False) as tmp:
             tmp.write(source)
-        subprocess.run([CHROME, "--headless", "--hide-scrollbars", f"--screenshot={image}",
-                        "--window-size=1200,630", f"file://{tmp.name}"], capture_output=True, check=True)
-        os.unlink(tmp.name)
+        try:
+            subprocess.run([CHROME, "--headless", "--hide-scrollbars", f"--screenshot={image}",
+                            "--window-size=1200,630", f"file://{tmp.name}"], capture_output=True, check=True)
+        finally:
+            os.unlink(tmp.name)
+        if not os.path.exists(image):
+            raise SystemExit(f"Chrome didn't write {image}")
         print(f"{slug}: images/og/{os.path.basename(image)}")
 
 
