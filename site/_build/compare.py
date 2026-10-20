@@ -189,7 +189,7 @@ COMPARES = [
             {"id": "api", "lit": True, "html": f"""
         <h2>Subscription or API billing?</h2>
         <p>Claude Code can bill API credits at standard API rates instead of your plan. That's useful as overflow, but easy to do by accident: if an <code>ANTHROPIC_API_KEY</code> is set in your environment, Claude Code uses it. To stay on your plan, run <code>claude logout</code>, then <code>claude login</code> and sign in with your Pro or Max account.</p>
-        <p>Two things that don't count toward Claude Code: the monthly API credits that come with Max can't be used in Claude Code or the Claude apps. Usage credits can, though: turn them on in <a href="{SETTINGS}">Settings › Usage</a> to keep working past a limit at API rates.</p>"""},
+        <p>The monthly API credits that come with Max can't be used in Claude Code or the Claude apps. Usage credits can: turn them on in <a href="{SETTINGS}">Settings › Usage</a> to keep working past a limit at API rates.</p>"""},
             {"id": "pace", "html": """
         <h2>Are you on the right plan?</h2>
         <p>The price you need depends on your pace, not on a spec sheet. <a href="/">Fuel Gauge</a> is a free Mac menu bar app that reads your Claude Code limits after every reply and tells you whether you'll make it to the reset. A week of "runs out early" is a reason to move up; a week of "makes it, about 50% by then" means you could pay less.</p>"""},
@@ -251,7 +251,7 @@ COMPARES = [
         <p>The other option is an API key: sign Codex in with it and you pay standard API rates, with no plan limits.</p>"""},
             {"id": "pace", "lit": True, "html": """
         <h2>Know before you need credits</h2>
-        <p><a href="/">Fuel Gauge</a> is a free Mac menu bar app that reads Codex's limits from its session logs on your Mac, with no sign-in, and forecasts whether each window lasts until it resets. If it says "runs out around 3p" on most days, a bigger plan is cheaper than buying credits; if it says "makes it" every day, you might not need the plan you're on.</p>"""},
+        <p><a href="/">Fuel Gauge</a> is a free Mac menu bar app that reads Codex's limits from its session logs on your Mac, with no sign-in, and forecasts whether each window lasts until it resets. If it says "runs out around 3p" on most days, compare a bigger plan with what you'd spend on credits; if it says "makes it" every day, you might not need the plan you're on.</p>"""},
             {"id": "sources", "html": sources(
                 ("Codex pricing", CODEX_PRICING),
                 ("Using Codex with your ChatGPT plan", CODEX_HELP))},
