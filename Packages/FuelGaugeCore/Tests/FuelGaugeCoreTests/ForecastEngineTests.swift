@@ -60,6 +60,22 @@ import Testing
         #expect(forecast.verdict == .learning)
     }
 
+    @Test func oneReadingFromBeforeTheStretchIsNotAPace() throws {
+        let monthly = [reading(80, minutesAgo: 25 * 60, resetsIn: 24, minutes: nil)]
+        #expect(try #require(ForecastEngine.forecast(for: monthly, now: now)).verdict == .learning)
+    }
+
+    @Test func aSlowClimbStillRunsOut() throws {
+        let monthly = [
+            reading(99.78, minutesAgo: 24 * 60, resetsIn: 48, minutes: nil),
+            reading(99.9, minutesAgo: 0, resetsIn: 48, minutes: nil)
+        ]
+        guard case .runsOut = try #require(ForecastEngine.forecast(for: monthly, now: now)).verdict else {
+            Issue.record("expected runsOut")
+            return
+        }
+    }
+
     @Test func idleTimeSlowsThePace() throws {
         // All the climbing happened 50 minutes ago; since then nothing.
         let readings = [reading(10, minutesAgo: 60), reading(30, minutesAgo: 50)]

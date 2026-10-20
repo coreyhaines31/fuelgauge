@@ -13,8 +13,10 @@ public struct ReadingStore: Sendable {
     }
 
     /// Appends the readings that add something: a new percent, a new reset time, or the first in a while.
+    /// Readings stamped in the future (a wrong clock) are dropped, so they can't block later ones.
     @discardableResult
-    public func append(_ readings: [Reading]) throws -> [Reading] {
+    public func append(_ readings: [Reading], now: Date = Date()) throws -> [Reading] {
+        let readings = readings.filter { $0.at <= now.addingTimeInterval(5 * 60) }
         guard !readings.isEmpty else { return [] }
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         var latest: [LimitKey: Reading] = [:]

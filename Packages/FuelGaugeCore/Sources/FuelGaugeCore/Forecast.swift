@@ -99,7 +99,7 @@ public enum ForecastEngine {
 
     /// When the limit hits 100% at `rate`, or nil if it isn't climbing.
     static func runOut(used: Double, rate: Double, now: Date) -> Date? {
-        guard rate > 0.01 else { return nil }
+        guard rate > 0 else { return nil }
         return now.addingTimeInterval((100 - used) / rate * 3600)
     }
 
@@ -110,13 +110,15 @@ public enum ForecastEngine {
         guard let latest = window.last else { return nil }
         let from: Date
         let baseline: Double
+        let windowStartsInside = windowStart.map { $0 >= start } ?? false
+        // One reading says nothing about pace unless the window's zero point is known.
+        guard window.count >= 2 || windowStartsInside else { return nil }
         if let before = window.last(where: { $0.at <= start }) {
             (from, baseline) = (start, before.usedPercent)
         } else if let windowStart, windowStart >= start {
             // The window began inside the stretch, at zero.
             (from, baseline) = (windowStart, 0)
-        } else if window.count >= 2, let first = window.first {
-            // One reading says nothing about pace; two or more do, counted from the first.
+        } else if let first = window.first {
             (from, baseline) = (first.at, first.usedPercent)
         } else {
             return nil
