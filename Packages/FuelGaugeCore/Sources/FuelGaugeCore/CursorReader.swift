@@ -33,10 +33,11 @@ public struct CursorReader: Sendable {
         guard let summary = try? JSONDecoder().decode(Summary.self, from: data),
               !summary.isUnlimited, let plan = summary.individualUsage?.plan, plan.enabled,
               let resetsAt = parseDate(summary.billingCycleEnd) else { return [] }
-        let used = plan.limit.map { $0 > 0 ? plan.used / $0 * 100 : 0 } ?? plan.totalPercentUsed ?? 0
+        // Cursor's own percent, else used over limit.
+        let percent = plan.totalPercentUsed ?? plan.limit.flatMap { $0 > 0 ? plan.used / $0 * 100 : nil } ?? 0
         return [Reading(
             provider: .cursor, limit: "monthly", windowMinutes: nil,
-            usedPercent: min(max(plan.totalPercentUsed ?? used, 0), 100), resetsAt: resetsAt, at: now
+            usedPercent: min(max(percent, 0), 100), resetsAt: resetsAt, at: now
         )]
     }
 
