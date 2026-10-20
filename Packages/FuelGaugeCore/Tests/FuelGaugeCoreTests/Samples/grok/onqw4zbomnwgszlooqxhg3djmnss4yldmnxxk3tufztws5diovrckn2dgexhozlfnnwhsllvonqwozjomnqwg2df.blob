@@ -1,0 +1,1 @@
+{"schemaVersion":2,"value":{"kind":"present","selectedTeamId":null,"reading":{"usage":{"percentUsed":89.4907908992416,"nextResetMs":1792645516371,"isSandTrial":false,"hasNonZeroIncludedLimit":true,"isTeamSeat":false,"onDemand":null,"grokPlanLabel":"Grok Bot Plan"},"readAtMs":1792512364754},"expiresAtMs":1792598764755}}
