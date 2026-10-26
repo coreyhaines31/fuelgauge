@@ -231,14 +231,14 @@ PRIVACY = {
     "description": "Fuel Gauge collects nothing about you. It reads only what Claude Code, Codex, and Grok Bot already save on your Mac.",
     "h1": "Privacy policy",
     "html": """
-        <p><strong>Last updated October 2026.</strong></p>
+        <p><strong>Last updated October 26, 2026.</strong></p>
         <h2>The Fuel Gauge app</h2>
         <p>The app collects nothing about you. There&#39;s no account, no analytics, and no telemetry.</p>
         <p>To forecast your limits it reads what Claude Code, Codex, and Grok Bot already save on your Mac: the usage Claude Code passes to its status line, Codex&#39;s session logs in <code>~/.codex/sessions</code>, and Grok Bot&#39;s local usage cache. It keeps a history of those readings in <code>~/Library/Application Support/Fuel Gauge</code>. It doesn&#39;t read browser cookies, the keychain, or anything that needs Full Disk Access, and it never signs in to anything. None of it leaves your Mac.</p>
         <p>If you turn on the Claude Code status line, Fuel Gauge backs up your Claude Code <code>settings.json</code> before changing it. <code>fuelgauge uninstall-statusline</code> puts it back.</p>
         <p>The app&#39;s only network request is the check for updates, which fetches a small update feed from GitHub. GitHub sees that request like any other web request, including your IP address.</p>
         <h2>fuelgauge.app</h2>
-        <p>This website counts visits with <a href="https://usefathom.com">Fathom Analytics</a>, which uses no cookies and collects no personal data. It&#39;s static pages hosted on Vercel, which keeps standard server logs, and it loads fonts from Google Fonts, which sees that request like any other web request.</p>
+        <p>This website uses <a href="https://usefathom.com">Fathom Analytics</a> for privacy-friendly visit counts and UserProof to see how visitors use the site (clicks, scrolling and page interactions, not anything you type). Neither sets cookies; UserProof keeps random ids in your browser&#39;s storage. No ad tracking, no personal data sold or shared. It&#39;s static pages hosted on Vercel, which keeps standard server logs, and it loads fonts from Google Fonts, which sees that request like any other web request.</p>
         <h2>Downloads</h2>
         <p>The app is downloaded from GitHub Releases, or through Homebrew, which downloads it from GitHub. Their privacy policies cover those downloads.</p>
         <h2>Questions</h2>
