@@ -113,7 +113,8 @@ final class UsageModel {
 
     func refreshCodexResets(force: Bool = false) {
         guard readsLiveData else { return }
-        guard UserDefaults.standard.bool(forKey: ResetPreferences.codexEnabled), Tracking.isEnabled(.codex) else {
+        guard UserDefaults.standard.bool(forKey: ResetPreferences.codexEnabled),
+              Tracking.enabled(installed: installedProviders).contains(.codex) else {
             codexResetCredits = nil
             codexResetsCheckedAt = nil
             codexResetsAttemptedAt = nil

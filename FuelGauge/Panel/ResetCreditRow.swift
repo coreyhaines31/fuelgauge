@@ -6,7 +6,7 @@ struct ResetCreditRow: View {
     let model: UsageModel
     let now: Date
     let openSettings: () -> Void
-    @AppStorage(ResetPreferences.codexEnabled) private var codexEnabled = false
+    @AppStorage(ResetPreferences.codexEnabled) private var codexEnabled = true
     @AppStorage(ResetPreferences.claudeCount) private var claudeCount = 0
     @AppStorage(ResetPreferences.claudeExpiry) private var claudeExpiry = 0.0
     @AppStorage(ResetPreferences.claudeCheckedAt) private var claudeCheckedAt = 0.0
