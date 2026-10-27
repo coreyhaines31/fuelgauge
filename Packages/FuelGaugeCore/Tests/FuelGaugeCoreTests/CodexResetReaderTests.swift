@@ -38,6 +38,12 @@ struct CodexResetReaderTests {
         }
     }
 
+    @Test func earlyExit() throws {
+        try withServer("exit 0") { executable in
+            #expect(CodexResetReader(executable: executable, timeout: 1).read() == nil)
+        }
+    }
+
     @Test func errorsAndMissingExecutable() throws {
         #expect(CodexResetReader(executable: URL(filePath: "/nonexistent/codex")).read() == nil)
         try withServer(#"""

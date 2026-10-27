@@ -30,6 +30,8 @@ public struct CodexResetReader: Sendable {
         let process = Process()
         let input = Pipe()
         let output = Pipe()
+        // A CLI that exits during the handshake must not terminate Fuel Gauge with SIGPIPE.
+        _ = fcntl(input.fileHandleForWriting.fileDescriptor, F_SETNOSIGPIPE, 1)
         process.executableURL = executable
         process.arguments = ["app-server", "--stdio"]
         // npm launchers need node beside codex even when launched from a GUI app.
