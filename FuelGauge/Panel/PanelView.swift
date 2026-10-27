@@ -29,13 +29,14 @@ struct PanelView: View {
             }
             .padding(14)
             .frame(width: 360)
+            .background(Color(nsColor: .windowBackgroundColor))
         }
     }
 
     private func header(now: Date) -> some View {
-        VStack(alignment: .leading, spacing: 3) {
+        VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .firstTextBaseline) {
-                Text(Brand.name).font(.system(size: 14, weight: .bold))
+                Text(Brand.name).font(.system(size: 15, weight: .semibold))
                 Spacer()
                 if let updatedAt = model.updatedAt {
                     Text("Updated \(ForecastText.time(updatedAt, now: now))")
@@ -44,10 +45,28 @@ struct PanelView: View {
                 }
             }
             if !model.forecasts.isEmpty {
-                Text(ForecastText.summary(model.forecasts, now: now))
-                    .font(.system(size: 12.5, weight: .semibold))
-                    .foregroundStyle(summaryTint)
+                HStack(alignment: .top, spacing: 8) {
+                    Image(systemName: summarySymbol)
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(summaryTint)
+                        .padding(.top, 2)
+                        .accessibilityHidden(true)
+                    Text(ForecastText.summary(model.forecasts, now: now))
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
+        }
+    }
+
+    private var summarySymbol: String {
+        switch model.mostUrgent?.verdict {
+        case .limitReached: "exclamationmark.circle.fill"
+        case .runsOut: "exclamationmark.triangle.fill"
+        case .makesIt: "checkmark.circle"
+        case .reset: "arrow.clockwise"
+        case .learning, nil: "clock"
         }
     }
 
@@ -91,7 +110,8 @@ struct PanelView: View {
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
             if let setupError {
-                Text(setupError).font(.system(size: 11)).foregroundStyle(.red)
+                Label(setupError, systemImage: "exclamationmark.circle")
+                    .font(.system(size: 12)).foregroundStyle(.primary)
             }
             Button("Turn On") {
                 do {
