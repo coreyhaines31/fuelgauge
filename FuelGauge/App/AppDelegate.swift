@@ -22,6 +22,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusItemController = StatusItemController(
             model: model,
             openSettings: { settingsWindow.show() },
+            openResetSettings: { settingsWindow.show(tab: "Resets") },
             checkForUpdates: { [updater] in updater.checkForUpdates() }
         )
         model.onChange = { [weak self] in self?.statusItemController?.update() }
@@ -51,7 +52,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         #if DEBUG
         if DemoMode.isOn {
             DemoMode.prepare()
-            return UsageModel(supportFolder: DemoMode.folder, readsLiveData: false)
+            return UsageModel(supportFolder: DemoMode.folder, readsLiveData: false,
+                              resetCredits: DemoMode.resetCredits)
         }
         #endif
         return UsageModel()

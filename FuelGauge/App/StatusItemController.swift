@@ -11,7 +11,8 @@ final class StatusItemController {
     private let model: UsageModel
     private var hosting: NSHostingController<PanelView>?
 
-    init(model: UsageModel, openSettings: @escaping () -> Void, checkForUpdates: @escaping () -> Void) {
+    init(model: UsageModel, openSettings: @escaping () -> Void, openResetSettings: @escaping () -> Void,
+         checkForUpdates: @escaping () -> Void) {
         self.model = model
         // New status items start at the far left on recent macOS, which is off-screen on a crowded menu bar.
         UserDefaults.standard.register(defaults: ["NSStatusItem Preferred Position \(Self.autosaveName)": 1])
@@ -24,7 +25,10 @@ final class StatusItemController {
         let panel = PanelView(model: model, openSettings: { [weak popover] in
             popover?.performClose(nil)
             openSettings()
-        }, checkForUpdates: checkForUpdates)
+        }, checkForUpdates: checkForUpdates, openResetSettings: { [weak popover] in
+            popover?.performClose(nil)
+            openResetSettings()
+        })
         let hosting = NSHostingController(rootView: panel)
         hosting.sizingOptions = .preferredContentSize
         self.hosting = hosting

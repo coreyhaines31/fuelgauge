@@ -19,6 +19,14 @@ enum DemoMode {
         return URL(filePath: CommandLine.arguments[index + 1])
     }
 
+    static var resetCredits: ResetCredits? {
+        let expiry = Date().addingTimeInterval(2 * 86400).timeIntervalSince1970
+        let json = """
+        {"rateLimitResetCredits":{"availableCount":2,"credits":[{"status":"available","expiresAt":\(expiry)}]}}
+        """
+        return try? ResetCredits.decode(Data(json.utf8))
+    }
+
     /// Writes sample readings: Claude's 5-hour window running short, its weekly window fine, Codex learning
     /// to be steady, Grok Bot nearly full.
     static func prepare(now: Date = Date()) {
@@ -74,7 +82,8 @@ enum DemoMode {
         let panes: [(String, AnyView)] = [
             ("general", AnyView(GeneralSettingsView(updater: updater))),
             ("tools", AnyView(ToolsSettingsView(model: model))),
-            ("alerts", AnyView(AlertsSettingsView()))
+            ("alerts", AnyView(AlertsSettingsView())),
+            ("resets", AnyView(ResetsSettingsView(model: model)))
         ]
         for (name, pane) in panes {
             let paneURL = url.deletingPathExtension().appendingPathExtension("\(name).png")
