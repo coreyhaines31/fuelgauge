@@ -14,7 +14,7 @@ struct ToolCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(provider.name)
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 14, weight: .semibold))
             ForEach(Array(forecasts.enumerated()), id: \.element.key) { index, forecast in
                 if index > 0 { Divider() }
                 WindowRow(forecast: forecast, now: now, showsChart: forecast.key == chartKey)
@@ -25,7 +25,11 @@ struct ToolCard: View {
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 10))
+        .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 12))
+        .overlay {
+            RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(Color(nsColor: .separatorColor).opacity(0.4), lineWidth: 0.5)
+        }
     }
 }
 
@@ -42,16 +46,16 @@ struct WindowRow: View {
                     .font(.system(size: 12, weight: .medium))
                 Spacer()
                 Text(ForecastText.percent(forecast.usedPercent))
-                    .font(.system(size: 12, weight: .semibold).monospacedDigit())
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 13, weight: .semibold).monospacedDigit())
+                    .foregroundStyle(.primary)
             }
             UsageBar(used: forecast.usedPercent, projected: projected, tint: tint)
             if forecast.isShort {
                 expanded
             } else {
                 Text(compactLine)
-                    .font(.system(size: 11.5, weight: .medium))
-                    .foregroundStyle(tint)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(.primary)
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
@@ -61,19 +65,19 @@ struct WindowRow: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(ForecastText.headline(forecast, now: now))
                 .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(tint)
+                .foregroundStyle(.primary)
             Text(ForecastText.usage(forecast, now: now))
-                .font(.system(size: 11))
+                .font(.system(size: 12))
                 .foregroundStyle(.secondary)
             if let pace = ForecastText.pace(forecast, now: now) {
                 Text(pace)
-                    .font(.system(size: 11))
+                    .font(.system(size: 12))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
             if let range = ForecastText.range(forecast, now: now) {
                 Text(range)
-                    .font(.system(size: 11))
+                    .font(.system(size: 12))
                     .foregroundStyle(.secondary)
             }
             if showsChart, forecast.history.count >= 2 {
