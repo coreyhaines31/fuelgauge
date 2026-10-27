@@ -27,3 +27,12 @@ if CommandLine.arguments.contains("--cursor") {
         print("Cursor: \(reading.usedPercent)% of the monthly plan, resets \(reading.resetsAt)")
     }
 }
+
+if CommandLine.arguments.contains("--resets") {
+    if let credits = CodexResetReader().read() {
+        print("Codex: \(credits.summary())")
+        if let expiry = credits.nextExpiration { print("  Next expiration: \(expiry)") }
+    } else {
+        print("Codex reset availability unknown")
+    }
+}
