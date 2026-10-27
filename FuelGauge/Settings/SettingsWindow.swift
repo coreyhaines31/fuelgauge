@@ -15,9 +15,13 @@ final class SettingsWindow {
         self.model = model
     }
 
-    func show() {
+    func show(tab: String? = nil) {
         if window == nil {
             window = makeWindow()
+        }
+        if let tab, let tabs = window?.contentViewController as? NSTabViewController,
+           let index = tabs.tabViewItems.firstIndex(where: { $0.label == tab }) {
+            tabs.selectedTabViewItemIndex = index
         }
         NSApp.activate()
         window?.makeKeyAndOrderFront(nil)
@@ -28,6 +32,7 @@ final class SettingsWindow {
         tabs.tabStyle = .toolbar
         tabs.add("General", symbol: "gearshape", view: GeneralSettingsView(updater: updater))
         tabs.add("Tools", symbol: "square.stack.3d.up", view: ToolsSettingsView(model: model))
+        tabs.add("Resets", symbol: "arrow.counterclockwise", view: ResetsSettingsView(model: model))
         tabs.add("Alerts", symbol: "bell", view: AlertsSettingsView())
         let window = NSWindow(contentViewController: tabs)
         window.styleMask = [.titled, .closable]

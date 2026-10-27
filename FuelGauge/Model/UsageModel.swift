@@ -10,6 +10,10 @@ import Observation
 final class UsageModel {
     private(set) var forecasts: [Forecast] = []
     private(set) var updatedAt: Date?
+    private(set) var codexResetCredits: ResetCredits?
+    private(set) var codexResetsCheckedAt: Date?
+    private(set) var checkingCodexResets = false
+    private var codexResetsAttemptedAt: Date?
     private(set) var claudeStatusLine: ClaudeSettings.State = .off
 
     var onChange: (() -> Void)?
@@ -31,13 +35,16 @@ final class UsageModel {
     /// How much history forecasts and charts look at.
     nonisolated static let history: TimeInterval = 8 * 24 * 3600
 
-    init(supportFolder: URL = Brand.supportFolder, readsLiveData: Bool = true) {
+    init(supportFolder: URL = Brand.supportFolder, readsLiveData: Bool = true,
+         resetCredits: ResetCredits? = nil) {
         store = ReadingStore(folder: supportFolder.appending(path: "Readings"))
         codexStateURL = supportFolder.appending(path: "codex-state.json")
         let state = (try? Data(contentsOf: codexStateURL))
             .flatMap { try? JSONDecoder().decode(CodexLogReader.State.self, from: $0) }
         codex = CodexLogReader(state: state ?? CodexLogReader.State())
         self.readsLiveData = readsLiveData
+        self.codexResetCredits = resetCredits
+        if resetCredits != nil { codexResetsCheckedAt = Date() }
     }
 
     /// Tools that look installed on this Mac, whether or not they're turned on.
@@ -57,6 +64,7 @@ final class UsageModel {
 
     /// Reads anything new, saves it, and recomputes the forecasts.
     func refresh() {
+        refreshCodexResets()
         guard !isRefreshing else { return }
         isRefreshing = true
         let enabled = Tracking.enabled(installed: installedProviders)
@@ -100,6 +108,29 @@ final class UsageModel {
             isRefreshing = false
             onChange?()
             onRefresh?(forecasts)
+        }
+    }
+
+    func refreshCodexResets(force: Bool = false) {
+        guard readsLiveData else { return }
+        guard UserDefaults.standard.bool(forKey: ResetPreferences.codexEnabled), Tracking.isEnabled(.codex) else {
+            codexResetCredits = nil
+            codexResetsCheckedAt = nil
+            codexResetsAttemptedAt = nil
+            return
+        }
+        guard !checkingCodexResets else { return }
+        guard force || codexResetsAttemptedAt.map({ Date().timeIntervalSince($0) >= 300 }) ?? true else { return }
+        checkingCodexResets = true
+        codexResetsAttemptedAt = Date()
+        Task {
+            let credits = await Task.detached(priority: .utility) { CodexResetReader().read() }.value
+            checkingCodexResets = false
+            guard UserDefaults.standard.bool(forKey: ResetPreferences.codexEnabled),
+                  Tracking.isEnabled(.codex) else { return }
+            codexResetCredits = credits
+            codexResetsCheckedAt = credits == nil ? nil : Date()
+            onChange?()
         }
     }
 

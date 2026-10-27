@@ -6,6 +6,7 @@ struct PanelView: View {
     let model: UsageModel
     let openSettings: () -> Void
     let checkForUpdates: () -> Void
+    var openResetSettings: (() -> Void)?
     @State private var setupError: String?
 
     var body: some View {
@@ -20,7 +21,8 @@ struct PanelView: View {
                 } else {
                     ForEach(groups, id: \.provider) { group in
                         ToolCard(provider: group.provider, forecasts: group.forecasts, now: context.date,
-                                 chartKey: chartKey)
+                                 chartKey: chartKey, model: model,
+                                 openSettings: openResetSettings ?? openSettings)
                     }
                 }
                 footer
