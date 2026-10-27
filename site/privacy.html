@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Privacy policy · Fuel Gauge</title>
-  <meta name="description" content="Fuel Gauge collects nothing about you. It reads only what Claude Code, Codex, and Grok Bot already save on your Mac.">
+  <meta name="description" content="Fuel Gauge has no telemetry. Learn about local usage readings, Codex reset checks, optional Cursor usage, and update requests.">
   <link rel="canonical" href="https://fuelgauge.app/privacy">
   <meta property="og:title" content="Privacy policy · Fuel Gauge">
-  <meta property="og:description" content="Fuel Gauge collects nothing about you. It reads only what Claude Code, Codex, and Grok Bot already save on your Mac.">
+  <meta property="og:description" content="Fuel Gauge has no telemetry. Learn about local usage readings, Codex reset checks, optional Cursor usage, and update requests.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Fuel Gauge">
   <meta property="og:image" content="https://fuelgauge.app/images/og/privacy.png">
@@ -16,7 +16,7 @@
   <meta property="og:url" content="https://fuelgauge.app/privacy">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Privacy policy · Fuel Gauge">
-  <meta name="twitter:description" content="Fuel Gauge collects nothing about you. It reads only what Claude Code, Codex, and Grok Bot already save on your Mac.">
+  <meta name="twitter:description" content="Fuel Gauge has no telemetry. Learn about local usage readings, Codex reset checks, optional Cursor usage, and update requests.">
   <meta name="theme-color" content="#fbe9d6" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/images/icon.svg" type="image/svg+xml">
@@ -50,12 +50,13 @@
     <section class="tight" style="padding-top:0">
       <div class="wrap narrow"><div class="prose">
 
-        <p><strong>Last updated October 26, 2026.</strong></p>
+        <p><strong>Last updated October 27, 2026.</strong></p>
         <h2>The Fuel Gauge app</h2>
         <p>The app collects nothing about you. There&#39;s no account, no analytics, and no telemetry.</p>
-        <p>To forecast your limits it reads what Claude Code, Codex, and Grok Bot already save on your Mac: the usage Claude Code passes to its status line, Codex&#39;s session logs in <code>~/.codex/sessions</code>, and Grok Bot&#39;s local usage cache. It keeps a history of those readings in <code>~/Library/Application Support/Fuel Gauge</code>. It doesn&#39;t read browser cookies, the keychain, or anything that needs Full Disk Access, and it never signs in to anything. None of it leaves your Mac.</p>
+        <p>To forecast your limits it reads what Claude Code, Codex, and Grok Bot already save on your Mac: the usage Claude Code passes to its status line, Codex&#39;s session logs in <code>~/.codex/sessions</code>, and Grok Bot&#39;s local usage cache. It keeps a history of those readings in <code>~/Library/Application Support/Fuel Gauge</code>. It doesn&#39;t read browser cookies or need Full Disk Access. Your saved reading history stays on your Mac.</p>
         <p>If you turn on the Claude Code status line, Fuel Gauge backs up your Claude Code <code>settings.json</code> before changing it. <code>fuelgauge uninstall-statusline</code> puts it back.</p>
-        <p>The app&#39;s only network request is the check for updates, which fetches a small update feed from GitHub. GitHub sees that request like any other web request, including your IP address.</p>
+        <p>Codex reset tracking is on by default while Codex is tracked. Every five minutes, Fuel Gauge asks the installed Codex CLI for available reset credits using its existing sign-in; this contacts OpenAI. Fuel Gauge does not read or store Codex credentials, and never redeems a reset. Turn tracking off in Settings &gt; Resets; explicit opt-outs are preserved across updates.</p>
+        <p>Cursor tracking is off by default. If enabled, it requests usage from cursor.com using the Cursor app&#39;s existing sign-in. The update check fetches a small feed from GitHub. These services see requests like other web requests, including your IP address.</p>
         <h2>fuelgauge.app</h2>
         <p>This website uses <a href="https://usefathom.com">Fathom Analytics</a> for privacy-friendly visit counts and UserProof to see how visitors use the site (clicks, scrolling and page interactions, not anything you type). Neither sets cookies; UserProof keeps random ids in your browser&#39;s storage. No ad tracking, no personal data sold or shared. It&#39;s static pages hosted on Vercel, which keeps standard server logs, and it loads fonts from Google Fonts, which sees that request like any other web request.</p>
         <h2>Downloads</h2>

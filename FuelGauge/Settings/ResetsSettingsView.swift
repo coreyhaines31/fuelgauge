@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ResetsSettingsView: View {
     let model: UsageModel
-    @AppStorage(ResetPreferences.codexEnabled) private var codexEnabled = false
+    @AppStorage(ResetPreferences.codexEnabled) private var codexEnabled = true
     @AppStorage(ResetPreferences.claudeCount) private var savedCount = 0
     @AppStorage(ResetPreferences.claudeExpiry) private var savedExpiry = 0.0
     @AppStorage(ResetPreferences.claudeCheckedAt) private var checkedAt = 0.0
@@ -25,8 +25,9 @@ struct ResetsSettingsView: View {
             } header: {
                 Text("Codex")
             } footer: {
-                Text("Every 5 minutes, Fuel Gauge asks the installed Codex CLI for your reset credits using "
-                    + "its existing sign-in. This contacts OpenAI. Use /usage in Codex to redeem a reset.")
+                Text("On by default when tracking Codex. Every 5 minutes, Fuel Gauge asks the installed CLI using "
+                    + "its existing sign-in for your reset credits. This contacts OpenAI. "
+                    + "Redeem resets in Codex /usage.")
             }
             Section {
                 Link("Open Claude Usage", destination: URL(string: "https://claude.ai/settings/usage")!)
