@@ -37,7 +37,7 @@ These keep Fuel Gauge something people can trust next to their coding tools:
 
 - **Read, never write.** Fuel Gauge reads Claude Code's status line input and Codex's session logs. The only file it changes outside its own folder is Claude Code's `settings.json`, when you turn the status line on, and it backs that up first.
 - **No credentials by default.** No browser cookies, no Full Disk Access, no tokens. Anything that needs a keychain item stays opt-in.
-- **No telemetry.** The only network request is Sparkle's update check.
+- **No telemetry.** Network requests are limited to Sparkle updates and opt-in usage lookups: Cursor usage and Codex reset credits. Codex credentials stay with the installed CLI.
 - **Honest forecasts.** Say "learning your pace" until there's enough data, and show a range, not a fake-precise minute.
 
 ## Before you open a pull request

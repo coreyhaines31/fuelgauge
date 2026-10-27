@@ -8,6 +8,8 @@ struct ToolCard: View {
     let now: Date
     /// The one window in the whole panel that gets a chart: the most urgent one that's running short.
     let chartKey: LimitKey?
+    var model: UsageModel?
+    var openSettings: () -> Void = {}
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -16,6 +18,9 @@ struct ToolCard: View {
             ForEach(Array(forecasts.enumerated()), id: \.element.key) { index, forecast in
                 if index > 0 { Divider() }
                 WindowRow(forecast: forecast, now: now, showsChart: forecast.key == chartKey)
+            }
+            if let model {
+                ResetCreditRow(provider: provider, model: model, now: now, openSettings: openSettings)
             }
         }
         .padding(12)

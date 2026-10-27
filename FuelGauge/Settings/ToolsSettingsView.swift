@@ -17,7 +17,8 @@ struct ToolsSettingsView: View {
                 }
             } footer: {
                 Text("Fuel Gauge reads what these tools already save on your Mac. It never reads browser cookies "
-                    + "or sends your usage anywhere. Cursor is the one exception, and only if you turn it on.")
+                    + "or sends your usage anywhere. Cursor usage and Codex reset checks go online "
+                    + "only if you turn them on.")
                     .font(.caption).foregroundStyle(.secondary)
             }
             if installed.contains(.claude) {
