@@ -17,8 +17,8 @@ struct ToolsSettingsView: View {
                 }
             } footer: {
                 Text("Fuel Gauge reads what these tools already save on your Mac. It never reads browser cookies "
-                    + "or sends your usage anywhere. Cursor usage and Codex reset checks go online "
-                    + "only if you turn them on.")
+                    + "or sends your usage anywhere. Codex reset checks contact OpenAI by default; turn them off "
+                    + "in Settings › Resets. Cursor usage goes online only if you turn it on.")
                     .font(.caption).foregroundStyle(.secondary)
             }
             if installed.contains(.claude) {

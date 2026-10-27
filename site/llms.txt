@@ -10,7 +10,7 @@
 - Install prompt for a coding agent: "Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`."
 - Line for CLAUDE.md or AGENTS.md: "Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before starting, or switch to a cheaper model. `fuelgauge status --json` has the details."
 - Uninstall: run `fuelgauge uninstall-statusline` first, then `brew uninstall --cask fuelgauge`.
-- Privacy: no browser cookies, no Full Disk Access, no keychain, no sign-in, zero telemetry. The only network requests are the update check and, if you turn Cursor on, Cursor's usage. Details: https://fuelgauge.app/privacy
+- Privacy: no browser cookies, no Full Disk Access, zero telemetry. Network requests include update checks, Codex reset checks through the installed CLI (on by default, with an opt-out), and optional Cursor usage. Details: https://fuelgauge.app/privacy
 
 ## Plan limits, explained
 
@@ -38,7 +38,7 @@
 
 ## Compared with other apps
 
-- [Fuel Gauge vs CodexBar](https://fuelgauge.app/alternatives/codexbar): Pick CodexBar if you use many AI providers and want them all in one menu. Pick Fuel Gauge if you live in Claude Code, Codex, or Grok Bot and want the verdict first, a forecast under your Claude Code prompt, and an exit code your agents can check. Fuel Gauge reads only local files.
+- [Fuel Gauge vs CodexBar](https://fuelgauge.app/alternatives/codexbar): Pick CodexBar if you use many AI providers and want them all in one menu. Pick Fuel Gauge if you live in Claude Code, Codex, or Grok Bot and want the verdict first, a forecast under your Claude Code prompt, and an exit code your agents can check. Fuel Gauge forecasts from local readings and checks Codex reset credits through the installed CLI.
 - [Fuel Gauge vs ccusage](https://fuelgauge.app/alternatives/ccusage): Use ccusage to see token use and estimated dollar cost by day, month, session, or 5-hour block, across 18 coding agents. Use Fuel Gauge to see, without running anything, whether your Claude Code, Codex, Grok Bot, or Cursor limit will last until it resets, with an alert when it won't. They answer different questions, so they work well together.
 - [Fuel Gauge vs ccstatusline](https://fuelgauge.app/alternatives/ccstatusline): Keep ccstatusline if you love its widgets: git, tokens, context, cost, and session and weekly usage with reset timers. Add Fuel Gauge for the forecast: whether each limit lasts until it resets at your pace, in the menu bar and as one more line under your status line. Fuel Gauge keeps your existing status line when you turn its line on.
 - [Fuel Gauge vs Claude-Code-Usage-Monitor](https://fuelgauge.app/alternatives/claude-code-usage-monitor): Use Claude-Code-Usage-Monitor if you want a live terminal dashboard of tokens and cost per 5-hour window, on macOS, Linux, or Windows. Use Fuel Gauge if you want a forecast from Claude's own limit percentages, always visible in the menu bar and under your prompt, with alerts, plus Codex, Grok Bot, and Cursor.
