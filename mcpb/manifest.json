@@ -1,0 +1,50 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/mcpb/main/schemas/mcpb-manifest-v0.4.schema.json",
+  "manifest_version": "0.4",
+  "name": "fuelgauge",
+  "display_name": "Fuel Gauge",
+  "version": "0.1.0",
+  "description": "Ask Claude whether your Claude Code, Codex, and Grok Bot limits will last until they reset.",
+  "long_description": "Fuel Gauge is a free menu bar app that forecasts whether your Claude Code, Codex, and Grok Bot usage limits last until they reset, and when they run out if they don't. This extension lets Claude read the same forecast through Fuel Gauge's `fuelgauge` command line tool.\n\nAsk things like \"how much Claude Code do I have left?\", \"will I hit my limit today?\", or \"when does my Codex limit reset?\".\n\nRequires the Fuel Gauge app (https://fuelgauge.app). Everything is read-only and local: no account details or tokens are read or sent. Fuel Gauge covers AI usage limits, not disk space or CPU and memory.",
+  "author": {
+    "name": "Corey Haines",
+    "url": "https://fuelgauge.app"
+  },
+  "homepage": "https://fuelgauge.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/coreyhaines31/fuelgauge"
+  },
+  "support": "https://github.com/coreyhaines31/fuelgauge/issues",
+  "license": "FSL-1.1-MIT",
+  "icon": "icon.png",
+  "keywords": ["mac", "macos", "claude code", "codex", "usage limits", "rate limits"],
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.mjs",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server/index.mjs"],
+      "env": {
+        "FUELGAUGE_CLI": "${user_config.fuelgauge_cli}"
+      }
+    }
+  },
+  "user_config": {
+    "fuelgauge_cli": {
+      "type": "file",
+      "title": "Fuel Gauge command line tool (optional)",
+      "description": "Leave empty to find Fuel Gauge automatically in Applications, Homebrew, or Spotlight.",
+      "required": false
+    }
+  },
+  "tools": [
+    { "name": "limits_status", "description": "Each limit's percent used, when it resets, and whether it lasts until then" },
+    { "name": "limits_history", "description": "The usage readings behind the forecast, per limit, over the last N days" }
+  ],
+  "compatibility": {
+    "claude_desktop": ">=0.10.0",
+    "platforms": ["darwin"],
+    "runtimes": { "node": ">=20.0.0" }
+  }
+}
