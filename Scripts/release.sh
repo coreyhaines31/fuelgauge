@@ -11,6 +11,7 @@
 #   - the Sparkle EdDSA private key in the keychain under the "fuelgauge" account, or
 #     SPARKLE_KEY_FILE pointing at it (CI)
 #   - gh authenticated with push access to coreyhaines31/fuelgauge
+#   - Node 20+ and npm, to pack the Claude Desktop extension in mcpb/
 set -euo pipefail
 
 VERSION="${1:?usage: Scripts/release.sh <version>}"
@@ -126,7 +127,10 @@ echo "▶ Publishing GitHub release v$VERSION"
 # A copy without the version in its name, so releases/latest/download/FuelGauge.dmg always works
 # for the website, install scripts, and AI agents.
 cp "$DMG" "$BUILD/FuelGauge.dmg"
-gh release create "v$VERSION" "$DMG" "$BUILD/FuelGauge.dmg" "$BUILD/appcast/appcast.xml" \
+(cd mcpb && npm ci --silent && npm run --silent pack >/dev/null)
+MCPB=mcpb/dist/fuelgauge.mcpb
+# Every release carries fuelgauge.mcpb so releases/latest/download/fuelgauge.mcpb keeps working.
+gh release create "v$VERSION" "$DMG" "$BUILD/FuelGauge.dmg" "$BUILD/appcast/appcast.xml" "$MCPB" \
   --repo "$REPO" --target main --title "$APP_NAME $VERSION" --generate-notes --latest
 
 echo "▶ Updating the Homebrew cask"

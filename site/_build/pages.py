@@ -293,6 +293,9 @@ Claude Code · Weekly: Makes it to reset, about 86% by then
         <p>Then every agent session checks before the expensive stuff, and tells you which limit runs out and when instead of hitting the wall halfway through.</p>
         <h3>Install it with your agent</h3>
         <div class="prompt-box"><button type="button" class="copy" data-copy="install-prompt-cli">Copy</button><pre id="install-prompt-cli">{INSTALL_PROMPT}</pre></div>"""},
+        {"id": "claude-desktop", "lit": True, "html": """
+        <h2>Use it in Claude Desktop</h2>
+        <p>Not using Claude Code? Download <a href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/fuelgauge.mcpb">fuelgauge.mcpb</a> and double-click it, or drag it onto Claude Desktop, and choose Install. Claude can then read your forecast and the readings behind it, and ask before a long task if a limit won&#39;t last. Answers come back short, so checking barely touches your limits. The extension only reads. <a href="/#claude">More about the extension</a>.</p>"""},
     ],
     "faqs": [
         ("What does exit code 2 mean?", "At least one tracked limit is forecast to run out before it resets, or has already run out."),
