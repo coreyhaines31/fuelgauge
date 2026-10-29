@@ -1,13 +1,13 @@
 import {Composition} from 'remotion';
 import {OgVideo, type OgVideoProps} from './OgVideo';
 
-// 5 s at 30 fps. Frame 112 is the resting frame, rendered as the og:image still.
+// 6 s at 60 fps. Frame 225 (3.75 s) is the resting frame, rendered as the og:image still.
 export const RemotionRoot = () => (
   <Composition
     id="OgVideo"
     component={OgVideo}
-    durationInFrames={150}
-    fps={30}
+    durationInFrames={360}
+    fps={60}
     width={1200}
     height={630}
     defaultProps={
