@@ -78,7 +78,7 @@ def esc(t):
 def share_image(path):
     """The page's own share image from og_pages.py if it has one, else the homepage's."""
     name = "og/" + path.strip("/").replace("/", "-") + ".png"
-    return f"{SITE}/images/{name}" if path != "/" and os.path.exists(os.path.join(ROOT, "images", name)) else f"{SITE}/images/og.png"
+    return f"{SITE}/images/{name}" if path != "/" and os.path.exists(os.path.join(ROOT, "images", name)) else f"{SITE}/images/og-video.png"
 
 
 def head(title, description, path):
@@ -99,6 +99,7 @@ def head(title, description, path):
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="{SITE}{path}">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{share_image(path)}">
   <meta name="twitter:title" content="{esc(title)}">
   <meta name="twitter:description" content="{esc(description)}">
   <meta name="theme-color" content="#fbe9d6" media="(prefers-color-scheme: light)">
