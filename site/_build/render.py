@@ -97,11 +97,6 @@ def head(title, description, path):
   <meta property="og:image" content="{share_image(path)}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:video" content="{SITE}/images/og.mp4">
-  <meta property="og:video:secure_url" content="{SITE}/images/og.mp4">
-  <meta property="og:video:type" content="video/mp4">
-  <meta property="og:video:width" content="1200">
-  <meta property="og:video:height" content="630">
   <meta property="og:url" content="{SITE}{path}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="{share_image(path)}">
