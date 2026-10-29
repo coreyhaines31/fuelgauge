@@ -16,6 +16,14 @@ case "$FAKE_MODE:$1" in
     echo '{"at":"2026-10-29T10:15:01Z","limit":"five_hour","resets_at":"2026-10-29T14:00:00Z","tool":"claude","used_percent":"7.0"}'
     echo '{"at":"2026-10-29T10:20:01Z","limit":"Secret Token","resets_at":"2026-10-29T14:00:00Z","tool":"claude","used_percent":"1.0"}' ;;
   empty:history) ;;
+  many:history)
+    # 59 readings climbing to 100% before a reset, then 41 in the next window: more than the server keeps.
+    i=42; while [ $i -le 100 ]; do
+      printf '{"at":"2026-10-29T08:%02d:00Z","limit":"five_hour","resets_at":"2026-10-29T09:00:00Z","tool":"claude","used_percent":"%s.0"}\n' $((i - 42)) $i
+      i=$((i + 1)); done
+    i=0; while [ $i -le 40 ]; do
+      printf '{"at":"2026-10-29T09:%02d:00Z","limit":"five_hour","resets_at":"2026-10-29T14:00:00Z","tool":"claude","used_percent":"%s.0"}\n' $i $i
+      i=$((i + 1)); done ;;
   garbage:*) echo 'not json' ;;
   stderr:*) echo "fuelgauge: fake stderr error" >&2; exit 1 ;;
   *) echo "unexpected: $FAKE_MODE $*" >&2; exit 1 ;;

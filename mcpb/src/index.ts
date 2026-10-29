@@ -59,7 +59,7 @@ server.registerTool(
     description:
       "The readings behind the forecast: for each limit (tool and limit name), points of [time, percent used] " +
       "over the last N days, keeping only the readings where the percent changed. readings is how many were " +
-      "saved. Use for 'how fast am I using Claude Code?' or 'when did I burn through my Codex limit?'. " +
+      "saved; past 48 points the rest are sampled (sampled: true), always keeping each window's peak. Use for 'how fast am I using Claude Code?' or 'when did I burn through my Codex limit?'. " +
       "For what's left right now, use limits_status instead.",
     inputSchema: {
       days: z

@@ -65,19 +65,35 @@ export function shapeStatus(stdout: string, code: 0 | 2): Shaped {
 }
 
 type Point = [string, number];
+type Reading = { at: string; used: number; window: string };
 
-// Keeps the readings where the percent changed (plus the latest), then thins evenly to MAX_POINTS.
-function thin(points: Point[]): Point[] {
-  const changed = points.filter((point, index) => index === 0 || point[1] !== points[index - 1][1]);
-  const last = points[points.length - 1];
+// Keeps the readings where the percent changed, plus the latest. Past MAX_POINTS it thins evenly, but
+// always keeps each window's peak, so a limit that ran out still shows 100% before its reset.
+function thin(readings: Reading[]): { points: Point[]; sampled: boolean } {
+  const changed = readings.filter((reading, index) => index === 0 || reading.used !== readings[index - 1].used);
+  const last = readings[readings.length - 1];
   if (changed[changed.length - 1] !== last) changed.push(last);
-  if (changed.length <= MAX_POINTS) return changed;
-  const step = (changed.length - 1) / (MAX_POINTS - 1);
-  return Array.from({ length: MAX_POINTS }, (_, index) => changed[Math.round(index * step)]);
+  const toPoints = (list: Reading[]) => list.map((reading): Point => [reading.at, reading.used]);
+  if (changed.length <= MAX_POINTS) return { points: toPoints(changed), sampled: false };
+
+  const keep = new Set<number>([0, changed.length - 1]);
+  const peaks = new Map<string, number>();
+  changed.forEach((reading, index) => {
+    const peak = peaks.get(reading.window);
+    if (peak === undefined || reading.used >= changed[peak].used) peaks.set(reading.window, index);
+  });
+  for (const index of peaks.values()) keep.add(index);
+  const spare = MAX_POINTS - keep.size;
+  if (spare > 0) {
+    const step = (changed.length - 1) / (spare + 1);
+    for (let n = 1; n <= spare; n++) keep.add(Math.round(n * step));
+  }
+  const kept = [...keep].sort((a, b) => a - b).map((index) => changed[index]);
+  return { points: toPoints(kept), sampled: true };
 }
 
 export function shapeHistory(stdout: string, days: number): Shaped {
-  const series = new Map<string, { tool: string; limit: string; resets_at: string; points: Point[] }>();
+  const series = new Map<string, { tool: string; limit: string; resets_at: string; readings: Reading[] }>();
   for (const line of stdout.split("\n")) {
     if (!line.trim()) continue;
     let reading: Record<string, unknown>;
@@ -93,20 +109,17 @@ export function shapeHistory(stdout: string, days: number): Shaped {
     if (typeof at !== "string" || typeof resetsAt !== "string" || !Number.isFinite(used)) continue;
 
     const key = `${tool}/${limit}`;
-    const entry = series.get(key) ?? { tool, limit, resets_at: "", points: [] };
+    const entry = series.get(key) ?? { tool, limit, resets_at: "", readings: [] };
     entry.resets_at = minute(resetsAt);
-    entry.points.push([minute(at), round(used)]);
+    entry.readings.push({ at: minute(at), used: round(used), window: entry.resets_at });
     series.set(key, entry);
   }
 
-  const limits = [...series.values()].map(({ tool, limit, resets_at, points }) => ({
-    tool,
-    limit,
-    resets_at,
-    readings: points.length,
-    // [time, percent used]
-    points: thin(points),
-  }));
+  const limits = [...series.values()].map(({ tool, limit, resets_at, readings }) => {
+    const { points, sampled } = thin(readings);
+    // points are [time, percent used]
+    return { tool, limit, resets_at, readings: readings.length, points, ...(sampled ? { sampled: true } : {}) };
+  });
   const answer: Record<string, unknown> = { days, limits };
   if (limits.length === 0) answer.note = NO_READINGS;
   return { ok: true, text: JSON.stringify(answer) };

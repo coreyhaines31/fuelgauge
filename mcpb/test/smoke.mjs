@@ -58,6 +58,16 @@ const fakeCalls = [
       }],
     },
   ],
+  [
+    "many", "limits_history", { days: 2 }, ok, "history --days 2 --json",
+    // Thinned to at most 48 points, but the reading at 100% before the reset survives.
+    (answer) => {
+      const [limit] = answer.limits;
+      return limit.readings === 100 && limit.sampled === true && limit.points.length <= 48 &&
+        limit.points.some(([, used]) => used === 100) &&
+        limit.points[0][1] === 42 && limit.points.at(-1)[1] === 40;
+    },
+  ],
   ["empty", "limits_history", { days: 30 }, ok, "history --days 30 --json", { days: 30, limits: [], note: NO_READINGS }],
   ["garbage", "limits_status", {}, fails, "status --json", "Couldn't read Fuel Gauge's forecast."],
   ["garbage", "limits_history", {}, fails, "history --days 1 --json", "Couldn't read Fuel Gauge's history."],
@@ -131,9 +141,11 @@ for (const [mode, name, args, shouldWork, argv, expected] of fakeCalls) {
   await fake.close();
   show(label, result);
   const sent = readFileSync(argvLog, "utf8");
-  const wanted = shouldWork ? JSON.stringify(expected) : expected;
   if (sent !== argv) failures.push(`${label} (sent "${sent}", expected "${argv}")`);
-  if (result.isError === shouldWork || result.text !== wanted) failures.push(label);
+  if (result.isError === shouldWork) failures.push(label);
+  else if (typeof expected === "function") {
+    if (!expected(JSON.parse(result.text))) failures.push(label);
+  } else if (result.text !== (shouldWork ? JSON.stringify(expected) : expected)) failures.push(label);
 }
 rmSync(scratch, { recursive: true, force: true });
 
