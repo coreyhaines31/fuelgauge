@@ -44,6 +44,7 @@ public struct UsageLogScanner: Sendable {
 
     public mutating func scan(enabled: [Provider], now: Date = Date()) -> [UsageEvent] {
         warnings = []
+        files = files.filter { path, _ in roots.contains { path.hasPrefix($0.url.path + "/") } }
         let cutoff = Calendar.current.date(byAdding: .day, value: -61, to: now)!
         for root in roots where enabled.contains(root.provider) {
             scan(root, cutoff: cutoff)
@@ -104,18 +105,28 @@ public struct UsageLogScanner: Sendable {
         var pending = Data()
         while let chunk = try handle.read(upToCount: 1 << 20), !chunk.isEmpty {
             pending.append(chunk)
-            while let newline = pending.firstIndex(of: 0x0A) {
-                let line = Data(pending[..<newline])
-                state.offset += UInt64(line.count + 1)
-                pending.removeSubrange(...newline)
-                if let event = state.parser.parse(line, provider: provider), event.at >= cutoff {
+            guard let newline = pending.lastIndex(of: 0x0A) else { continue }
+            let complete = pending[...newline]
+            state.offset += UInt64(complete.count)
+            for line in complete.split(separator: 0x0A) where Self.isUsageLine(line, provider: provider) {
+                if let event = state.parser.parse(Data(line), provider: provider), event.at >= cutoff {
                     if let prior = state.events[event.id], prior.tokens.total > event.tokens.total { continue }
                     state.events[event.id] = event
                 }
             }
+            pending = Data(pending[pending.index(after: newline)...])
         }
         state.modified = modified
         state.size = size
         files[url.path] = state
     }
+
+    private static let claudeMarkers = [Data("\"usage\"".utf8)]
+    private static let codexMarkers = ["\"token_count\"", "\"turn_context\"", "\"session_meta\""].map { Data($0.utf8) }
+
+    private static func isUsageLine(_ line: Data.SubSequence, provider: Provider) -> Bool {
+        let markers = provider == .claude ? claudeMarkers : codexMarkers
+        return markers.contains { line.range(of: $0) != nil }
+    }
+
 }
