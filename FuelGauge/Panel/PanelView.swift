@@ -7,24 +7,35 @@ struct PanelView: View {
     let openSettings: () -> Void
     let checkForUpdates: () -> Void
     var openResetSettings: (() -> Void)?
+    var openUsage: () -> Void = {}
     @State private var setupError: String?
+    @State private var cardsHeight: CGFloat = 400
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 30)) { context in
             VStack(alignment: .leading, spacing: 10) {
                 header(now: context.date)
-                if needsClaudeSetup {
-                    claudeSetup
-                }
-                if model.forecasts.isEmpty {
-                    emptyState
-                } else {
-                    ForEach(groups, id: \.provider) { group in
-                        ToolCard(provider: group.provider, forecasts: group.forecasts, now: context.date,
-                                 chartKey: chartKey, model: model,
-                                 openSettings: openResetSettings ?? openSettings)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 10) {
+                        if needsClaudeSetup {
+                            claudeSetup
+                        }
+                        if groups.isEmpty {
+                            emptyState
+                        } else {
+                            ForEach(groups, id: \.provider) { group in
+                                ToolCard(provider: group.provider, forecasts: group.forecasts, now: context.date,
+                                         chartKey: chartKey, model: model,
+                                         openSettings: openResetSettings ?? openSettings, openUsage: openUsage)
+                            }
+                        }
                     }
+                    .background(GeometryReader { geometry in
+                        Color.clear.preference(key: PanelHeightKey.self, value: geometry.size.height)
+                    })
                 }
+                .frame(height: min(cardsHeight, max(240, (NSScreen.main?.visibleFrame.height ?? 900) - 200)))
+                .onPreferenceChange(PanelHeightKey.self) { cardsHeight = $0 }
                 footer
             }
             .padding(14)
@@ -85,6 +96,9 @@ struct PanelView: View {
         var order: [Provider] = []
         for forecast in model.byUrgency where !order.contains(forecast.key.provider) {
             order.append(forecast.key.provider)
+        }
+        for provider in [Provider.claude, .codex] where !order.contains(provider) {
+            if model.visibleUsage.contains(where: { $0.provider == provider }) { order.append(provider) }
         }
         return order.map { provider in
             Group(provider: provider, forecasts: model.forecasts
@@ -161,6 +175,8 @@ struct PanelView: View {
 
     private var footer: some View {
         HStack {
+            Button("View usage", action: openUsage)
+                .buttonStyle(.plain).foregroundStyle(Color.accentColor)
             Spacer()
             Menu {
                 Button("Settings…", action: openSettings)
@@ -175,4 +191,9 @@ struct PanelView: View {
             .fixedSize()
         }
     }
+}
+
+private struct PanelHeightKey: PreferenceKey {
+    static let defaultValue: CGFloat = 400
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
 }

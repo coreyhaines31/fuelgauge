@@ -27,6 +27,21 @@ enum DemoMode {
         return try? ResetCredits.decode(Data(json.utf8))
     }
 
+    static func usageEvents(now: Date = Date()) -> [UsageEvent] {
+        (0..<60).flatMap { day in
+            [Provider.claude, .codex].map { provider in
+                let at = Calendar.current.date(byAdding: .day, value: -day, to: now)!.addingTimeInterval(-120)
+                let scale = Int64(8 + (day * 7) % 17)
+                return UsageEvent(id: "demo-\(provider.rawValue)-\(day)", provider: provider,
+                                  session: "session-\(day)",
+                                  project: day % 2 == 0 ? "/projects/fuelgauge" : "/projects/site",
+                                  model: provider == .claude ? "claude-sonnet-4-6" : "gpt-6.1-sol", at: at,
+                                  tokens: TokenUsage(input: scale * 12_000, output: scale * 2_000,
+                                                     cacheRead: scale * 35_000, cacheWrite: scale * 3_000))
+            }
+        }
+    }
+
     /// Writes sample readings: Claude's 5-hour window running short, its weekly window fine, Codex learning
     /// to be steady, Grok Bot nearly full.
     static func prepare(now: Date = Date()) {
@@ -79,6 +94,8 @@ enum DemoMode {
     /// Draws the panel offscreen and saves it. An app can always draw its own views, so this works without
     /// Screen Recording permission.
     static func snapshot(model: UsageModel, updater: Updater, to url: URL) {
+        let usageURL = url.deletingPathExtension().appendingPathExtension("usage.png")
+        render(UsageView(model: model).frame(width: 900, height: 850), to: usageURL)
         let panes: [(String, AnyView)] = [
             ("general", AnyView(GeneralSettingsView(updater: updater))),
             ("tools", AnyView(ToolsSettingsView(model: model))),
