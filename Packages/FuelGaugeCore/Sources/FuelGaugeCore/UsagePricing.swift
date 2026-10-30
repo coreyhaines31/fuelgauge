@@ -23,11 +23,14 @@ public enum UsagePricing {
     private static func rate(for model: String) -> Rate? {
         let rates: [String: Rate] = [
             "gpt-6-astra": openAI(10, 50, 1),
+            "gpt-6-sol": openAI(2, 10, 0.2),
             "gpt-6.1-sol": openAI(2, 10, 0.1),
             "gpt-6.1-terra": openAI(1, 5, 0.05),
             "gpt-6-luna": openAI(0.1, 0.5, 0.01),
             "gpt-5.6-sol": openAI(4, 20, 0.4),
             "gpt-5.3-codex": openAI(1.75, 14, 0.175),
+            "gpt-5.4": openAI(2.5, 15, 0.25),
+            "gpt-5.5": openAI(5, 30, 0.5),
             "claude-opus-5-5": claude(4, 20, 0.2),
             "claude-sonnet-5-5": claude(2, 10, 0.1),
             "claude-opus-5": claude(5, 25, 0.5),
