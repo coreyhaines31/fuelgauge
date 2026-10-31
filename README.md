@@ -104,9 +104,44 @@ fuelgauge uninstall-statusline
 Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before starting, or switch to a cheaper model. `fuelgauge status --json` has the details.
 ```
 
+### Use Fuel Gauge from Claude Desktop
+
+Download [`fuelgauge.mcpb`](https://github.com/coreyhaines31/fuelgauge/releases/latest/download/fuelgauge.mcpb) and double-click it (or drag it onto Claude Desktop) to install the Fuel Gauge extension. Then ask Claude things like *how much Claude Code do I have left?*, *will I hit my limit today?*, or *when does my Codex limit reset?*
+
+The extension runs the `fuelgauge` tool from your installed Fuel Gauge app, so install Fuel Gauge first. It only reads (`status` and `history`), and its answers are trimmed short, since reading them uses the same limits. The source is in [`mcpb/`](mcpb/); `cd mcpb && npm install && npm run pack` builds `mcpb/dist/fuelgauge.mcpb`, and `npm test` calls every tool on your Mac.
+
+## Token usage and cost
+
+Choose **View usage** in the menu panel to see Claude Code and Codex usage on this Mac. Each tool card
+also shows today's tokens and estimated API cost. Usage remains available even when no quota forecast exists.
+
+- **Today / 7 days / 30 days:** daily token or cost charts, with an elapsed-period token comparison.
+- **Token categories:** uncached input, output, cache reads, and cache writes. Recorded reasoning is included
+  in output rather than added to the total again. Cache hit rate is the cached share of all prompt tokens.
+- **Breakdowns:** tool, model, project directory, and session, sorted by token usage. Hover a project for its full path.
+- **Cost:** USD equivalents at bundled standard short-context API rates, not your subscription bill.
+  Long-context premiums, service tiers, regional adjustments, and tool fees are excluded. Unknown models
+  show unavailable cost; mixed totals explicitly say “+ unpriced.” Cache writes without a recorded duration
+  use the short-duration rate. Rates were checked October 30, 2026 against
+  [OpenAI](https://developers.openai.com/api/docs/pricing) and
+  [Anthropic](https://platform.claude.com/docs/en/about-claude/pricing).
+
+The first import runs in the background and may take a few minutes for large histories. Later refreshes
+read appended records and reuse a local cache. Claude streaming snapshots and copied Codex token events
+are deduplicated. A missing or unreadable source does not erase cached history; read errors are shown in Usage.
+This is local history, so remote tasks, other devices, deleted transcripts before the first import, and other
+providers may be missing. It is independent of account-wide quota percentages.
+
+Sources: `$CLAUDE_CONFIG_DIR/projects` (default `~/.claude/projects`), and `$CODEX_HOME/sessions` plus
+`archived_sessions` (default `~/.codex`). Turn a tool off in **Settings › Tools** to stop importing and hide it.
+
+Screenshots: [previous panel](.github/images/contrast-light.png),
+[new panel](.github/images/usage-panel-light.png), [Usage light](.github/images/usage-light.png),
+[Usage dark](.github/images/usage-dark.png).
+
 ## Privacy
 
-Fuel Gauge reads three things, all on your Mac: the JSON Claude Code passes to its status line, Codex's session logs, and Grok Bot's usage cache. If you turn on Cursor, it also asks cursor.com for your Cursor usage every 10 minutes, using the sign-in the Cursor app stores; nothing else is sent. It saves readings (tool, limit, percent, reset time) in `~/Library/Application Support/Fuel Gauge/Readings` for about two months. It never signs in to anything, reads browser cookies, or asks for Full Disk Access, and it sends nothing anywhere. Optional Codex reset tracking also contacts OpenAI through your installed Codex CLI. Otherwise, apart from Cursor, the only network request is Sparkle's update check against this repo's releases.
+Fuel Gauge reads local data: Claude Code's status line JSON and session logs, Codex's session logs, and Grok Bot's usage cache. If you turn on Cursor, it also asks cursor.com for your Cursor usage every 10 minutes, using the sign-in the Cursor app stores; nothing else is sent. It saves readings (tool, limit, percent, reset time) in `~/Library/Application Support/Fuel Gauge/Readings` for about two months. Local usage metadata (timestamps, model names, token counts, session identifiers, and project paths) is cached alongside them in `usage-history-v1.json`, with about 61 days of usage events. Prompt and response text are not saved in that cache. It never signs in to anything, reads browser cookies, or asks for Full Disk Access, and it sends nothing anywhere. Codex reset tracking is on by default and contacts OpenAI through your installed Codex CLI; you can turn it off in Settings › Resets. Otherwise, apart from Cursor, the only network request is Sparkle's update check against this repo's releases.
 
 ## Troubleshooting
 
@@ -133,16 +168,17 @@ Without Homebrew, drag **Fuel Gauge** from Applications to the Trash, and trash 
 
 Open **Settings › Resets** to track resets you can redeem when you need more usage.
 
-- **Codex:** Turn on **Track Codex reset credits**. Fuel Gauge asks your installed, signed-in Codex CLI
+- **Codex:** Reset tracking is on by default when Codex is tracked. Fuel Gauge asks your installed, signed-in Codex CLI
   for the available count every five minutes and shows the next known expiration. You can refresh it
   immediately after redeeming a reset in Codex's `/usage` menu. Missing data is shown as unknown, not zero.
+  Turn it off in Settings › Resets; an explicit opt-out is preserved across updates.
 - **Claude:** Open Claude Usage from the card, then save a manual count and optional next expiration
   in Settings › Resets. Claude's status line does not expose this balance. The card labels the count
   as manual and shows when you recorded it; update it after redemption or switching accounts.
 - **Grok Bot:** No saved-reset balance is currently tracked. Its documented additional usage credits
   are distinct from redeemable resets.
 
-Fuel Gauge never redeems a reset. Codex reset tracking is off by default because it contacts OpenAI
+Fuel Gauge never redeems a reset. Codex reset tracking is on by default and contacts OpenAI
 through the Codex CLI using its existing sign-in. Fuel Gauge does not read or store Codex credentials.
 
 ## Building from source

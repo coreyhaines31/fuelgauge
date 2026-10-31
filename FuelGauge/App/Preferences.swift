@@ -27,7 +27,8 @@ enum Preferences {
         UserDefaults.standard.register(defaults: [
             menuBarTextKey: MenuBarText.none.rawValue,
             alertWhenShortKey: true,
-            alertThresholdsKey: [80, 95]
+            alertThresholdsKey: [80, 95],
+            ResetPreferences.codexEnabled: true
         ])
     }
 

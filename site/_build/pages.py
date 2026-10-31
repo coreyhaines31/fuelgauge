@@ -14,13 +14,13 @@ COMPARISONS = [
         "eyebrow": "CodexBar alternative",
         "h1": "CodexBar shows how much you&#39;ve used. Fuel Gauge says if you&#39;ll <em>make it to reset.</em>",
         "lede": "CodexBar is a good free menu bar app that tracks usage across a huge list of AI providers. Fuel Gauge does less, on purpose: four tools, and one answer for each.",
-        "tldr": "Pick CodexBar if you use many AI providers and want them all in one menu. Pick Fuel Gauge if you live in Claude Code, Codex, or Grok Bot and want the verdict first, a forecast under your Claude Code prompt, and an exit code your agents can check. Fuel Gauge reads only local files.",
+        "tldr": "Pick CodexBar if you use many AI providers and want them all in one menu. Pick Fuel Gauge if you live in Claude Code, Codex, or Grok Bot and want the verdict first, a forecast under your Claude Code prompt, and an exit code your agents can check. Fuel Gauge forecasts from local readings and checks Codex reset credits through the installed CLI.",
         "card_title": "CodexBar",
         "cta": "Know if you&#39;ll make it.",
         "faqs": [
             ("Is CodexBar free?", "Yes. CodexBar is free and MIT licensed. Fuel Gauge is free too, with the source on GitHub under the FSL-1.1-MIT license."),
             ("Does Fuel Gauge track as many providers as CodexBar?", "No. CodexBar lists over 100 providers. Fuel Gauge tracks Claude Code, Codex, Grok Bot, and Cursor, and puts its effort into forecasting those."),
-            ("Why doesn't Fuel Gauge use browser cookies?", "It reads only what Claude Code, Codex, and Grok Bot already save on your Mac. That means no browser cookies, no Full Disk Access, no keychain, and no sign-in."),
+            ("Why doesn't Fuel Gauge use browser cookies?", "Its Claude Code, Codex, and Grok Bot forecasts use local readings. Codex reset checks use the installed CLI and its existing sign-in. Fuel Gauge does not read browser cookies or need Full Disk Access."),
             ("Can I run both?", "Yes. They don't conflict. Some people keep CodexBar for its breadth and Fuel Gauge for the forecast."),
         ],
         "sections": [
@@ -32,7 +32,7 @@ COMPARISONS = [
         <p><strong>It leads with the verdict.</strong> Each card opens with “Runs out around 11:50a, 1h 30m early” or “Makes it to reset, about 86% by then”, then shows how much you can use per hour and still make it.</p>
         <p><strong>It sits under your Claude Code prompt.</strong> The optional status line puts the forecast in Claude Code after every reply.</p>
         <p><strong>Agents can check it.</strong> <code>fuelgauge status</code> exits with code 2 when a limit will run out before it resets, so an agent can ask before a big job.</p>
-        <p><strong>It reads only local files.</strong> CodexBar uses browser cookies and Full Disk Access for some providers. Fuel Gauge never does.</p>
+        <p><strong>No browser cookies or Full Disk Access.</strong> CodexBar uses browser cookies and Full Disk Access for some providers. Fuel Gauge never does.</p>
             """},
             {"id": "compare", "lit": True, "html": """
         <h2>Fuel Gauge vs CodexBar</h2>
@@ -228,15 +228,16 @@ COMPARISONS = [
 PRIVACY = {
     "path": "/privacy",
     "title": "Privacy policy · Fuel Gauge",
-    "description": "Fuel Gauge collects nothing about you. It reads only what Claude Code, Codex, and Grok Bot already save on your Mac.",
+    "description": "Fuel Gauge has no telemetry. Learn about local usage readings, Codex reset checks, optional Cursor usage, and update requests.",
     "h1": "Privacy policy",
     "html": """
-        <p><strong>Last updated October 26, 2026.</strong></p>
+        <p><strong>Last updated October 27, 2026.</strong></p>
         <h2>The Fuel Gauge app</h2>
         <p>The app collects nothing about you. There&#39;s no account, no analytics, and no telemetry.</p>
-        <p>To forecast your limits it reads what Claude Code, Codex, and Grok Bot already save on your Mac: the usage Claude Code passes to its status line, Codex&#39;s session logs in <code>~/.codex/sessions</code>, and Grok Bot&#39;s local usage cache. It keeps a history of those readings in <code>~/Library/Application Support/Fuel Gauge</code>. It doesn&#39;t read browser cookies, the keychain, or anything that needs Full Disk Access, and it never signs in to anything. None of it leaves your Mac.</p>
+        <p>To forecast your limits it reads what Claude Code, Codex, and Grok Bot already save on your Mac: the usage Claude Code passes to its status line, Codex&#39;s session logs in <code>~/.codex/sessions</code>, and Grok Bot&#39;s local usage cache. It keeps a history of those readings in <code>~/Library/Application Support/Fuel Gauge</code>. It doesn&#39;t read browser cookies or need Full Disk Access. Your saved reading history stays on your Mac.</p>
         <p>If you turn on the Claude Code status line, Fuel Gauge backs up your Claude Code <code>settings.json</code> before changing it. <code>fuelgauge uninstall-statusline</code> puts it back.</p>
-        <p>The app&#39;s only network request is the check for updates, which fetches a small update feed from GitHub. GitHub sees that request like any other web request, including your IP address.</p>
+        <p>Codex reset tracking is on by default while Codex is tracked. Every five minutes, Fuel Gauge asks the installed Codex CLI for available reset credits using its existing sign-in; this contacts OpenAI. Fuel Gauge does not read or store Codex credentials, and never redeems a reset. Turn tracking off in Settings &gt; Resets; explicit opt-outs are preserved across updates.</p>
+        <p>Cursor tracking is off by default. If enabled, it requests usage from cursor.com using the Cursor app&#39;s existing sign-in. The update check fetches a small feed from GitHub. These services see requests like other web requests, including your IP address.</p>
         <h2>fuelgauge.app</h2>
         <p>This website uses <a href="https://usefathom.com">Fathom Analytics</a> for privacy-friendly visit counts and UserProof to see how visitors use the site (clicks, scrolling and page interactions, not anything you type). Neither sets cookies; UserProof keeps random ids in your browser&#39;s storage. No ad tracking, no personal data sold or shared. It&#39;s static pages hosted on Vercel, which keeps standard server logs, and it loads fonts from Google Fonts, which sees that request like any other web request.</p>
         <h2>Downloads</h2>
@@ -292,6 +293,9 @@ Claude Code · Weekly: Makes it to reset, about 86% by then
         <p>Then every agent session checks before the expensive stuff, and tells you which limit runs out and when instead of hitting the wall halfway through.</p>
         <h3>Install it with your agent</h3>
         <div class="prompt-box"><button type="button" class="copy" data-copy="install-prompt-cli">Copy</button><pre id="install-prompt-cli">{INSTALL_PROMPT}</pre></div>"""},
+        {"id": "claude-desktop", "lit": True, "html": """
+        <h2>Use it in Claude Desktop</h2>
+        <p>Not using Claude Code? Download <a href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/fuelgauge.mcpb">fuelgauge.mcpb</a> and double-click it, or drag it onto Claude Desktop, and choose Install. Claude can then read your forecast and the readings behind it, and ask before a long task if a limit won&#39;t last. Answers come back short, so checking barely touches your limits. The extension only reads. <a href="/#claude">More about the extension</a>.</p>"""},
     ],
     "faqs": [
         ("What does exit code 2 mean?", "At least one tracked limit is forecast to run out before it resets, or has already run out."),

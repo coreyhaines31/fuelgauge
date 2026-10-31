@@ -1,6 +1,23 @@
 import Foundation
 import FuelGaugeCore
 
+if CommandLine.arguments.contains("--usage") {
+    let cache = FileManager.default.temporaryDirectory.appending(path: "fuelgauge-usage-check.json")
+    var scanner = UsageLogScanner(cacheURL: cache)
+    let start = Date()
+    let events = scanner.scan(enabled: [.claude, .codex])
+    print("Usage scan: \(events.count) events in \(String(format: "%.2f", Date().timeIntervalSince(start)))s")
+    for provider in [Provider.claude, .codex] {
+        let summary = UsageSummary(UsageHistory.select(events, interval: UsagePeriod.month.interval(now: Date()),
+                                                       provider: provider))
+        print("\(provider.name): \(summary.tokens.total) tokens, \(summary.costLabel), \(summary.sessions) sessions")
+    }
+    let unknown = Set(events.filter { UsagePricing.cost(model: $0.model, tokens: $0.tokens) == nil }.map(\.model))
+    print("Unpriced models: \(unknown.sorted().joined(separator: ", "))")
+    for warning in scanner.warnings { print(warning) }
+    exit(0)
+}
+
 let start = Date()
 var codex = CodexLogReader()
 let codexReadings = codex.poll()

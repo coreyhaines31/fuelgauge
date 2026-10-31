@@ -7,35 +7,47 @@ struct PanelView: View {
     let openSettings: () -> Void
     let checkForUpdates: () -> Void
     var openResetSettings: (() -> Void)?
+    var openUsage: () -> Void = {}
     @State private var setupError: String?
+    @State private var cardsHeight: CGFloat = 400
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 30)) { context in
             VStack(alignment: .leading, spacing: 10) {
                 header(now: context.date)
-                if needsClaudeSetup {
-                    claudeSetup
-                }
-                if model.forecasts.isEmpty {
-                    emptyState
-                } else {
-                    ForEach(groups, id: \.provider) { group in
-                        ToolCard(provider: group.provider, forecasts: group.forecasts, now: context.date,
-                                 chartKey: chartKey, model: model,
-                                 openSettings: openResetSettings ?? openSettings)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 10) {
+                        if needsClaudeSetup {
+                            claudeSetup
+                        }
+                        if groups.isEmpty {
+                            emptyState
+                        } else {
+                            ForEach(groups, id: \.provider) { group in
+                                ToolCard(provider: group.provider, forecasts: group.forecasts, now: context.date,
+                                         chartKey: chartKey, model: model,
+                                         openSettings: openResetSettings ?? openSettings, openUsage: openUsage)
+                            }
+                        }
                     }
+                    .background(GeometryReader { geometry in
+                        Color.clear.preference(key: PanelHeightKey.self, value: geometry.size.height)
+                    })
                 }
+                .frame(height: min(cardsHeight, max(240, (NSScreen.main?.visibleFrame.height ?? 900) - 200)))
+                .onPreferenceChange(PanelHeightKey.self) { cardsHeight = $0 }
                 footer
             }
             .padding(14)
             .frame(width: 360)
+            .background(Color(nsColor: .windowBackgroundColor))
         }
     }
 
     private func header(now: Date) -> some View {
-        VStack(alignment: .leading, spacing: 3) {
+        VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .firstTextBaseline) {
-                Text(Brand.name).font(.system(size: 14, weight: .bold))
+                Text(Brand.name).font(.system(size: 15, weight: .semibold))
                 Spacer()
                 if let updatedAt = model.updatedAt {
                     Text("Updated \(ForecastText.time(updatedAt, now: now))")
@@ -44,10 +56,28 @@ struct PanelView: View {
                 }
             }
             if !model.forecasts.isEmpty {
-                Text(ForecastText.summary(model.forecasts, now: now))
-                    .font(.system(size: 12.5, weight: .semibold))
-                    .foregroundStyle(summaryTint)
+                HStack(alignment: .top, spacing: 8) {
+                    Image(systemName: summarySymbol)
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(summaryTint)
+                        .padding(.top, 2)
+                        .accessibilityHidden(true)
+                    Text(ForecastText.summary(model.forecasts, now: now))
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
+        }
+    }
+
+    private var summarySymbol: String {
+        switch model.mostUrgent?.verdict {
+        case .limitReached: "exclamationmark.circle.fill"
+        case .runsOut: "exclamationmark.triangle.fill"
+        case .makesIt: "checkmark.circle"
+        case .reset: "arrow.clockwise"
+        case .learning, nil: "clock"
         }
     }
 
@@ -66,6 +96,9 @@ struct PanelView: View {
         var order: [Provider] = []
         for forecast in model.byUrgency where !order.contains(forecast.key.provider) {
             order.append(forecast.key.provider)
+        }
+        for provider in [Provider.claude, .codex] where !order.contains(provider) {
+            if model.visibleUsage.contains(where: { $0.provider == provider }) { order.append(provider) }
         }
         return order.map { provider in
             Group(provider: provider, forecasts: model.forecasts
@@ -91,7 +124,8 @@ struct PanelView: View {
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
             if let setupError {
-                Text(setupError).font(.system(size: 11)).foregroundStyle(.red)
+                Label(setupError, systemImage: "exclamationmark.circle")
+                    .font(.system(size: 12)).foregroundStyle(.primary)
             }
             Button("Turn On") {
                 do {
@@ -141,6 +175,8 @@ struct PanelView: View {
 
     private var footer: some View {
         HStack {
+            Button("View usage", action: openUsage)
+                .buttonStyle(.plain).foregroundStyle(Color.accentColor)
             Spacer()
             Menu {
                 Button("Settings…", action: openSettings)
@@ -155,4 +191,9 @@ struct PanelView: View {
             .fixedSize()
         }
     }
+}
+
+private struct PanelHeightKey: PreferenceKey {
+    static let defaultValue: CGFloat = 400
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
 }

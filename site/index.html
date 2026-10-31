@@ -10,11 +10,17 @@
   <meta property="og:description" content="Free for macOS. Know if your Claude Code, Codex, Grok Bot, and Cursor limits will last until they reset, from the menu bar.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Fuel Gauge">
-  <meta property="og:image" content="https://fuelgauge.app/images/og.png">
+  <meta property="og:image" content="https://fuelgauge.app/images/og-video.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:video" content="https://fuelgauge.app/images/og.mp4">
+  <meta property="og:video:secure_url" content="https://fuelgauge.app/images/og.mp4">
+  <meta property="og:video:type" content="video/mp4">
+  <meta property="og:video:width" content="1200">
+  <meta property="og:video:height" content="630">
   <meta property="og:url" content="https://fuelgauge.app/">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://fuelgauge.app/images/og-video.png">
   <meta name="twitter:title" content="Fuel Gauge: don&#39;t hit your limit mid-task">
   <meta name="twitter:description" content="Free for macOS. Know if your Claude Code, Codex, Grok Bot, and Cursor limits will last until they reset, from the menu bar.">
   <meta name="theme-color" content="#fbe9d6" media="(prefers-color-scheme: light)">
@@ -224,6 +230,36 @@
           <div class="prompt-box">
             <button type="button" class="copy" data-copy="agent-rule">Copy</button>
             <pre id="agent-rule">Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before starting, or switch to a cheaper model. `fuelgauge status --json` has the details.</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="claude" class="lit">
+      <div class="wrap">
+        <div class="split">
+          <div>
+            <p class="eyebrow">Claude Desktop extension</p>
+            <h2>Use Fuel Gauge from Claude.</h2>
+            <p>Add Fuel Gauge to Claude Desktop and ask in plain words: how much Claude Code do I have left, will I hit my limit today, when does Codex reset. Claude reads the same forecast you see in the menu bar.</p>
+            <p>Answers come back short, so checking your limits barely touches them. The extension only reads, and nothing about your accounts leaves your Mac.</p>
+            <div class="actions">
+              <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/fuelgauge.mcpb"><svg aria-hidden="true"><use href="#i-download"/></svg>Download fuelgauge.mcpb</a>
+              <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge/tree/main/mcpb"><svg aria-hidden="true"><use href="#i-github"/></svg>View the source</a>
+            </div>
+            <p class="fineprint">Install Fuel Gauge first. Then double-click fuelgauge.mcpb, or drag it onto Claude Desktop, and choose Install.</p>
+          </div>
+          <div class="chat-mock glass" role="img" aria-label="An illustrative Claude Desktop chat. You ask whether your Claude Code limit will last today. Claude answers that the 5-hour limit is 55% used and at this pace runs out around 11:50a, 1h 30m before it resets at 1:20p, while the weekly Claude Code limit and the weekly Codex limit both make it to reset. It suggests a cheaper model or switching to Codex for the next hour.">
+            <span class="chat-label">Claude Desktop</span>
+            <p class="chat-ask">Will my Claude Code limit last today?</p>
+            <div class="chat-reply">
+              <p>Not this session. You&#39;re at 55% of your 5-hour limit, and at this pace it runs out around 11:50a, 1h 30m before it resets at 1:20p.</p>
+              <div class="chat-row"><span>Claude Code · 5-hour</span><b>Runs out 11:50a</b></div>
+              <div class="chat-row"><span>Claude Code · weekly</span><b class="ok">Makes it, ~86%</b></div>
+              <div class="chat-row"><span>Codex · weekly</span><b class="ok">Makes it, ~62%</b></div>
+              <p>Switch to a cheaper model for the next hour, or hand the big job to Codex.</p>
+            </div>
+            <span class="chat-note">Illustrative chat · Sample data</span>
           </div>
         </div>
       </div>
