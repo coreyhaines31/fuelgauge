@@ -104,6 +104,12 @@ fuelgauge uninstall-statusline
 Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before starting, or switch to a cheaper model. `fuelgauge status --json` has the details.
 ```
 
+### Use Fuel Gauge from Claude Desktop
+
+Download [`fuelgauge.mcpb`](https://github.com/coreyhaines31/fuelgauge/releases/latest/download/fuelgauge.mcpb) and double-click it (or drag it onto Claude Desktop) to install the Fuel Gauge extension. Then ask Claude things like *how much Claude Code do I have left?*, *will I hit my limit today?*, or *when does my Codex limit reset?*
+
+The extension runs the `fuelgauge` tool from your installed Fuel Gauge app, so install Fuel Gauge first. It only reads (`status` and `history`), and its answers are trimmed short, since reading them uses the same limits. The source is in [`mcpb/`](mcpb/); `cd mcpb && npm install && npm run pack` builds `mcpb/dist/fuelgauge.mcpb`, and `npm test` calls every tool on your Mac.
+
 ## Token usage and cost
 
 Choose **View usage** in the menu panel to see Claude Code and Codex usage on this Mac. Each tool card

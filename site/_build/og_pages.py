@@ -4,7 +4,7 @@
     python3 site/_build/render.py && python3 site/_build/og_pages.py && python3 site/_build/render.py
 
 render.py points a page's og:image at images/og/<slug>.png when that file exists, so run it again after
-adding a page. The homepage keeps images/og.png (from og.html). Needs Google Chrome.
+adding a page. The homepage uses images/og-video.png, the still from site/_og. Needs Google Chrome.
 """
 import glob
 import html
