@@ -104,9 +104,38 @@ fuelgauge uninstall-statusline
 Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before starting, or switch to a cheaper model. `fuelgauge status --json` has the details.
 ```
 
+## Token usage and cost
+
+Choose **View usage** in the menu panel to see Claude Code and Codex usage on this Mac. Each tool card
+also shows today's tokens and estimated API cost. Usage remains available even when no quota forecast exists.
+
+- **Today / 7 days / 30 days:** daily token or cost charts, with an elapsed-period token comparison.
+- **Token categories:** uncached input, output, cache reads, and cache writes. Recorded reasoning is included
+  in output rather than added to the total again. Cache hit rate is the cached share of all prompt tokens.
+- **Breakdowns:** tool, model, project directory, and session, sorted by token usage. Hover a project for its full path.
+- **Cost:** USD equivalents at bundled standard short-context API rates, not your subscription bill.
+  Long-context premiums, service tiers, regional adjustments, and tool fees are excluded. Unknown models
+  show unavailable cost; mixed totals explicitly say “+ unpriced.” Cache writes without a recorded duration
+  use the short-duration rate. Rates were checked October 30, 2026 against
+  [OpenAI](https://developers.openai.com/api/docs/pricing) and
+  [Anthropic](https://platform.claude.com/docs/en/about-claude/pricing).
+
+The first import runs in the background and may take a few minutes for large histories. Later refreshes
+read appended records and reuse a local cache. Claude streaming snapshots and copied Codex token events
+are deduplicated. A missing or unreadable source does not erase cached history; read errors are shown in Usage.
+This is local history, so remote tasks, other devices, deleted transcripts before the first import, and other
+providers may be missing. It is independent of account-wide quota percentages.
+
+Sources: `$CLAUDE_CONFIG_DIR/projects` (default `~/.claude/projects`), and `$CODEX_HOME/sessions` plus
+`archived_sessions` (default `~/.codex`). Turn a tool off in **Settings › Tools** to stop importing and hide it.
+
+Screenshots: [previous panel](.github/images/contrast-light.png),
+[new panel](.github/images/usage-panel-light.png), [Usage light](.github/images/usage-light.png),
+[Usage dark](.github/images/usage-dark.png).
+
 ## Privacy
 
-Fuel Gauge reads three things, all on your Mac: the JSON Claude Code passes to its status line, Codex's session logs, and Grok Bot's usage cache. If you turn on Cursor, it also asks cursor.com for your Cursor usage every 10 minutes, using the sign-in the Cursor app stores; nothing else is sent. It saves readings (tool, limit, percent, reset time) in `~/Library/Application Support/Fuel Gauge/Readings` for about two months. It never signs in to anything, reads browser cookies, or asks for Full Disk Access, and it sends nothing anywhere. Codex reset tracking is on by default and contacts OpenAI through your installed Codex CLI; you can turn it off in Settings › Resets. Otherwise, apart from Cursor, the only network request is Sparkle's update check against this repo's releases.
+Fuel Gauge reads local data: Claude Code's status line JSON and session logs, Codex's session logs, and Grok Bot's usage cache. If you turn on Cursor, it also asks cursor.com for your Cursor usage every 10 minutes, using the sign-in the Cursor app stores; nothing else is sent. It saves readings (tool, limit, percent, reset time) in `~/Library/Application Support/Fuel Gauge/Readings` for about two months. Local usage metadata (timestamps, model names, token counts, session identifiers, and project paths) is cached alongside them in `usage-history-v1.json`, with about 61 days of usage events. Prompt and response text are not saved in that cache. It never signs in to anything, reads browser cookies, or asks for Full Disk Access, and it sends nothing anywhere. Codex reset tracking is on by default and contacts OpenAI through your installed Codex CLI; you can turn it off in Settings › Resets. Otherwise, apart from Cursor, the only network request is Sparkle's update check against this repo's releases.
 
 ## Troubleshooting
 
