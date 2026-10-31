@@ -9,6 +9,12 @@ import Observation
 @Observable
 final class UsageModel {
     private(set) var forecasts: [Forecast] = []
+    private(set) var usageEvents: [UsageEvent] = []
+    private(set) var usageWarnings: [String] = []
+    private(set) var scanningUsage = false
+    private(set) var usageUpdatedAt: Date?
+    private var usageScanner: UsageLogScanner?
+    private let usageCacheURL: URL
     private(set) var updatedAt: Date?
     private(set) var codexResetCredits: ResetCredits?
     private(set) var codexResetsCheckedAt: Date?
@@ -38,6 +44,7 @@ final class UsageModel {
     init(supportFolder: URL = Brand.supportFolder, readsLiveData: Bool = true,
          resetCredits: ResetCredits? = nil) {
         store = ReadingStore(folder: supportFolder.appending(path: "Readings"))
+        usageCacheURL = supportFolder.appending(path: "usage-history-v1.json")
         codexStateURL = supportFolder.appending(path: "codex-state.json")
         let state = (try? Data(contentsOf: codexStateURL))
             .flatMap { try? JSONDecoder().decode(CodexLogReader.State.self, from: $0) }
@@ -65,6 +72,7 @@ final class UsageModel {
     /// Reads anything new, saves it, and recomputes the forecasts.
     func refresh() {
         refreshCodexResets()
+        refreshUsage()
         guard !isRefreshing else { return }
         isRefreshing = true
         let enabled = Tracking.enabled(installed: installedProviders)
@@ -110,6 +118,44 @@ final class UsageModel {
             onRefresh?(forecasts)
         }
     }
+
+    var visibleUsage: [UsageEvent] {
+        let enabled = Set([Provider.claude, .codex].filter { Tracking.isEnabled($0) })
+        return usageEvents.filter { enabled.contains($0.provider) }
+    }
+
+    func todayUsage(for provider: Provider, now: Date = Date()) -> UsageSummary {
+        UsageSummary(UsageHistory.select(visibleUsage, interval: UsagePeriod.today.interval(now: now),
+                                         provider: provider))
+    }
+
+    private func refreshUsage() {
+        guard readsLiveData, !scanningUsage else { return }
+        scanningUsage = true
+        let scanner = usageScanner
+        let cacheURL = usageCacheURL
+        let enabled = Tracking.enabled(installed: installedProviders)
+        Task {
+            let (updated, events) = await Task.detached(priority: .utility) {
+                var reader = scanner ?? UsageLogScanner(cacheURL: cacheURL)
+                let events = reader.scan(enabled: enabled)
+                return (reader, events)
+            }.value
+            usageScanner = updated
+            usageEvents = events
+            usageWarnings = updated.warnings
+            usageUpdatedAt = Date()
+            scanningUsage = false
+            onChange?()
+        }
+    }
+
+    #if DEBUG
+    func setDemoUsage(_ events: [UsageEvent]) {
+        usageEvents = events
+        usageUpdatedAt = Date()
+    }
+    #endif
 
     func refreshCodexResets(force: Bool = false) {
         guard readsLiveData else { return }

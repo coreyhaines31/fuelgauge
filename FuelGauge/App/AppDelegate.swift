@@ -8,6 +8,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var model: UsageModel?
     private var statusItemController: StatusItemController?
     private var settingsWindow: SettingsWindow?
+    private var usageWindow: HostedWindow?
     private let alerts = Alerts()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -19,9 +20,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.model = model
         let settingsWindow = SettingsWindow(updater: updater, model: model)
         self.settingsWindow = settingsWindow
+        let usageWindow = HostedWindow(title: "Fuel Gauge Usage", size: NSSize(width: 900, height: 760)) {
+            UsageView(model: model)
+        }
+        self.usageWindow = usageWindow
         statusItemController = StatusItemController(
             model: model,
             openSettings: { settingsWindow.show() },
+            openUsage: { usageWindow.show() },
             openResetSettings: { settingsWindow.show(tab: "Resets") },
             checkForUpdates: { [updater] in updater.checkForUpdates() }
         )
@@ -52,8 +58,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         #if DEBUG
         if DemoMode.isOn {
             DemoMode.prepare()
-            return UsageModel(supportFolder: DemoMode.folder, readsLiveData: false,
-                              resetCredits: DemoMode.resetCredits)
+            let model = UsageModel(supportFolder: DemoMode.folder, readsLiveData: false,
+                                   resetCredits: DemoMode.resetCredits)
+            model.setDemoUsage(DemoMode.usageEvents())
+            return model
         }
         #endif
         return UsageModel()
