@@ -120,7 +120,8 @@ final class UsageModel {
     }
 
     var visibleUsage: [UsageEvent] {
-        usageEvents.filter { Tracking.isEnabled($0.provider) }
+        let enabled = Set([Provider.claude, .codex].filter { Tracking.isEnabled($0) })
+        return usageEvents.filter { enabled.contains($0.provider) }
     }
 
     func todayUsage(for provider: Provider, now: Date = Date()) -> UsageSummary {
