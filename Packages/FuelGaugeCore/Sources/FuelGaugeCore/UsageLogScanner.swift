@@ -34,8 +34,6 @@ public struct UsageLogScanner: Sendable {
         let revision: Int
         let enabled: [Provider]
         let events: [UsageEvent]
-        /// An event stamped after `now` was left out and belongs in a later result, so this one can't be reused.
-        let leftOutFuture: Bool
     }
     /// Writing the cache re-encodes every tracked file, so changes are batched. A crash only costs a re-read.
     static let saveInterval: TimeInterval = 600
@@ -83,14 +81,11 @@ public struct UsageLogScanner: Sendable {
                 savedAt = now
             } catch { warnings.append("Usage history could not be saved; it will be rebuilt on restart.") }
         }
-        if let lastResult, lastResult.revision == revision, lastResult.enabled == enabled, !lastResult.leftOutFuture {
-            return lastResult.events
-        }
-        let candidates = files.values.flatMap { $0.events.values }
-            .filter { enabled.contains($0.provider) && $0.at >= cutoff }
-        let events = UsageHistory.deduplicate(candidates.filter { $0.at <= now })
-        lastResult = LastResult(revision: revision, enabled: enabled, events: events,
-                                leftOutFuture: candidates.contains { $0.at > now })
+        if let lastResult, lastResult.revision == revision, lastResult.enabled == enabled { return lastResult.events }
+        let events = UsageHistory.deduplicate(files.values.flatMap { $0.events.values }.filter {
+            enabled.contains($0.provider) && $0.at >= cutoff && $0.at <= now
+        })
+        lastResult = LastResult(revision: revision, enabled: enabled, events: events)
         return events
     }
 
