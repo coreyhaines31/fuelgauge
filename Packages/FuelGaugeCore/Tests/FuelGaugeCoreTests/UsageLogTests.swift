@@ -92,4 +92,42 @@ struct UsageLogTests {
         #expect(UsageSummary(scanner.scan(enabled: [.codex], now: now)).tokens.total == 3)
         #expect(scanner.warnings.isEmpty)
     }
+
+    @Test func scannerWritesItsCacheOnlyAfterChangesAndAtMostEveryTenMinutes() throws {
+        // The real path: the temp folder sits behind the /var link, and the scanner sees files at /private/var.
+        let temp = try #require(realpath(FileManager.default.temporaryDirectory.path, nil))
+        defer { free(temp) }
+        let folder = URL(filePath: String(cString: temp)).appending(path: UUID().uuidString)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let file = folder.appending(path: "session.jsonl")
+        let cache = folder.appending(path: "cache.json")
+        let roots = [UsageLogScanner.Root(provider: .codex, url: folder)]
+        let now = try Date("2026-10-30T14:00:00Z", strategy: .iso8601)
+        try (codex(input: 100, output: 10) + Data([10])).write(to: file)
+        var scanner = UsageLogScanner(roots: roots, cacheURL: cache)
+        _ = scanner.scan(enabled: [.codex], now: now)
+        #expect(FileManager.default.fileExists(atPath: cache.path))
+
+        try FileManager.default.removeItem(at: cache)
+        _ = scanner.scan(enabled: [.codex], now: now.addingTimeInterval(3_600))
+        #expect(!FileManager.default.fileExists(atPath: cache.path), "nothing changed, so nothing to write")
+
+        let append = try FileHandle(forWritingTo: file)
+        try append.seekToEnd()
+        try append.write(contentsOf: codex(input: 300, output: 30) + Data([10]))
+        try append.close()
+        _ = scanner.scan(enabled: [.codex], now: now.addingTimeInterval(3_660))
+        #expect(FileManager.default.fileExists(atPath: cache.path))
+
+        try FileManager.default.removeItem(at: cache)
+        let again = try FileHandle(forWritingTo: file)
+        try again.seekToEnd()
+        try again.write(contentsOf: codex(input: 5, output: 1) + Data([10]))
+        try again.close()
+        #expect(scanner.scan(enabled: [.codex], now: now.addingTimeInterval(3_720)).count == 3)
+        #expect(!FileManager.default.fileExists(atPath: cache.path), "a change within ten minutes waits")
+        _ = scanner.scan(enabled: [.codex], now: now.addingTimeInterval(3_660 + UsageLogScanner.saveInterval))
+        #expect(FileManager.default.fileExists(atPath: cache.path))
+    }
 }

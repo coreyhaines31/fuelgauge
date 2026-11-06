@@ -23,6 +23,11 @@ public struct UsageLogScanner: Sendable {
     private var files: [String: FileState] = [:]
     private let roots: [Root]
     private let cacheURL: URL?
+    /// Something changed since the cache was last written.
+    private var dirty = false
+    private var savedAt: Date?
+    /// Writing the cache re-encodes every tracked file, so changes are batched. A crash only costs a re-read.
+    static let saveInterval: TimeInterval = 600
     public private(set) var warnings: [String] = []
 
     public init(roots: [Root] = Self.defaultRoots, cacheURL: URL? = nil) {
@@ -44,20 +49,27 @@ public struct UsageLogScanner: Sendable {
 
     public mutating func scan(enabled: [Provider], now: Date = Date()) -> [UsageEvent] {
         warnings = []
+        let tracked = files.count
         files = files.filter { path, _ in roots.contains { path.hasPrefix($0.url.path + "/") } }
+        if files.count != tracked { dirty = true }
         let cutoff = Calendar.current.date(byAdding: .day, value: -61, to: now)!
         for root in roots where enabled.contains(root.provider) {
             scan(root, cutoff: cutoff)
         }
         for path in Array(files.keys) {
             let recent = files[path]?.events.filter { $0.value.at >= cutoff } ?? [:]
-            files[path]?.events = recent
+            if recent.count != files[path]?.events.count {
+                files[path]?.events = recent
+                dirty = true
+            }
         }
-        if let cacheURL {
+        if let cacheURL, dirty, savedAt.map({ now.timeIntervalSince($0) >= Self.saveInterval }) ?? true {
             do {
                 try FileManager.default.createDirectory(at: cacheURL.deletingLastPathComponent(),
                                                         withIntermediateDirectories: true)
                 try JSONEncoder().encode(files).write(to: cacheURL, options: .atomic)
+                dirty = false
+                savedAt = now
             } catch { warnings.append("Usage history could not be saved; it will be rebuilt on restart.") }
         }
         return UsageHistory.deduplicate(files.values.flatMap { $0.events.values }.filter {
@@ -119,6 +131,7 @@ public struct UsageLogScanner: Sendable {
         state.modified = modified
         state.size = size
         files[url.path] = state
+        dirty = true
     }
 
     private static let claudeMarkers = [Data("\"usage\"".utf8)]
