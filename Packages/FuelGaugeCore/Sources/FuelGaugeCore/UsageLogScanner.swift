@@ -26,6 +26,15 @@ public struct UsageLogScanner: Sendable {
     /// Something changed since the cache was last written.
     private var dirty = false
     private var savedAt: Date?
+    /// Goes up with every change, so an unchanged scan can return the last result instead of rebuilding it.
+    private var revision = 0
+    private var lastResult: LastResult?
+
+    private struct LastResult: Sendable {
+        let revision: Int
+        let enabled: [Provider]
+        let events: [UsageEvent]
+    }
     /// Writing the cache re-encodes every tracked file, so changes are batched. A crash only costs a re-read.
     static let saveInterval: TimeInterval = 600
     public private(set) var warnings: [String] = []
@@ -51,7 +60,7 @@ public struct UsageLogScanner: Sendable {
         warnings = []
         let tracked = files.count
         files = files.filter { path, _ in roots.contains { path.hasPrefix($0.url.path + "/") } }
-        if files.count != tracked { dirty = true }
+        if files.count != tracked { markChanged() }
         let cutoff = Calendar.current.date(byAdding: .day, value: -61, to: now)!
         for root in roots where enabled.contains(root.provider) {
             scan(root, cutoff: cutoff)
@@ -60,7 +69,7 @@ public struct UsageLogScanner: Sendable {
             let recent = files[path]?.events.filter { $0.value.at >= cutoff } ?? [:]
             if recent.count != files[path]?.events.count {
                 files[path]?.events = recent
-                dirty = true
+                markChanged()
             }
         }
         if let cacheURL, dirty, savedAt.map({ now.timeIntervalSince($0) >= Self.saveInterval }) ?? true {
@@ -72,9 +81,17 @@ public struct UsageLogScanner: Sendable {
                 savedAt = now
             } catch { warnings.append("Usage history could not be saved; it will be rebuilt on restart.") }
         }
-        return UsageHistory.deduplicate(files.values.flatMap { $0.events.values }.filter {
+        if let lastResult, lastResult.revision == revision, lastResult.enabled == enabled { return lastResult.events }
+        let events = UsageHistory.deduplicate(files.values.flatMap { $0.events.values }.filter {
             enabled.contains($0.provider) && $0.at >= cutoff && $0.at <= now
         })
+        lastResult = LastResult(revision: revision, enabled: enabled, events: events)
+        return events
+    }
+
+    private mutating func markChanged() {
+        dirty = true
+        revision += 1
     }
 
     private mutating func scan(_ root: Root, cutoff: Date) {
@@ -131,7 +148,7 @@ public struct UsageLogScanner: Sendable {
         state.modified = modified
         state.size = size
         files[url.path] = state
-        dirty = true
+        markChanged()
     }
 
     private static let claudeMarkers = [Data("\"usage\"".utf8)]
