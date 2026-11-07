@@ -9,6 +9,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItemController: StatusItemController?
     private var settingsWindow: SettingsWindow?
     private var usageWindow: HostedWindow?
+    private var forecastWindow: HostedWindow?
     private let alerts = Alerts()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -24,10 +25,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             UsageView(model: model)
         }
         self.usageWindow = usageWindow
+        let forecastWindow = HostedWindow(title: "Fuel Gauge Forecasts", size: NSSize(width: 760, height: 840)) {
+            ForecastDetailsView(model: model)
+        }
+        self.forecastWindow = forecastWindow
         statusItemController = StatusItemController(
             model: model,
             openSettings: { settingsWindow.show() },
             openUsage: { usageWindow.show() },
+            openForecasts: { forecastWindow.show() },
             openResetSettings: { settingsWindow.show(tab: "Resets") },
             checkForUpdates: { [updater] in updater.checkForUpdates() }
         )
