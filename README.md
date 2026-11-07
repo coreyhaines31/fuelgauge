@@ -32,8 +32,8 @@ It's free, the source is on GitHub, and your usage never leaves your Mac.
 
 ## What it does
 
-- **Forecasts each limit.** For every window (Claude Code's 5-hour and weekly, Codex's, Grok Bot's weekly, Cursor's) it measures your pace over the recent stretch and says whether you'll make it to the reset, or when you'll run out.
-- **Shows a range, not a guess dressed up as a fact.** "Between 2:50p and 4:30p at your recent pace." Until it has about 10 minutes of readings, it says "Learning your pace" instead of making one up.
+- **Forecasts each limit.** Learns your usual hours and weekday/weekend patterns for daily, weekly, and monthly limits, with recent activity adjusting the forecast. Short windows and sparse histories use recent pace. Learning is automatic and local.
+- **Explains its assumptions.** Shows when a forecast uses your usual hours and when continuing the current session would run out sooner. Stale or conflicting readings say "Waiting for a reliable reading" instead of claiming you will make it.
 - **Tells you your budget.** "You can use up to 9% an hour and still make it." That's the number that changes how you work.
 - **Lives in the menu bar.** A fuel pump fills with the fuel left in whichever limit is closest to running out. It turns orange when one will run out before it resets, and red when one is out.
 - **Shows up inside Claude Code.** A strip under the prompt: `⛽ 5h 55% out ~12:05p · wk 41% ok`. If you already have a status line, it stays, with the forecast under it.
@@ -71,7 +71,7 @@ Click the fuel pump in the menu bar.
 | Grok Bot | Nothing. | Grok Bot saves its weekly usage on your Mac while it's open. |
 | Cursor | Turn it on in **Settings › Tools** (it's off by default). | Cursor keeps no usage on your Mac, so Fuel Gauge asks cursor.com every 10 minutes, signed in with the Cursor app's own sign-in. |
 
-Forecasts need about 10 minutes of readings while you work. Until then a card says "Learning your pace". Choose which tools to track in **Settings › Tools**.
+Recent-pace forecasts need about 10 minutes of readings for a 5-hour limit, or 3 hours for a weekly limit. Until then a card says "Learning your pace". Choose which tools to track in **Settings › Tools**.
 
 ## Reading a card
 
@@ -81,10 +81,13 @@ Forecasts need about 10 minutes of readings while you work. Until then a card sa
 | **Runs out around 3:40p, 1h 20m early** | At your recent pace, you'll hit the limit before it resets. |
 | **Out until 5:00p** | The limit is used up. |
 | **Learning your pace** | Not enough readings yet. |
+| **Waiting for a reliable reading** | Reports are too old or contradict one another. Open the tool and use it to refresh its limits. |
+| Based on your usual hours and recent activity | A learned schedule is being used, including observed nights and weekends. |
+| If you keep this session's pace | A conditional run-out estimate for continuing the current burst, separate from the main forecast. |
 | Using 6% an hour | Your pace over the recent stretch: the last hour for a 5-hour window, the last day for a weekly one. |
 | You can use up to 9% an hour | The fastest pace that still lasts until the reset. |
 
-It's an estimate from your recent pace, not a promise. A burst of work speeds it up and a break slows it down.
+Forecasts are estimates. Schedule learning uses up to eight weeks of local readings and starts only after two weeks, with observed intervals covering at least half of the latest fortnight. It falls back to recent pace when coverage is sparse; missing hours are not assumed quiet. Reset credits are a separate fallback and are never assumed to be redeemed. See [how forecasting works](docs/forecasting.md).
 
 ## Command line
 
@@ -94,6 +97,7 @@ The app includes a `fuelgauge` command. Homebrew puts it on your PATH; otherwise
 fuelgauge status              # every limit, in plain words; exits 2 if one will run out before it resets
 fuelgauge status --json       # the same, for scripts and agents
 fuelgauge history --days 2    # the readings behind the forecasts
+fuelgauge backtest --days 7   # compare forecasts against observed history; local and read-only
 fuelgauge install-statusline  # make Fuel Gauge Claude Code's status line
 fuelgauge uninstall-statusline
 ```
