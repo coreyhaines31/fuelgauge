@@ -55,11 +55,11 @@ struct UsageSchedule {
         recentMultiplier = trend(intervals, now: now)
     }
 
-    func rate(at date: Date, fallback: Double) -> Double {
+    func rate(at date: Date) -> Double? {
         let bucket = buckets[index(at: date)]
         if bucket.supported { return bucket.rate }
         let pool = pooled[calendar.component(.hour, from: date)]
-        return pool.supported ? pool.rate : fallback
+        return pool.supported ? pool.rate : nil
     }
 
     private func index(at date: Date) -> Int {
@@ -76,9 +76,11 @@ struct UsageSchedule {
             while start < interval.end {
                 let end = min(interval.end, calendar.dateInterval(of: .hour, for: start)!.end)
                 let hours = end.timeIntervalSince(start) / 3600
-                actual += interval.consumed * hours / interval.hours
-                expected += rate(at: start, fallback: 0) * hours
-                coverage += hours
+                if let expectedRate = rate(at: start) {
+                    actual += interval.consumed * hours / interval.hours
+                    expected += expectedRate * hours
+                    coverage += hours
+                }
                 start = end
             }
         }
