@@ -54,7 +54,7 @@ public struct AlertPlanner: Sendable {
             fired[id].map { abs($0 - forecast.resetsAt.timeIntervalSince1970) <= Self.sameWindow } ?? false
         }
 
-        for forecast in forecasts where forecast.verdict != .reset {
+        for forecast in forecasts where forecast.verdict != .reset && forecast.verdict != .stale {
             if settings.alertWhenShort, case .runsOut(let at, _, _) = forecast.verdict,
                forecast.resetsAt.timeIntervalSince(at) >= settings.minimumMargin {
                 shortNow.insert(forecast.key)

@@ -7,6 +7,7 @@ fuelgauge: will your Claude Code, Codex, and Grok Bot limits last until they res
 Usage:
   fuelgauge status [--json]
   fuelgauge history [--days 1] [--json]
+  fuelgauge backtest [--days 7] [--json]
   fuelgauge statusline
   fuelgauge install-statusline
   fuelgauge uninstall-statusline
@@ -15,6 +16,7 @@ Commands:
   status                Each limit: percent used, when it resets, and whether it lasts until then.
                         Exits 2 when a limit is forecast to run out before it resets, or already has.
   history               The readings behind the forecasts, per limit.
+  backtest              Compare recent and adaptive forecasts against saved observations. Read-only.
   statusline            Claude Code's status line command: reads Claude's limits from stdin, saves
                         them, and prints the forecast. Set up with install-statusline.
   install-statusline    Make Fuel Gauge Claude Code's status line. An existing status line keeps
@@ -49,7 +51,7 @@ func currentForecasts(now: Date = Date()) -> [Forecast] {
     if enabled.contains(.grokBot) {
         try? store.append(GrokBotReader().read(), now: now)
     }
-    let readings = store.load(since: now.addingTimeInterval(-8 * 24 * 3600))
+    let readings = store.load(since: now.addingTimeInterval(-ForecastEngine.historyDuration))
         .filter { enabled.contains($0.provider) }
     return ForecastEngine.forecasts(from: readings, now: now).filter {
         !($0.verdict == .reset && $0.resetsAt < now.addingTimeInterval(-24 * 3600))
@@ -73,6 +75,7 @@ func status() -> Never {
             print("\(name): \(ForecastText.headline(forecast, now: now))")
             print("  \(ForecastText.usage(forecast, now: now))")
             if let pace = ForecastText.pace(forecast) { print("  \(pace)") }
+            if let scenario = ForecastText.sessionScenario(forecast, now: now) { print("  \(scenario)") }
             if let range = ForecastText.range(forecast, now: now) { print("  \(range)") }
         }
     }
@@ -115,7 +118,7 @@ func statusLine() -> Never {
     }
     guard Tracking.isEnabled(.claude) else { exit(0) }
     try? store.append(ClaudeStatusLine.readings(from: input, at: now), now: now)
-    let readings = store.load(since: now.addingTimeInterval(-8 * 24 * 3600), provider: .claude)
+    let readings = store.load(since: now.addingTimeInterval(-ForecastEngine.historyDuration), provider: .claude)
     let forecasts = ForecastEngine.forecasts(from: readings, now: now).filter { $0.verdict != .reset }
     if let strip = StatusLineStrip.render(forecasts, now: now) {
         print(strip)
@@ -221,6 +224,8 @@ case "status", nil:
     status()
 case "history":
     history()
+case "backtest":
+    backtest()
 case "statusline":
     statusLine()
 case "install-statusline":

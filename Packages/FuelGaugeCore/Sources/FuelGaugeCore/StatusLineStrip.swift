@@ -23,7 +23,7 @@ public enum StatusLineStrip {
         case .limitReached: "31"
         case .runsOut: "33"
         case .makesIt: "32"
-        case .learning, .reset: "2"
+        case .learning, .stale, .reset: "2"
         }
         return "\u{1B}[\(code)m\(text)\u{1B}[0m"
     }

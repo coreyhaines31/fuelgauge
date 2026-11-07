@@ -5,6 +5,8 @@ public struct Forecast: Sendable, Equatable {
     public enum Verdict: Sendable, Equatable {
         /// Not enough history yet to trust a pace.
         case learning
+        /// The latest reading is too old or conflicts with another report.
+        case stale
         /// The limit is used up until it resets.
         case limitReached
         /// The window reset since the last reading; usage starts again from zero.
@@ -25,9 +27,18 @@ public struct Forecast: Sendable, Equatable {
     public let ratePerHour: Double?
     /// The highest pace that still lasts until reset, in percentage points per hour.
     public let budgetPerHour: Double?
-    public let verdict: Verdict
+    public var verdict: Verdict
     /// This window's readings, oldest first, for the chart.
     public let history: [Reading]
+
+    public enum Basis: String, Sendable { case recent, schedule }
+    public struct Point: Sendable, Equatable {
+        public let at: Date
+        public let usedPercent: Double
+    }
+    public var basis: Basis = .recent
+    public var projection: [Point] = []
+    public var sessionRunsOutAt: Date?
 
     public var windowName: String { WindowName.of(windowMinutes: windowMinutes) }
 
@@ -41,6 +52,9 @@ public struct Forecast: Sendable, Equatable {
 }
 
 public enum ForecastEngine {
+    public enum Method: String, CaseIterable, Sendable { case recent, adaptive }
+    public static let historyDuration: TimeInterval = 56 * 86400
+
     /// How much history a pace needs before it's shown: 10 minutes, or an eighth of the stretch it's measured
     /// over, whichever is longer. One busy hour says little about a whole week, so a weekly window waits for
     /// 3 hours.
@@ -49,9 +63,10 @@ public enum ForecastEngine {
     }
 
     /// One forecast per limit in `readings`, in a stable order.
-    public static func forecasts(from readings: [Reading], now: Date = Date()) -> [Forecast] {
+    public static func forecasts(from readings: [Reading], now: Date = Date(), method: Method = .adaptive,
+                                 calendar: Calendar = .current) -> [Forecast] {
         Dictionary(grouping: readings, by: \.key)
-            .compactMap { forecast(for: $0.value, now: now) }
+            .compactMap { forecast(for: $0.value, now: now, method: method, calendar: calendar) }
             .sorted { $0.key < $1.key }
     }
 
@@ -62,7 +77,15 @@ public enum ForecastEngine {
     }
 
     /// The forecast for one limit's readings.
-    public static func forecast(for readings: [Reading], now: Date = Date()) -> Forecast? {
+    public static func forecast(for readings: [Reading], now: Date = Date(), method: Method = .adaptive,
+                                calendar: Calendar = .current) -> Forecast? {
+        switch method {
+        case .recent: recentForecast(for: readings, now: now)
+        case .adaptive: AdaptiveForecast.make(readings, now: now, calendar: calendar)
+        }
+    }
+
+    static func recentForecast(for readings: [Reading], now: Date, windowStartAllowed: Bool = true) -> Forecast? {
         let sorted = readings.filter { $0.at <= now }.sorted { $0.at < $1.at }
         guard let latest = sorted.last else { return nil }
         // Readings belong to the current window when they share its reset time (a little drift is normal).
@@ -82,7 +105,8 @@ public enum ForecastEngine {
         let budget = max(0, 100 - used) / hoursLeft
         if used >= 100 { return make(.limitReached, budget: 0) }
 
-        let windowStart = latest.windowMinutes.map { latest.resetsAt.addingTimeInterval(-Double($0) * 60) }
+        let windowStart = windowStartAllowed
+            ? latest.windowMinutes.map { latest.resetsAt.addingTimeInterval(-Double($0) * 60) } : nil
         let span = lookback(windowMinutes: latest.windowMinutes)
         let coverage = minimumCoverage(windowMinutes: latest.windowMinutes)
         guard let rate = pace(

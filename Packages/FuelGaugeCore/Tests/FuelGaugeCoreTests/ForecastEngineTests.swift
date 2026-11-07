@@ -60,9 +60,9 @@ import Testing
         #expect(forecast.verdict == .learning)
     }
 
-    @Test func oneReadingFromBeforeTheStretchIsNotAPace() throws {
+    @Test func anOldMonthlyReadingNeedsToBeRefreshed() throws {
         let monthly = [reading(80, minutesAgo: 25 * 60, resetsIn: 24, minutes: nil)]
-        #expect(try #require(ForecastEngine.forecast(for: monthly, now: now)).verdict == .learning)
+        #expect(try #require(ForecastEngine.forecast(for: monthly, now: now)).verdict == .stale)
     }
 
     @Test func aSlowClimbStillRunsOut() throws {

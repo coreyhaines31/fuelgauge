@@ -39,7 +39,7 @@ final class UsageModel {
     private let readsLiveData: Bool
 
     /// How much history forecasts and charts look at.
-    nonisolated static let history: TimeInterval = 8 * 24 * 3600
+    nonisolated static let history = ForecastEngine.historyDuration
 
     init(supportFolder: URL = Brand.supportFolder, readsLiveData: Bool = true,
          resetCredits: ResetCredits? = nil) {
@@ -204,7 +204,7 @@ final class UsageModel {
         case .limitReached: return -1
         case .runsOut(let at, _, _): return at.timeIntervalSinceNow
         case .reset: return .greatestFiniteMagnitude
-        case .learning, .makesIt: return 1_000_000_000 - forecast.usedPercent
+        case .learning, .stale, .makesIt: return 1_000_000_000 - forecast.usedPercent
         }
     }
 

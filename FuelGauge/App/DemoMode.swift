@@ -69,6 +69,7 @@ enum DemoMode {
         readings += series(.grokBot, "weekly", minutes: 10080, resetsIn: 35, [
             (60 * 20, 72), (60 * 14, 78), (60 * 8, 84), (60 * 2, 89)
         ])
+        if CommandLine.arguments.contains("--forecast-demo") { readings = ForecastDemo.readings(now: now) }
         try? store.append(readings, now: now)
         NSApp.appearance = NSAppearance(named: CommandLine.arguments.contains("--dark") ? .darkAqua : .aqua)
     }
@@ -94,6 +95,15 @@ enum DemoMode {
     /// Draws the panel offscreen and saves it. An app can always draw its own views, so this works without
     /// Screen Recording permission.
     static func snapshot(model: UsageModel, updater: Updater, to url: URL) {
+        if CommandLine.arguments.contains("--forecast-demo") {
+            let details = VStack(alignment: .leading, spacing: 14) {
+                ForEach(model.forecasts, id: \.key) { forecast in
+                    ToolCard(provider: forecast.key.provider, forecasts: [forecast], now: Date(),
+                             chartKey: forecast.key)
+                }
+            }.padding(14).frame(width: 360)
+            render(details, to: url.deletingPathExtension().appendingPathExtension("forecasts.png"))
+        }
         let usageURL = url.deletingPathExtension().appendingPathExtension("usage.png")
         render(UsageView(model: model).frame(width: 900, height: 850), to: usageURL)
         let panes: [(String, AnyView)] = [
