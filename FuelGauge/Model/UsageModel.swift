@@ -9,6 +9,7 @@ import Observation
 @Observable
 final class UsageModel {
     private(set) var forecasts: [Forecast] = []
+    private(set) var forecastHistory: ForecastHistory
     private(set) var usageEvents: [UsageEvent] = []
     private(set) var usageWarnings: [String] = []
     private(set) var scanningUsage = false
@@ -44,6 +45,7 @@ final class UsageModel {
     init(supportFolder: URL = Brand.supportFolder, readsLiveData: Bool = true,
          resetCredits: ResetCredits? = nil) {
         store = ReadingStore(folder: supportFolder.appending(path: "Readings"))
+        forecastHistory = ForecastHistory(folder: supportFolder)
         usageCacheURL = supportFolder.appending(path: "usage-history-v1.json")
         codexStateURL = supportFolder.appending(path: "codex-state.json")
         let state = (try? Data(contentsOf: codexStateURL))
@@ -86,10 +88,12 @@ final class UsageModel {
         let grokBot = grokBot
         let store = store
         let codexStateURL = codexStateURL
+        let forecastHistory = forecastHistory, recordsForecasts = readsLiveData
+        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
         // Demo data stands in for a set-up Mac, so it doesn't ask to set up Claude Code.
         claudeStatusLine = readsLiveData ? claude.state : .on
         Task {
-            let (readings, updatedCodex) = await Task.detached(priority: .utility) {
+            let (updatedForecasts, updatedCodex, history, refreshedAt) = await Task.detached(priority: .utility) {
                 var polled = codex
                 var fresh: [Reading] = []
                 if readsCodex { fresh += polled.poll() }
@@ -100,23 +104,35 @@ final class UsageModel {
                 var kept = codex
                 if (try? store.append(fresh)) != nil {
                     kept = polled
-                    if readsCodex, let data = try? JSONEncoder().encode(polled.state) {
-                        try? FileManager.default.createDirectory(
-                            at: codexStateURL.deletingLastPathComponent(), withIntermediateDirectories: true
-                        )
-                        try? data.write(to: codexStateURL, options: .atomic)
-                    }
+                    if readsCodex { Self.saveCodexState(polled.state, to: codexStateURL) }
                 }
-                let since = Date().addingTimeInterval(-Self.history)
-                return (store.load(since: since).filter { enabled.contains($0.provider) }, kept)
+                let now = Date()
+                let readings = store.load(since: now.addingTimeInterval(-Self.history))
+                    .filter { enabled.contains($0.provider) }
+                let forecasts = ForecastEngine.forecasts(from: readings, now: now).filter {
+                    $0.verdict != .reset || $0.resetsAt >= now.addingTimeInterval(-24 * 3600)
+                }
+                var history = forecastHistory
+                if recordsForecasts {
+                    history.refresh(forecasts: forecasts, readings: readings, now: now, appVersion: appVersion)
+                }
+                return (forecasts, kept, history, now)
             }.value
             self.codex = updatedCodex
-            forecasts = ForecastEngine.forecasts(from: readings).filter { !isStale($0) }
-            updatedAt = Date()
+            forecasts = updatedForecasts
+            self.forecastHistory = history
+            updatedAt = refreshedAt
             isRefreshing = false
             onChange?()
             onRefresh?(forecasts)
         }
+    }
+
+    private nonisolated static func saveCodexState(_ state: CodexLogReader.State, to url: URL) {
+        guard let data = try? JSONEncoder().encode(state) else { return }
+        try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(),
+                                                withIntermediateDirectories: true)
+        try? data.write(to: url, options: .atomic)
     }
 
     var visibleUsage: [UsageEvent] {
@@ -155,6 +171,10 @@ final class UsageModel {
         usageEvents = events
         usageUpdatedAt = Date()
     }
+
+    func setDemoForecastHistory(_ journal: ForecastJournal, now: Date) {
+        forecastHistory.summarize(journal, now: now)
+    }
     #endif
 
     func refreshCodexResets(force: Bool = false) {
@@ -179,11 +199,6 @@ final class UsageModel {
             codexResetsCheckedAt = credits == nil ? nil : Date()
             onChange?()
         }
-    }
-
-    /// A window that reset more than a day ago, with no reading since, isn't worth a card.
-    private func isStale(_ forecast: Forecast) -> Bool {
-        forecast.verdict == .reset && forecast.resetsAt < Date().addingTimeInterval(-24 * 3600)
     }
 
     /// The forecast that matters most: one that runs out soonest, else the fullest.
