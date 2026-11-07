@@ -8,6 +8,8 @@ public enum ForecastText {
         switch forecast.verdict {
         case .learning:
             "Learning your pace"
+        case .stale:
+            "Waiting for a reliable reading"
         case .limitReached:
             "Out until \(time(forecast.resetsAt, now: now))"
         case .reset:
@@ -45,6 +47,8 @@ public enum ForecastText {
         }
         if active.isEmpty { return "No readings yet" }
         if active.allSatisfy({ $0.verdict == .learning }) { return "Learning your pace" }
+        if active.contains(where: { $0.verdict == .stale }) { return "Some tools need fresh readings" }
+        if active.contains(where: { $0.verdict == .learning }) { return "Some tools are still learning" }
         return "Everything makes it to reset"
     }
 
@@ -82,6 +86,8 @@ public enum ForecastText {
         case .learning:
             let needed = duration(ForecastEngine.minimumCoverage(windowMinutes: forecast.windowMinutes))
             return "A forecast needs \(needed) of readings while you work."
+        case .stale:
+            return "Open the tool and use it to refresh its limits."
         case .limitReached, .reset:
             return nil
         case .makesIt, .runsOut:
@@ -122,6 +128,7 @@ public enum ForecastText {
         let used = percent(forecast.usedPercent)
         switch forecast.verdict {
         case .learning: return "\(label) \(used) learning"
+        case .stale: return "\(label) \(used) stale"
         case .limitReached: return "\(label) out til \(time(forecast.resetsAt, now: now))"
         case .reset: return "\(label) reset"
         case .makesIt: return "\(label) \(used) ok"

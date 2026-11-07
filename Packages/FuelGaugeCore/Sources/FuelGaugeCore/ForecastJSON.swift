@@ -26,6 +26,9 @@ public struct ForecastJSON: Encodable {
         lastReadingAt = forecast.lastReadingAt
         summary = ForecastText.headline(forecast, now: now)
         switch forecast.verdict {
+        case .stale:
+            verdict = "stale"
+            projectedPercentAtReset = nil
         case .learning:
             verdict = "learning"
             projectedPercentAtReset = nil

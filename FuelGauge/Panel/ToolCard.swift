@@ -145,7 +145,7 @@ struct WindowRow: View {
         case .limitReached: .red
         case .runsOut: .orange
         case .makesIt: .green
-        case .learning, .reset: .secondary
+        case .learning, .stale, .reset: .secondary
         }
     }
 }

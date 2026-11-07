@@ -77,7 +77,7 @@ struct PanelView: View {
         case .runsOut: "exclamationmark.triangle.fill"
         case .makesIt: "checkmark.circle"
         case .reset: "arrow.clockwise"
-        case .learning, nil: "clock"
+        case .learning, .stale, nil: "clock"
         }
     }
 
