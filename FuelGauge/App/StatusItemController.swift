@@ -12,6 +12,7 @@ final class StatusItemController {
     private var hosting: NSHostingController<PanelView>?
 
     init(model: UsageModel, openSettings: @escaping () -> Void, openUsage: @escaping () -> Void,
+         openForecasts: @escaping () -> Void,
          openResetSettings: @escaping () -> Void,
          checkForUpdates: @escaping () -> Void) {
         self.model = model
@@ -32,6 +33,9 @@ final class StatusItemController {
         }, openUsage: { [weak popover] in
             popover?.performClose(nil)
             openUsage()
+        }, openForecasts: { [weak popover] in
+            popover?.performClose(nil)
+            openForecasts()
         })
         let hosting = NSHostingController(rootView: panel)
         hosting.sizingOptions = .preferredContentSize

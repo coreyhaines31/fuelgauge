@@ -22,6 +22,20 @@ The panel may also show a separate conditional estimate: **If you keep this sess
 
 Schedule projections integrate the expected consumption in 15-minute steps, so the chart can flatten through learned quiet hours. These are point estimates. The recent-pace method's fastest/slowest range remains a comparison of averaging windows, not a calibrated confidence interval. Probability estimates and calibrated ranges are not implemented.
 
+## Live prediction history
+
+Open **Forecast details** in the menu bar panel to see the current method, the provider's latest reading time, and the schedule's four learning requirements. Learning and recording are on automatically for tracked providers. The reading time is separate from the app's refresh time.
+
+While the app runs, it freezes the first eligible forecast for each limit in each clock hour. The record includes its issue time, source reading, app version, method, verdict, and predictions 1, 6, and 24 hours ahead. Both Fuel Gauge's adaptive prediction and the original recent-pace baseline use the same information available then. Stale, reset, and already-exhausted limits do not create records; learning forecasts can record an unavailable estimate. Targets at or beyond the known reset are marked ineligible. CLI-only use does not record predictions.
+
+An outcome is scored only when the running app receives a reliable reading within 15 minutes after the target, with a source timestamp in that same interval. The frozen estimate is evaluated at the reading's actual timestamp, including exhaustion caps. Waking the Mac later or importing old readings cannot fill missed outcomes. Resets, sustained usage corrections, and unresolved contradictions are excluded. Once evaluated, an outcome is not rewritten by later readings.
+
+The view compares the methods' mean absolute error in **percentage points**, on identical paired outcomes from the last 30 days. Each horizon needs at least 20 pairs across three local issue dates before showing a score. This is a minimum reporting threshold, not a claim of statistical confidence. Observation coverage shows pending, missed, conflicting, reset/correction, and beyond-reset targets separately, along with each method's availability and how many pairs used learned hours. When Fuel Gauge uses recent pace, equal scores are expected.
+
+Hourly comparisons overlap. Changes in your behavior after a warning can also affect results, and the scores describe forecasts as issued across app versions. They are not probabilities or calibrated confidence intervals. No past history is imported as live prediction evidence.
+
+Records stay in `~/Library/Application Support/Fuel Gauge/forecast-history-v1.json`, bounded to 60 days and 10,000 records. Updates are atomic and locked, unchanged data is not rewritten, and an unreadable or unsupported file is preserved with a visible recording warning. This file contains quota readings and predictions, not prompts, responses, tokens, or credentials.
+
 ## Historical replay
 
 ```sh
