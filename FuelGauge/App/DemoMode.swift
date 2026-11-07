@@ -95,7 +95,17 @@ enum DemoMode {
     /// Draws the panel offscreen and saves it. An app can always draw its own views, so this works without
     /// Screen Recording permission.
     static func snapshot(model: UsageModel, updater: Updater, to url: URL) {
+        let detailsURL = url.deletingPathExtension().appendingPathExtension("details.png")
+        render(ForecastDetailsView(model: model).frame(width: 760, height: 900), to: detailsURL)
         if CommandLine.arguments.contains("--forecast-demo") {
+            model.setDemoForecastHistory(ForecastDemo.journal(now: Date()), now: Date())
+            let learnedURL = url.deletingPathExtension().appendingPathExtension("learned.png")
+            let key = model.forecasts.first(where: { $0.key.provider == .codex })?.key.id ?? ""
+            render(ForecastDetailsView(model: model, selectedKey: key).frame(width: 760, height: 900), to: learnedURL)
+            let staleURL = url.deletingPathExtension().appendingPathExtension("stale.png")
+            let staleKey = model.forecasts.first(where: { $0.verdict == .stale })?.key.id ?? ""
+            render(ForecastDetailsView(model: model, selectedKey: staleKey)
+                .frame(width: 760, height: 900), to: staleURL)
             let details = VStack(alignment: .leading, spacing: 14) {
                 ForEach(model.forecasts, id: \.key) { forecast in
                     ToolCard(provider: forecast.key.provider, forecasts: [forecast], now: Date(),

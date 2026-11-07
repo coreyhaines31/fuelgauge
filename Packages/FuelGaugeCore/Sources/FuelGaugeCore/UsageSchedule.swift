@@ -24,16 +24,19 @@ struct UsageSchedule {
     private let calendar: Calendar
     private(set) var observedDays = 0
     private(set) var recentMultiplier = 1.0
+    private(set) var evidence = ScheduleEvidence(ageDays: 0, observedHours: 0, observedDays: 0, supportedHours: 0)
 
     init?(_ intervals: [ReadingTimeline.Interval], now: Date, calendar: Calendar) {
+        self.init(observing: intervals, now: now, calendar: calendar)
+        if !evidence.isReady { return nil }
+    }
+
+    init(observing intervals: [ReadingTimeline.Interval], now: Date, calendar: Calendar) {
         self.calendar = calendar
-        guard let first = intervals.first, now.timeIntervalSince(first.start) >= 14 * 86400 else { return nil }
         let cutoff = now.addingTimeInterval(-14 * 86400)
         let knownHours = intervals.reduce(0.0) { total, interval in
             total + max(0, interval.end.timeIntervalSince(max(interval.start, cutoff))) / 3600
         }
-        // Calendar age alone is insufficient: require observations for at least half of the last fortnight.
-        guard knownHours >= 7 * 24 else { return nil }
         var days: Set<Date> = []
         for interval in intervals {
             var start = interval.start
@@ -51,8 +54,10 @@ struct UsageSchedule {
             }
         }
         observedDays = days.count
-        guard days.count >= 7, pooled.filter(\.supported).count >= 12 else { return nil }
-        recentMultiplier = trend(intervals, now: now)
+        evidence = ScheduleEvidence(ageDays: intervals.first.map { now.timeIntervalSince($0.start) / 86400 } ?? 0,
+                                    observedHours: knownHours, observedDays: days.count,
+                                    supportedHours: pooled.filter(\.supported).count)
+        if evidence.isReady { recentMultiplier = trend(intervals, now: now) }
     }
 
     func rate(at date: Date) -> Double? {

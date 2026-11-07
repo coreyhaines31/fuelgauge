@@ -8,6 +8,7 @@ struct PanelView: View {
     let checkForUpdates: () -> Void
     var openResetSettings: (() -> Void)?
     var openUsage: () -> Void = {}
+    var openForecasts: () -> Void = {}
     @State private var setupError: String?
     @State private var cardsHeight: CGFloat = 400
 
@@ -176,6 +177,8 @@ struct PanelView: View {
     private var footer: some View {
         HStack {
             Button("View usage", action: openUsage)
+                .buttonStyle(.plain).foregroundStyle(Color.accentColor)
+            Button("Forecast details", action: openForecasts)
                 .buttonStyle(.plain).foregroundStyle(Color.accentColor)
             Spacer()
             Menu {

@@ -36,6 +36,25 @@ import Testing
         #expect(UsageSchedule(scattered, now: start.addingTimeInterval(21 * 86400), calendar: calendar) == nil)
     }
 
+    @Test func evidenceExplainsMissingCoverageWithoutChangingEligibility() {
+        let short = intervals(days: 5)
+        let learning = UsageSchedule(observing: short, now: short.last!.end, calendar: calendar).evidence
+        #expect(learning.ageDays == 5)
+        #expect(learning.observedHours == 120)
+        #expect(learning.observedDays == 5)
+        #expect(learning.supportedHours == 24)
+        #expect(!learning.isReady)
+        let data = intervals()
+        let ready = UsageSchedule(observing: data, now: data.last!.end, calendar: calendar).evidence
+        #expect(ready.isReady)
+        #expect(ready.observedHours == 336)
+        let sparse = data.filter { $0.consumed > 0 }
+        let evidence = UsageSchedule(observing: sparse, now: data.last!.end, calendar: calendar).evidence
+        #expect(evidence.ageDays > 14)
+        #expect(evidence.observedHours < 168)
+        #expect(!evidence.isReady)
+    }
+
     @Test func respondsToRecentIntensityWithoutExtrapolatingAccelerationForever() throws {
         let data = intervals(recentRate: 6)
         let schedule = try #require(UsageSchedule(data, now: data.last!.end, calendar: calendar))

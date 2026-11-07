@@ -11,6 +11,10 @@ enum AdaptiveForecast {
         } ?? false
         guard var forecast = ForecastEngine.recentForecast(for: window, now: now,
                                                           windowStartAllowed: !correction) else { return nil }
+        let schedule = UsageSchedule(observing: timeline.intervals, now: now, calendar: calendar)
+        forecast.scheduleEvidence = schedule.evidence
+        forecast.scheduleStatus = scheduleStatus(forecast, correction: correction,
+                                                 evidence: schedule.evidence, now: now)
         if forecast.verdict == .reset { return forecast }
         let maximumAge: TimeInterval = (latest.windowMinutes ?? 10080) <= 300 ? 3600 : 6 * 3600
         if timeline.hasConflict || (now.timeIntervalSince(latest.at) > maximumAge && latest.usedPercent < 100) {
@@ -23,11 +27,16 @@ enum AdaptiveForecast {
            at < latest.resetsAt, at.timeIntervalSince(now) <= 5 * 3600 {
             forecast.sessionRunsOutAt = at
         }
-        guard (latest.windowMinutes ?? 10080) >= 1440,
-              !correction,
-              let schedule = UsageSchedule(timeline.intervals, now: now, calendar: calendar),
-              latest.resetsAt.timeIntervalSince(now) <= 35 * 86400 else { return forecast }
+        guard forecast.scheduleStatus == .ready else { return forecast }
         return project(forecast, schedule: schedule, activeRate: activeRate, now: now)
+    }
+
+    private static func scheduleStatus(_ forecast: Forecast, correction: Bool,
+                                       evidence: ScheduleEvidence, now: Date) -> Forecast.ScheduleStatus {
+        if (forecast.windowMinutes ?? 10080) < 1440 { return .shortWindow }
+        if correction { return .correction }
+        if forecast.resetsAt.timeIntervalSince(now) > 35 * 86400 { return .distantReset }
+        return evidence.isReady ? .ready : .collecting
     }
 
     private static func sessionRate(_ window: [Reading], now: Date) -> Double? {
@@ -51,7 +60,11 @@ enum AdaptiveForecast {
             let midpoint = at.addingTimeInterval(end.timeIntervalSince(at) / 2)
             let ahead = midpoint.timeIntervalSince(now) / 3600
             let trend = 1 + (schedule.recentMultiplier - 1) * exp(-ahead / 48)
-            guard let expectedRate = schedule.rate(at: midpoint) ?? forecast.ratePerHour else { return original }
+            guard let expectedRate = schedule.rate(at: midpoint) ?? forecast.ratePerHour else {
+                var fallback = original
+                fallback.scheduleStatus = .missingHours
+                return fallback
+            }
             let usual = expectedRate * trend
             let weight = activeRate.map { $0 > 0 ? exp(-ahead / 2) : 0 } ?? 0
             let rate = usual * (1 - weight) + (activeRate ?? 0) * weight
