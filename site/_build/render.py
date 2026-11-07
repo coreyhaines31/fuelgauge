@@ -111,6 +111,7 @@ def head(title, description, path):
   <link rel="stylesheet" href="{FONTS}">
   <link rel="stylesheet" href="/site.css">
   <script src="https://cdn.usefathom.com/script.js" data-site="ETCPQLNF" defer></script>
+  <script async src="https://tracerkit.com/t.js" data-key="tk_bsPe2rM_f5F7Q4G8"></script>
   <script src="https://ingest.getuserproof.com/sdk.js" data-site="eb2393e8-b6bf-405b-a82f-9adf86865677" defer></script>
 </head>
 <body>
