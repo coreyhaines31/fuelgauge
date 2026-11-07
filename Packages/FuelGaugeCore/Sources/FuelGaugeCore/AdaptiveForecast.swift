@@ -51,7 +51,8 @@ enum AdaptiveForecast {
             let midpoint = at.addingTimeInterval(end.timeIntervalSince(at) / 2)
             let ahead = midpoint.timeIntervalSince(now) / 3600
             let trend = 1 + (schedule.recentMultiplier - 1) * exp(-ahead / 48)
-            let usual = schedule.rate(at: midpoint, fallback: forecast.ratePerHour ?? 0) * trend
+            guard let expectedRate = schedule.rate(at: midpoint) ?? forecast.ratePerHour else { return original }
+            let usual = expectedRate * trend
             let weight = activeRate.map { $0 > 0 ? exp(-ahead / 2) : 0 } ?? 0
             let rate = usual * (1 - weight) + (activeRate ?? 0) * weight
             let next = used + rate * end.timeIntervalSince(at) / 3600

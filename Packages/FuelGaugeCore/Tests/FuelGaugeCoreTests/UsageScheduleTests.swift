@@ -19,12 +19,12 @@ import Testing
         let data = intervals()
         let now = try #require(data.last?.end)
         let schedule = try #require(UsageSchedule(data, now: now, calendar: calendar))
-        #expect(schedule.rate(at: start.addingTimeInterval(10 * 3600), fallback: 1) == 2)
-        #expect(schedule.rate(at: start.addingTimeInterval(22 * 3600), fallback: 1) == 0)
-        #expect(schedule.rate(at: start.addingTimeInterval((5 * 24 + 10) * 3600), fallback: 1) == 0)
+        #expect(schedule.rate(at: start.addingTimeInterval(10 * 3600)) == 2)
+        #expect(schedule.rate(at: start.addingTimeInterval(22 * 3600)) == 0)
+        #expect(schedule.rate(at: start.addingTimeInterval((5 * 24 + 10) * 3600)) == 0)
         let overnight = data.map { ReadingTimeline.Interval(start: $0.start, end: $0.end, consumed: 3) }
         let alwaysBusy = try #require(UsageSchedule(overnight, now: now, calendar: calendar))
-        #expect(abs(alwaysBusy.rate(at: now, fallback: 0) - 3) < 0.001)
+        #expect(abs(try #require(alwaysBusy.rate(at: now)) - 3) < 0.001)
     }
 
     @Test func sparseAndShortHistoriesDoNotInventASchedule() {
@@ -54,7 +54,7 @@ import Testing
         }
         let schedule = try #require(UsageSchedule(data, now: data.last!.end, calendar: local))
         let morning = try Date("2026-11-09T17:00:00Z", strategy: .iso8601)
-        #expect(schedule.rate(at: morning, fallback: 1) == 2)
-        #expect(schedule.rate(at: morning.addingTimeInterval(-3600), fallback: 1) == 0)
+        #expect(schedule.rate(at: morning) == 2)
+        #expect(schedule.rate(at: morning.addingTimeInterval(-3600)) == 0)
     }
 }
