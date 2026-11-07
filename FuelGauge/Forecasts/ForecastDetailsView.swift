@@ -27,7 +27,7 @@ struct ForecastDetailsView: View {
                         current(forecast, now: context.date)
                         ForecastLearningView(forecast: forecast)
                         ForecastAccuracyView(results: model.forecastHistory.accuracy[forecast.key]
-                            ?? [1, 6, 24].map { ForecastAccuracy(hours: $0) })
+                            ?? [1, 6, 24].map { ForecastAccuracy(hours: $0) }, windowMinutes: forecast.windowMinutes)
                         recording(forecast)
                     } else {
                         ContentUnavailableView("Waiting for usage readings", systemImage: "clock",

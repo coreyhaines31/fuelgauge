@@ -70,7 +70,8 @@ struct ForecastLearningView: View {
                 Text(title)
             }
             .font(.caption).foregroundStyle(.secondary)
-            Text("\(Int(value)) \(unit) · need \(required)").font(.callout.monospacedDigit())
+            let label = Int(value) == 1 && unit.hasSuffix("s") ? String(unit.dropLast()) : unit
+            Text("\(Int(value)) \(label) · need \(required)").font(.callout.monospacedDigit())
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }

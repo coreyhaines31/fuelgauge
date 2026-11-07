@@ -3,6 +3,11 @@ import SwiftUI
 
 struct ForecastAccuracyView: View {
     let results: [ForecastAccuracy]
+    var windowMinutes: Int?
+
+    private var eligible: [ForecastAccuracy] {
+        results.filter { $0.hours * 60 < (windowMinutes ?? Int.max) }
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -26,12 +31,12 @@ struct ForecastAccuracyView: View {
                         Text("\(result.hours) hour\(result.hours == 1 ? "" : "s")")
                         Text(error(result.adaptiveMAE))
                         Text(error(result.recentMAE))
-                        Text("\(result.paired) pairs · \(result.pairedDays) days")
+                        Text(result.hours * 60 >= (windowMinutes ?? Int.max) ? "Beyond this window" : evidence(result))
                     }
                     .font(.callout.monospacedDigit())
                 }
             }
-            if results.contains(where: { !$0.hasEnoughEvidence }) {
+            if eligible.contains(where: { !$0.hasEnoughEvidence }) {
                 Text("Collecting outcomes · Each row needs \(ForecastAccuracy.requiredPairs) paired observations "
                      + "across \(ForecastAccuracy.requiredDays) days before showing an error score.")
                     .font(.callout)
@@ -65,5 +70,11 @@ struct ForecastAccuracyView: View {
 
     private func error(_ value: Double?) -> String {
         value.map { $0.formatted(.number.precision(.fractionLength(1))) + " pp" } ?? "—"
+    }
+
+    private func evidence(_ result: ForecastAccuracy) -> String {
+        let pairs = "\(result.paired) \(result.paired == 1 ? "pair" : "pairs")"
+        let days = "\(result.pairedDays) \(result.pairedDays == 1 ? "day" : "days")"
+        return "\(pairs) · \(days)"
     }
 }
