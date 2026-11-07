@@ -8,6 +8,10 @@ case "$FAKE_MODE:$1" in
   short:status)
     echo '[{"tool":"codex","window":"weekly","verdict":"runs_out","summary":"Runs out around 3:40p","used_percent":80,"resets_at":"2026-10-30T00:00:00Z","runs_out_at":"2026-10-29T22:40:00Z","last_reading_at":"2026-10-29T17:25:53Z"}]'
     exit 2 ;;
+  stale:status)
+    echo '[{"tool":"codex","window":"weekly","verdict":"stale","forecast_basis":"recent"}]' ;;
+  schedule:status)
+    echo '[{"tool":"claude","window":"weekly","verdict":"makes_it","forecast_basis":"schedule","session_runs_out_at":"2026-10-29T22:40:00Z"}]' ;;
   empty:status) echo '[]' ;;
   ok:history)
     echo '{"at":"2026-10-29T10:00:01Z","limit":"five_hour","resets_at":"2026-10-29T14:00:00Z","tool":"claude","used_percent":"5.0"}'
