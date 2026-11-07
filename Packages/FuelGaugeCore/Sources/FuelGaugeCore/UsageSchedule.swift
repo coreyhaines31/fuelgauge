@@ -28,6 +28,12 @@ struct UsageSchedule {
     init?(_ intervals: [ReadingTimeline.Interval], now: Date, calendar: Calendar) {
         self.calendar = calendar
         guard let first = intervals.first, now.timeIntervalSince(first.start) >= 14 * 86400 else { return nil }
+        let cutoff = now.addingTimeInterval(-14 * 86400)
+        let knownHours = intervals.reduce(0.0) { total, interval in
+            total + max(0, interval.end.timeIntervalSince(max(interval.start, cutoff))) / 3600
+        }
+        // Calendar age alone is insufficient: require observations for at least half of the last fortnight.
+        guard knownHours >= 7 * 24 else { return nil }
         var days: Set<Date> = []
         for interval in intervals {
             var start = interval.start

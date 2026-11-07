@@ -32,6 +32,8 @@ import Testing
         #expect(UsageSchedule(short, now: short.last!.end, calendar: calendar) == nil)
         let sparse = intervals().filter { $0.consumed > 0 }
         #expect(UsageSchedule(sparse, now: start.addingTimeInterval(21 * 86400), calendar: calendar) == nil)
+        let scattered = intervals().enumerated().filter { index, _ in index < 48 || index % 24 == 10 }.map(\.element)
+        #expect(UsageSchedule(scattered, now: start.addingTimeInterval(21 * 86400), calendar: calendar) == nil)
     }
 
     @Test func respondsToRecentIntensityWithoutExtrapolatingAccelerationForever() throws {
