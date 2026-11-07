@@ -39,6 +39,9 @@ public struct Forecast: Sendable, Equatable {
     public var basis: Basis = .recent
     public var projection: [Point] = []
     public var sessionRunsOutAt: Date?
+    public enum ScheduleStatus: Sendable { case collecting, shortWindow, correction, missingHours, distantReset, ready }
+    public var scheduleEvidence: ScheduleEvidence?
+    public var scheduleStatus: ScheduleStatus = .collecting
 
     public var windowName: String { WindowName.of(windowMinutes: windowMinutes) }
 
