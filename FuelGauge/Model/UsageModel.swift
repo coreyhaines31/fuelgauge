@@ -39,7 +39,7 @@ final class UsageModel {
     private let readsLiveData: Bool
 
     /// How much history forecasts and charts look at.
-    nonisolated static let history: TimeInterval = 8 * 24 * 3600
+    nonisolated static let history = ForecastEngine.historyDuration
 
     init(supportFolder: URL = Brand.supportFolder, readsLiveData: Bool = true,
          resetCredits: ResetCredits? = nil) {

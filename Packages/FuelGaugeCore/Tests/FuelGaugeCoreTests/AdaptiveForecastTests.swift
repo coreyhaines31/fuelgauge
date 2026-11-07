@@ -51,6 +51,18 @@ import Testing
         #expect(expected == ForecastEngine.forecast(for: future, now: now, method: .adaptive, calendar: .utc))
     }
 
+    @Test func defaultForecastsAndJSONExplainTheirBasisAndConditionalSessionRisk() throws {
+        let now = ForecastSamples.start.addingTimeInterval((28 * 24 + 10) * 3600)
+        let data = ForecastSamples.weekdays(until: now, mondayRate: 5)
+        let forecast = try #require(ForecastEngine.forecast(for: data, now: now, calendar: .utc))
+        #expect(forecast.basis == .schedule)
+        let json = try #require(String(data: ForecastJSON.encode([forecast], now: now), encoding: .utf8))
+        #expect(json.contains("\"forecast_basis\" : \"schedule\""))
+        #expect(json.contains("\"session_runs_out_at\""))
+        #expect(ForecastText.context(forecast, now: now)?.contains("If you keep") == true)
+        #expect(ForecastText.pace(forecast, now: now)?.contains("usual hours") == true)
+    }
+
     @Test func aCorrectionDoesNotInferAZeroAtTheScheduledWindowStart() throws {
         let now = ForecastSamples.start.addingTimeInterval(4 * 3600)
         let readings = [(0.0, 80.0), (3.5, 2), (3.75, 2), (4.0, 2)].map { hour, used in

@@ -51,7 +51,7 @@ func currentForecasts(now: Date = Date()) -> [Forecast] {
     if enabled.contains(.grokBot) {
         try? store.append(GrokBotReader().read(), now: now)
     }
-    let readings = store.load(since: now.addingTimeInterval(-8 * 24 * 3600))
+    let readings = store.load(since: now.addingTimeInterval(-ForecastEngine.historyDuration))
         .filter { enabled.contains($0.provider) }
     return ForecastEngine.forecasts(from: readings, now: now).filter {
         !($0.verdict == .reset && $0.resetsAt < now.addingTimeInterval(-24 * 3600))
@@ -75,6 +75,7 @@ func status() -> Never {
             print("\(name): \(ForecastText.headline(forecast, now: now))")
             print("  \(ForecastText.usage(forecast, now: now))")
             if let pace = ForecastText.pace(forecast) { print("  \(pace)") }
+            if let scenario = ForecastText.sessionScenario(forecast, now: now) { print("  \(scenario)") }
             if let range = ForecastText.range(forecast, now: now) { print("  \(range)") }
         }
     }
@@ -117,7 +118,7 @@ func statusLine() -> Never {
     }
     guard Tracking.isEnabled(.claude) else { exit(0) }
     try? store.append(ClaudeStatusLine.readings(from: input, at: now), now: now)
-    let readings = store.load(since: now.addingTimeInterval(-8 * 24 * 3600), provider: .claude)
+    let readings = store.load(since: now.addingTimeInterval(-ForecastEngine.historyDuration), provider: .claude)
     let forecasts = ForecastEngine.forecasts(from: readings, now: now).filter { $0.verdict != .reset }
     if let strip = StatusLineStrip.render(forecasts, now: now) {
         print(strip)

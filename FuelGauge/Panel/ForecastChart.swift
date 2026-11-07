@@ -96,6 +96,9 @@ struct ForecastChart: View {
     }
 
     private var projection: [Point] {
+        if !forecast.projection.isEmpty {
+            return forecast.projection.map { Point(date: $0.at, used: $0.usedPercent) }
+        }
         let from = Point(date: now, used: forecast.usedPercent)
         switch forecast.verdict {
         case .runsOut(let at, _, _):

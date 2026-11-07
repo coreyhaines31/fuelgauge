@@ -63,7 +63,7 @@ public enum ForecastEngine {
     }
 
     /// One forecast per limit in `readings`, in a stable order.
-    public static func forecasts(from readings: [Reading], now: Date = Date(), method: Method = .recent,
+    public static func forecasts(from readings: [Reading], now: Date = Date(), method: Method = .adaptive,
                                  calendar: Calendar = .current) -> [Forecast] {
         Dictionary(grouping: readings, by: \.key)
             .compactMap { forecast(for: $0.value, now: now, method: method, calendar: calendar) }
@@ -77,7 +77,7 @@ public enum ForecastEngine {
     }
 
     /// The forecast for one limit's readings.
-    public static func forecast(for readings: [Reading], now: Date = Date(), method: Method = .recent,
+    public static func forecast(for readings: [Reading], now: Date = Date(), method: Method = .adaptive,
                                 calendar: Calendar = .current) -> Forecast? {
         switch method {
         case .recent: recentForecast(for: readings, now: now)

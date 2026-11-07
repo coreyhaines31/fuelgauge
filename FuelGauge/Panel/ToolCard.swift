@@ -82,6 +82,12 @@ struct WindowRow: View {
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(.primary)
                     .fixedSize(horizontal: false, vertical: true)
+                if let context = ForecastText.context(forecast, now: now) {
+                    Text(context)
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
         }
     }

@@ -15,8 +15,12 @@ public struct ForecastJSON: Encodable {
     public let budgetPerHour: Double?
     public let lastReadingAt: Date
     public let summary: String
+    public let forecastBasis: String
+    public let sessionRunsOutAt: Date?
 
     public init(_ forecast: Forecast, now: Date = Date()) {
+        forecastBasis = forecast.basis.rawValue
+        sessionRunsOutAt = forecast.sessionRunsOutAt
         tool = forecast.key.provider.rawValue
         window = forecast.windowName.lowercased()
         usedPercent = forecast.usedPercent

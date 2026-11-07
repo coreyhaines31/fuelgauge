@@ -91,6 +91,10 @@ public enum ForecastText {
         case .limitReached, .reset:
             return nil
         case .makesIt, .runsOut:
+            if forecast.basis == .schedule {
+                return "Based on your usual hours and recent activity. "
+                    + "\(percent(max(0, 100 - forecast.usedPercent))) left until reset."
+            }
             guard let rate = forecast.ratePerHour, let budget = forecast.budgetPerHour else { return nil }
             let left = max(0, 100 - forecast.usedPercent)
             let using: String
@@ -110,6 +114,17 @@ public enum ForecastText {
             }
             return "\(using) You can use up to \(rate: budget) an hour and still make it."
         }
+    }
+
+    public static func sessionScenario(_ forecast: Forecast, now: Date = Date()) -> String? {
+        guard !forecast.isShort, let at = forecast.sessionRunsOutAt else { return nil }
+        return "If you keep this session's pace: out around \(time(at, now: now))."
+    }
+
+    public static func context(_ forecast: Forecast, now: Date = Date()) -> String? {
+        if forecast.verdict == .stale { return "Open the tool and use it to refresh its limits." }
+        if let session = sessionScenario(forecast, now: now) { return session }
+        return forecast.basis == .schedule ? "Based on your usual hours and recent activity." : nil
     }
 
     /// The range behind a run-out time: "Between 2:50p and 4:30p at your recent pace."
