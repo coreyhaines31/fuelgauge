@@ -7,6 +7,7 @@ fuelgauge: will your Claude Code, Codex, and Grok Bot limits last until they res
 Usage:
   fuelgauge status [--json]
   fuelgauge history [--days 1] [--json]
+  fuelgauge backtest [--days 7] [--json]
   fuelgauge statusline
   fuelgauge install-statusline
   fuelgauge uninstall-statusline
@@ -15,6 +16,7 @@ Commands:
   status                Each limit: percent used, when it resets, and whether it lasts until then.
                         Exits 2 when a limit is forecast to run out before it resets, or already has.
   history               The readings behind the forecasts, per limit.
+  backtest              Compare recent and adaptive forecasts against saved observations. Read-only.
   statusline            Claude Code's status line command: reads Claude's limits from stdin, saves
                         them, and prints the forecast. Set up with install-statusline.
   install-statusline    Make Fuel Gauge Claude Code's status line. An existing status line keeps
@@ -221,6 +223,8 @@ case "status", nil:
     status()
 case "history":
     history()
+case "backtest":
+    backtest()
 case "statusline":
     statusLine()
 case "install-statusline":
