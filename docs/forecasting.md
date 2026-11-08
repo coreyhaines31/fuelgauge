@@ -26,6 +26,14 @@ These bars are the usual hourly averages before recent-activity and session adju
 
 The panel may also show a separate conditional estimate: **If you keep this session's pace**. This estimates what happens if the current observed rate continues, up to five hours ahead. It does not replace the normal forecast or automatically trigger an exhaustion notification.
 
+## Session planning
+
+**Forecast details → Plan your next session** compares all tracked limits for the selected provider, including short and weekly windows. Choose another 30 minutes, one hour, two hours, or four hours at the current session's pace. The planner shows projected usage and the first tracked limit expected to run out. It is available automatically and does not change the normal forecast, notifications, or prediction history.
+
+The planner uses the same active-session pace as the conditional estimate above: at least two readings in the last hour, at least ten minutes of coverage, no gap longer than thirty minutes, and a latest reading no more than fifteen minutes old. Quiet usage does not establish a pace for future work; missing, contradictory, or old readings remain unknown. An observed exhausted limit stays exhausted until reset even without fresh activity.
+
+Projections start from the latest reported percentage and assume the measured session pace continues. Usage is capped at 100%, and each projection stops at its quota reset. A plan that reaches a reset leaves the following window unknown rather than assuming its allowance or usage. Saved reset credits are never assumed to be redeemed. Reaching 100% at the session end is shown as exhaustion; reaching it exactly at the quota reset is not reported as running out early. These are conditional scenarios, not guarantees or calibrated probabilities.
+
 ## Forecast warnings
 
 An early-exhaustion notification requires two distinct source readings that both support a run-out forecast at least 30 minutes before reset. Both readings must be no more than 15 minutes old when the warning fires and belong to the same quota window and window length. Repeated refreshes of a cached reading cannot confirm a warning.

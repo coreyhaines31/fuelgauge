@@ -99,6 +99,7 @@ enum DemoMode {
         render(ForecastDetailsView(model: model).frame(width: 760, height: 900), to: detailsURL)
         if CommandLine.arguments.contains("--forecast-demo") {
             ForecastTimelineDemo.save(next: url)
+            SessionPlanDemo.save(next: url)
             saveSchedules(model: model, next: url)
             model.setDemoForecastHistory(ForecastDemo.journal(now: Date()), now: Date())
             let learnedURL = url.deletingPathExtension().appendingPathExtension("learned.png")
