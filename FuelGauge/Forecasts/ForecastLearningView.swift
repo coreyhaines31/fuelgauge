@@ -13,25 +13,39 @@ struct ForecastLearningView: View {
             }
             Text(explanation).font(.callout).foregroundStyle(.secondary)
             if forecast.scheduleStatus != .shortWindow, let evidence = forecast.scheduleEvidence {
-                Grid(alignment: .leading, horizontalSpacing: 28, verticalSpacing: 12) {
-                    GridRow {
-                        progress("History", value: evidence.ageDays,
-                                 required: ScheduleEvidence.requiredAgeDays, unit: "days")
-                        progress("Observed in the last 14 days", value: evidence.observedHours,
-                                 required: ScheduleEvidence.requiredObservedHours, unit: "hours")
+                if let profile = forecast.scheduleProfile, profile.hours.contains(where: { $0.ratePerHour != nil }) {
+                    ScheduleProfileView(profile: profile, isApplied: forecast.basis == .schedule)
+                    if evidence.isReady {
+                        DisclosureGroup("Learning requirements") { requirements(evidence).padding(.top, 8) }
+                            .font(.callout)
+                    } else {
+                        requirements(evidence)
                     }
-                    GridRow {
-                        progress("Dates with observed intervals", value: Double(evidence.observedDays),
-                                 required: ScheduleEvidence.requiredObservedDays, unit: "days")
-                        progress("Supported hours of the day", value: Double(evidence.supportedHours),
-                                 required: ScheduleEvidence.requiredSupportedHours, unit: "of 24 hours")
-                    }
+                } else {
+                    requirements(evidence)
                 }
             }
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12))
+    }
+
+    private func requirements(_ evidence: ScheduleEvidence) -> some View {
+        Grid(alignment: .leading, horizontalSpacing: 28, verticalSpacing: 12) {
+            GridRow {
+                progress("History", value: evidence.ageDays,
+                         required: ScheduleEvidence.requiredAgeDays, unit: "days")
+                progress("Observed in the last 14 days", value: evidence.observedHours,
+                         required: ScheduleEvidence.requiredObservedHours, unit: "hours")
+            }
+            GridRow {
+                progress("Dates with observed intervals", value: Double(evidence.observedDays),
+                         required: ScheduleEvidence.requiredObservedDays, unit: "days")
+                progress("Supported hours of the day", value: Double(evidence.supportedHours),
+                         required: ScheduleEvidence.requiredSupportedHours, unit: "of 24 hours")
+            }
+        }
     }
 
     private var status: String {

@@ -13,6 +13,7 @@ enum AdaptiveForecast {
                                                           windowStartAllowed: !correction) else { return nil }
         let schedule = UsageSchedule(observing: timeline.intervals, now: now, calendar: calendar)
         forecast.scheduleEvidence = schedule.evidence
+        if (forecast.windowMinutes ?? 10080) >= 1440 { forecast.scheduleProfile = schedule.profile }
         forecast.scheduleStatus = scheduleStatus(forecast, correction: correction,
                                                  evidence: schedule.evidence, now: now)
         if forecast.verdict == .reset { return forecast }

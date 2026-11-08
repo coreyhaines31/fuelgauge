@@ -15,7 +15,9 @@ struct UsageSchedule {
             days.insert(day)
         }
 
-        var supported: Bool { days.count >= 2 && hours >= 2 }
+        var supported: Bool {
+            days.count >= ScheduleProfile.requiredDates && hours >= ScheduleProfile.requiredHours
+        }
         var rate: Double { weight > 0 ? consumed / weight : 0 }
     }
 
@@ -23,7 +25,8 @@ struct UsageSchedule {
     private var pooled = Array(repeating: Bucket(), count: 24)
     private let calendar: Calendar
     private(set) var observedDays = 0
-    private(set) var recentMultiplier = 1.0
+    private(set) var recentActivity: ScheduleProfile.Activity?
+    var recentMultiplier: Double { recentActivity?.multiplier ?? 1 }
     private(set) var evidence = ScheduleEvidence(ageDays: 0, observedHours: 0, observedDays: 0, supportedHours: 0)
 
     init?(_ intervals: [ReadingTimeline.Interval], now: Date, calendar: Calendar) {
@@ -57,21 +60,40 @@ struct UsageSchedule {
         evidence = ScheduleEvidence(ageDays: intervals.first.map { now.timeIntervalSince($0.start) / 86400 } ?? 0,
                                     observedHours: knownHours, observedDays: days.count,
                                     supportedHours: pooled.filter(\.supported).count)
-        if evidence.isReady { recentMultiplier = trend(intervals, now: now) }
+        if evidence.isReady { recentActivity = trend(intervals, now: now) }
     }
 
     func rate(at date: Date) -> Double? {
-        let bucket = buckets[index(at: date)]
-        if bucket.supported { return bucket.rate }
-        let pool = pooled[calendar.component(.hour, from: date)]
-        return pool.supported ? pool.rate : nil
+        let day: ScheduleProfile.Day = calendar.isDateInWeekend(date) ? .weekend : .weekday
+        let (bucket, _) = selection(hour: calendar.component(.hour, from: date), day: day)
+        return bucket.supported ? bucket.rate : nil
+    }
+
+    var profile: ScheduleProfile {
+        let hours = ScheduleProfile.Day.allCases.flatMap { day in
+            (0..<24).map { hour in
+                let (bucket, source) = selection(hour: hour, day: day)
+                return ScheduleProfile.Hour(day: day, hour: hour, ratePerHour: bucket.supported ? bucket.rate : nil,
+                                            observedHours: bucket.hours, observedDates: bucket.days.count,
+                                            source: source)
+            }
+        }
+        return ScheduleProfile(hours: hours, timeZoneIdentifier: calendar.timeZone.identifier,
+                               recentActivity: recentActivity)
+    }
+
+    private func selection(hour: Int, day: ScheduleProfile.Day) -> (Bucket, ScheduleProfile.Source) {
+        let bucket = buckets[hour + (day == .weekend ? 24 : 0)]
+        if bucket.supported { return (bucket, .observed) }
+        let pool = pooled[hour]
+        return pool.supported ? (pool, .pooled) : (bucket, .unknown)
     }
 
     private func index(at date: Date) -> Int {
         calendar.component(.hour, from: date) + (calendar.isDateInWeekend(date) ? 24 : 0)
     }
 
-    private func trend(_ intervals: [ReadingTimeline.Interval], now: Date) -> Double {
+    private func trend(_ intervals: [ReadingTimeline.Interval], now: Date) -> ScheduleProfile.Activity {
         var actual = 0.0
         var expected = 0.0
         var coverage = 0.0
@@ -89,7 +111,6 @@ struct UsageSchedule {
                 start = end
             }
         }
-        guard coverage >= 12, expected >= 1 else { return 1 }
-        return min(2, max(0.5, actual / expected))
+        return ScheduleProfile.Activity(observedHours: coverage, actualUsage: actual, expectedUsage: expected)
     }
 }
