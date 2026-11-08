@@ -1,8 +1,8 @@
 import Foundation
 
 /// Decides which alerts to send for a refresh's forecasts: once per window when a limit is forecast to run
-/// out early, and once per window per usage threshold. A run-out forecast has to hold for two refreshes in a
-/// row, so one burst of work can't set it off. Pure, so it can be tested; the app posts what it returns.
+/// out early, and once per window per usage threshold. A run-out warning needs two distinct, recent source
+/// readings from the same window. Refreshing a cached reading cannot confirm it.
 public struct AlertPlanner: Sendable {
     public struct Settings: Sendable {
         public var alertWhenShort: Bool
@@ -17,16 +17,36 @@ public struct AlertPlanner: Sendable {
         }
     }
 
-    /// What carries over between refreshes. `fired` is saved across launches; `shortLastTime` lives in memory.
+    /// Only `fired` is saved across launches; pending confirmations live in memory.
     public struct State: Sendable, Equatable {
         /// Per limit and kind ("claude/five_hour|short", "claude/five_hour|80"), the reset time of the window
         /// that alert last fired for.
         public var fired: [String: Double]
-        public var shortLastTime: Set<LimitKey>
+        public var pendingShorts: [LimitKey: Confirmation]
 
-        public init(fired: [String: Double] = [:], shortLastTime: Set<LimitKey> = []) {
+        public init(fired: [String: Double] = [:], pendingShorts: [LimitKey: Confirmation] = [:]) {
             self.fired = fired
-            self.shortLastTime = shortLastTime
+            self.pendingShorts = pendingShorts
+        }
+    }
+
+    public struct Confirmation: Sendable, Equatable {
+        let readingAt: Date
+        let resetsAt: Date
+        let windowMinutes: Int?
+        let usedPercent: Double
+
+        init(_ forecast: Forecast) {
+            readingAt = forecast.lastReadingAt
+            resetsAt = forecast.resetsAt
+            windowMinutes = forecast.windowMinutes
+            usedPercent = forecast.usedPercent
+        }
+
+        func confirms(_ forecast: Forecast, now: Date) -> Bool {
+            forecast.lastReadingAt > readingAt && now.timeIntervalSince(readingAt) <= confirmationLifetime
+                && abs(resetsAt.timeIntervalSince(forecast.resetsAt)) <= sameWindow
+                && windowMinutes == forecast.windowMinutes && forecast.usedPercent >= usedPercent
         }
     }
 
@@ -38,6 +58,7 @@ public struct AlertPlanner: Sendable {
 
     /// Reset times within this much of each other are the same window; they drift a little between readings.
     static let sameWindow: TimeInterval = 600
+    static let confirmationLifetime: TimeInterval = 15 * 60
 
     public var settings: Settings
 
@@ -47,7 +68,7 @@ public struct AlertPlanner: Sendable {
 
     public func plan(_ forecasts: [Forecast], state: State, now: Date = Date()) -> ([Alert], State) {
         var fired = state.fired
-        var shortNow: Set<LimitKey> = []
+        var pendingShorts: [LimitKey: Confirmation] = [:]
         var alerts: [Alert] = []
 
         func hasFired(_ id: String, _ forecast: Forecast) -> Bool {
@@ -55,11 +76,14 @@ public struct AlertPlanner: Sendable {
         }
 
         for forecast in forecasts where forecast.verdict != .reset && forecast.verdict != .stale {
-            if settings.alertWhenShort, case .runsOut(let at, _, _) = forecast.verdict,
-               forecast.resetsAt.timeIntervalSince(at) >= settings.minimumMargin {
-                shortNow.insert(forecast.key)
+            if let at = candidate(forecast, now: now) {
+                let previous = state.pendingShorts[forecast.key]
+                // A backwards timestamp breaks confirmation instead of becoming a replayable new baseline.
+                if previous.map({ forecast.lastReadingAt >= $0.readingAt }) ?? true {
+                    pendingShorts[forecast.key] = Confirmation(forecast)
+                }
                 let id = "\(forecast.key.id)|short"
-                if state.shortLastTime.contains(forecast.key), !hasFired(id, forecast) {
+                if previous?.confirms(forecast, now: now) == true, !hasFired(id, forecast) {
                     fired[id] = forecast.resetsAt.timeIntervalSince1970
                     alerts.append(Alert(id: id, title: Self.shortTitle(forecast, at: at, now: now),
                                         body: Self.shortBody(forecast, at: at, now: now)))
@@ -78,7 +102,15 @@ public struct AlertPlanner: Sendable {
                 body: ForecastText.headline(forecast, now: now) + ". " + ForecastText.usage(forecast, now: now)
             ))
         }
-        return (alerts, State(fired: fired, shortLastTime: shortNow))
+        return (alerts, State(fired: fired, pendingShorts: pendingShorts))
+    }
+
+    private func candidate(_ forecast: Forecast, now: Date) -> Date? {
+        guard settings.alertWhenShort, case .runsOut(let at, _, _) = forecast.verdict, at > now,
+              forecast.resetsAt.timeIntervalSince(at) >= settings.minimumMargin,
+              forecast.lastReadingAt <= now,
+              now.timeIntervalSince(forecast.lastReadingAt) <= Self.confirmationLifetime else { return nil }
+        return at
     }
 
     static func name(_ forecast: Forecast) -> String {

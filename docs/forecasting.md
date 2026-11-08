@@ -26,6 +26,16 @@ These bars are the usual hourly averages before recent-activity and session adju
 
 The panel may also show a separate conditional estimate: **If you keep this session's pace**. This estimates what happens if the current observed rate continues, up to five hours ahead. It does not replace the normal forecast or automatically trigger an exhaustion notification.
 
+## Forecast warnings
+
+An early-exhaustion notification requires two distinct source readings that both support a run-out forecast at least 30 minutes before reset. Both readings must be no more than 15 minutes old when the warning fires and belong to the same quota window and window length. Repeated refreshes of a cached reading cannot confirm a warning.
+
+Pending confirmation clears when a limit disappears, its forecast stops running short, readings become unreliable, or forecast notifications are disabled. A lower usage report or changed quota window starts a new confirmation; a backwards timestamp is discarded. A long pause expires the previous evidence. Small reset-time drift retains the existing 10-minute tolerance.
+
+Confirmed warnings remain limited to once per quota window, including after restarting the app. Pending confirmation is kept only in memory, so a restart needs fresh corroboration. Percentage-threshold alerts remain based on observed usage and do not require this two-reading confirmation.
+
+## Projection ranges
+
 Schedule projections integrate the expected consumption in 15-minute steps, so the chart can flatten through learned quiet hours. These are point estimates. The recent-pace method's fastest/slowest range remains a comparison of averaging windows, not a calibrated confidence interval. Probability estimates and calibrated ranges are not implemented.
 
 ## Live prediction history
