@@ -4,10 +4,19 @@ import FuelGaugeCore
 
 enum ForecastDemo {
     static func burstReadings(now: Date) -> [Reading] {
-        readings(now: now).filter { $0.provider == .codex }.map { reading in
-            var reading = reading
-            reading.usedPercent *= reading.at >= now.addingTimeInterval(-3 * 86400) ? 0.5 : 0.05
-            return reading
+        var previous: Reading?
+        var used = 0.0
+        return readings(now: now).filter { $0.provider == .codex }.map { reading in
+            if let previous, previous.resetsAt == reading.resetsAt {
+                let scale = previous.at >= now.addingTimeInterval(-3 * 86400) ? 0.5 : 0.01
+                used += max(0, reading.usedPercent - previous.usedPercent) * scale
+            } else {
+                used = 0
+            }
+            previous = reading
+            var result = reading
+            result.usedPercent = used
+            return result
         }
     }
 
