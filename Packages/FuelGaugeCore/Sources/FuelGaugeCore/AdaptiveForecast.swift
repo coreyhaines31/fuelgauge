@@ -40,7 +40,7 @@ enum AdaptiveForecast {
         return evidence.isReady ? .ready : .collecting
     }
 
-    private static func sessionRate(_ window: [Reading], now: Date) -> Double? {
+    static func sessionRate(_ window: [Reading], now: Date) -> Double? {
         guard let latest = window.last, now.timeIntervalSince(latest.at) <= 900 else { return nil }
         let recent = window.filter { $0.at >= now.addingTimeInterval(-3600) }
         guard let first = recent.first, recent.count >= 2,

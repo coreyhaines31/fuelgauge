@@ -25,6 +25,9 @@ struct ForecastDetailsView: View {
                     if let forecast {
                         picker
                         current(forecast, now: context.date)
+                        SessionPlanView(forecasts: model.forecasts.filter { $0.key.provider == forecast.key.provider },
+                                        now: context.date)
+                            .id(forecast.key.provider)
                         ForecastTimelineView(history: model.forecastHistory.comparisons[forecast.key] ?? [],
                                              now: context.date)
                             .id(forecast.key)
