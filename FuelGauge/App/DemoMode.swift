@@ -98,6 +98,7 @@ enum DemoMode {
         let detailsURL = url.deletingPathExtension().appendingPathExtension("details.png")
         render(ForecastDetailsView(model: model).frame(width: 760, height: 900), to: detailsURL)
         if CommandLine.arguments.contains("--forecast-demo") {
+            ForecastTimelineDemo.save(next: url)
             saveSchedules(model: model, next: url)
             model.setDemoForecastHistory(ForecastDemo.journal(now: Date()), now: Date())
             let learnedURL = url.deletingPathExtension().appendingPathExtension("learned.png")
@@ -158,7 +159,7 @@ enum DemoMode {
         }
     }
 
-    private static func render(_ view: some View, to url: URL, then done: (() -> Void)? = nil) {
+    static func render(_ view: some View, to url: URL, then done: (() -> Void)? = nil) {
         let hosting = NSHostingView(rootView: view.background(Color(nsColor: .windowBackgroundColor)))
         hosting.frame = NSRect(origin: .zero, size: hosting.fittingSize)
         let window = NSWindow(
