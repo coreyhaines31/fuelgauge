@@ -42,7 +42,7 @@ public struct SessionPlan: Sendable {
     public var hasUnknownUsage: Bool {
         limits.isEmpty || limits.contains {
             if case .projected(let projection) = $0.outcome { return projection.stopsAtReset }
-            return $0.outcome != .exhausted
+            return $0.outcome != .exhausted || endsAt >= $0.forecast.resetsAt
         }
     }
 
