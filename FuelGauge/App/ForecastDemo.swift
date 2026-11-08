@@ -35,10 +35,11 @@ enum ForecastDemo {
         }
     }
 
-    static func journal(now: Date) -> ForecastJournal {
+    static func journal(now: Date, skipping: Set<Int> = []) -> ForecastJournal {
         let data = readings(now: now)
         var journal = ForecastJournal()
         for hour in -72...0 {
+            guard !skipping.contains(hour) else { continue }
             let at = now.addingTimeInterval(Double(hour) * 3600)
             let history = data.filter { $0.at <= at }
             journal.update(forecasts: ForecastEngine.forecasts(from: history, now: at),
