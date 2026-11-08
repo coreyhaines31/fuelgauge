@@ -4,6 +4,7 @@ import FuelGaugeCore
 struct ForecastHistory: Sendable {
     private var store: ForecastJournalStore
     private(set) var accuracy: [LimitKey: [ForecastAccuracy]] = [:]
+    private(set) var comparisons: [LimitKey: [ForecastComparison]] = [:]
     private(set) var firstRecordedAt: [LimitKey: Date] = [:]
     private(set) var warning: String?
 
@@ -25,6 +26,9 @@ struct ForecastHistory: Sendable {
         let keys = Set(journal.records.map { $0.source.key })
         accuracy = Dictionary(uniqueKeysWithValues: keys.map {
             ($0, ForecastAccuracy.summarize(journal, key: $0, now: now))
+        })
+        comparisons = Dictionary(uniqueKeysWithValues: keys.map {
+            ($0, ForecastComparison.history(journal, key: $0, now: now))
         })
         firstRecordedAt = Dictionary(grouping: journal.records, by: { $0.source.key })
             .compactMapValues { $0.map(\.issuedAt).min() }

@@ -25,6 +25,9 @@ struct ForecastDetailsView: View {
                     if let forecast {
                         picker
                         current(forecast, now: context.date)
+                        ForecastTimelineView(history: model.forecastHistory.comparisons[forecast.key] ?? [],
+                                             now: context.date)
+                            .id(forecast.key)
                         ForecastLearningView(forecast: forecast)
                         ForecastAccuracyView(results: model.forecastHistory.accuracy[forecast.key]
                             ?? [1, 6, 24].map { ForecastAccuracy(hours: $0) }, windowMinutes: forecast.windowMinutes)
