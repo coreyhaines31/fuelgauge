@@ -75,5 +75,7 @@ import Testing
         let morning = try Date("2026-11-09T17:00:00Z", strategy: .iso8601)
         #expect(schedule.rate(at: morning) == 2)
         #expect(schedule.rate(at: morning.addingTimeInterval(-3600)) == 0)
+        #expect(schedule.profile.timeZoneIdentifier == "America/Los_Angeles")
+        #expect(schedule.profile.hours.first(where: { $0.day == .weekday && $0.hour == 9 })?.ratePerHour == 2)
     }
 }
