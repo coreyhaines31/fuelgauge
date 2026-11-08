@@ -44,7 +44,16 @@ struct ForecastTimelineChart: View {
         .chartXScale(domain: range)
         .chartYScale(domain: 0...100)
         .chartXSelection(value: $selectionDate)
-        .chartXAxis { AxisMarks(values: .automatic(desiredCount: 4)) }
+        .chartXAxis {
+            AxisMarks(values: .automatic(desiredCount: 4)) { value in
+                AxisGridLine()
+                if let date = value.as(Date.self) {
+                    AxisValueLabel(anchor: axisAnchor(date)) {
+                        Text(axisLabel(date)).font(.caption2).fixedSize()
+                    }
+                }
+            }
+        }
         .chartYAxis {
             AxisMarks(values: [0, 25, 50, 75, 100]) { value in
                 AxisGridLine()
@@ -61,5 +70,15 @@ struct ForecastTimelineChart: View {
         let last = points.map(\.at).max() ?? now
         let padding = max(1800, last.timeIntervalSince(first) * 0.03)
         return first.addingTimeInterval(-padding)...last.addingTimeInterval(padding)
+    }
+
+    private func axisAnchor(_ date: Date) -> UnitPoint {
+        let fraction = date.timeIntervalSince(range.lowerBound) / range.upperBound.timeIntervalSince(range.lowerBound)
+        return fraction > 0.85 ? .topTrailing : fraction < 0.15 ? .topLeading : .top
+    }
+
+    private func axisLabel(_ date: Date) -> String {
+        range.upperBound.timeIntervalSince(range.lowerBound) < 86400
+            ? date.formatted(.dateTime.hour().minute()) : date.formatted(.dateTime.month(.abbreviated).day())
     }
 }
