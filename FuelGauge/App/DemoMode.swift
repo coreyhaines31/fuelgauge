@@ -98,10 +98,11 @@ enum DemoMode {
         let detailsURL = url.deletingPathExtension().appendingPathExtension("details.png")
         render(ForecastDetailsView(model: model).frame(width: 760, height: 900), to: detailsURL)
         if CommandLine.arguments.contains("--forecast-demo") {
+            saveSchedules(model: model, next: url)
             model.setDemoForecastHistory(ForecastDemo.journal(now: Date()), now: Date())
             let learnedURL = url.deletingPathExtension().appendingPathExtension("learned.png")
             let key = model.forecasts.first(where: { $0.key.provider == .codex })?.key.id ?? ""
-            render(ForecastDetailsView(model: model, selectedKey: key).frame(width: 760, height: 900), to: learnedURL)
+            render(ForecastDetailsView(model: model, selectedKey: key).frame(width: 760, height: 1200), to: learnedURL)
             let staleURL = url.deletingPathExtension().appendingPathExtension("stale.png")
             let staleKey = model.forecasts.first(where: { $0.verdict == .stale })?.key.id ?? ""
             render(ForecastDetailsView(model: model, selectedKey: staleKey)
@@ -130,6 +131,30 @@ enum DemoMode {
         render(view, to: url) {
             saveGlyphs(next: url)
             NSApp.terminate(nil)
+        }
+    }
+
+    private static func saveSchedules(model: UsageModel, next url: URL) {
+        if let forecast = model.forecasts.first(where: { $0.key.provider == .codex }),
+           let profile = forecast.scheduleProfile {
+            render(ScheduleProfileView(profile: profile, isApplied: forecast.basis == .schedule,
+                                       selectedID: "weekday-10").padding(20).frame(width: 700),
+                   to: url.deletingPathExtension().appendingPathExtension("schedule.png"))
+        }
+        let now = Date()
+        if let forecast = ForecastEngine.forecast(for: ForecastDemo.sparseReadings(now: now), now: now),
+           let profile = forecast.scheduleProfile {
+            for (name, selected) in [("sparse", "weekend-10"), ("unknown", "weekday-2")] {
+                render(ScheduleProfileView(profile: profile, isApplied: false, selectedID: selected)
+                    .padding(20).frame(width: 700),
+                       to: url.deletingPathExtension().appendingPathExtension("\(name).png"))
+            }
+        }
+        if let forecast = ForecastEngine.forecast(for: ForecastDemo.burstReadings(now: now), now: now),
+           let profile = forecast.scheduleProfile {
+            render(ScheduleProfileView(profile: profile, isApplied: forecast.basis == .schedule)
+                .padding(20).frame(width: 700),
+                   to: url.deletingPathExtension().appendingPathExtension("burst.png"))
         }
     }
 
