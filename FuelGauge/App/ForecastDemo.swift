@@ -3,6 +3,29 @@ import Foundation
 import FuelGaugeCore
 
 enum ForecastDemo {
+    static func burstReadings(now: Date) -> [Reading] {
+        readings(now: now).filter { $0.provider == .codex }.map { reading in
+            var reading = reading
+            reading.usedPercent *= reading.at >= now.addingTimeInterval(-3 * 86400) ? 0.5 : 0.05
+            return reading
+        }
+    }
+
+    static func sparseReadings(now: Date) -> [Reading] {
+        let calendar = Calendar.current
+        let start = calendar.date(byAdding: .day, value: -21, to: calendar.startOfDay(for: now))!
+        return (0...21).flatMap { day -> [Reading] in
+            let date = calendar.date(byAdding: .day, value: day, to: start)!
+            guard !calendar.isDateInWeekend(date) else { return [] }
+            return (9...21).map { hour in
+                Reading(provider: .codex, limit: "weekly", windowMinutes: 10080,
+                        usedPercent: Double(day % 7) * 10 + Double(hour - 9) * 0.5,
+                        resetsAt: calendar.date(byAdding: .day, value: (day / 7 + 1) * 7, to: start)!,
+                        at: calendar.date(bySettingHour: hour, minute: 0, second: 0, of: date)!)
+            }.filter { $0.at <= now }
+        }
+    }
+
     static func journal(now: Date) -> ForecastJournal {
         let data = readings(now: now)
         var journal = ForecastJournal()
