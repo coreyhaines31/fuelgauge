@@ -59,7 +59,7 @@ struct ForecastComparisonView: View {
         switch point.target.outcome {
         case .observed:
             guard let error = point.error else { return "A reading arrived, but no comparable estimate was saved." }
-            if abs(error) < 0.05 { return "The prediction matched observed usage to one decimal place." }
+            if abs(error) < 0.05 { return "The prediction was within 0.05 percentage points of observed usage." }
             return "Predicted \(error > 0 ? "more" : "less") usage than observed. "
                 + "Both values use the reading's actual time."
         case .pending:
