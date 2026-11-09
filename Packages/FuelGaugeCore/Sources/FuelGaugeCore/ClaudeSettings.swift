@@ -41,8 +41,10 @@ public struct ClaudeSettings: Sendable {
     /// The status line command Fuel Gauge runs after its own strip, if it replaced one.
     public var wrappedCommand: String? {
         guard let data = try? Data(contentsOf: wrappedURL),
-              let saved = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return nil }
-        return saved["command"] as? String
+              let saved = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let command = saved["command"] as? String,
+              !Self.runsFuelGauge(command) else { return nil }
+        return command
     }
 
     /// Makes `command` (the full `… statusline` invocation) Claude Code's status line. Backs up
@@ -50,7 +52,7 @@ public struct ClaudeSettings: Sendable {
     public func install(command: String) throws {
         var settings = try readSettings()
         var statusLine = settings["statusLine"] as? [String: Any] ?? [:]
-        if let existing = statusLine["command"] as? String, !Self.isOurs(existing) {
+        if let existing = statusLine["command"] as? String, !Self.runsFuelGauge(existing) {
             try FileManager.default.createDirectory(
                 at: wrappedURL.deletingLastPathComponent(), withIntermediateDirectories: true
             )
@@ -82,6 +84,11 @@ public struct ClaudeSettings: Sendable {
 
     static func isOurs(_ command: String) -> Bool {
         command.contains("fuelgauge") && command.hasSuffix(" statusline")
+    }
+
+    /// Whether `command` runs `fuelgauge statusline` anywhere, including inside another tool's wrapper.
+    static func runsFuelGauge(_ command: String) -> Bool {
+        command.range(of: #"fuelgauge['"]?\s+statusline"#, options: .regularExpression) != nil
     }
 
     private func currentCommand() -> String? {

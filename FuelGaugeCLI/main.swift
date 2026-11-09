@@ -107,13 +107,18 @@ func history() -> Never {
     exit(0)
 }
 
+let nestedStatusLineKey = "FUEL_GAUGE_NESTED_STATUSLINE"
+
 /// Claude Code's status line: save the reading, print any wrapped status line, then the forecast strip.
 /// Never fails loudly, since anything on stderr is lost and a crash blanks the status line.
 func statusLine() -> Never {
     let input = FileHandle.standardInput.readDataToEndOfFile()
     let now = Date()
     let settings = ClaudeSettings()
-    if let wrapped = settings.wrappedCommand, let output = run(wrapped, input: input) {
+    // A wrapped command that leads back here (directly or through another tool's wrapper) would spawn
+    // status lines forever, so a nested run skips it.
+    let nested = ProcessInfo.processInfo.environment[nestedStatusLineKey] != nil
+    if !nested, let wrapped = settings.wrappedCommand, let output = run(wrapped, input: input) {
         print(output, terminator: output.hasSuffix("\n") ? "" : "\n")
     }
     guard Tracking.isEnabled(.claude) else { exit(0) }
@@ -148,7 +153,9 @@ func run(_ command: String, input: Data) -> String? {
     var pid: pid_t = 0
     let argv: [UnsafeMutablePointer<CChar>?] = [strdup("/bin/sh"), strdup("-c"), strdup(command), nil]
     defer { argv.forEach { free($0) } }
-    let spawned = posix_spawn(&pid, "/bin/sh", &actions, &attributes, argv, environ)
+    let envp = nestedEnvironment()
+    defer { envp.forEach { free($0) } }
+    let spawned = posix_spawn(&pid, "/bin/sh", &actions, &attributes, argv, envp)
     close(stdinPipe[0])
     close(stdoutPipe[1])
     guard spawned == 0 else {
@@ -181,6 +188,13 @@ func run(_ command: String, input: Data) -> String? {
     waitpid(pid, &status, 0)
     if timedOut { return nil }
     return output.data.isEmpty ? nil : String(bytes: output.data, encoding: .utf8)
+}
+
+/// This process's environment, marked so a `fuelgauge statusline` started inside it knows it's nested.
+func nestedEnvironment() -> [UnsafeMutablePointer<CChar>?] {
+    var environment = ProcessInfo.processInfo.environment
+    environment[nestedStatusLineKey] = "1"
+    return environment.map { strdup("\($0.key)=\($0.value)") } + [nil]
 }
 
 final class OutputBox: @unchecked Sendable {
