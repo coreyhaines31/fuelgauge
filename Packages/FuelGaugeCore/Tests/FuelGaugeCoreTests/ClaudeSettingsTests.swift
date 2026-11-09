@@ -35,4 +35,30 @@ import Testing
         try settings.uninstall()
         #expect(settings.state == .off)
     }
+
+    /// Another tool (SlashVibe) wrapping `fuelgauge statusline` must never be saved as the command Fuel Gauge
+    /// runs, or every status line refresh spawns itself forever.
+    @Test func neverWrapsACommandThatRunsFuelGauge() throws {
+        let folder = temporaryFolder()
+        let settingsURL = folder.appending(path: "settings.json")
+        let wrappedURL = folder.appending(path: "wrapped.json")
+        let wrapper = "'/x/hook-relay' --statusline --forward-command '/opt/homebrew/bin/fuelgauge statusline'"
+        try JSONSerialization.data(withJSONObject: ["statusLine": ["type": "command", "command": wrapper]])
+            .write(to: settingsURL)
+        let settings = ClaudeSettings(settingsURL: settingsURL, wrappedURL: wrappedURL)
+
+        try settings.install(command: "/opt/homebrew/bin/fuelgauge statusline")
+        #expect(settings.state == .on)
+        #expect(settings.wrappedCommand == nil)
+
+        try JSONSerialization.data(withJSONObject: ["type": "command", "command": wrapper]).write(to: wrappedURL)
+        #expect(settings.wrappedCommand == nil)
+    }
+
+    @Test func recognizesFuelGaugeInvocations() {
+        #expect(ClaudeSettings.runsFuelGauge("/opt/homebrew/bin/fuelgauge statusline"))
+        #expect(ClaudeSettings.runsFuelGauge("'/Applications/Fuel Gauge.app/Contents/MacOS/fuelgauge' statusline"))
+        #expect(ClaudeSettings.runsFuelGauge("relay --forward-command '/opt/homebrew/bin/fuelgauge statusline'"))
+        #expect(!ClaudeSettings.runsFuelGauge("~/bin/mine.sh"))
+    }
 }
