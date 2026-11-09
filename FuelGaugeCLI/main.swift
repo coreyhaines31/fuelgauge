@@ -107,10 +107,10 @@ func history() -> Never {
     exit(0)
 }
 
-/// Claude Code's status line: save the reading, print any wrapped status line, then the forecast strip.
-/// Never fails loudly, since anything on stderr is lost and a crash blanks the status line.
 let nestedStatusLineKey = "FUEL_GAUGE_NESTED_STATUSLINE"
 
+/// Claude Code's status line: save the reading, print any wrapped status line, then the forecast strip.
+/// Never fails loudly, since anything on stderr is lost and a crash blanks the status line.
 func statusLine() -> Never {
     let input = FileHandle.standardInput.readDataToEndOfFile()
     let now = Date()
