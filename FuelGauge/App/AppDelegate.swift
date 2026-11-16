@@ -14,7 +14,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let alerts = Alerts()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        PanelKit.registerFonts()
+        PanelFont.register()
         Preferences.registerDefaults()
         #if !DEBUG
         applyLaunchAtLoginDefault()
