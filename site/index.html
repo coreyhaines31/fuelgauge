@@ -265,6 +265,43 @@
       </div>
     </section>
 
+    <section id="plan" class="lit">
+      <div class="wrap">
+        <div class="split feature">
+          <div>
+            <h2>Plan the next session before you start it.</h2>
+            <p>About to kick off something big? Open <b>Forecast details</b>, choose 30 minutes, 1 hour, 2 hours, or 4 hours more at this session&#39;s pace, and see every limit for that tool at once: which runs out first, and when.</p>
+            <p>It needs a real session to measure: fresh readings over at least 10 minutes. Each projection stops at that limit&#39;s reset, and it never assumes you&#39;ll redeem a saved reset. It&#39;s a what-if, so your normal forecast and alerts don&#39;t change.</p>
+          </div>
+          <div class="bx-mount" role="group" aria-label="Plan your next session, with sample data">
+            <span class="bx-screw"></span><span class="bx-screw"></span><span class="bx-screw"></span><span class="bx-screw"></span>
+            <div class="pop light win" style="--acc:#e06a1b"><div class="fas"><div class="fh"><span class="np"><i></i>Next session</span><span class="ts">All tracked Claude Code limits</span></div></div><div class="tabs"><span>30m</span><span>1h</span><span class="on">2h</span><span>4h</span></div><div class="verdict"><span class="led-l ca">Continue working for 2h</span><b>5-hour limit runs out first, around 1:05p.</b></div><div class="sect"><span>5-hour</span><span>55% now</span></div><div class="tp"><span class="tape ca"><span style="width:55%"></span><i style="left:55%;width:45%"></i></span></div><p class="ln">Pace: 32.1 points/hour. Runs out around 1:05p (in 1h 24m).</p><div class="sect"><span>Weekly</span><span>41% now</span></div><div class="tp"><span class="tape"><span style="width:41%"></span><i style="left:41%;width:7%"></i></span></div><p class="ln">Pace: 3.4 points/hour. About 52% left at 3:41p.</p><p class="ln cap">Assumes this session&#39;s pace continues. Projections stop at quota resets; saved resets are not assumed to be redeemed. Shown with sample data.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="usage" class="lit">
+      <div class="wrap">
+        <div class="split feature flip">
+          <div>
+            <h2>Claude Code and Codex token usage, with the API cost.</h2>
+            <p>Choose <b>View usage</b> in the panel for what Claude Code and Codex used on this Mac: today, the last 7 days, or the last 30. Each tool card shows today&#39;s tokens and estimated cost too, even when there&#39;s no forecast yet.</p>
+            <ul class="checks">
+              <li>Tokens split into uncached input, output, cache reads, and cache writes, with your cache hit rate.</li>
+              <li>Breakdowns by tool, model, project folder, and session. Hover a project for its full path.</li>
+              <li>Cost in US dollars at standard API rates, checked October 30, 2026. It&#39;s what those tokens would cost on the API, not your subscription bill.</li>
+              <li>Read from your own logs in <code>~/.claude/projects</code> and <code>~/.codex</code>. Prompt and response text is never saved.</li>
+            </ul>
+          </div>
+          <div class="bx-mount" role="group" aria-label="The Usage window, with sample data">
+            <span class="bx-screw"></span><span class="bx-screw"></span><span class="bx-screw"></span><span class="bx-screw"></span>
+            <div class="pop light win" style="--acc:#e06a1b"><div class="fas"><div class="fh"><span class="np"><i></i>Usage</span><span class="ts">This Mac · Claude Code &amp; Codex</span></div></div><div class="tabs"><span>Today</span><span class="on">7 days</span><span>30 days</span><span class="sp"></span><span class="on">Tokens</span><span>Cost</span></div><div class="chart"><svg viewBox="0 0 300 96" role="img" aria-label="Daily tokens for the last 7 days, Claude Code and Codex stacked, peaking on Friday."><rect x="14" y="47.2" width="24" height="32.8" rx="1.5" fill="var(--fill)"/><rect x="14" y="36.0" width="24" height="9.7" rx="1.5" fill="var(--sub)" opacity=".55"/><text x="26" y="93" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Tue</text><rect x="55" y="34.8" width="24" height="45.2" rx="1.5" fill="var(--fill)"/><rect x="55" y="19.3" width="24" height="14.0" rx="1.5" fill="var(--sub)" opacity=".55"/><text x="67" y="93" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Wed</text><rect x="96" y="62.8" width="24" height="17.2" rx="1.5" fill="var(--fill)"/><rect x="96" y="56.4" width="24" height="4.8" rx="1.5" fill="var(--sub)" opacity=".55"/><text x="108" y="93" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Thu</text><rect x="137" y="27.2" width="24" height="52.8" rx="1.5" fill="var(--fill)"/><rect x="137" y="9.0" width="24" height="16.7" rx="1.5" fill="var(--sub)" opacity=".55"/><text x="149" y="93" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Fri</text><rect x="178" y="39.6" width="24" height="40.4" rx="1.5" fill="var(--fill)"/><rect x="178" y="26.3" width="24" height="11.8" rx="1.5" fill="var(--sub)" opacity=".55"/><text x="190" y="93" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Sat</text><rect x="219" y="73.5" width="24" height="6.5" rx="1.5" fill="var(--fill)"/><text x="231" y="93" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Sun</text><rect x="260" y="55.2" width="24" height="24.8" rx="1.5" fill="var(--fill)"/><rect x="260" y="46.2" width="24" height="7.5" rx="1.5" fill="var(--sub)" opacity=".55"/><text x="272" y="93" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Mon</text><line x1="0" y1="80.5" x2="300" y2="80.5" stroke="var(--line)" stroke-width="1"/></svg></div><div class="sect"><span>Breakdown</span><span>By tool</span></div><div class="row noico"><span class="nm">Claude Code</span><span class="vl">40.8M<small>$58.20</small></span><span class="sb">Cache hit rate 94%</span></div><div class="row noico"><span class="nm">Codex</span><span class="vl">12.0M<small>$14.70</small></span><span class="sb">Cache hit rate 88%</span></div><div class="sect"><span>Token breakdown</span><span>7 days</span></div><div class="grid2"><span>Cache reads</span><b>47.9M</b><span>Uncached input</span><b>2.6M</b><span>Cache writes</span><b>1.4M</b><span>Output</span><b>0.9M</b></div><p class="ln cap">Est. API cost · Rates checked October 30, 2026 · Shown with sample data</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="agents" class="lit">
       <div class="wrap">
         <div class="split">
