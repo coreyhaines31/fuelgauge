@@ -1,45 +1,57 @@
 import Charts
 import FuelGaugeCore
+import PanelKit
 import SwiftUI
 
-/// The recent stretch of a window as a line, and where it's headed as a dashed line to the run-out point or
-/// the reset. Weekly windows show the last day rather than a sliver of the whole week.
+/// The recent stretch of a window as a graphite line, and where it's headed as a dashed line in the warning
+/// colour to the run-out point or the reset. Weekly windows show the last day rather than a sliver of the whole
+/// week.
 struct ForecastChart: View {
     let forecast: Forecast
     let now: Date
+    /// The warning colour for the projection and the run-out label.
     let tint: Color
+    @BrushedTheme private var theme
 
     var body: some View {
         Chart {
             ForEach(points, id: \.date) { point in
                 LineMark(x: .value("Time", point.date), y: .value("Used", point.used), series: .value("Line", "used"))
                     .interpolationMethod(.stepEnd)
-                    .foregroundStyle(tint)
+                    .lineStyle(StrokeStyle(lineWidth: 1.6))
+                    .foregroundStyle(theme.fill)
             }
             ForEach(projection, id: \.date) { point in
                 LineMark(x: .value("Time", point.date), y: .value("Used", point.used),
                          series: .value("Line", "projection"))
-                    .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [3, 3]))
+                    .lineStyle(StrokeStyle(lineWidth: 1.6, dash: [4, 3]))
+                    .foregroundStyle(tint)
+            }
+            if case .runsOut = forecast.verdict, endPoint <= range.upperBound {
+                PointMark(x: .value("Time", endPoint), y: .value("Used", 100))
+                    .symbolSize(28)
                     .foregroundStyle(tint)
             }
             RuleMark(y: .value("Limit", 100))
-                .lineStyle(StrokeStyle(lineWidth: 0.5))
-                .foregroundStyle(.secondary)
+                .lineStyle(StrokeStyle(lineWidth: 0.7, dash: [2, 3]))
+                .foregroundStyle(theme.sub)
             RuleMark(x: .value("Now", now))
-                .lineStyle(StrokeStyle(lineWidth: 0.5, dash: [2, 2]))
-                .foregroundStyle(.secondary)
+                .lineStyle(StrokeStyle(lineWidth: 0.7, dash: [2, 2]))
+                .foregroundStyle(theme.sub)
             if range.contains(forecast.resetsAt) {
                 RuleMark(x: .value("Reset", forecast.resetsAt))
-                    .lineStyle(StrokeStyle(lineWidth: 0.5, dash: [2, 2]))
-                    .foregroundStyle(.secondary)
+                    .lineStyle(StrokeStyle(lineWidth: 0.7, dash: [2, 2]))
+                    .foregroundStyle(theme.sub)
             }
         }
         .chartYScale(domain: 0...100)
         .chartXScale(domain: range)
         .chartYAxis {
             AxisMarks(values: [0, 50, 100]) { value in
-                AxisGridLine()
-                AxisValueLabel { Text("\(value.as(Int.self) ?? 0)%").font(.system(size: 9)) }
+                AxisGridLine().foregroundStyle(theme.line)
+                AxisValueLabel {
+                    Text("\(value.as(Int.self) ?? 0)%").font(PanelFont.body(8.5)).foregroundStyle(theme.sub)
+                }
             }
         }
         .chartXAxis {
@@ -47,7 +59,9 @@ struct ForecastChart: View {
                 let date = value.as(Date.self) ?? now
                 // A label near the right edge hangs to the left, so it isn't cut off.
                 AxisValueLabel(anchor: nearRightEdge(date) ? .topTrailing : .top) {
-                    Text(label(for: date)).font(.system(size: 9))
+                    Text(label(for: date))
+                        .font(PanelFont.body(8.5, isRunOut(date) ? .semibold : .regular))
+                        .foregroundStyle(isRunOut(date) ? tint : theme.sub)
                 }
             }
         }
@@ -77,6 +91,11 @@ struct ForecastChart: View {
     private func nearRightEdge(_ date: Date) -> Bool {
         let width = range.upperBound.timeIntervalSince(range.lowerBound)
         return range.upperBound.timeIntervalSince(date) < width * 0.15
+    }
+
+    private func isRunOut(_ date: Date) -> Bool {
+        guard case .runsOut = forecast.verdict else { return false }
+        return date == endPoint && abs(date.timeIntervalSince(now)) >= 60
     }
 
     private func label(for date: Date) -> String {
