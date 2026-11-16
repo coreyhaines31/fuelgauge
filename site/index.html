@@ -302,6 +302,34 @@
       </div>
     </section>
 
+    <section id="meter" class="lit">
+      <div class="wrap">
+        <div class="split feature">
+          <div>
+            <h2>A meter, an alert, and a few settings.</h2>
+            <p>The menu bar glyph is a small fuel meter. Its needle shows the fuel left in whichever limit is closest to running out. It turns orange when one won&#39;t make it to its reset, and red when one is out. Next to it, show nothing, the percent used, or the time until you run out.</p>
+            <p>You get one alert per window, and only when two fresh readings agree you&#39;ll run out at least 30 minutes early. Alerts at 80% and 95% used are on by default; 50% is there if you want it. macOS asks once, at the first alert, whether Fuel Gauge may send notifications.</p>
+          </div>
+          <div class="meter-demo" role="group" aria-label="Three menu bar states and an alert, with sample data">
+            <div class="mb-row"><span class="mb-say">Makes it</span><span class="mb-bar"><span class="mb-dim">Wed 9:41 AM</span><svg class="mb-g" aria-hidden="true"><use href="#g-fuel"/></svg><span>38%</span></span></div>
+            <div class="mb-row ca"><span class="mb-say">Running short</span><span class="mb-bar"><span class="mb-dim">Wed 11:02 AM</span><svg class="mb-g" aria-hidden="true"><use href="#g-fuel"/></svg><span>48m</span></span></div>
+            <div class="mb-row st"><span class="mb-say">Out</span><span class="mb-bar"><span class="mb-dim">Wed 11:52 AM</span><svg class="mb-g" aria-hidden="true"><use href="#g-fuel"/></svg><span>out</span></span></div>
+            <div class="notif"><img src="/images/icon.svg" alt="" width="34" height="34"><div><b>Claude Code&#39;s 5-hour limit runs out around 11:50a</b><p>That&#39;s 1h 30m before it resets at 1:20p.</p></div><span>now</span></div>
+            <p class="meter-cap">Shown with sample data</p>
+          </div>
+        </div>
+        <div class="table-card glass settings-table"><div class="table-scroll"><table class="compare">
+          <thead><tr><th>Settings tab</th><th>What&#39;s in it</th></tr></thead>
+          <tbody>
+            <tr><td>General</td><td>Launch at login (on by default, so readings keep coming after a restart), what shows next to the meter, the <code>fuelgauge</code> command, a copyable prompt for AI agents, and automatic update checks.</td></tr>
+            <tr><td>Tools</td><td>Which of Claude Code, Codex, Grok Bot, and Cursor to track, with where each one&#39;s numbers come from. The Claude Code status line turns on and off here.</td></tr>
+            <tr><td>Alerts</td><td>The early run-out alert, plus optional alerts at 50%, 80%, and 95% used.</td></tr>
+            <tr><td>Resets</td><td>Codex reset tracking, and a manual count of saved Claude resets.</td></tr>
+          </tbody>
+        </table></div></div>
+      </div>
+    </section>
+
     <section id="agents" class="lit">
       <div class="wrap">
         <div class="split">
