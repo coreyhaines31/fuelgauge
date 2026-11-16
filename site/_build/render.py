@@ -120,10 +120,9 @@ def head(title, description, path):
 
 
 def nav():
-    return f'''  <div class="sky" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-  <div class="nav">
+    return f'''  <div class="nav">
     <div class="wrap">
-      <a class="brand" href="/"><img src="/images/icon.svg" alt="" width="28" height="28"> Fuel Gauge</a>
+      <a class="brand" href="/"><img src="/images/icon.svg" alt="" width="32" height="32"> Fuel Gauge</a>
       <nav>
         <a href="/#how">How it works</a>
         <a href="/limits">Limits</a>
@@ -187,7 +186,7 @@ def render_homepage():
            "author": {"@type": "Person", "name": "Corey Haines"}}
     schema = f'  <script type="application/ld+json">{json.dumps(app)}</script>\n  {faq_schema(faqs)}\n'
     page = replace_between(page, "<!-- footer -->\n", "      <!-- /footer -->", footer_inner())
-    page = re.sub(r'  <div class="nav">.*?\n  </div>\n', nav().split('</div>\n', 1)[1], page, count=1, flags=re.S)
+    page = re.sub(r'  <div class="nav">.*?\n  </div>\n', nav(), page, count=1, flags=re.S)
     page = replace_between(page, "<!-- schema -->\n", "  <!-- /schema -->", schema)
     with open(os.path.join(ROOT, "index.html"), "w") as f:
         f.write(page)
