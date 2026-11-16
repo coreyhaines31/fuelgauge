@@ -1,6 +1,9 @@
 import FuelGaugeCore
+import PanelKit
 import SwiftUI
 
+/// Reset credits under Codex and Claude Code. The "Check resets in Claude Usage" link sits in the Claude Code
+/// section's link bar.
 struct ResetCreditRow: View {
     let provider: Provider
     let model: UsageModel
@@ -12,63 +15,65 @@ struct ResetCreditRow: View {
     @AppStorage(ResetPreferences.claudeCheckedAt) private var claudeCheckedAt = 0.0
 
     var body: some View {
-        if provider == .codex || provider == .claude {
-            Divider()
-            VStack(alignment: .leading, spacing: 3) {
-                if provider == .codex {
-                    codex
-                } else {
-                    claude
-                }
-            }
-            .font(.system(size: 11))
-            .foregroundStyle(.secondary)
-            .fixedSize(horizontal: false, vertical: true)
+        if provider == .codex {
+            codex
+        } else if provider == .claude {
+            claude
         }
     }
 
     @ViewBuilder private var codex: some View {
         if codexEnabled || model.codexResetCredits != nil {
-            HStack {
-                Label(model.codexResetCredits?.summary(now: now) ?? "Reset availability unknown",
-                      systemImage: "arrow.counterclockwise")
-                Spacer()
+            Row("↺ " + (model.codexResetCredits?.summary(now: now) ?? "Reset availability unknown"),
+                subtitle: codexLines.isEmpty ? nil : codexLines.joined(separator: "\n")) {
                 Button(model.checkingCodexResets ? "Checking…" : "Refresh") {
                     model.refreshCodexResets(force: true)
                 }
-                .buttonStyle(.borderless)
+                .buttonStyle(.panelCompact)
                 .disabled(model.checkingCodexResets)
             }
-            if let credits = model.codexResetCredits, credits.availableCount > 0,
-               let expiry = credits.nextExpiration, expiry > now {
-                Text("Next expires \(expiry.formatted(date: .abbreviated, time: .shortened))")
-            }
-            if let checked = model.codexResetsCheckedAt {
-                Text("Checked \(checked.formatted(date: .omitted, time: .shortened)) · Redeem in Codex /usage")
-            }
+            .subtitleLineLimit(nil)
         } else {
             Button("Set up reset tracking…", action: openSettings)
-                .buttonStyle(.borderless)
+                .buttonStyle(.panelCompact)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 7)
         }
+    }
+
+    private var codexLines: [String] {
+        var lines: [String] = []
+        if let credits = model.codexResetCredits, credits.availableCount > 0,
+           let expiry = credits.nextExpiration, expiry > now {
+            lines.append("Next expires \(expiry.formatted(date: .abbreviated, time: .shortened))")
+        }
+        if let checked = model.codexResetsCheckedAt {
+            lines.append("Checked \(checked.formatted(date: .omitted, time: .shortened)) · Redeem in Codex /usage")
+        }
+        return lines
     }
 
     @ViewBuilder private var claude: some View {
         if claudeCheckedAt > 0 {
             let expired = claudeExpiry > 0 && claudeExpiry <= now.timeIntervalSince1970
             let count = claudeCount == 1 ? "1 reset recorded" : "\(claudeCount) resets recorded"
-            HStack {
-                Label(expired ? "Recheck reset availability" : "\(count) · manual",
-                      systemImage: "arrow.counterclockwise")
-                Spacer()
-                Button("Update…", action: openSettings).buttonStyle(.borderless)
+            Row("↺ " + (expired ? "Recheck reset availability" : "\(count) · manual"),
+                subtitle: claudeLines.joined(separator: "\n")) {
+                Button("Update…", action: openSettings)
+                    .buttonStyle(.panelCompact)
             }
-            if claudeCount > 0 && claudeExpiry > now.timeIntervalSince1970 {
-                let expiry = Date(timeIntervalSince1970: claudeExpiry)
-                Text("Next expires \(expiry.formatted(date: .abbreviated, time: .shortened))")
-            }
-            let recorded = Date(timeIntervalSince1970: claudeCheckedAt)
-            Text("Recorded \(recorded.formatted(date: .abbreviated, time: .shortened))")
+            .subtitleLineLimit(nil)
         }
-        Link("Check resets in Claude Usage", destination: URL(string: "https://claude.ai/settings/usage")!)
+    }
+
+    private var claudeLines: [String] {
+        var lines: [String] = []
+        if claudeCount > 0 && claudeExpiry > now.timeIntervalSince1970 {
+            let expiry = Date(timeIntervalSince1970: claudeExpiry)
+            lines.append("Next expires \(expiry.formatted(date: .abbreviated, time: .shortened))")
+        }
+        let recorded = Date(timeIntervalSince1970: claudeCheckedAt)
+        lines.append("Recorded \(recorded.formatted(date: .abbreviated, time: .shortened))")
+        return lines
     }
 }
