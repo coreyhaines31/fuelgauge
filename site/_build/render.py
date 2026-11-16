@@ -40,7 +40,7 @@ GITHUB_ICON = ('<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                '.21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>')
 CTAS = (f'<a class="btn" href="{DOWNLOAD}">{DOWNLOAD_ICON}Download for Mac</a>\n'
         f'        <a class="btn-quiet" href="{REPO}">{GITHUB_ICON}View source code</a>')
-FONTS = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+FONTS = "https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@300;600;700&display=swap"
 
 # Corey's other free Mac apps, cross-linked from every footer.
 FAMILY = [
@@ -102,18 +102,20 @@ def head(title, description, path):
   <meta name="twitter:image" content="{share_image(path)}">
   <meta name="twitter:title" content="{esc(title)}">
   <meta name="twitter:description" content="{esc(description)}">
-  <meta name="theme-color" content="#fbe9d6" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#e7e8e9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#2a2a2c" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/images/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/images/icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="{FONTS}">
+  <link rel="stylesheet" href="/kit/brushed.css">
+  <link rel="stylesheet" href="/kit/popover.css">
   <link rel="stylesheet" href="/site.css">
   <script async src="https://tracerkit.com/t.js" data-key="tk_bsPe2rM_f5F7Q4G8"></script>
   <script src="https://ingest.getuserproof.com/sdk.js" data-site="eb2393e8-b6bf-405b-a82f-9adf86865677" defer></script>
 </head>
-<body>
+<body class="bx">
 '''
 
 
