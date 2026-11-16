@@ -477,16 +477,17 @@
       <div class="wrap">
         <div class="head center">
           <h2>Quiet, and stays on your Mac.</h2>
-          <p>It reads only what Claude Code, Codex, and Grok Bot already save on your Mac.</p>
+          <p>Your usage stays on your Mac. Here&#39;s exactly what it reads, what it saves, and the few times it goes online.</p>
         </div>
         <div class="points glass">
-          <div><h3>Local files only</h3><p>No browser cookies, no keychain, no sign-in. It never asks for your accounts.</p></div>
-          <div><h3>No Full Disk Access</h3><p>It doesn&#39;t need it. Everything it reads sits in your home folder.</p></div>
-          <div><h3>Zero telemetry</h3><p>The only network request is the check for updates, plus Cursor's usage if you turn Cursor on.</p></div>
+          <div><h3>Local files only</h3><p>Claude Code&#39;s status line input and logs, Codex&#39;s logs in <code>~/.codex</code>, and Grok Bot&#39;s usage cache. No browser cookies, no keychain, no sign-in. It never asks for your accounts.</p></div>
+          <div><h3>No Full Disk Access</h3><p>It doesn&#39;t need it. Everything it reads sits in your home folder. The only permission it asks for is notifications, at the first alert.</p></div>
+          <div><h3>Zero telemetry</h3><p>No analytics, nothing about your usage sent anywhere. It goes online for update checks, Codex reset counts through your Codex CLI (on by default, off in Settings › Resets), and Cursor if you turn it on.</p></div>
           <div><h3>One alert, early</h3><p>Once per window, when the forecast says you&#39;ll run out at least 30 minutes early. Alerts at 50, 80, or 95% used are optional.</p></div>
           <div><h3>Track what you use</h3><p>Pick which tools it watches in Settings › Tools.</p></div>
           <div><h3>Free</h3><p>No trial, no subscription. Source on GitHub, signed and notarized by Apple.</p></div>
         </div>
+        <p class="note-line">What it saves, all in <code>~/Library/Application Support/Fuel Gauge</code>: limit readings (tool, limit, percent, reset time) for about two months; a usage cache of timestamps, model names, token counts, session IDs, and project paths for about 61 days, with no prompt or response text; and its saved predictions for up to 60 days. Uninstalling with <code>brew uninstall --cask --zap fuelgauge</code> removes it all.</p>
       </div>
     </section>
 
