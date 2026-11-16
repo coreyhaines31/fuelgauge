@@ -11,7 +11,7 @@ struct ForecastChart: View {
     let now: Date
     /// The warning colour for the projection and the run-out label.
     let tint: Color
-    @BrushedTheme private var theme
+    @Environment(\.panelTheme) private var theme
 
     var body: some View {
         Chart {

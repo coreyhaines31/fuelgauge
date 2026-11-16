@@ -13,7 +13,7 @@ struct PanelView: View {
     var openForecasts: () -> Void = {}
     @State private var setupError: String?
     @State private var cardsHeight: CGFloat = 400
-    @BrushedTheme private var theme
+    @Environment(\.panelTheme) private var theme
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 30)) { context in

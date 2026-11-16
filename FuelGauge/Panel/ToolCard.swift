@@ -59,7 +59,7 @@ struct WindowRow: View {
     let forecast: Forecast
     let now: Date
     let showsChart: Bool
-    @BrushedTheme private var theme
+    @Environment(\.panelTheme) private var theme
 
     var body: some View {
         if forecast.isShort {

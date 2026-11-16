@@ -1,17 +1,6 @@
 import PanelKit
 import SwiftUI
 
-/// The PanelKit theme for the current appearance, for the few panel pieces PanelKit doesn't have yet.
-@propertyWrapper
-struct BrushedTheme: DynamicProperty {
-    @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.panelThemeOverride) private var override
-
-    var wrappedValue: PanelTheme {
-        override ?? PanelTheme.resolve(colorScheme)
-    }
-}
-
 /// A PanelKit-style tape with a faint extension to where usage is headed by the reset. Graphite unless the
 /// window runs short.
 struct ProjectedTape: View {
@@ -20,7 +9,7 @@ struct ProjectedTape: View {
     /// Percent projected at the reset, if there's a forecast.
     let projected: Double?
     let status: PanelStatus?
-    @BrushedTheme private var theme
+    @Environment(\.panelTheme) private var theme
 
     var body: some View {
         GeometryReader { geometry in
@@ -60,7 +49,7 @@ struct InfoRow<Accessory: View>: View {
     var value: String?
     var secondary: String?
     @ViewBuilder var accessory: () -> Accessory
-    @BrushedTheme private var theme
+    @Environment(\.panelTheme) private var theme
 
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -129,7 +118,7 @@ struct LinkBar<Content: View>: View {
 
 /// A small metal key for actions inside a row, such as Refresh.
 struct SmallKeyStyle: ButtonStyle {
-    @BrushedTheme private var theme
+    @Environment(\.panelTheme) private var theme
     @Environment(\.isEnabled) private var isEnabled
 
     func makeBody(configuration: Configuration) -> some View {
