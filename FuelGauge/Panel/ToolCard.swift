@@ -1,7 +1,8 @@
 import FuelGaugeCore
+import PanelKit
 import SwiftUI
 
-/// One tool's limits in a card: a row per window, shortest window first.
+/// One tool's limits as a panel section: a row per window, shortest window first, then usage and resets.
 struct ToolCard: View {
     let provider: Provider
     let forecasts: [Forecast]
@@ -13,11 +14,9 @@ struct ToolCard: View {
     var openUsage: () -> Void = {}
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(provider.name)
-                .font(.system(size: 14, weight: .semibold))
-            ForEach(Array(forecasts.enumerated()), id: \.element.key) { index, forecast in
-                if index > 0 { Divider() }
+        VStack(alignment: .leading, spacing: 0) {
+            SectionHeader(provider.name)
+            ForEach(forecasts, id: \.key) { forecast in
                 WindowRow(forecast: forecast, now: now, showsChart: forecast.key == chartKey)
             }
             if let model, provider == .claude || provider == .codex {
@@ -26,97 +25,85 @@ struct ToolCard: View {
             if let model {
                 ResetCreditRow(provider: provider, model: model, now: now, openSettings: openSettings)
             }
-        }
-        .padding(12)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 12))
-        .overlay {
-            RoundedRectangle(cornerRadius: 12)
-                .strokeBorder(Color(nsColor: .separatorColor).opacity(0.4), lineWidth: 0.5)
+            if model != nil, provider == .claude || provider == .codex {
+                LinkBar {
+                    Button("Details ›", action: openUsage)
+                    if provider == .claude {
+                        Link("Check resets in Claude Usage ↗",
+                             destination: URL(string: "https://claude.ai/settings/usage")!)
+                    }
+                }
+                .padding(.bottom, 4)
+            }
         }
     }
 
     private func usageRow(_ model: UsageModel) -> some View {
         let summary = model.todayUsage(for: provider, now: now)
-        return VStack(alignment: .leading, spacing: 5) {
-            Divider()
-            HStack {
-                Text("Today · This Mac").font(.system(size: 11)).foregroundStyle(.secondary)
-                Spacer()
-                Button("Details", action: openUsage).buttonStyle(.plain).foregroundStyle(Color.accentColor)
-            }
+        return Group {
             if summary.events > 0 {
-                Text("\(summary.tokens.total.formatted(.number.notation(.compactName))) tokens · \(summary.costLabel)")
-                    .font(.system(size: 12, weight: .medium)).monospacedDigit()
-                Text("Estimated API cost · USD").font(.system(size: 10)).foregroundStyle(.secondary)
+                InfoRow("Today · This Mac", lines: ["Estimated API cost · USD"],
+                        value: "\(summary.tokens.total.formatted(.number.notation(.compactName))) tokens",
+                        secondary: summary.costLabel)
             } else {
-                Text(model.scanningUsage ? "Reading usage history…" : "No usage recorded today")
-                    .font(.system(size: 11)).foregroundStyle(.secondary)
+                InfoRow("Today · This Mac",
+                        lines: [model.scanningUsage ? "Reading usage history…" : "No usage recorded today"])
             }
         }
     }
-
 }
 
-/// One window. Compact when it's fine or still learning; the full story when it's running short.
+/// One window. A plain row when it's fine or still learning; an open disclosure with the full story when it's
+/// running short.
 struct WindowRow: View {
     let forecast: Forecast
     let now: Date
     let showsChart: Bool
+    @BrushedTheme private var theme
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            HStack(alignment: .firstTextBaseline) {
-                Text(forecast.windowName)
-                    .font(.system(size: 12, weight: .medium))
-                Spacer()
-                Text(ForecastText.percent(forecast.usedPercent))
-                    .font(.system(size: 13, weight: .semibold).monospacedDigit())
-                    .foregroundStyle(.primary)
-            }
-            UsageBar(used: forecast.usedPercent, projected: projected, tint: tint)
-            if forecast.isShort {
+        if forecast.isShort {
+            Disclosure(forecast.windowName, subtitle: ForecastText.headline(forecast, now: now),
+                       value: ForecastText.percent(forecast.usedPercent), initiallyExpanded: true) {
                 expanded
-            } else {
-                Text(compactLine)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(.primary)
-                    .fixedSize(horizontal: false, vertical: true)
-                if let context = ForecastText.context(forecast, now: now) {
-                    Text(context)
-                        .font(.system(size: 11))
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
+            }
+        } else {
+            VStack(alignment: .leading, spacing: 0) {
+                InfoRow(forecast.windowName,
+                        lines: [compactLine] + (ForecastText.context(forecast, now: now).map { [$0] } ?? []),
+                        value: ForecastText.percent(forecast.usedPercent))
+                ProjectedTape(used: forecast.usedPercent, projected: projected, status: status)
+                    .padding(.horizontal, 14)
+                    .padding(.bottom, 8)
             }
         }
     }
 
     private var expanded: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(ForecastText.headline(forecast, now: now))
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(.primary)
-            Text(ForecastText.usage(forecast, now: now))
-                .font(.system(size: 12))
-                .foregroundStyle(.secondary)
-            if let pace = ForecastText.pace(forecast, now: now) {
-                Text(pace)
-                    .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+            ProjectedTape(used: forecast.usedPercent, projected: projected, status: status)
+                .padding(.bottom, 4)
+            Group {
+                Text(ForecastText.usage(forecast, now: now))
+                if let pace = ForecastText.pace(forecast, now: now) {
+                    Text(pace)
+                }
+                if let range = ForecastText.range(forecast, now: now) {
+                    Text(range)
+                }
             }
-            if let range = ForecastText.range(forecast, now: now) {
-                Text(range)
-                    .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
-            }
+            .font(PanelFont.body(11.5))
+            .foregroundStyle(theme.sub)
+            .fixedSize(horizontal: false, vertical: true)
             if showsChart, forecast.history.count >= 2 {
-                ForecastChart(forecast: forecast, now: now, tint: tint)
+                ForecastChart(forecast: forecast, now: now, tint: theme.color(for: status ?? .off))
                     .frame(height: 76)
-                    .padding(.top, 4)
+                    .padding(.top, 6)
             }
         }
+        .padding(.leading, 46)
+        .padding(.trailing, 14)
+        .padding(.bottom, 10)
     }
 
     /// "Makes it, about 14% by then · resets 2p", or "Learning your pace, forecast in about 2h · resets 2p".
@@ -133,7 +120,7 @@ struct WindowRow: View {
         }
     }
 
-    /// Where the bar's faint extension ends: the projected percent at reset.
+    /// Where the tape's faint extension ends: the projected percent at reset.
     private var projected: Double? {
         switch forecast.verdict {
         case .makesIt(let projected): projected
@@ -142,39 +129,12 @@ struct WindowRow: View {
         }
     }
 
-    private var tint: Color {
-        WindowRow.tint(for: forecast.verdict)
-    }
-
-    static func tint(for verdict: Forecast.Verdict) -> Color {
-        switch verdict {
-        case .limitReached: .red
-        case .runsOut: .orange
-        case .makesIt: .green
-        case .learning, .stale, .reset: .secondary
+    /// Colour only when the window runs short; graphite otherwise.
+    private var status: PanelStatus? {
+        switch forecast.verdict {
+        case .limitReached: .stop
+        case .runsOut: .caution
+        case .makesIt, .learning, .stale, .reset: nil
         }
-    }
-}
-
-/// A bar of the percent used, with a faint extension to where it's headed by reset.
-struct UsageBar: View {
-    let used: Double
-    let projected: Double?
-    let tint: Color
-
-    var body: some View {
-        GeometryReader { geometry in
-            let width = geometry.size.width
-            ZStack(alignment: .leading) {
-                Capsule().fill(.quaternary)
-                if let projected, projected > used {
-                    Capsule().fill(tint.opacity(0.25))
-                        .frame(width: width * min(projected, 100) / 100)
-                }
-                Capsule().fill(tint == .secondary ? Color.gray : tint)
-                    .frame(width: max(5, width * min(used, 100) / 100))
-            }
-        }
-        .frame(height: 5)
     }
 }
