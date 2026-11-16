@@ -77,7 +77,7 @@ COMPARISONS = [
         "cta": "Know if you&#39;ll make it.",
         "faqs": [
             ("Is ccusage free?", "Yes. ccusage is free and MIT licensed. Fuel Gauge is free too, with the source on GitHub under the FSL-1.1-MIT license."),
-            ("Does Fuel Gauge show dollar costs like ccusage?", "No. Fuel Gauge works in percent of your plan's limit, which is what decides whether you get cut off on Pro or Max. ccusage estimates cost from tokens at API prices."),
+            ("Does Fuel Gauge show dollar costs like ccusage?", "Yes, for Claude Code and Codex on this Mac. View usage shows tokens and estimated API cost for today, 7 days, or 30 days, by tool, model, project, and session. It's what those tokens would cost at API rates, not your subscription bill. ccusage covers more agents and has more report types. Fuel Gauge's forecasts still work in percent of your plan's limit, which is what decides whether you get cut off on Pro or Max."),
             ("Can I use ccusage and Fuel Gauge together?", "Yes. ccusage is a command you run for reports; Fuel Gauge runs in the menu bar. Neither changes the other."),
         ],
         "sections": [
@@ -93,13 +93,13 @@ COMPARISONS = [
         <h2>Fuel Gauge vs ccusage</h2>
         {{TABLE}}
         <h3>What ccusage does better</h3>
-        <p>History and cost. If you want to know what last month cost at API prices, or compare usage across many agents, ccusage is the tool.</p>
+        <p>Breadth and reports. Fuel Gauge shows 30 days of tokens and estimated API cost for Claude Code and Codex, but if you want monthly reports, 5-hour block reports, or usage across many more agents, ccusage is the tool.</p>
         <h3>What Fuel Gauge does better</h3>
         <p>The next few hours. It tells you whether your current limit will last, while you work, without opening a terminal.</p>
             """, "table": [
                 ("Price", "Free", "Free"),
                 ("License", "FSL-1.1-MIT, source on GitHub", "MIT"),
-                ("What it measures", "Percent of your plan&#39;s limits", "Tokens and estimated cost in dollars"),
+                ("What it measures", "Percent of your plan&#39;s limits, plus tokens and estimated API cost for Claude Code and Codex", "Tokens and estimated cost in dollars"),
                 ("Forecast to reset", "Yes, with a range", "—"),
                 ("Where it runs", "Mac menu bar, Claude Code status line, CLI", "Command line"),
                 ("Tools", "Claude Code, Codex, Grok Bot, Cursor (opt-in)", "18, including Claude Code, Codex, Gemini CLI"),
@@ -206,7 +206,7 @@ COMPARISONS = [
                 ("Price", "Free", "Free"),
                 ("License", "FSL-1.1-MIT, source on GitHub", "MIT"),
                 ("Where it runs", "Mac menu bar, Claude Code status line, CLI", "Terminal dashboard"),
-                ("Measures", "Claude&#39;s own session and weekly percentages", "Tokens and cost per 5-hour window"),
+                ("Measures", "Claude&#39;s own session and weekly percentages, plus tokens and estimated API cost", "Tokens and cost per 5-hour window"),
                 ("Forecast", "Each window, with a range", "Session forecasting"),
                 ("Weekly limit forecast", "Yes", "—"),
                 ("Codex, Grok Bot, Cursor", "Yes", "—"),
