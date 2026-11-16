@@ -171,6 +171,9 @@ enum DemoMode {
         window.orderFrontRegardless()
         hosting.layoutSubtreeIfNeeded()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            // The panel's scroll area sizes itself to its content after the first layout.
+            hosting.setFrameSize(hosting.fittingSize)
+            hosting.layoutSubtreeIfNeeded()
             guard let rep = hosting.bitmapImageRepForCachingDisplay(in: hosting.bounds) else { return }
             hosting.cacheDisplay(in: hosting.bounds, to: rep)
             try? rep.representation(using: .png, properties: [:])?.write(to: url)
