@@ -20,8 +20,8 @@ packages:
     url: https://github.com/sparkle-project/Sparkle
     exactVersion: "2.10.0"
   PanelKit:
-    url: https://github.com/coreyhaines31/mac-app-kit
-    branch: feature/2-panelkit
+    url: https://github.com/coreyhaines31/panelkit
+    from: 0.1.0
 targets:
   FuelGauge:
     type: application
