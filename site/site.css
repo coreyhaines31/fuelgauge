@@ -325,3 +325,7 @@ section.tight { padding: clamp(48px, 6vw, 72px) 0 0; }
 .compare.vs th:first-child, .compare.vs td:first-child { width: 17%; }
 .compare.vs th a { color: inherit; }
 .fair { margin-top: 14px; }
+
+/* Free: big figures over short lines */
+.proof b { font: 600 30px/1.05 var(--bx-display); color: var(--bx-ink); }
+
