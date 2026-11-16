@@ -127,23 +127,9 @@ struct PanelView: View {
     }
 
     private var claudeSetup: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("See your Claude Code limits")
-                .font(PanelFont.body(13, .semibold))
-                .foregroundStyle(theme.ink)
-            Text(claudeSetupDetail)
-                .font(PanelFont.body(11.5))
-                .foregroundStyle(theme.sub)
-                .fixedSize(horizontal: false, vertical: true)
-            if let setupError {
-                HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    StatusLight(.stop, "Error")
-                    Text(setupError)
-                        .font(PanelFont.body(11.5))
-                        .foregroundStyle(theme.ink)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-            }
+        Notice("See your Claude Code limits",
+               message: setupError.map { claudeSetupDetail + "\n\n" + $0 } ?? claudeSetupDetail,
+               status: setupError == nil ? .caution : .stop) {
             Button("Turn On") {
                 do {
                     try model.setClaudeStatusLine(on: true)
@@ -152,15 +138,8 @@ struct PanelView: View {
                     setupError = "Couldn't update Claude Code's settings: \(error.localizedDescription)"
                 }
             }
-            .buttonStyle(PanelButtonStyle(.primary))
-            .padding(.top, 2)
+            .buttonStyle(.panelCompact)
         }
-        .padding(12)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(theme.field, in: RoundedRectangle(cornerRadius: 6))
-        .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(theme.line, lineWidth: 1))
-        .padding(.horizontal, 14)
-        .padding(.bottom, 12)
     }
 
     private var claudeSetupDetail: String {
