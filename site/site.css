@@ -315,3 +315,7 @@ section.tight { padding: clamp(48px, 6vw, 72px) 0 0; }
   .hero { padding-top: 80px; }
   .sub-hero { padding-top: 84px; }
 }
+
+/* Command reference under the agent check */
+.rule .table-card { margin-top: 4px; }
+.cli-table td:first-child { width: 36%; white-space: nowrap; }

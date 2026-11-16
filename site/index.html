@@ -380,6 +380,20 @@
             <pre id="agent-rule">Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before starting, or switch to a cheaper model. `fuelgauge status --json` has the details.</pre>
           </div>
         </div>
+        <div class="rule">
+          <h3>The whole command line</h3>
+          <p>Homebrew puts <code>fuelgauge</code> on your PATH. Installed from the DMG? Use Settings › General › Install…</p>
+          <div class="table-card glass"><div class="table-scroll"><table class="compare cli-table">
+            <tbody>
+              <tr><td><code>fuelgauge status</code></td><td>Every limit in plain words. Exits 2 if one will run out before it resets, or already has.</td></tr>
+              <tr><td><code>fuelgauge status --json</code></td><td>The same, for scripts and agents, with a verdict per limit.</td></tr>
+              <tr><td><code>fuelgauge history --days 2</code></td><td>The readings behind the forecasts.</td></tr>
+              <tr><td><code>fuelgauge backtest --days 7</code></td><td>Compares forecasts with what actually happened. Local and read-only.</td></tr>
+              <tr><td><code>fuelgauge install-statusline</code></td><td>Makes Fuel Gauge Claude Code&#39;s status line, keeping yours above it.</td></tr>
+              <tr><td><code>fuelgauge uninstall-statusline</code></td><td>Puts your old status line back.</td></tr>
+            </tbody>
+          </table></div></div>
+        </div>
       </div>
     </section>
 
