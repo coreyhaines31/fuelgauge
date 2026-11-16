@@ -31,7 +31,6 @@ p { margin: 0 0 1em; }
 
 /* Surfaces: flat cards with a rule, depth from bays not shadows */
 .glass { position: relative; background: var(--bx-card); border: 1px solid var(--bx-rule); }
-.sky { display: none; }
 
 /* Nav: sits on the brushed hero */
 .nav { position: absolute; top: 0; left: 0; right: 0; z-index: 20; }
@@ -71,7 +70,8 @@ p { margin: 0 0 1em; }
 
 /* Hero: brushed aluminium (black anodised at night) with the popover on its mount */
 .hero { background: var(--bx-brush); border-bottom: 1px solid rgba(0,0,0,.25); padding: 92px 0 56px; }
-.hero > .wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; align-items: center; }
+.hero > .wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; align-items: start; }
+.hero > .wrap > div:first-child { padding-top: 56px; }
 .hero h1 { font-weight: 600; font-size: clamp(42px, 6vw, 76px); line-height: .97; margin-top: 18px; }
 .hero .lede { margin: 18px 0 26px; max-width: 30em; }
 .badge { width: fit-content; display: inline-flex; gap: 10px; align-items: center; font: 600 12px/1.2 var(--bx-display); letter-spacing: .24em; text-transform: uppercase;
@@ -80,7 +80,7 @@ p { margin: 0 0 1em; }
 .hero .prompt-box { margin: 0; }
 .hero .bx-mount { padding: 40px 20px; }
 .hero .bx-mount .pop { margin-top: 6px; }
-@media (max-width: 880px) { .hero > .wrap { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 880px) { .hero > .wrap { grid-template-columns: minmax(0, 1fr); } .hero > .wrap > div:first-child { padding-top: 24px; } }
 
 /* The popover follows the visitor's light or dark setting, like a real Mac: the dark values from kit/popover.css */
 @media (prefers-color-scheme: dark) {
@@ -271,80 +271,3 @@ section.tight { padding: clamp(48px, 6vw, 72px) 0 0; }
   .hero { padding-top: 80px; }
   .sub-hero { padding-top: 84px; }
 }
-
-/* ---------- Hi-fi macOS 26 mockups, drawn in code. They follow the visitor's light or dark setting, like a real Mac. ---------- */
-.mk { --m-text: #1d1d1f; --m-sub: #6e6e73; --m-faint: #8e8e93; --m-sep: rgba(0,0,0,0.09); --m-menu: rgba(250,250,252,0.72); --m-card: rgba(255,255,255,0.62);
-  --m-track: rgba(0,0,0,0.08); --m-warn: #b84c06; --m-warn-fill: #f2761c; --m-ok: #15803d; --m-ok-fill: #34c759; --m-bad: #c4221a;
-  font: 13px/1.35 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif; color: var(--m-text); text-align: left; letter-spacing: 0; }
-@media (prefers-color-scheme: dark) {
-  .mk { --m-text: #f2f2f4; --m-sub: #a1a1a7; --m-faint: #8a8a90; --m-sep: rgba(255,255,255,0.1); --m-menu: rgba(36,34,32,0.7); --m-card: rgba(255,255,255,0.06);
-    --m-track: rgba(255,255,255,0.12); --m-warn: #ffa552; --m-warn-fill: #ff9a3c; --m-ok: #4ade80; --m-ok-fill: #32d74b; }
-}
-
-/* Desktop with the menu bar and the open panel */
-.desk { position: relative; border-radius: 28px; overflow: hidden; padding-bottom: 44px; box-shadow: var(--shadow-win);
-  background: radial-gradient(45% 60% at 80% 6%, #ffd59a, transparent 70%), radial-gradient(55% 70% at 6% 100%, #ffb38a, transparent 70%),
-    radial-gradient(40% 50% at 40% 60%, #fde6c4, transparent 70%), linear-gradient(165deg, #fbe3c6, #f6c18f 55%, #e99a6a); }
-@media (prefers-color-scheme: dark) {
-  .desk { background: radial-gradient(45% 60% at 80% 6%, rgba(245,150,60,0.4), transparent 70%), radial-gradient(55% 70% at 6% 100%, #6b2f1a, transparent 70%),
-    radial-gradient(40% 50% at 40% 60%, rgba(120,70,30,0.45), transparent 70%), linear-gradient(165deg, #3a2516, #2a1a10 55%, #170e08); }
-}
-.mk-menubar { display: flex; justify-content: space-between; align-items: center; height: 30px; padding: 0 14px; font-size: 13px; color: #1d1d1f;
-  background: rgba(255,255,255,0.28); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
-@media (prefers-color-scheme: dark) { .mk-menubar { color: #fff; background: rgba(0,0,0,0.18); } }
-.mk-menubar .l, .mk-menubar .r { display: flex; align-items: center; gap: 16px; white-space: nowrap; }
-.mk-menubar .l b { font-weight: 700; }
-.mk-menubar svg { flex: none; }
-.mk-menubar .apple { width: 13px; height: 15px; fill: currentColor; }
-.mk-menubar .r svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-.mk-menubar .item { display: flex; align-items: center; gap: 5px; padding: 2px 8px; margin: 0 -6px; border-radius: 6px; font-variant-numeric: tabular-nums; font-weight: 500; }
-.mk-menubar .item.on { background: rgba(0,0,0,0.12); }
-@media (prefers-color-scheme: dark) { .mk-menubar .item.on { background: rgba(255,255,255,0.2); } }
-.mk-menubar .item svg.gauge { width: 19px; height: 19px; stroke-width: 2; }
-.mk-menubar .item.warn { color: #b84c06; }
-@media (prefers-color-scheme: dark) { .mk-menubar .item.warn { color: #ffa552; } }
-
-/* The Fuel Gauge panel: one card per limit, most urgent first */
-.mk-panel { width: 372px; margin: 8px 24px 0 auto; padding: 8px; border-radius: 18px; background: var(--m-menu);
-  -webkit-backdrop-filter: blur(30px) saturate(200%); backdrop-filter: blur(30px) saturate(200%);
-  box-shadow: 0 0 0 0.5px rgba(0,0,0,0.18), inset 0 0.5px 0 rgba(255,255,255,0.6), 0 10px 30px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.08); }
-@media (prefers-color-scheme: dark) { .mk-panel { box-shadow: 0 0 0 0.5px rgba(0,0,0,0.6), inset 0 0 0 0.5px rgba(255,255,255,0.14), 0 14px 36px rgba(0,0,0,0.5); } }
-.fg-card { background: var(--m-card); border-radius: 12px; padding: 11px 12px 12px; box-shadow: inset 0 0 0 0.5px var(--m-sep); }
-.fg-card + .fg-card { margin-top: 6px; }
-.fg-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
-.fg-top b { font-weight: 600; font-size: 13px; }
-.fg-top span { font-weight: 600; font-size: 15px; font-variant-numeric: tabular-nums; }
-.fg-bar { position: relative; height: 6px; border-radius: 3px; background: var(--m-track); margin: 7px 0 8px; overflow: hidden; }
-.fg-bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
-.fg-bar .proj { opacity: 0.28; }
-.fg-row.warn .fg-bar i { background: var(--m-warn-fill); }
-.fg-row.ok .fg-bar i { background: var(--m-ok-fill); }
-.fg-row.learn .fg-bar i { background: var(--m-faint); }
-.fg-verdict { font-weight: 700; font-size: 13px; }
-.fg-row.warn .fg-verdict { color: var(--m-warn); }
-.fg-row.ok .fg-verdict { color: var(--m-ok); }
-.fg-row.learn .fg-verdict { color: var(--m-sub); }
-.fg-line { color: var(--m-sub); font-size: 11.5px; line-height: 1.4; margin-top: 2px; font-variant-numeric: tabular-nums; }
-.fg-chart { margin-top: 10px; }
-.fg-chart svg { width: 100%; height: auto; overflow: visible; }
-.fg-chart .full { stroke: var(--m-faint); stroke-width: 1; stroke-dasharray: 2 3; opacity: 0.6; }
-.fg-chart .base { stroke: var(--m-sep); stroke-width: 1; }
-.fg-chart .used { fill: none; stroke: var(--m-warn-fill); stroke-width: 2; stroke-linejoin: round; }
-.fg-chart .area { fill: var(--m-warn-fill); opacity: 0.12; }
-.fg-chart .proj { fill: none; stroke: var(--m-warn-fill); stroke-width: 2; stroke-dasharray: 3 4; stroke-linecap: round; }
-.fg-chart .reset { stroke: var(--m-sub); stroke-width: 1; stroke-dasharray: 3 3; }
-.fg-chart .dot { fill: var(--m-warn-fill); }
-.fg-axis { position: relative; height: 14px; font-size: 10px; color: var(--m-faint); margin-top: 3px; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.fg-axis span { position: absolute; top: 0; transform: translateX(-50%); }
-.fg-foot { display: flex; justify-content: space-between; padding: 8px 6px 2px; font-size: 12px; color: var(--m-sub); }
-
-
-/* Panel mockup: summary line, a card per tool, a row per window (matches the app since 1.3.0) */
-.fg-summary { font-weight: 700; font-size: 12.5px; color: var(--m-warn); margin: 0 2px 8px; }
-.fg-tool { font-weight: 600; font-size: 13px; margin-bottom: 8px; }
-.fg-row + .fg-row { border-top: 0.5px solid var(--m-sep); margin-top: 10px; padding-top: 10px; }
-.fg-row .fg-top b { font-weight: 500; font-size: 12px; }
-.fg-row .fg-top span { font-size: 12px; color: var(--m-sub); }
-.fg-compact { font-weight: 600; font-size: 11.5px; margin-top: 5px; line-height: 1.35; }
-.fg-row.ok .fg-compact { color: var(--m-ok); }
-.fg-row.learn .fg-compact { color: var(--m-sub); }
