@@ -444,6 +444,35 @@
       </div>
     </section>
 
+    <section id="compare" class="lit">
+      <div class="wrap">
+        <div class="head">
+          <h2>The other ways to check your Claude usage, honestly compared.</h2>
+          <p>You can see your usage without any app, and there are good free trackers. Here&#39;s how they differ, checked against each one&#39;s own docs and GitHub page on November 16, 2026. Deeper comparisons: <a href="/alternatives/codexbar">CodexBar</a>, <a href="/alternatives/ccusage">ccusage</a>, <a href="/alternatives/ccstatusline">ccstatusline</a>, <a href="/alternatives/claude-code-usage-monitor">Claude-Code-Usage-Monitor</a>.</p>
+        </div>
+        <div class="table-card glass"><div class="table-scroll"><table class="compare vs">
+          <thead><tr><th></th><th class="us">Fuel Gauge</th><th>Built-in views</th><th><a href="https://codexbar.app">CodexBar</a></th><th><a href="https://github.com/tddworks/ClaudeBar">ClaudeBar</a></th><th><a href="https://github.com/sirmalloc/ccstatusline">ccstatusline</a></th></tr></thead>
+          <tbody>
+            <tr><td>Where it lives</td><td class="us">Menu bar, Claude Code status line, Terminal</td><td>Claude Code&#39;s <code>/usage</code>, Codex&#39;s <code>/status</code>, and each provider&#39;s web page</td><td>Menu bar, plus a CLI</td><td>Menu bar</td><td>Claude Code status line</td></tr>
+            <tr><td>Covers</td><td class="us">Claude Code, Codex, Grok Bot, Cursor (opt-in)</td><td>One tool each</td><td>114 providers</td><td>20+ providers, including Claude, Codex, and Cursor</td><td>Claude Code</td></tr>
+            <tr><td>Percent used and reset time</td><td class="us">Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Says if you&#39;ll make it to reset</td><td class="us">Yes, it&#39;s the headline</td><td class="n">No</td><td>Yes, “runs out in” and a burn-down</td><td>Yes</td><td>Yes, forecast and limit-timer widgets</td></tr>
+            <tr><td>Learns your weekday and weekend hours</td><td class="us">Yes</td><td class="n">No</td><td class="n">Not documented</td><td class="n">Not documented</td><td class="n">Not documented</td></tr>
+            <tr><td>Scores its own forecasts</td><td class="us">Yes, predicted vs. actual</td><td class="n">No</td><td class="n">Not documented</td><td class="n">Not documented</td><td class="n">Not documented</td></tr>
+            <tr><td>For agents</td><td class="us">Exit code 2, JSON, Claude Desktop extension</td><td class="n">No</td><td>CLI</td><td class="n">Not documented</td><td class="n">Not documented</td></tr>
+            <tr><td>How it gets your numbers</td><td class="us">Local files and Claude Code&#39;s status line; Codex CLI for reset counts; cursor.com only if you turn Cursor on</td><td>Your account</td><td>OAuth, API keys, local files, opt-in browser cookies</td><td>Varies by provider</td><td>Claude Code&#39;s status line input</td></tr>
+            <tr><td>Price and license</td><td class="us">Free, FSL-1.1-MIT</td><td>Included</td><td>Free, MIT</td><td>Free, Apache-2.0</td><td>Free, MIT</td></tr>
+          </tbody>
+        </table></div></div>
+        <div class="points glass fair">
+          <div><h3>Where the built-ins win</h3><p>They&#39;re official and already installed. Claude Code&#39;s <code>/usage</code> also breaks down what&#39;s using your plan, like skills, subagents, and MCP servers, with suggestions. The usage page on claude.ai covers every device.</p></div>
+          <div><h3>Where CodexBar and ClaudeBar win</h3><p>Breadth. If you use Gemini, Copilot, Z.ai, or a dozen other services, they cover them in one menu, and both already forecast when you&#39;ll run out. CodexBar also has a big community and a Linux CLI.</p></div>
+          <div><h3>Where ccstatusline wins</h3><p>If all you want is a status line, it&#39;s a deep one: forecast and limit-timer widgets alongside dozens of others, right where you type.</p></div>
+        </div>
+        <p class="table-foot">Also worth knowing: <a href="https://github.com/hamed-elfayome/Claude-Usage-Tracker">Claude Usage Tracker</a> and <a href="https://github.com/f-is-h/Usage4Claude">Usage4Claude</a> show Claude and Codex percentages and reset times in the menu bar, with pace markers, using a pasted session key or a sign-in. <a href="https://github.com/ccusage/ccusage">ccusage</a> reports tokens and cost across about 20 agent CLIs. Fuel Gauge&#39;s case is narrower: the verdict first, a forecast that knows your week and checks itself, an exit code your agents can use, and no browser cookies or pasted session keys.</p>
+      </div>
+    </section>
+
     <section id="privacy" class="lit">
       <div class="wrap">
         <div class="head center">

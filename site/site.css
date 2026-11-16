@@ -319,3 +319,9 @@ section.tight { padding: clamp(48px, 6vw, 72px) 0 0; }
 /* Command reference under the agent check */
 .rule .table-card { margin-top: 4px; }
 .cli-table td:first-child { width: 36%; white-space: nowrap; }
+
+/* Homepage comparison: six columns, scrolls sideways on phones */
+.compare.vs { min-width: 860px; font-size: 14.5px; }
+.compare.vs th:first-child, .compare.vs td:first-child { width: 17%; }
+.compare.vs th a { color: inherit; }
+.fair { margin-top: 14px; }
