@@ -137,11 +137,11 @@
       <div class="wrap">
         <div class="head center">
           <h2>Set up once. Then just work.</h2>
-          <p>Three steps, about a minute. Codex and Grok Bot need nothing at all.</p>
+          <p>About a minute. Codex and Grok Bot work as soon as the app is open; Claude Code takes one click.</p>
         </div>
         <div class="points glass">
-          <div><span class="n">1</span><h3>Install it</h3><p>Download the app and drag it to Applications, or run <code>brew install --cask coreyhaines31/tap/fuelgauge</code>. A 4.6 MB download, signed and notarized by Apple.</p></div>
-          <div><span class="n">2</span><h3>Turn on Claude Code</h3><p>Click Turn On in the panel, or run <code>fuelgauge install-statusline</code>. Claude Code only shares its limits with a status line, so Fuel Gauge becomes one. Your settings are backed up first.</p></div>
+          <div><span class="n">1</span><h3>Install it</h3><p>Download the app and drag it to Applications, or run <code>brew install --cask coreyhaines31/tap/fuelgauge</code>. A 4.6 MB download.</p></div>
+          <div><span class="n">2</span><h3>Turn on Claude Code</h3><p>Click Turn On in the panel, or run <code>fuelgauge install-statusline</code>. Claude Code only shares its limits with a status line, so Fuel Gauge becomes one.</p></div>
           <div><span class="n">3</span><h3>Keep working</h3><p>Readings arrive as you go. A 5-hour limit gets a forecast after about 10 minutes, a weekly one after about 3 hours. Codex&#39;s last 8 days are read on first launch, so its weekly forecast starts right away.</p></div>
         </div>
       </div>
@@ -197,7 +197,7 @@
       <div class="wrap">
         <div class="head">
           <h2>What each line on a card means.</h2>
-          <p>Every limit gets one card row. The first line is the verdict; the rest tell you why, and what to do about it.</p>
+          <p>Each limit gets its own row on a tool&#39;s card: the verdict first, then the pace and reset math underneath.</p>
         </div>
         <div class="table-card glass"><div class="table-scroll"><table class="compare">
           <thead><tr><th>When it says</th><th>It means</th></tr></thead>
@@ -233,7 +233,7 @@
           <div>
             <h3>It learns your week.</h3>
             <p>Weekly and monthly limits depend on when you work, not just how fast. After two weeks of readings, Fuel Gauge learns your usual hours, separately for weekdays and weekends. A forecast made on Friday night doesn&#39;t assume you&#39;ll code all weekend at Friday&#39;s pace.</p>
-            <p>The last three days nudge that pattern up or down, by up to 2×. A busy session counts for a few hours, then fades. Until there&#39;s enough history, it uses your recent pace. Hours it hasn&#39;t seen stay unknown, never zero.</p>
+            <p>The last three days nudge that pattern up or down, by up to 2×. A busy session counts for a few hours, then fades. Until there&#39;s enough history, it uses your recent pace. Hours it hasn&#39;t seen aren&#39;t assumed to be quiet; it falls back to your recent pace instead.</p>
             <p><b>Forecast details</b> shows exactly what it learned: weekday and weekend bars by hour, the readings behind each one, and how this week compares with usual.</p>
           </div>
           <div class="bx-mount" role="group" aria-label="Forecast details, Your usual hours, with sample data">
@@ -285,7 +285,7 @@
       <div class="wrap">
         <div class="split feature flip">
           <div>
-            <h2>Claude Code and Codex token usage, with the API cost.</h2>
+            <h2>Token usage, cache hits, and API cost, from your own logs.</h2>
             <p>Choose <b>View usage</b> in the panel for what Claude Code and Codex used on this Mac: today, the last 7 days, or the last 30. Each tool card shows today&#39;s tokens and estimated cost too, even when there&#39;s no forecast yet.</p>
             <ul class="checks">
               <li>Tokens split into uncached input, output, cache reads, and cache writes, with your cache hit rate.</li>
@@ -307,7 +307,7 @@
         <div class="split feature">
           <div>
             <h2>A meter, an alert, and a few settings.</h2>
-            <p>The menu bar glyph is a small fuel meter. Its needle shows the fuel left in whichever limit is closest to running out. It turns orange when one won&#39;t make it to its reset, and red when one is out. Next to it, show nothing, the percent used, or the time until you run out.</p>
+            <p>The meter is the whole story at a glance: needle for fuel left, orange for running short, red for out. Next to it, show nothing, the percent used, or the time until you run out. Hover it for the most urgent limit&#39;s verdict.</p>
             <p>You get one alert per window, and only when two fresh readings agree you&#39;ll run out at least 30 minutes early. Alerts at 80% and 95% used are on by default; 50% is there if you want it. macOS asks once, at the first alert, whether Fuel Gauge may send notifications.</p>
           </div>
           <div class="meter-demo" role="group" aria-label="Three menu bar states and an alert, with sample data">
@@ -323,7 +323,7 @@
           <tbody>
             <tr><td>General</td><td>Launch at login (on by default, so readings keep coming after a restart), what shows next to the meter, the <code>fuelgauge</code> command, a copyable prompt for AI agents, and automatic update checks.</td></tr>
             <tr><td>Tools</td><td>Which of Claude Code, Codex, Grok Bot, and Cursor to track, with where each one&#39;s numbers come from. The Claude Code status line turns on and off here.</td></tr>
-            <tr><td>Alerts</td><td>The early run-out alert, plus optional alerts at 50%, 80%, and 95% used.</td></tr>
+            <tr><td>Alerts</td><td>The early run-out alert, plus alerts at 50%, 80%, and 95% used. 80% and 95% start on.</td></tr>
             <tr><td>Resets</td><td>Codex reset tracking, and a manual count of saved Claude resets.</td></tr>
           </tbody>
         </table></div></div>
@@ -404,7 +404,7 @@
             <p class="eyebrow">Claude Desktop extension</p>
             <h2>Use Fuel Gauge from Claude.</h2>
             <p>Add Fuel Gauge to Claude Desktop and ask in plain words: how much Claude Code do I have left, will I hit my limit today, when does Codex reset. Claude reads the same forecast you see in the menu bar.</p>
-            <p>It adds two read-only tools: <code>limits_status</code> for each limit&#39;s percent, reset time, and verdict, and <code>limits_history</code> for the readings behind it, up to 30 days back. Answers come back short, so checking your limits barely touches them. Nothing about your accounts leaves your Mac.</p>
+            <p>It adds two read-only tools: <code>limits_status</code> for each limit&#39;s percent, reset time, and verdict, and <code>limits_history</code> for the readings behind it, up to 30 days back. Answers stay compact, so asking Claude about your limits uses very little of them. Nothing about your accounts leaves your Mac.</p>
             <div class="actions">
               <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/fuelgauge.mcpb"><svg aria-hidden="true"><use href="#i-download"/></svg>Download fuelgauge.mcpb</a>
               <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge/tree/main/mcpb"><svg aria-hidden="true"><use href="#i-github"/></svg>View the source</a>
@@ -434,9 +434,9 @@
           <p>Anyone whose work stops when a coding plan runs dry, and especially these three.</p>
         </div>
         <div class="points glass">
-          <div><h3>On Claude Pro, racing the 5-hour window</h3><p>The status line tells you after each reply whether this window will last. When it won&#39;t, you can wrap up, go smaller, or take the break before the cutoff takes it for you.</p></div>
+          <div><h3>On Claude Pro, racing the 5-hour window</h3><p>The status line tells you after each reply whether this window will last. When it won&#39;t, you can wrap up, switch to a smaller model, or pause on your own terms before the limit cuts you off.</p></div>
           <div><h3>On Max, running agents for hours</h3><p>The weekly limit is the one that bites. A forecast that knows your week, and one early alert, give you days of notice instead of minutes.</p></div>
-          <div><h3>Using Claude Code and Codex side by side</h3><p>Both in one panel. When one is running short, hand the next job to the one that makes it to reset.</p></div>
+          <div><h3>Using more than one coding agent</h3><p>Both in one panel. When one is running short, hand the next job to the one that makes it to reset.</p></div>
         </div>
       </div>
     </section>
@@ -453,7 +453,7 @@
             <tr><td>Where it lives</td><td class="us">Menu bar, Claude Code status line, Terminal</td><td>Claude Code&#39;s <code>/usage</code>, Codex&#39;s <code>/status</code>, and each provider&#39;s web page</td><td>Menu bar, plus a CLI</td><td>Menu bar</td><td>Claude Code status line</td></tr>
             <tr><td>Covers</td><td class="us">Claude Code, Codex, Grok Bot, Cursor (opt-in)</td><td>One tool each</td><td>114 providers</td><td>20+ providers, including Claude, Codex, and Cursor</td><td>Claude Code</td></tr>
             <tr><td>Percent used and reset time</td><td class="us">Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
-            <tr><td>Says if you&#39;ll make it to reset</td><td class="us">Yes, it&#39;s the headline</td><td class="n">No</td><td>Yes, “runs out in” and a burn-down</td><td>Yes</td><td>Yes, forecast and limit-timer widgets</td></tr>
+            <tr><td>Says if you&#39;ll make it to reset</td><td class="us">Yes</td><td class="n">No</td><td>Yes, “runs out in” and a burn-down</td><td>Yes</td><td>Yes, forecast and limit-timer widgets</td></tr>
             <tr><td>Learns your weekday and weekend hours</td><td class="us">Yes</td><td class="n">No</td><td class="n">Not documented</td><td class="n">Not documented</td><td class="n">Not documented</td></tr>
             <tr><td>Scores its own forecasts</td><td class="us">Yes, predicted vs. actual</td><td class="n">No</td><td class="n">Not documented</td><td class="n">Not documented</td><td class="n">Not documented</td></tr>
             <tr><td>For agents</td><td class="us">Exit code 2, JSON, Claude Desktop extension</td><td class="n">No</td><td>CLI</td><td class="n">Not documented</td><td class="n">Not documented</td></tr>
@@ -463,7 +463,7 @@
         </table></div></div>
         <div class="points glass fair">
           <div><h3>Where the built-ins win</h3><p>They&#39;re official and already installed. Claude Code&#39;s <code>/usage</code> also breaks down what&#39;s using your plan, like skills, subagents, and MCP servers, with suggestions. The usage page on claude.ai covers every device.</p></div>
-          <div><h3>Where CodexBar and ClaudeBar win</h3><p>Breadth. If you use Gemini, Copilot, Z.ai, or a dozen other services, they cover them in one menu, and both already forecast when you&#39;ll run out. CodexBar also has a big community and a Linux CLI.</p></div>
+          <div><h3>Where the menu bar trackers win</h3><p>Breadth. If you use Gemini, Copilot, Z.ai, or a dozen other services, they cover them in one menu, and both already forecast when you&#39;ll run out. CodexBar also has a big community and a Linux CLI.</p></div>
           <div><h3>Where ccstatusline wins</h3><p>If all you want is a status line, it&#39;s a deep one: forecast and limit-timer widgets alongside dozens of others, right where you type.</p></div>
         </div>
         <p class="table-foot">Also worth knowing: <a href="https://github.com/hamed-elfayome/Claude-Usage-Tracker">Claude Usage Tracker</a> and <a href="https://github.com/f-is-h/Usage4Claude">Usage4Claude</a> show Claude and Codex percentages and reset times in the menu bar, with pace markers, using a pasted session key or a sign-in. <a href="https://github.com/ccusage/ccusage">ccusage</a> reports tokens and cost across about 20 agent CLIs. Fuel Gauge&#39;s case is narrower: the verdict first, a forecast that knows your week and checks itself, an exit code your agents can use, and no browser cookies or pasted session keys.</p>
@@ -477,14 +477,14 @@
           <p>Your usage stays on your Mac. Here&#39;s exactly what it reads, what it saves, and the few times it goes online.</p>
         </div>
         <div class="points glass">
-          <div><h3>Local files only</h3><p>Claude Code&#39;s status line input and logs, Codex&#39;s logs in <code>~/.codex</code>, and Grok Bot&#39;s usage cache. No browser cookies, no keychain, no sign-in. It never asks for your accounts.</p></div>
+          <div><h3>Local files only</h3><p>Claude Code&#39;s status line input and logs, Codex&#39;s logs in <code>~/.codex</code>, and Grok Bot&#39;s usage cache. No browser cookies, no keychain, and it never asks you to sign in. The few things that go online are listed under Zero telemetry.</p></div>
           <div><h3>No Full Disk Access</h3><p>It doesn&#39;t need it. Everything it reads sits in your home folder. The only permission it asks for is notifications, at the first alert.</p></div>
           <div><h3>Zero telemetry</h3><p>No analytics, nothing about your usage sent anywhere. It goes online for update checks, Codex reset counts through your Codex CLI (on by default, off in Settings › Resets), and Cursor if you turn it on.</p></div>
-          <div><h3>One alert, early</h3><p>Once per window, when the forecast says you&#39;ll run out at least 30 minutes early. Alerts at 50, 80, or 95% used are optional.</p></div>
+          <div><h3>One alert, early</h3><p>Once per window, when the forecast says you&#39;ll run out at least 30 minutes early. Alerts at 80% and 95% used are on by default, 50% is there if you want it, and any of them can be turned off.</p></div>
           <div><h3>Track what you use</h3><p>Pick which tools it watches in Settings › Tools.</p></div>
           <div><h3>Free</h3><p>No trial, no subscription. Source on GitHub, signed and notarized by Apple.</p></div>
         </div>
-        <p class="note-line">What it saves, all in <code>~/Library/Application Support/Fuel Gauge</code>: limit readings (tool, limit, percent, reset time) for about two months; a usage cache of timestamps, model names, token counts, session IDs, and project paths for about 61 days, with no prompt or response text; and its saved predictions for up to 60 days. Uninstalling with <code>brew uninstall --cask --zap fuelgauge</code> removes it all.</p>
+        <p class="note-line">What it saves, all in <code>~/Library/Application Support/Fuel Gauge</code>: limit readings (tool, limit, percent, reset time), a usage cache of timestamps, model names, token counts, session IDs, and project paths, and its saved predictions. Each is kept for about two months, and none of it includes prompt or response text. Uninstalling with <code>brew uninstall --cask --zap fuelgauge</code> removes it all.</p>
       </div>
     </section>
 
