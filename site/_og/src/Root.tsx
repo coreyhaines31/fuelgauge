@@ -14,13 +14,11 @@ export const RemotionRoot = () => (
       {
         name: 'Fuel Gauge',
         icon: 'icon.svg',
+        badge: 'Free for macOS',
         headline: "Know if you'll make it",
-        headlineAccent: 'to reset.',
-        sub: 'Free for macOS · fuelgauge.app',
-        accent: '#e8670c',
-        accentInk: '#b84c06',
-        accentFill: '#f2761c',
-        field: ['#ffc98a', '#ffe3a3', '#c9e6ff', '#ffd3c4'],
+        headlineLight: 'to reset.',
+        sub: 'fuelgauge.app',
+        accent: '#e06a1b',
       } satisfies OgVideoProps
     }
   />
