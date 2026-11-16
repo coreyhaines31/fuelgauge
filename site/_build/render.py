@@ -52,6 +52,7 @@ FAMILY = [
     ("Green Room", "https://greenroomformac.com", "Check your camera, mic, and speakers", "green"),
     ("On Hand", "https://onhandformac.com", "A clipboard manager for your Mac", "hand"),
     ("Coat Check", "https://coatcheckformac.com", "Reach the menu bar icons the notch hides", "coat"),
+    ("Kill Cord", "https://killcord.app", "See your API spend before the bill does", "kill"),
 ]
 
 COPY_SCRIPT = '''  <script>
@@ -147,8 +148,6 @@ def footer_inner():
         f'<li><a href="{url}"{' aria-current="page"' if key == "fuel" else f' title="{esc(desc)}"'}>'
         f'<img src="/images/family/{key}.png" alt="" width="56" height="56">{esc(name)}</a></li>'
         for name, url, desc, key in FAMILY)
-    family += ('<li><span class="soon"><img src="/images/family/kill.png" alt="" width="56" height="56">'
-               'Kill Cord<small>Coming soon</small></span></li>')
     return (f'    <div class="foot-links">\n      <div class="wrap">\n'
             f'        <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a>{limits}</nav>\n'
             f'        <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a>{guides}</nav>\n'
