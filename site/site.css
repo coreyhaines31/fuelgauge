@@ -251,6 +251,18 @@ section.tight { padding: clamp(48px, 6vw, 72px) 0 0; }
 .story-body p { font-size: 18px; line-height: 1.55; color: var(--bx-ink2); break-inside: avoid; }
 .asks h3 { font-size: 20px; }
 
+/* Feature deep-dives: words beside a static popover built from the kit's parts */
+.feature { margin-top: clamp(40px, 6vw, 64px); }
+.feature h3 { font-size: clamp(26px, 2.8vw, 34px); margin-bottom: 14px; }
+.feature > div > p { font-size: 17px; color: var(--bx-ink2); line-height: 1.55; margin: 0 0 14px; }
+.feature > div > p b { color: var(--bx-ink); font-weight: 600; }
+.split.flip > :first-child { order: 2; }
+.bx-mount .pop { margin: 0 auto; }
+.bx-mount .pop.win::before { display: none; }
+.pop p { margin: 0; }
+.pop .ln.strong { color: inherit; font-weight: 600; padding-top: 6px; }
+.pop .tabs { padding-top: 10px; }
+
 /* Focus */
 .bx a:focus-visible, .bx button:focus-visible, .bx summary:focus-visible { outline: 2px solid var(--bx-accent); outline-offset: 3px; }
 
