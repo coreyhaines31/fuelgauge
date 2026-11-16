@@ -67,6 +67,7 @@ struct WindowRow: View {
                        value: ForecastText.percent(forecast.usedPercent), initiallyExpanded: true) {
                 expanded
             }
+            .subtitleTint(status)
         } else {
             Row(forecast.windowName,
                 subtitle: ([compactLine] + (ForecastText.context(forecast, now: now).map { [$0] } ?? []))
