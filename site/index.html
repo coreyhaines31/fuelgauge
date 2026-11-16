@@ -133,6 +133,39 @@
       </div>
     </section>
 
+    <section id="setup" class="lit">
+      <div class="wrap">
+        <div class="head center">
+          <h2>Set up once. Then just work.</h2>
+          <p>Three steps, about a minute. Codex and Grok Bot need nothing at all.</p>
+        </div>
+        <div class="points glass">
+          <div><span class="n">1</span><h3>Install it</h3><p>Download the app and drag it to Applications, or run <code>brew install --cask coreyhaines31/tap/fuelgauge</code>. A 4.6 MB download, signed and notarized by Apple.</p></div>
+          <div><span class="n">2</span><h3>Turn on Claude Code</h3><p>Click Turn On in the panel, or run <code>fuelgauge install-statusline</code>. Claude Code only shares its limits with a status line, so Fuel Gauge becomes one. Your settings are backed up first.</p></div>
+          <div><span class="n">3</span><h3>Keep working</h3><p>Readings arrive as you go. A 5-hour limit gets a forecast after about 10 minutes, a weekly one after about 3 hours. Codex&#39;s last 8 days are read on first launch, so its weekly forecast starts right away.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tools" class="lit">
+      <div class="wrap">
+        <div class="head">
+          <h2>Claude Code, Codex, and Grok Bot limits, read from your Mac.</h2>
+          <p>Fuel Gauge doesn&#39;t guess your plan or turn tokens into a quota. It reads the percentages your tools already report, then watches how fast they climb. Cursor is there too, off until you turn it on.</p>
+        </div>
+        <div class="table-card glass"><div class="table-scroll"><table class="compare">
+          <thead><tr><th>Tool</th><th>Limits it forecasts</th><th>Where the numbers come from</th><th>Setup</th></tr></thead>
+          <tbody>
+            <tr><td>Claude Code</td><td>5-hour and weekly, on Pro and Max plans</td><td>The usage Claude Code hands its status line after each reply</td><td>Turn on the status line once</td></tr>
+            <tr><td>Codex</td><td>The windows your plan reports: 5-hour and weekly, or weekly only on plans without a 5-hour limit</td><td>Codex&#39;s session logs in <code>~/.codex/sessions</code></td><td>None</td></tr>
+            <tr><td>Grok Bot</td><td>Weekly</td><td>The usage Grok Bot saves on your Mac while it&#39;s open</td><td>None</td></tr>
+            <tr><td>Cursor</td><td>Monthly</td><td>cursor.com, every 10 minutes, using the Cursor app&#39;s own sign-in</td><td>Off by default. Turn it on in Settings › Tools</td></tr>
+          </tbody>
+        </table></div></div>
+        <p class="table-foot">Claude on the web and in the desktop app share your account&#39;s limits, so that usage shows up at your next Claude Code reply. Claude Code only reports limits on Pro and Max. What each plan allows: <a href="/limits/claude-pro">Claude Pro</a>, <a href="/limits/claude-max">Claude Max</a>, <a href="/limits/codex">Codex</a>, <a href="/limits/grok">Grok</a>, <a href="/limits/cursor">Cursor</a>.</p>
+      </div>
+    </section>
+
     <section id="statusline" class="lit">
       <div class="wrap">
         <div class="split">
