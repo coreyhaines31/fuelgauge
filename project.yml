@@ -19,10 +19,9 @@ packages:
   Sparkle:
     url: https://github.com/sparkle-project/Sparkle
     exactVersion: "2.10.0"
-  # Temporary: PanelKit 0.2 lives on `development` until 0.2.0 is tagged; switch back to `from: 0.2.0` then.
   PanelKit:
     url: https://github.com/coreyhaines31/panelkit
-    branch: development
+    from: 0.2.0
 targets:
   FuelGauge:
     type: application
