@@ -76,13 +76,13 @@
         <div>
           <div class="badge"><i></i>Free, with the source on GitHub</div>
           <h1>Don&#39;t hit your limit <em>mid-task.</em></h1>
-          <p class="lede">Fuel Gauge watches your Claude Code, Codex, Grok Bot, and Cursor limits and tells you, at your pace, whether each one lasts until it resets. If one won&#39;t, you see when it runs out, before you start the big task.</p>
+          <p class="lede">Fuel Gauge watches your Claude Code, Codex, Grok Bot, and Cursor limits and tells you, at your pace, whether each one lasts until it resets. If one won&#39;t, you see when it runs out before you start.</p>
           <div class="actions">
             <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"><svg aria-hidden="true"><use href="#i-download"/></svg>Download free for Mac</a>
             <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge"><svg aria-hidden="true"><use href="#i-github"/></svg>View source code</a>
           </div>
           <div class="copyline"><code id="brew">brew install --cask coreyhaines31/tap/fuelgauge</code><button type="button" class="copy" data-copy="brew">Copy</button></div>
-          <p class="fineprint">macOS 14 Sonoma or later · Apple Silicon and Intel · No account</p>
+          <p class="fineprint">macOS 14 Sonoma or later · Apple silicon and Intel · No account</p>
           <div class="ask" id="agent-install">
             <p>Or ask your coding agent:</p>
             <div class="prompt-box">
@@ -270,7 +270,7 @@
         <div class="split feature">
           <div>
             <h2>Plan the next session before you start it.</h2>
-            <p>About to kick off something big? Open <b>Forecast details</b>, choose 30 minutes, 1 hour, 2 hours, or 4 hours more at this session&#39;s pace, and see every limit for that tool at once: which runs out first, and when.</p>
+            <p>About to kick off something big? Open <b>Forecast details</b> and choose 30 minutes, 1 hour, 2 hours, or 4 hours more at this session&#39;s pace. You see every limit for that tool at once, and which one runs out first.</p>
             <p>It needs a real session to measure: fresh readings over at least 10 minutes. Each projection stops at that limit&#39;s reset, and it never assumes you&#39;ll redeem a saved reset. It&#39;s a what-if, so your normal forecast and alerts don&#39;t change.</p>
           </div>
           <div class="bx-mount" role="group" aria-label="Plan your next session, with sample data">
@@ -289,7 +289,7 @@
             <p>Choose <b>View usage</b> in the panel for what Claude Code and Codex used on this Mac: today, the last 7 days, or the last 30. Each tool card shows today&#39;s tokens and estimated cost too, even when there&#39;s no forecast yet.</p>
             <ul class="checks">
               <li>Tokens split into uncached input, output, cache reads, and cache writes, with your cache hit rate.</li>
-              <li>Breakdowns by tool, model, project folder, and session. Hover a project for its full path.</li>
+              <li>Breakdowns by tool, model, project folder, and session, so you can see where the tokens go. Hover a project for its full path.</li>
               <li>Cost in US dollars at standard API rates, checked October 30, 2026. It&#39;s what those tokens would cost on the API, not your subscription bill.</li>
               <li>Read from your own logs in <code>~/.claude/projects</code> and <code>~/.codex</code>. Prompt and response text is never saved.</li>
             </ul>
@@ -388,7 +388,7 @@
               <tr><td><code>fuelgauge status</code></td><td>Every limit in plain words. Exits 2 if one will run out before it resets, or already has.</td></tr>
               <tr><td><code>fuelgauge status --json</code></td><td>The same, for scripts and agents, with a verdict per limit.</td></tr>
               <tr><td><code>fuelgauge history --days 2</code></td><td>The readings behind the forecasts.</td></tr>
-              <tr><td><code>fuelgauge backtest --days 7</code></td><td>Compares forecasts with what actually happened. Local and read-only.</td></tr>
+              <tr><td><code>fuelgauge backtest --days 7</code></td><td>Compares forecasts with what happened. Local and read-only.</td></tr>
               <tr><td><code>fuelgauge install-statusline</code></td><td>Makes Fuel Gauge Claude Code&#39;s status line, keeping yours above it.</td></tr>
               <tr><td><code>fuelgauge uninstall-statusline</code></td><td>Puts your old status line back.</td></tr>
             </tbody>
@@ -404,7 +404,7 @@
             <p class="eyebrow">Claude Desktop extension</p>
             <h2>Ask Claude if you&#39;ll make it.</h2>
             <p>Add Fuel Gauge to Claude Desktop and ask in plain words: how much Claude Code do I have left, will I hit my limit today, when does Codex reset. Claude reads the same forecast you see in the menu bar.</p>
-            <p>It adds two read-only tools: <code>limits_status</code> for each limit&#39;s percent, reset time, and verdict, and <code>limits_history</code> for the readings behind it, up to 30 days back. Answers stay compact, so asking Claude about your limits uses very little of them. Nothing about your accounts leaves your Mac.</p>
+            <p>It adds two read-only tools: <code>limits_status</code> for each limit&#39;s percent, reset time, and verdict, and <code>limits_history</code> for the readings behind it, up to 30 days back. Answers stay compact, so asking Claude about your limits barely dents them. Nothing about your accounts leaves your Mac.</p>
             <div class="actions">
               <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/fuelgauge.mcpb"><svg aria-hidden="true"><use href="#i-download"/></svg>Download fuelgauge.mcpb</a>
               <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge/tree/main/mcpb"><svg aria-hidden="true"><use href="#i-github"/></svg>View the source</a>
@@ -563,7 +563,7 @@
             <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge"><svg aria-hidden="true"><use href="#i-github"/></svg>View source code</a>
           </div>
           <div class="copyline"><code id="brew-cta">brew install --cask coreyhaines31/tap/fuelgauge</code><button type="button" class="copy" data-copy="brew-cta">Copy</button></div>
-          <p class="fineprint">macOS 14 Sonoma or later · Apple Silicon and Intel · <a href="#agent-install">Or ask your coding agent</a></p>
+          <p class="fineprint">macOS 14 Sonoma or later · Apple silicon and Intel · <a href="#agent-install">Or ask your coding agent</a></p>
         </div>
       </div>
     </section>
