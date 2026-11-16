@@ -40,17 +40,18 @@ GITHUB_ICON = ('<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                '.21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>')
 CTAS = (f'<a class="btn" href="{DOWNLOAD}">{DOWNLOAD_ICON}Download for Mac</a>\n'
         f'        <a class="btn-quiet" href="{REPO}">{GITHUB_ICON}View source code</a>')
-FONTS = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+FONTS = "https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@300;600;700&display=swap"
 
-# Corey's other free Mac apps, cross-linked from every footer.
+# The Mac app family, cross-linked from every footer, in the family's order. Fuel Gauge is marked as this site.
 FAMILY = [
-    ("Midnight Oil", "https://midnightoil.app", "Keep your Mac awake"),
-    ("Disk Forecast", "https://diskforecast.com", "Know before your disk is full"),
-    ("Spare", "https://spareformac.com", "See what's using your Mac"),
-    ("WiFi or ISP", "https://wifiorisp.com", "Is slow internet your Wi-Fi or your ISP?"),
-    ("Green Room", "https://greenroomformac.com", "Check your camera, mic, and speakers"),
-    ("On Hand", "https://onhandformac.com", "A clipboard manager for your Mac"),
-    ("Coat Check", "https://coatcheckformac.com", "Reach the menu bar icons the notch hides"),
+    ("Fuel Gauge", "https://fuelgauge.app", "Don't hit your limit mid-task", "fuel"),
+    ("Spare", "https://spareformac.com", "See what's using your Mac", "spare"),
+    ("Disk Forecast", "https://diskforecast.com", "Know before your disk is full", "disk"),
+    ("Midnight Oil", "https://midnightoil.app", "Keep your Mac awake", "oil"),
+    ("WiFi or ISP", "https://wifiorisp.com", "Is slow internet your Wi-Fi or your ISP?", "wifi"),
+    ("Green Room", "https://greenroomformac.com", "Check your camera, mic, and speakers", "green"),
+    ("On Hand", "https://onhandformac.com", "A clipboard manager for your Mac", "hand"),
+    ("Coat Check", "https://coatcheckformac.com", "Reach the menu bar icons the notch hides", "coat"),
 ]
 
 COPY_SCRIPT = '''  <script>
@@ -102,26 +103,28 @@ def head(title, description, path):
   <meta name="twitter:image" content="{share_image(path)}">
   <meta name="twitter:title" content="{esc(title)}">
   <meta name="twitter:description" content="{esc(description)}">
-  <meta name="theme-color" content="#fbe9d6" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
-  <link rel="icon" href="/images/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/images/icon.png">
+  <meta name="theme-color" content="#e7e8e9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#2a2a2c" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="{FONTS}">
+  <link rel="stylesheet" href="/kit/brushed.css">
+  <link rel="stylesheet" href="/kit/popover.css">
   <link rel="stylesheet" href="/site.css">
   <script async src="https://tracerkit.com/t.js" data-key="tk_bsPe2rM_f5F7Q4G8"></script>
   <script src="https://ingest.getuserproof.com/sdk.js" data-site="eb2393e8-b6bf-405b-a82f-9adf86865677" defer></script>
 </head>
-<body>
+<body class="bx">
 '''
 
 
 def nav():
-    return f'''  <div class="sky" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-  <div class="nav">
+    return f'''  <div class="nav">
     <div class="wrap">
-      <a class="brand" href="/"><img src="/images/icon.svg" alt="" width="28" height="28"> Fuel Gauge</a>
+      <a class="brand" href="/"><img src="/images/icon.svg" alt="" width="32" height="32"> Fuel Gauge</a>
       <nav>
         <a href="/#how">How it works</a>
         <a href="/limits">Limits</a>
@@ -140,20 +143,27 @@ def footer_inner():
     guides = "".join(f'<a href="{p["path"]}">{esc(p["short"])}</a>' for p in GUIDES)
     compare = "".join(f'<a href="{p["path"]}">{esc(p["short"])}</a>' for p in COMPARES)
     compare += "".join(f'<a href="/{p["slug"]}">{esc(p["competitor"])} alternative</a>' for p in COMPARISONS)
-    family = "".join(f'<a href="{url}" title="{esc(desc)}">{esc(name)}</a>' for name, url, desc in FAMILY)
-    return (f'      <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a>{limits}</nav>\n'
-            f'      <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a>{guides}</nav>\n'
-            f'      <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a>{compare}</nav>\n'
-            f'      <nav class="footer-alts" aria-label="More free Mac apps"><a class="label" href="https://github.com/coreyhaines31">More free Mac apps</a>{family}</nav>\n'
-            f'      <div class="footer-links"><span>© 2026 Corey Haines. Source available under the <a href="{REPO}/blob/main/LICENSE">FSL-1.1-MIT License</a>.</span></div>\n'
-            f'      <div class="footer-links"><a href="{REPO}">GitHub</a><a href="{REPO}/releases">Releases</a><a href="{REPO}/issues">Issues</a><a href="/privacy">Privacy</a><a href="/llms.txt">llms.txt</a></div>\n')
+    family = "".join(
+        f'<li><a href="{url}"{' aria-current="page"' if key == "fuel" else f' title="{esc(desc)}"'}>'
+        f'<img src="/images/family/{key}.png" alt="" width="56" height="56">{esc(name)}</a></li>'
+        for name, url, desc, key in FAMILY)
+    return (f'    <div class="foot-links">\n      <div class="wrap">\n'
+            f'        <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a>{limits}</nav>\n'
+            f'        <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a>{guides}</nav>\n'
+            f'        <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a>{compare}</nav>\n'
+            f'      </div>\n    </div>\n'
+            f'    <nav class="bx-family" aria-label="More free Mac apps">\n      <div class="bx-wrap">\n'
+            f'        <a class="bx-eyebrow" href="https://github.com/coreyhaines31">More free Mac apps</a>\n'
+            f'        <ul>{family}</ul>\n      </div>\n    </nav>\n'
+            f'    <div class="bx-footer">\n      <div class="bx-wrap">\n'
+            f'        <div><span>© 2026 Corey Haines. Source available under the <a href="{REPO}/blob/main/LICENSE">FSL-1.1-MIT License</a>.</span></div>\n'
+            f'        <div><a href="{REPO}">GitHub</a><a href="{REPO}/releases">Releases</a><a href="{REPO}/issues">Issues</a><a href="/privacy">Privacy</a><a href="/llms.txt">llms.txt</a></div>\n'
+            f'      </div>\n    </div>\n')
 
 
 def footer():
     return f'''  <footer>
-    <div class="wrap">
-{footer_inner()}    </div>
-  </footer>
+{footer_inner()}  </footer>
 '''
 
 
@@ -184,8 +194,8 @@ def render_homepage():
            "downloadUrl": DOWNLOAD, "url": f"{SITE}/", "image": f"{SITE}/images/icon.png",
            "author": {"@type": "Person", "name": "Corey Haines"}}
     schema = f'  <script type="application/ld+json">{json.dumps(app)}</script>\n  {faq_schema(faqs)}\n'
-    page = replace_between(page, "<!-- footer -->\n", "      <!-- /footer -->", footer_inner())
-    page = re.sub(r'  <div class="nav">.*?\n  </div>\n', nav().split('</div>\n', 1)[1], page, count=1, flags=re.S)
+    page = replace_between(page, "<!-- footer -->\n", "    <!-- /footer -->", footer_inner())
+    page = re.sub(r'  <div class="nav">.*?\n  </div>\n', nav(), page, count=1, flags=re.S)
     page = replace_between(page, "<!-- schema -->\n", "  <!-- /schema -->", schema)
     with open(os.path.join(ROOT, "index.html"), "w") as f:
         f.write(page)
