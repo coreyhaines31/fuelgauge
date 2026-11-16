@@ -341,3 +341,12 @@ section.tight { padding: clamp(48px, 6vw, 72px) 0 0; }
 /* Narrow first column for the tools table */
 #tools .compare th:first-child, #tools .compare td:first-child { width: 14%; }
 #card .compare th:first-child, #card .compare td:first-child { width: 40%; }
+
+/* Popovers shrink with their mount on phones; two-column tables wrap instead of scrolling */
+.bx-mount { grid-template-columns: minmax(0, 340px); justify-content: center; }
+.bx-mount > .pop { width: 100%; min-width: 0; }
+#card .compare, .settings-table .compare, .cli-table { min-width: 0; }
+@media (max-width: 760px) {
+  .cli-table td:first-child { white-space: normal; overflow-wrap: anywhere; width: 46%; }
+  .settings-table .compare th:first-child, .settings-table .compare td:first-child { width: 28%; }
+}
