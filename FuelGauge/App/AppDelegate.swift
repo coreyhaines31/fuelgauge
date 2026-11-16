@@ -1,5 +1,6 @@
 import AppKit
 import FuelGaugeCore
+import PanelKit
 import ServiceManagement
 
 @MainActor
@@ -13,6 +14,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let alerts = Alerts()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        PanelKit.registerFonts()
         Preferences.registerDefaults()
         #if !DEBUG
         applyLaunchAtLoginDefault()
