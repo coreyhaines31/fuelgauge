@@ -1,46 +1,6 @@
 import PanelKit
 import SwiftUI
 
-/// A PanelKit-style tape with a faint extension to where usage is headed by the reset. Graphite unless the
-/// window runs short.
-struct ProjectedTape: View {
-    /// Percent used, 0 to 100.
-    let used: Double
-    /// Percent projected at the reset, if there's a forecast.
-    let projected: Double?
-    let status: PanelStatus?
-    @Environment(\.panelTheme) private var theme
-
-    var body: some View {
-        GeometryReader { geometry in
-            let width = geometry.size.width
-            ZStack(alignment: .leading) {
-                Rectangle().fill(theme.track)
-                if let projected, projected > used {
-                    Rectangle().fill(fill.opacity(0.3))
-                        .frame(width: width * min(projected, 100) / 100)
-                }
-                Rectangle().fill(fill)
-                    .frame(width: width * min(max(used, 0), 100) / 100)
-            }
-        }
-        .frame(height: 5)
-        .clipShape(RoundedRectangle(cornerRadius: 1))
-        .accessibilityElement()
-        .accessibilityLabel("Used")
-        .accessibilityValue(projected.map { "\(Int(used.rounded())) percent, headed for \(Int(min($0, 100).rounded())) "
-            + "percent by the reset" } ?? "\(Int(used.rounded())) percent")
-    }
-
-    private var fill: Color {
-        switch status {
-        case .caution: theme.caution
-        case .stop: theme.stop
-        default: theme.fill
-        }
-    }
-}
-
 /// A readout row like PanelKit's `Row`, except the lines under the name wrap instead of truncating, so long
 /// forecast and reset lines stay whole.
 struct InfoRow<Accessory: View>: View {

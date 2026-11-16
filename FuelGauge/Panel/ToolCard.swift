@@ -72,7 +72,7 @@ struct WindowRow: View {
                 InfoRow(forecast.windowName,
                         lines: [compactLine] + (ForecastText.context(forecast, now: now).map { [$0] } ?? []),
                         value: ForecastText.percent(forecast.usedPercent))
-                ProjectedTape(used: forecast.usedPercent, projected: projected, status: status)
+                Tape(forecast.usedPercent / 100, projection: projected.map { $0 / 100 }, status: status)
                     .padding(.horizontal, 14)
                     .padding(.bottom, 8)
             }
@@ -81,7 +81,7 @@ struct WindowRow: View {
 
     private var expanded: some View {
         VStack(alignment: .leading, spacing: 4) {
-            ProjectedTape(used: forecast.usedPercent, projected: projected, status: status)
+            Tape(forecast.usedPercent / 100, projection: projected.map { $0 / 100 }, status: status)
                 .padding(.bottom, 4)
             Group {
                 Text(ForecastText.usage(forecast, now: now))
