@@ -42,12 +42,12 @@ struct ToolCard: View {
         let summary = model.todayUsage(for: provider, now: now)
         return Group {
             if summary.events > 0 {
-                InfoRow("Today · This Mac", lines: ["Estimated API cost · USD"],
-                        value: "\(summary.tokens.total.formatted(.number.notation(.compactName))) tokens",
-                        secondary: summary.costLabel)
+                Row("Today · This Mac", subtitle: "Estimated API cost · USD",
+                    value: "\(summary.tokens.total.formatted(.number.notation(.compactName))) tokens",
+                    secondary: summary.costLabel)
             } else {
-                InfoRow("Today · This Mac",
-                        lines: [model.scanningUsage ? "Reading usage history…" : "No usage recorded today"])
+                Row("Today · This Mac",
+                    subtitle: model.scanningUsage ? "Reading usage history…" : "No usage recorded today")
             }
         }
     }
@@ -68,14 +68,12 @@ struct WindowRow: View {
                 expanded
             }
         } else {
-            VStack(alignment: .leading, spacing: 0) {
-                InfoRow(forecast.windowName,
-                        lines: [compactLine] + (ForecastText.context(forecast, now: now).map { [$0] } ?? []),
-                        value: ForecastText.percent(forecast.usedPercent))
-                Tape(forecast.usedPercent / 100, projection: projected.map { $0 / 100 }, status: status)
-                    .padding(.horizontal, 14)
-                    .padding(.bottom, 8)
-            }
+            Row(forecast.windowName,
+                subtitle: ([compactLine] + (ForecastText.context(forecast, now: now).map { [$0] } ?? []))
+                    .joined(separator: "\n"),
+                value: ForecastText.percent(forecast.usedPercent),
+                tape: RowTape(forecast.usedPercent / 100, projection: projected.map { $0 / 100 }, status: status))
+            .subtitleLineLimit(nil)
         }
     }
 

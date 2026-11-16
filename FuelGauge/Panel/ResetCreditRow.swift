@@ -24,14 +24,15 @@ struct ResetCreditRow: View {
 
     @ViewBuilder private var codex: some View {
         if codexEnabled || model.codexResetCredits != nil {
-            InfoRow(name: "↺ " + (model.codexResetCredits?.summary(now: now) ?? "Reset availability unknown"),
-                    lines: codexLines) {
+            Row("↺ " + (model.codexResetCredits?.summary(now: now) ?? "Reset availability unknown"),
+                subtitle: codexLines.isEmpty ? nil : codexLines.joined(separator: "\n")) {
                 Button(model.checkingCodexResets ? "Checking…" : "Refresh") {
                     model.refreshCodexResets(force: true)
                 }
                 .buttonStyle(SmallKeyStyle())
                 .disabled(model.checkingCodexResets)
             }
+            .subtitleLineLimit(nil)
         } else {
             Button("Set up reset tracking…", action: openSettings)
                 .buttonStyle(SmallKeyStyle())
@@ -56,11 +57,12 @@ struct ResetCreditRow: View {
         if claudeCheckedAt > 0 {
             let expired = claudeExpiry > 0 && claudeExpiry <= now.timeIntervalSince1970
             let count = claudeCount == 1 ? "1 reset recorded" : "\(claudeCount) resets recorded"
-            InfoRow(name: "↺ " + (expired ? "Recheck reset availability" : "\(count) · manual"),
-                    lines: claudeLines) {
+            Row("↺ " + (expired ? "Recheck reset availability" : "\(count) · manual"),
+                subtitle: claudeLines.joined(separator: "\n")) {
                 Button("Update…", action: openSettings)
                     .buttonStyle(SmallKeyStyle())
             }
+            .subtitleLineLimit(nil)
         }
     }
 
