@@ -88,6 +88,7 @@ p { margin: 0 0 1em; }
   .bx-mount .pop.light .fas { box-shadow: inset 0 1px 0 rgba(255,255,255,.08); border-bottom-color: #000; }
   .bx-mount .pop.light .lo { border-color: #6a6c6e; }
   .bx-mount .pop.light .lk { color: #8fb0ff; }
+  .bx-mount .pop.light .disc .tw { color: #e6e7e8; }
   .bx-mount .pop.light rect[fill="url(#face)"] { fill: url(#faceLit); }
 }
 

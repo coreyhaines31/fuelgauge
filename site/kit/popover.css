@@ -139,3 +139,12 @@
 .tp .tape { display: block; } .disc .tw { font-size: 13px; }
 .ni .nico:empty { width: 0; } .ni { grid-template-columns: auto minmax(0,1fr) auto; }
 
+
+/* Disclosure control: 22pt round button, bold chevron, rotates open; whole header is the hit target */
+.disc .dh { grid-template-columns: 22px 1fr auto; gap: 10px; align-items: start; cursor: pointer; }
+.disc .tw { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--b2); box-shadow: inset 0 0 0 1px var(--b2e), 0 1px 0 rgba(0,0,0,.08); color: var(--ink, #161616); font-size: 0; margin-top: -1px; }
+.pop.dark .disc .tw, .menuwrap.dark .disc .tw { color: #e6e7e8; }
+.disc .tw svg { width: 12px; height: 12px; transition: transform .15s ease; }
+.disc.open .tw svg { transform: rotate(90deg); }
+.disc .dh:hover .tw { filter: brightness(.96); }
+.disc .dr { align-self: center; }
