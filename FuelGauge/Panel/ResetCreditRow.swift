@@ -29,13 +29,13 @@ struct ResetCreditRow: View {
                 Button(model.checkingCodexResets ? "Checking…" : "Refresh") {
                     model.refreshCodexResets(force: true)
                 }
-                .buttonStyle(SmallKeyStyle())
+                .buttonStyle(.panelCompact)
                 .disabled(model.checkingCodexResets)
             }
             .subtitleLineLimit(nil)
         } else {
             Button("Set up reset tracking…", action: openSettings)
-                .buttonStyle(SmallKeyStyle())
+                .buttonStyle(.panelCompact)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 7)
         }
@@ -60,7 +60,7 @@ struct ResetCreditRow: View {
             Row("↺ " + (expired ? "Recheck reset availability" : "\(count) · manual"),
                 subtitle: claudeLines.joined(separator: "\n")) {
                 Button("Update…", action: openSettings)
-                    .buttonStyle(SmallKeyStyle())
+                    .buttonStyle(.panelCompact)
             }
             .subtitleLineLimit(nil)
         }
