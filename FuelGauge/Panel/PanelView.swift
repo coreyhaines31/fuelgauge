@@ -31,12 +31,9 @@ struct PanelView: View {
                             }
                         }
                     }
-                    .background(GeometryReader { geometry in
-                        Color.clear.preference(key: PanelHeightKey.self, value: geometry.size.height)
-                    })
+                    .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { cardsHeight = $0 }
                 }
                 .frame(height: min(cardsHeight, max(240, (NSScreen.main?.visibleFrame.height ?? 900) - 200)))
-                .onPreferenceChange(PanelHeightKey.self) { cardsHeight = $0 }
                 footer
             }
             .padding(14)
@@ -194,9 +191,4 @@ struct PanelView: View {
             .fixedSize()
         }
     }
-}
-
-private struct PanelHeightKey: PreferenceKey {
-    static let defaultValue: CGFloat = 400
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
 }
