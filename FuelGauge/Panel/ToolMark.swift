@@ -14,7 +14,7 @@ struct ToolMark: View {
                 .resizable()
                 .renderingMode(.template)
                 .interpolation(.high)
-                .aspectRatio(contentMode: .fit)
+                .scaledToFit()
                 .frame(width: size * asset.scale, height: size * asset.scale)
                 .frame(width: size, height: size)
                 .accessibilityLabel(provider.name)
