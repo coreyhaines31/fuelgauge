@@ -32,7 +32,7 @@ public enum ForecastText {
         let active = forecasts.filter { $0.verdict != .reset }
         if let out = active.first(where: { $0.verdict == .limitReached }) {
             let until = time(out.resetsAt, now: now)
-            return "\(out.key.provider.name)'s \(out.windowName.lowercased()) limit is out until \(until)"
+            return "\(out.key.provider.name)'s \(out.windowPhrase) limit is out until \(until)"
         }
         let short = active.compactMap { forecast -> (Forecast, Date)? in
             guard case .runsOut(let at, _, _) = forecast.verdict else { return nil }
@@ -139,7 +139,7 @@ public enum ForecastText {
 
     /// One short segment for the Claude Code status line: "5h 23% ok", "wk 81% out ~Thu 2p".
     public static func strip(_ forecast: Forecast, now: Date = Date()) -> String {
-        let label = shortName(forecast.windowMinutes)
+        let label = forecast.modelName?.lowercased() ?? shortName(forecast.windowMinutes)
         let used = percent(forecast.usedPercent)
         switch forecast.verdict {
         case .learning: return "\(label) \(used) learning"
