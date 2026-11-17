@@ -26,6 +26,10 @@ Commands:
                         showing, above the forecast. Backs up settings.json first.
   uninstall-statusline  Put Claude Code's status line back the way it was.
 
+Several accounts: Claude Code keeps each sign-in in its own folder (CLAUDE_CONFIG_DIR=~/.claude-work
+claude). Run install-statusline once per account, with that account's CLAUDE_CONFIG_DIR set, or turn it
+on in Fuel Gauge's Settings › Tools. Each account's readings stay its own.
+
 For agents: run `fuelgauge status` before a long task. If it exits 2, tell the person which limit
 runs out and when, and ask before starting, or switch to a cheaper model.
 """
@@ -42,6 +46,14 @@ signal(SIGPIPE, SIG_IGN)
 let arguments = Array(CommandLine.arguments.dropFirst())
 let wantsJSON = arguments.contains("--json")
 let store = ReadingStore()
+// The command's own CLAUDE_CONFIG_DIR names the account it runs for, so it never decides the default folder.
+let accounts = AccountList.load(environment: [:])
+
+/// The Claude Code account this command runs for: the one its `CLAUDE_CONFIG_DIR` points at, else the default.
+func currentClaudeAccount() -> Account {
+    accounts.account(.claude, environment: ProcessInfo.processInfo.environment)
+        ?? Account.defaultAccount(.claude, environment: [:])
+}
 
 func option(_ name: String) -> String? {
     guard let index = arguments.firstIndex(of: name), index + 1 < arguments.count else { return nil }
@@ -69,7 +81,7 @@ func status() -> Never {
         FileHandle.standardOutput.write(data + Data("\n".utf8))
     } else if forecasts.isEmpty {
         print("No readings yet. Open Fuel Gauge, and use Claude Code, Codex, or Grok Bot for a few minutes.")
-        if Tracking.isEnabled(.claude), ClaudeSettings().state != .on {
+        if Tracking.isEnabled(.claude), ClaudeSettings(account: currentClaudeAccount()).state != .on {
             print("For Claude Code limits, run: fuelgauge install-statusline")
         }
     } else {
@@ -164,7 +176,8 @@ let nestedStatusLineKey = "FUEL_GAUGE_NESTED_STATUSLINE"
 func statusLine() -> Never {
     let input = FileHandle.standardInput.readDataToEndOfFile()
     let now = Date()
-    let settings = ClaudeSettings()
+    let account = currentClaudeAccount()
+    let settings = ClaudeSettings(account: account)
     // A wrapped command that leads back here (directly or through another tool's wrapper) would spawn
     // status lines forever, so a nested run skips it.
     let nested = ProcessInfo.processInfo.environment[nestedStatusLineKey] != nil
@@ -172,8 +185,10 @@ func statusLine() -> Never {
         print(output, terminator: output.hasSuffix("\n") ? "" : "\n")
     }
     guard Tracking.isEnabled(.claude) else { exit(0) }
-    try? store.append(ClaudeStatusLine.readings(from: input, at: now), now: now)
+    try? store.append(ClaudeStatusLine.readings(from: input, at: now, account: account.slug), now: now)
+    // Only this session's account: another account's limits say nothing about this one.
     let readings = store.load(since: now.addingTimeInterval(-ForecastEngine.historyDuration), provider: .claude)
+        .filter { $0.account == account.slug }
     let forecasts = ForecastEngine.forecasts(from: readings, now: now).filter { $0.verdict != .reset }
     if let strip = StatusLineStrip.render(forecasts, now: now) {
         print(strip)
@@ -252,7 +267,7 @@ final class OutputBox: @unchecked Sendable {
 }
 
 func installStatusLine() -> Never {
-    let settings = ClaudeSettings()
+    let settings = ClaudeSettings(account: currentClaudeAccount())
     let path = Bundle.main.executableURL?.resolvingSymlinksInPath().path ?? "fuelgauge"
     let linked = ["/opt/homebrew/bin/fuelgauge", "/usr/local/bin/fuelgauge"].first {
         URL(filePath: $0).resolvingSymlinksInPath().path == path
@@ -271,7 +286,7 @@ func installStatusLine() -> Never {
 }
 
 func uninstallStatusLine() -> Never {
-    let settings = ClaudeSettings()
+    let settings = ClaudeSettings(account: currentClaudeAccount())
     do {
         try settings.uninstall()
     } catch {

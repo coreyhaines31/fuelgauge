@@ -4,8 +4,9 @@ import Foundation
 /// `rate_limits.five_hour` and `seven_day` for Pro and Max plans. `fuelgauge statusline` is that command:
 /// it saves a reading from the JSON, then prints the forecast strip.
 public enum ClaudeStatusLine {
-    /// The readings in one status line input. Empty when the plan has no limits or before the first reply.
-    public static func readings(from input: Data, at now: Date = Date()) -> [Reading] {
+    /// The readings in one status line input, for the account the session runs as. Empty when the plan has no
+    /// limits or before the first reply.
+    public static func readings(from input: Data, at now: Date = Date(), account: String? = nil) -> [Reading] {
         guard let payload = try? JSONDecoder().decode(Payload.self, from: input),
               let limits = payload.rateLimits else { return [] }
         let windows: [NamedWindow] = [
@@ -19,7 +20,7 @@ public enum ClaudeStatusLine {
             }
             return Reading(
                 provider: .claude, limit: named.name, windowMinutes: named.minutes,
-                usedPercent: used, resetsAt: Date(timeIntervalSince1970: resetsAt), at: now
+                usedPercent: used, resetsAt: Date(timeIntervalSince1970: resetsAt), at: now, account: account
             )
         }
     }

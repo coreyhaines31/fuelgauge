@@ -12,6 +12,13 @@ import Testing
         #expect(readings[0].at == now)
     }
 
+    @Test func tagsReadingsWithTheSessionsAccount() throws {
+        let input = try Data(contentsOf: try sample("statusline.json"))
+        #expect(ClaudeStatusLine.readings(from: input).allSatisfy { $0.account == nil })
+        let work = ClaudeStatusLine.readings(from: input, account: "work_1a2b3c")
+        #expect(work.map(\.key.id) == ["claude@work_1a2b3c/five_hour", "claude@work_1a2b3c/seven_day"])
+    }
+
     @Test func noLimitsBeforeTheFirstReply() {
         #expect(ClaudeStatusLine.readings(from: Data(#"{"model":{"id":"x"}}"#.utf8)).isEmpty)
         #expect(ClaudeStatusLine.readings(from: Data("not json".utf8)).isEmpty)
