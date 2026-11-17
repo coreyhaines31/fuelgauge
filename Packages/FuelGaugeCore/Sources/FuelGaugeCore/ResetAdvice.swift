@@ -4,7 +4,15 @@ import Foundation
 /// only: Fuel Gauge can't use a reset, so the text says what a reset would do, never that one was used.
 public struct ResetAdvice: Equatable, Sendable {
     public let kind: ClaudeResets.Kind
+    /// A short headline: "Fix: a Fable reset", or "A Fable reset helps, but not enough".
+    public let title: String
     public let text: String
+
+    public init(kind: ClaudeResets.Kind, title: String, text: String) {
+        self.kind = kind
+        self.title = title
+        self.text = text
+    }
 
     public static func suggest(forecasts: [Forecast], usage: ClaudeUsage?, resets: ClaudeResets,
                                now: Date = Date()) -> ResetAdvice? {
@@ -17,7 +25,8 @@ public struct ResetAdvice: Equatable, Sendable {
         }
         if let fable, fable.isShort, resets.usable(.fable, now: now) > 0 {
             let back = share.flatMap { $0 >= 1 ? " and gives back \(ForecastText.percent($0)) of your week" : nil }
-            return ResetAdvice(kind: .fable, text: "Using a Fable reset refills Fable\(back ?? "").")
+            return ResetAdvice(kind: .fable, title: fix(.fable),
+                               text: "Using a Fable reset refills Fable\(back ?? "").")
         }
         return nil
     }
@@ -29,37 +38,48 @@ public struct ResetAdvice: Equatable, Sendable {
         // A weekly reset that lapses before this week ends costs nothing to use now.
         if weeklyResets > 0, let expiry = resets.weekly.expiresAt, expiry < week.resetsAt {
             let when = ForecastText.time(expiry, now: now)
-            return ResetAdvice(kind: .weekly, text: "\(weeklyText) Yours expires \(when), before this week ends.")
+            return ResetAdvice(kind: .weekly, title: "Fix: your expiring weekly reset",
+                               text: "\(weeklyText) Yours expires \(when), before this week ends.")
         }
         if fableResets > 0, let share {
             guard share >= 1 else {
                 return weeklyResets > 0
-                    ? ResetAdvice(kind: .weekly, text: "Fable hasn't used any of this week, so a Fable reset "
-                                  + "wouldn't help. \(weeklyText)")
+                    ? ResetAdvice(kind: .weekly, title: fix(.weekly),
+                                  text: "Fable hasn't used any of this week, so a Fable reset wouldn't help. "
+                                  + weeklyText)
                     : nil
             }
             let back = "Using a Fable reset gives back \(ForecastText.percent(share)) of your week"
             switch runsOut(week, givenBack: share, now: now) {
             case .lasts:
-                return ResetAdvice(kind: .fable, text: "\(back), enough to reach the reset at this pace.")
+                return ResetAdvice(kind: .fable, title: fix(.fable),
+                                   text: "\(back), enough to reach the reset at this pace.")
             case .runsOut(let at) where weeklyResets > 0:
-                return ResetAdvice(kind: .weekly, text: "\(back), but the week would still run out around "
+                return ResetAdvice(kind: .weekly, title: fix(.weekly),
+                                   text: "\(back), but the week would still run out around "
                                    + "\(ForecastText.time(at, now: now)). \(weeklyText)")
             case .runsOut(let at):
-                return ResetAdvice(kind: .fable, text: "\(back). At this pace it still runs out around "
+                return ResetAdvice(kind: .fable, title: "A Fable reset helps, but not enough",
+                                   text: "\(back). At this pace it still runs out around "
                                    + "\(ForecastText.time(at, now: now)).")
             case .unknown where weeklyResets > 0:
-                return ResetAdvice(kind: .fable, text: "\(back). If that's not enough, \(weeklyText.lowercased())")
+                return ResetAdvice(kind: .fable, title: "Try a Fable reset first",
+                                   text: "\(back). If that's not enough, \(weeklyText.lowercased())")
             case .unknown:
-                return ResetAdvice(kind: .fable, text: "\(back).")
+                return ResetAdvice(kind: .fable, title: "A Fable reset would help", text: "\(back).")
             }
         }
-        if weeklyResets > 0 { return ResetAdvice(kind: .weekly, text: weeklyText) }
+        if weeklyResets > 0 { return ResetAdvice(kind: .weekly, title: fix(.weekly), text: weeklyText) }
         if fableResets > 0 {
-            return ResetAdvice(kind: .fable, text: "A Fable reset gives back what Fable used this week. "
+            return ResetAdvice(kind: .fable, title: "A Fable reset might help",
+                               text: "A Fable reset gives back what Fable used this week. "
                                + "Fuel Gauge can't see how much yet.")
         }
         return nil
+    }
+
+    private static func fix(_ kind: ClaudeResets.Kind) -> String {
+        "Fix: a \(kind.phrase) reset"
     }
 
     private enum Outcome { case lasts, runsOut(Date), unknown }

@@ -32,8 +32,8 @@ public struct ClaudeResets: Equatable, Sendable {
 
         // The weekly keys are the ones Fuel Gauge used before Fable resets existed, when every Claude reset
         // reset the whole week.
-        var countKey: String { self == .fable ? "claudeFableResetCount" : "claudeResetCount" }
-        var expiryKey: String { self == .fable ? "claudeFableResetExpiry" : "claudeResetExpiry" }
+        public var countKey: String { self == .fable ? "claudeFableResetCount" : "claudeResetCount" }
+        public var expiryKey: String { self == .fable ? "claudeFableResetExpiry" : "claudeResetExpiry" }
     }
 
     public struct Balance: Equatable, Sendable {
@@ -105,22 +105,29 @@ public struct ClaudeResets: Equatable, Sendable {
         return balance.available == 0 ? "No \(kind.phrase) resets" : kind.count(balance.available)
     }
 
-    /// "All expire Mar 8" or "Expires Dec 15", for a balance with an expiry.
+    /// "All expire Mar 8" or "Expires Dec 15", for a balance with an expiry; "Expires Sat 2p if unused" when
+    /// that's within a week.
     public func expiry(_ kind: Kind, now: Date = Date()) -> String? {
         let balance = self[kind]
         guard balance.available > 0, let expiry = balance.expiresAt else { return nil }
-        let when = Self.date(expiry, now: now)
-        if expiry <= now { return "Set to expire \(when)" }
-        return (balance.available == 1 ? "Expires " : "All expire ") + when
+        if expiry <= now { return "Set to expire \(Self.date(expiry, now: now))" }
+        let lead = balance.available == 1 ? "Expires " : "All expire "
+        if expiresSoon(kind, now: now) { return lead + ForecastText.time(expiry, now: now) + " if unused" }
+        return lead + Self.date(expiry, now: now)
+    }
+
+    /// Recorded resets of this kind lapse within `warningWindow`.
+    public func expiresSoon(_ kind: Kind, now: Date = Date()) -> Bool {
+        let balance = self[kind]
+        guard recordedAt != nil, balance.available > 0, let expiry = balance.expiresAt else { return false }
+        return expiry > now && expiry.timeIntervalSince(now) <= Self.warningWindow
     }
 
     /// Resets about to lapse unused: "3 Fable resets expire Sun 11:59p if unused".
     public func warnings(now: Date = Date()) -> [(kind: Kind, text: String)] {
-        guard recordedAt != nil else { return [] }
-        return Kind.allCases.compactMap { kind in
+        Kind.allCases.compactMap { kind in
             let balance = self[kind]
-            guard balance.available > 0, let expiry = balance.expiresAt, expiry > now,
-                  expiry.timeIntervalSince(now) <= Self.warningWindow else { return nil }
+            guard expiresSoon(kind, now: now), let expiry = balance.expiresAt else { return nil }
             let verb = balance.available == 1 ? "expires" : "expire"
             return (kind, "\(kind.count(balance.available)) \(verb) \(ForecastText.time(expiry, now: now)) if unused")
         }

@@ -49,6 +49,9 @@ struct ClaudeResetsTests {
         #expect(warnings.first?.text.hasPrefix("3 Fable resets expire ") == true)
         #expect(warnings.first?.text.hasSuffix(" if unused") == true)
         #expect(resets.expiry(.fable, now: now)?.hasPrefix("All expire ") == true)
+        #expect(resets.expiry(.fable, now: now)?.hasSuffix(" if unused") == true)
+        #expect(resets.expiresSoon(.fable, now: now))
+        #expect(!resets.expiresSoon(.weekly, now: now))
         #expect(resets.expiry(.weekly, now: now)?.hasPrefix("Expires ") == true)
     }
 }
@@ -83,6 +86,7 @@ struct ResetAdviceTests {
         let advice = ResetAdvice.suggest(forecasts: [shortWeek], usage: usage(share: 25),
                                          resets: resets(fable: 3, weekly: 1), now: now)
         #expect(advice?.kind == .fable)
+        #expect(advice?.title == "Fix: a Fable reset")
         #expect(advice?.text == "Using a Fable reset gives back 25% of your week, "
                 + "enough to reach the reset at this pace.")
     }
@@ -99,6 +103,7 @@ struct ResetAdviceTests {
         let advice = ResetAdvice.suggest(forecasts: [shortWeek], usage: usage(share: 18),
                                          resets: resets(fable: 3, weekly: 0), now: now)
         #expect(advice?.kind == .fable)
+        #expect(advice?.title == "A Fable reset helps, but not enough")
         #expect(advice?.text.contains("At this pace it still runs out around") == true)
     }
 
@@ -137,7 +142,7 @@ struct ResetAdviceTests {
         let week = forecast("seven_day", used: 30, rate: 1, resetsIn: 20, verdict: .makesIt(projectedPercent: 50))
         let advice = ResetAdvice.suggest(forecasts: [week, fable], usage: usage(share: 22),
                                          resets: resets(fable: 1, weekly: 1), now: now)
-        #expect(advice == ResetAdvice(kind: .fable,
+        #expect(advice == ResetAdvice(kind: .fable, title: "Fix: a Fable reset",
                                       text: "Using a Fable reset refills Fable and gives back 22% of your week."))
     }
 
