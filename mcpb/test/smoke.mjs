@@ -27,18 +27,18 @@ const NO_READINGS =
   "Claude Code's limits only arrive through its status line: turn it on in Fuel Gauge's Settings > Tools.";
 // [fake mode, tool, arguments, should work, argv the CLI must get, exact answer]
 const fakeCalls = [
-  ["stale", "limits_status", {}, ok, "status --json", {
+  ["stale", "limits_status", {}, ok, "status --json then resets --json", {
     problem: false,
     limits: [{ tool: "codex", window: "weekly", verdict: "stale", forecast_basis: "recent" }],
     note: "Some limits have no reliable forecast. problem: false does not confirm they will last.",
   }],
-  ["schedule", "limits_status", {}, ok, "status --json", {
+  ["schedule", "limits_status", {}, ok, "status --json then resets --json", {
     problem: false,
     limits: [{ tool: "claude", window: "weekly", verdict: "makes_it", forecast_basis: "schedule",
       session_runs_out_at: "2026-10-29T22:40Z" }],
   }],
   [
-    "ok", "limits_status", {}, ok, "status --json",
+    "ok", "limits_status", {}, ok, "status --json then resets --json",
     {
       problem: false,
       limits: [{
@@ -48,7 +48,7 @@ const fakeCalls = [
     },
   ],
   [
-    "short", "limits_status", {}, ok, "status --json",
+    "short", "limits_status", {}, ok, "status --json then resets --json",
     {
       problem: true,
       limits: [{
@@ -57,7 +57,25 @@ const fakeCalls = [
       }],
     },
   ],
-  ["empty", "limits_status", {}, ok, "status --json", { problem: false, limits: [], note: NO_READINGS }],
+  ["empty", "limits_status", {}, ok, "status --json then resets --json", { problem: false, limits: [], note: NO_READINGS }],
+  [
+    "fable", "limits_status", {}, ok, "status --json then resets --json",
+    {
+      problem: false,
+      limits: [{ tool: "claude", window: "weekly", limit: "seven_day_model_fable", model: "Fable", verdict: "makes_it",
+        used_percent: 36 }],
+      claude_resets: {
+        source: "manual",
+        fable: { available: 3, usable: 3, expires_at: "2027-03-09T07:59Z", expires_soon: false,
+          explanation: "Refills Fable and gives back what Fable used this week" },
+        weekly: { available: 1, usable: 1, expires_soon: true, explanation: "Resets your whole week" },
+        recorded_at: "2026-11-17T17:00Z",
+        allowances: [{ model: "Fable", used_percent: 36, used_percent_of_weekly: 18, allowance_percent_of_weekly: 50,
+          resets_at: "2026-11-20T21:00Z", checked_at: "2026-11-17T17:10Z" }],
+        advice: { reset: "fable", title: "Fix: a Fable reset", text: "Using a Fable reset gives back 18% of your week." },
+      },
+    },
+  ],
   [
     "ok", "limits_history", {}, ok, "history --days 1 --json",
     {
