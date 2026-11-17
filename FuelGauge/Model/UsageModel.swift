@@ -220,10 +220,8 @@ final class UsageModel {
         guard readsLiveData else { return }
         guard UserDefaults.standard.bool(forKey: ResetPreferences.claudeUsageEnabled),
               Tracking.enabled(installed: installedProviders).contains(.claude) else {
-            if claudeUsage != nil {
-                claudeUsage = nil
-                try? FileManager.default.removeItem(at: claudeUsageURL)
-            }
+            claudeUsage = nil
+            try? FileManager.default.removeItem(at: claudeUsageURL)
             claudeUsageAttemptedAt = nil
             return
         }
@@ -233,19 +231,20 @@ final class UsageModel {
         claudeUsageAttemptedAt = Date()
         let store = store, url = claudeUsageURL
         Task {
-            let usage = await Task.detached(priority: .utility) { () -> ClaudeUsage? in
-                guard let usage = ClaudeUsageReader().read() else { return nil }
-                try? store.append(usage.readings(), now: usage.checkedAt)
-                try? usage.save(to: url)
-                return usage
-            }.value
+            let usage = await Task.detached(priority: .utility) { ClaudeUsageReader().read() }.value
             checkingClaudeUsage = false
+            // Turned off while the check ran: keep nothing from it.
             guard UserDefaults.standard.bool(forKey: ResetPreferences.claudeUsageEnabled),
                   Tracking.isEnabled(.claude) else { return }
             // A failed check keeps the last answer: Fable's share of the week only grows until it resets.
-            if let usage { claudeUsage = usage }
+            guard let usage else { return }
+            claudeUsage = usage
+            await Task.detached(priority: .utility) {
+                try? store.append(usage.readings(), now: usage.checkedAt)
+                try? usage.save(to: url)
+            }.value
             onChange?()
-            if usage != nil { refresh() }
+            refresh()
         }
     }
 
