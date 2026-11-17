@@ -211,3 +211,5 @@ The forecasting logic lives in `Packages/FuelGaugeCore` (`swift test` there). `s
 ## License
 
 Free to use. The source is available under the [Functional Source License 1.1, MIT Future License](LICENSE): you can read, modify, and use it for anything except a competing product, and each version becomes MIT two years after release. The name and icon are covered by [TRADEMARK.md](TRADEMARK.md).
+
+The Claude, OpenAI, Grok, and Cursor logos are trademarks of their owners, used only to identify the tools. Fuel Gauge isn't affiliated with or endorsed by them. Sources and terms: [docs/third-party-marks.md](docs/third-party-marks.md).
