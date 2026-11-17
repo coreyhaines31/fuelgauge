@@ -57,7 +57,10 @@ struct ToolsSettingsView: View {
             }
         )) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(tool.provider.name)
+                HStack(spacing: 6) {
+                    ToolMark(provider: tool.provider, size: 13)
+                    Text(tool.provider.name)
+                }
                 Text(isInstalled ? tool.source : "Not found on this Mac.")
                     .font(.caption).foregroundStyle(.secondary)
             }
