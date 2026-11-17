@@ -154,3 +154,40 @@ struct ResetAdviceTests {
                                     resets: resets(fable: 0, weekly: 0), now: now) == nil)
     }
 }
+
+struct ResetsJSONTests {
+    @Test func reportsBothKindsTheAllowanceAndTheAdvice() throws {
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        let resets = ClaudeResets(fable: .init(available: 3, expiresAt: now.addingTimeInterval(86400)),
+                                  weekly: .init(available: 1), recordedAt: now)
+        let usage = ClaudeUsage(models: [.init(name: "Fable", usedPercent: 36,
+                                               resetsAt: now.addingTimeInterval(3600), usedPercentOfWeekly: 18,
+                                               allowancePercentOfWeekly: 50)], checkedAt: now)
+        let advice = ResetAdvice(kind: .fable, title: "Fix: a Fable reset", text: "Using a Fable reset…")
+        let data = try ResetsJSON.encode(ResetsJSON(resets: resets, usage: usage, advice: advice, now: now))
+        let object = try #require(try JSONSerialization.jsonObject(with: data) as? [String: Any])
+        let claude = try #require(object["claude"] as? [String: Any])
+        #expect(claude["source"] as? String == "manual")
+        let fable = try #require(claude["fable"] as? [String: Any])
+        #expect(fable["available"] as? Int == 3)
+        #expect(fable["usable"] as? Int == 3)
+        #expect(fable["expires_soon"] as? Bool == true)
+        #expect(fable["explanation"] as? String == "Refills Fable and gives back what Fable used this week")
+        let weekly = try #require(claude["weekly"] as? [String: Any])
+        #expect(weekly["explanation"] as? String == "Resets your whole week")
+        let allowance = try #require((claude["allowances"] as? [[String: Any]])?.first)
+        #expect(allowance["model"] as? String == "Fable")
+        #expect(allowance["used_percent_of_weekly"] as? Double == 18)
+        #expect((claude["advice"] as? [String: Any])?["reset"] as? String == "fable")
+    }
+
+    @Test func nothingRecordedReportsZero() throws {
+        let data = try ResetsJSON.encode(ResetsJSON(resets: ClaudeResets(fable: .init(available: 3)), usage: nil,
+                                                    advice: nil))
+        let object = try #require(try JSONSerialization.jsonObject(with: data) as? [String: Any])
+        let claude = try #require(object["claude"] as? [String: Any])
+        #expect((claude["fable"] as? [String: Any])?["available"] as? Int == 0)
+        #expect(claude["advice"] == nil)
+        #expect((claude["allowances"] as? [Any])?.isEmpty == true)
+    }
+}
