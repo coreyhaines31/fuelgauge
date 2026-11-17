@@ -15,7 +15,7 @@ const TIMEOUT_MS = 30_000;
 
 // Only these subcommands can ever be spawned. statusline reads stdin for Claude Code, and
 // install-statusline / uninstall-statusline edit ~/.claude/settings.json.
-const ALLOWED_COMMANDS = new Set(["status", "history"]);
+const ALLOWED_COMMANDS = new Set(["status", "resets", "history"]);
 
 // The CLI exits 0 on success, 2 when `status` forecasts a limit running out before it resets (or already
 // out), and 1 on any error, with the message on stderr. Exit 2 still prints the forecast.

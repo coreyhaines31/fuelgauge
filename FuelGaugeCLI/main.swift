@@ -6,6 +6,7 @@ fuelgauge: will your Claude Code, Codex, and Grok Bot limits last until they res
 
 Usage:
   fuelgauge status [--json]
+  fuelgauge resets [--json]
   fuelgauge history [--days 1] [--json]
   fuelgauge backtest [--days 7] [--json]
   fuelgauge statusline
@@ -15,6 +16,8 @@ Usage:
 Commands:
   status                Each limit: percent used, when it resets, and whether it lasts until then.
                         Exits 2 when a limit is forecast to run out before it resets, or already has.
+  resets                Claude's recorded Fable and weekly resets, its Fable allowance, and which
+                        reset would help if the week won't last. Read-only: it never uses a reset.
   history               The readings behind the forecasts, per limit.
   backtest              Compare recent and adaptive forecasts against saved observations. Read-only.
   statusline            Claude Code's status line command: reads Claude's limits from stdin, saves
@@ -77,9 +80,54 @@ func status() -> Never {
             if let pace = ForecastText.pace(forecast) { print("  \(pace)") }
             if let scenario = ForecastText.sessionScenario(forecast, now: now) { print("  \(scenario)") }
             if let range = ForecastText.range(forecast, now: now) { print("  \(range)") }
+            if let share = modelShare(forecast, now: now) { print("  \(share)") }
         }
+        if Tracking.isEnabled(.claude) { printResets(forecasts: forecasts, now: now, headerOnlyIfAny: true) }
     }
     exit(forecasts.contains(where: \.isShort) ? 2 : 0)
+}
+
+/// "18% of your week so far · up to 50%" for a model allowance, from the app's last check.
+func modelShare(_ forecast: Forecast, now: Date) -> String? {
+    guard let name = forecast.modelName, let allowance = ClaudeUsage.load()?.model(named: name),
+          allowance.resetsAt > now, let used = allowance.usedPercentOfWeekly else { return nil }
+    let cap = allowance.allowancePercentOfWeekly.map { " · up to \(ForecastText.percent($0))" } ?? ""
+    return "\(ForecastText.percent(used)) of your week so far\(cap)"
+}
+
+/// Claude's recorded resets and the planner's suggestion, as text.
+func printResets(forecasts: [Forecast], now: Date, headerOnlyIfAny: Bool) {
+    let resets = ClaudeResets.load()
+    let advice = ResetAdvice.suggest(forecasts: forecasts, usage: ClaudeUsage.load(), resets: resets, now: now)
+    guard let recorded = resets.recordedAt else {
+        if let advice { print("Claude Code · \(advice.title)\n  \(advice.text)") }
+        if !headerOnlyIfAny { print("No Claude resets recorded. Record them in Fuel Gauge's Settings › Resets.") }
+        return
+    }
+    print("Claude Code · Resets (recorded by hand \(ForecastText.time(recorded, now: now)))")
+    for kind in ClaudeResets.Kind.allCases {
+        let expiry = resets.expiry(kind, now: now).map { ". \($0)" } ?? ""
+        print("  \(resets.summary(kind, now: now)): \(kind.explanation)\(expiry)")
+    }
+    if let advice { print("  \(advice.title). \(advice.text)") }
+}
+
+func resetsCommand() -> Never {
+    let now = Date()
+    let forecasts = currentForecasts(now: now)
+    if wantsJSON {
+        let resets = ClaudeResets.load()
+        // Claude Code turned off in Fuel Gauge: the recorded counts, but no allowance or advice.
+        let usage = Tracking.isEnabled(.claude) ? ClaudeUsage.load() : nil
+        let advice = Tracking.isEnabled(.claude)
+            ? ResetAdvice.suggest(forecasts: forecasts, usage: usage, resets: resets, now: now) : nil
+        guard let data = try? ResetsJSON.encode(ResetsJSON(resets: resets, usage: usage, advice: advice, now: now))
+        else { fail("couldn't encode the resets") }
+        FileHandle.standardOutput.write(data + Data("\n".utf8))
+    } else {
+        printResets(forecasts: forecasts, now: now, headerOnlyIfAny: false)
+    }
+    exit(0)
 }
 
 func history() -> Never {
@@ -98,7 +146,9 @@ func history() -> Never {
         }
     } else {
         for (key, group) in Dictionary(grouping: readings, by: \.key).sorted(by: { $0.key < $1.key }) {
-            print("\(key.provider.name) · \(WindowName.of(windowMinutes: group.last?.windowMinutes))")
+            let window = WindowName.of(windowMinutes: group.last?.windowMinutes)
+            let name = ModelLimit.modelName(of: key.limit).map { "\($0) \(window.lowercased())" } ?? window
+            print("\(key.provider.name) · \(name)")
             for reading in group {
                 print("  \(ForecastText.time(reading.at))  \(ForecastText.percent(reading.usedPercent))")
             }
@@ -236,6 +286,8 @@ case "--version", "version":
     print(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown")
 case "status", nil:
     status()
+case "resets":
+    resetsCommand()
 case "history":
     history()
 case "backtest":

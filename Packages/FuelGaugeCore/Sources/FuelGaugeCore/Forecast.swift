@@ -44,7 +44,19 @@ public struct Forecast: Sendable, Equatable {
     public var scheduleProfile: ScheduleProfile?
     public var scheduleStatus: ScheduleStatus = .collecting
 
-    public var windowName: String { WindowName.of(windowMinutes: windowMinutes) }
+    /// "Weekly", or "Fable weekly" for a limit on one model.
+    public var windowName: String {
+        let window = WindowName.of(windowMinutes: windowMinutes)
+        return modelName.map { "\($0) \(window.lowercased())" } ?? window
+    }
+
+    /// For mid-sentence use: "weekly", or "Fable weekly", keeping the model's capital.
+    public var windowPhrase: String {
+        modelName.map { _ in windowName } ?? windowName.lowercased()
+    }
+
+    /// The model a limit is scoped to, like "Fable"; nil for the plan-wide limits.
+    public var modelName: String? { ModelLimit.modelName(of: key.limit) }
 
     /// Running out before reset, or already out: what alerts and the menu bar color care about.
     public var isShort: Bool {

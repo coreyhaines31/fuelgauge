@@ -2,8 +2,8 @@ import FuelGaugeCore
 import PanelKit
 import SwiftUI
 
-/// Reset credits under Codex and Claude Code. The "Check resets in Claude Usage" link sits in the Claude Code
-/// section's link bar.
+/// Reset credits under Codex, and Claude's recorded Fable and weekly resets under Claude Code. The "Check resets
+/// in Claude Usage" link sits in the Claude Code section's link bar.
 struct ResetCreditRow: View {
     let provider: Provider
     let model: UsageModel
@@ -13,6 +13,8 @@ struct ResetCreditRow: View {
     @AppStorage(ResetPreferences.claudeCount) private var claudeCount = 0
     @AppStorage(ResetPreferences.claudeExpiry) private var claudeExpiry = 0.0
     @AppStorage(ResetPreferences.claudeCheckedAt) private var claudeCheckedAt = 0.0
+    @AppStorage(ResetPreferences.claudeFableCount) private var fableCount = 0
+    @AppStorage(ResetPreferences.claudeFableExpiry) private var fableExpiry = 0.0
 
     var body: some View {
         if provider == .codex {
@@ -55,25 +57,35 @@ struct ResetCreditRow: View {
 
     @ViewBuilder private var claude: some View {
         if claudeCheckedAt > 0 {
-            let expired = claudeExpiry > 0 && claudeExpiry <= now.timeIntervalSince1970
-            let count = claudeCount == 1 ? "1 reset recorded" : "\(claudeCount) resets recorded"
-            Row("↺ " + (expired ? "Recheck reset availability" : "\(count) · manual"),
-                subtitle: claudeLines.joined(separator: "\n")) {
+            claudeRow(.fable)
+            claudeRow(.weekly)
+            let recorded = Date(timeIntervalSince1970: claudeCheckedAt)
+            Row("Recorded by hand", subtitle: recorded.formatted(date: .abbreviated, time: .shortened)) {
                 Button("Update…", action: openSettings)
                     .buttonStyle(.panelCompact)
             }
-            .subtitleLineLimit(nil)
+        } else {
+            Button("Record Claude resets…", action: openSettings)
+                .buttonStyle(.panelCompact)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 7)
         }
     }
 
-    private var claudeLines: [String] {
-        var lines: [String] = []
-        if claudeCount > 0 && claudeExpiry > now.timeIntervalSince1970 {
-            let expiry = Date(timeIntervalSince1970: claudeExpiry)
-            lines.append("Next expires \(expiry.formatted(date: .abbreviated, time: .shortened))")
+    private var claudeResets: ClaudeResets {
+        func date(_ seconds: Double) -> Date? { seconds > 0 ? Date(timeIntervalSince1970: seconds) : nil }
+        return ClaudeResets(fable: .init(available: fableCount, expiresAt: date(fableExpiry)),
+                            weekly: .init(available: claudeCount, expiresAt: date(claudeExpiry)),
+                            recordedAt: date(claudeCheckedAt))
+    }
+
+    /// "↺ 3 Fable resets", what one does, and when they lapse, with a light when that's within a week.
+    private func claudeRow(_ kind: ClaudeResets.Kind) -> some View {
+        let resets = claudeResets
+        let lines = [kind.explanation, resets.expiry(kind, now: now)].compactMap { $0 }
+        return Row("↺ " + resets.summary(kind, now: now), subtitle: lines.joined(separator: "\n")) {
+            if resets.expiresSoon(kind, now: now) { StatusLight(.caution, "Expiring") }
         }
-        let recorded = Date(timeIntervalSince1970: claudeCheckedAt)
-        lines.append("Recorded \(recorded.formatted(date: .abbreviated, time: .shortened))")
-        return lines
+        .subtitleLineLimit(nil)
     }
 }
