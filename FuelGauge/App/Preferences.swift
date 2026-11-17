@@ -28,7 +28,8 @@ enum Preferences {
             menuBarTextKey: MenuBarText.none.rawValue,
             alertWhenShortKey: true,
             alertThresholdsKey: [80, 95],
-            ResetPreferences.codexEnabled: true
+            ResetPreferences.codexEnabled: true,
+            ResetPreferences.claudeUsageEnabled: true
         ])
     }
 
