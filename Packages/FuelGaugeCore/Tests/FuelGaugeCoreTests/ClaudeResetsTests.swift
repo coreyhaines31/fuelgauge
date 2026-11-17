@@ -66,9 +66,9 @@ struct ResetAdviceTests {
                  budgetPerHour: nil, verdict: verdict, history: [])
     }
 
-    /// 80% used, 2%/hour, 20 hours left: runs out in 10 hours.
+    /// 95% used, 0.5%/hour, 20 hours left: runs out in 10 hours. A fresh week at this pace lasts.
     private var shortWeek: Forecast {
-        forecast("seven_day", used: 80, rate: 2, resetsIn: 20,
+        forecast("seven_day", used: 95, rate: 0.5, resetsIn: 20,
                  verdict: .runsOut(at: now.addingTimeInterval(10 * 3600), earliest: now, latest: nil))
     }
 
@@ -92,15 +92,16 @@ struct ResetAdviceTests {
     }
 
     @Test func weeklyResetWhenFableGivesBackTooLittle() {
-        let advice = ResetAdvice.suggest(forecasts: [shortWeek], usage: usage(share: 18),
+        let advice = ResetAdvice.suggest(forecasts: [shortWeek], usage: usage(share: 3),
                                          resets: resets(fable: 3, weekly: 1), now: now)
         #expect(advice?.kind == .weekly)
-        #expect(advice?.text.hasPrefix("Using a Fable reset gives back 18% of your week, but the week") == true)
+        #expect(advice?.title == "Fix: a weekly reset")
+        #expect(advice?.text.hasPrefix("Using a Fable reset gives back 3% of your week, but the week") == true)
         #expect(advice?.text.hasSuffix("A weekly reset starts your week over.") == true)
     }
 
     @Test func fableResetAloneSaysItStillRunsOut() {
-        let advice = ResetAdvice.suggest(forecasts: [shortWeek], usage: usage(share: 18),
+        let advice = ResetAdvice.suggest(forecasts: [shortWeek], usage: usage(share: 3),
                                          resets: resets(fable: 3, weekly: 0), now: now)
         #expect(advice?.kind == .fable)
         #expect(advice?.title == "A Fable reset helps, but not enough")
@@ -113,6 +114,25 @@ struct ResetAdviceTests {
         #expect(advice?.kind == .weekly)
         #expect(ResetAdvice.suggest(forecasts: [shortWeek], usage: usage(share: 0),
                                     resets: resets(fable: 3, weekly: 0), now: now) == nil)
+    }
+
+    @Test func aWeeklyResetThatWouldRunOutTooSaysSo() {
+        let fast = forecast("seven_day", used: 80, rate: 2, resetsIn: 20,
+                            verdict: .runsOut(at: now.addingTimeInterval(10 * 3600), earliest: now, latest: nil))
+        let advice = ResetAdvice.suggest(forecasts: [fast], usage: nil, resets: resets(fable: 0, weekly: 1), now: now)
+        #expect(advice?.title == "A weekly reset helps, but not enough")
+        #expect(advice?.text.contains("a fresh week runs out in about 2d 2h") == true)
+    }
+
+    @Test func aCheckThisWeekWithoutFableMeansNoFableUse() {
+        let noFable = ClaudeUsage(models: [], checkedAt: now.addingTimeInterval(-3600))
+        let advice = ResetAdvice.suggest(forecasts: [shortWeek], usage: noFable,
+                                         resets: resets(fable: 3, weekly: 1), now: now)
+        #expect(advice?.text.hasPrefix("Fable hasn't used any of this week") == true)
+        // A check from before this week started says nothing about this week.
+        let old = ClaudeUsage(models: [], checkedAt: now.addingTimeInterval(-8 * 86400))
+        #expect(ResetAdvice.suggest(forecasts: [shortWeek], usage: old, resets: resets(fable: 3, weekly: 0),
+                                    now: now)?.title == "A Fable reset might help")
     }
 
     @Test func weeklyResetThatLapsesThisWeekGoesFirst() {
