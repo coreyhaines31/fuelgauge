@@ -22,12 +22,12 @@ struct ToolMark: View {
     }
 
     /// `scale` evens out the marks' optical size: OpenAI's file keeps its prescribed clear space inside the
-    /// canvas, so it's drawn larger and the empty margin overhangs the slot.
+    /// canvas, and Grok Bot's has a small margin, so they're drawn larger and the empty margin overhangs the slot.
     private static func asset(for provider: Provider) -> (name: String, scale: CGFloat)? {
         switch provider {
         case .claude: ("ToolMarkClaude", 1)
         case .codex: ("ToolMarkCodex", 1.45)
-        case .grokBot: ("ToolMarkGrok", 1)
+        case .grokBot: ("ToolMarkGrokBot", 1.08)
         case .cursor: ("ToolMarkCursor", 1)
         default: nil
         }
