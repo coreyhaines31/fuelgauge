@@ -149,7 +149,13 @@ Screenshots: [previous panel](.github/images/contrast-light.png),
 
 ## Privacy
 
-Fuel Gauge reads local data: Claude Code's status line JSON and session logs, Codex's session logs, and Grok Bot's usage cache. If you turn on Cursor, it also asks cursor.com for your Cursor usage every 10 minutes, using the sign-in the Cursor app stores; nothing else is sent. It saves readings (tool, limit, percent, reset time) in `~/Library/Application Support/Fuel Gauge/Readings` for about two months. Local usage metadata (timestamps, model names, token counts, session identifiers, and project paths) is cached alongside them in `usage-history-v1.json`, with about 61 days of usage events. Prompt and response text are not saved in that cache. Live prediction records are stored locally in `forecast-history-v1.json` for up to 60 days (10,000 records), containing quota readings, forecast metadata, and observed outcomes. It never signs in to anything, reads browser cookies, or asks for Full Disk Access, and it sends no telemetry. Codex reset tracking is on by default and contacts OpenAI through your installed Codex CLI; you can turn it off in Settings › Resets. Otherwise, apart from Cursor, the only network request is Sparkle's update check against this repo's releases.
+Fuel Gauge reads local data: Claude Code's status line JSON and session logs, Codex's session logs, and Grok Bot's usage cache. It saves readings (tool, limit, percent, reset time) in `~/Library/Application Support/Fuel Gauge/Readings` for about two months. Local usage metadata (timestamps, model names, token counts, session identifiers, and project paths) is cached alongside them in `usage-history-v1.json`, with about 61 days of usage events. Prompt and response text are not saved in that cache. Live prediction records are stored locally in `forecast-history-v1.json` for up to 60 days (10,000 records), containing quota readings, forecast metadata, and observed outcomes. It never signs in to anything, reads browser cookies, or asks for Full Disk Access, and it sends no telemetry. Your usage never leaves your Mac.
+
+It goes online for three things:
+
+- **Update checks**: Sparkle checks this repo's releases (off in Settings › General).
+- **Codex resets**: on by default, every 5 minutes it runs your installed Codex CLI (`codex app-server`), which asks OpenAI for your reset credits. Turn it off in Settings › Resets.
+- **Cursor**: only if you turn it on, every 10 minutes it asks cursor.com for your Cursor usage, using the sign-in the Cursor app stores.
 
 ## Troubleshooting
 
