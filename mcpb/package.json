@@ -1,6 +1,6 @@
 {
   "name": "fuelgauge-mcpb",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "description": "Claude Desktop extension for Fuel Gauge",
@@ -19,5 +19,8 @@
     "@types/node": "22.19.1",
     "esbuild": "0.28.2",
     "typescript": "5.9.3"
+  },
+  "overrides": {
+    "tmp": "0.2.7"
   }
 }

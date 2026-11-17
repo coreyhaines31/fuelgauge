@@ -77,7 +77,7 @@ COMPARISONS = [
         "cta": "Know if you&#39;ll make it.",
         "faqs": [
             ("Is ccusage free?", "Yes. ccusage is free and MIT licensed. Fuel Gauge is free too, with the source on GitHub under the FSL-1.1-MIT license."),
-            ("Does Fuel Gauge show dollar costs like ccusage?", "No. Fuel Gauge works in percent of your plan's limit, which is what decides whether you get cut off on Pro or Max. ccusage estimates cost from tokens at API prices."),
+            ("Does Fuel Gauge show dollar costs like ccusage?", "Yes, for Claude Code and Codex on this Mac. View usage shows tokens and estimated API cost for today, 7 days, or 30 days, by tool, model, project, and session. It's what those tokens would cost at API rates, not your subscription bill. ccusage covers more agents and has more report types. Fuel Gauge's forecasts still work in percent of your plan's limit, which is what decides whether you get cut off on Pro or Max."),
             ("Can I use ccusage and Fuel Gauge together?", "Yes. ccusage is a command you run for reports; Fuel Gauge runs in the menu bar. Neither changes the other."),
         ],
         "sections": [
@@ -93,13 +93,13 @@ COMPARISONS = [
         <h2>Fuel Gauge vs ccusage</h2>
         {{TABLE}}
         <h3>What ccusage does better</h3>
-        <p>History and cost. If you want to know what last month cost at API prices, or compare usage across many agents, ccusage is the tool.</p>
+        <p>Breadth and reports. Fuel Gauge shows 30 days of tokens and estimated API cost for Claude Code and Codex, but if you want monthly reports, 5-hour block reports, or usage across many more agents, ccusage is the tool.</p>
         <h3>What Fuel Gauge does better</h3>
         <p>The next few hours. It tells you whether your current limit will last, while you work, without opening a terminal.</p>
             """, "table": [
                 ("Price", "Free", "Free"),
                 ("License", "FSL-1.1-MIT, source on GitHub", "MIT"),
-                ("What it measures", "Percent of your plan&#39;s limits", "Tokens and estimated cost in dollars"),
+                ("What it measures", "Percent of your plan&#39;s limits, plus tokens and estimated API cost for Claude Code and Codex", "Tokens and estimated cost in dollars"),
                 ("Forecast to reset", "Yes, with a range", "—"),
                 ("Where it runs", "Mac menu bar, Claude Code status line, CLI", "Command line"),
                 ("Tools", "Claude Code, Codex, Grok Bot, Cursor (opt-in)", "18, including Claude Code, Codex, Gemini CLI"),
@@ -206,7 +206,7 @@ COMPARISONS = [
                 ("Price", "Free", "Free"),
                 ("License", "FSL-1.1-MIT, source on GitHub", "MIT"),
                 ("Where it runs", "Mac menu bar, Claude Code status line, CLI", "Terminal dashboard"),
-                ("Measures", "Claude&#39;s own session and weekly percentages", "Tokens and cost per 5-hour window"),
+                ("Measures", "Claude&#39;s own session and weekly percentages, plus tokens and estimated API cost", "Tokens and cost per 5-hour window"),
                 ("Forecast", "Each window, with a range", "Session forecasting"),
                 ("Weekly limit forecast", "Yes", "—"),
                 ("Codex, Grok Bot, Cursor", "Yes", "—"),
@@ -231,7 +231,7 @@ PRIVACY = {
     "description": "Fuel Gauge has no telemetry. Learn about local usage readings, Codex reset checks, optional Cursor usage, and update requests.",
     "h1": "Privacy policy",
     "html": """
-        <p><strong>Last updated October 27, 2026.</strong></p>
+        <p><strong>Last updated November 7, 2026.</strong></p>
         <h2>The Fuel Gauge app</h2>
         <p>The app collects nothing about you. There&#39;s no account, no analytics, and no telemetry.</p>
         <p>To forecast your limits it reads what Claude Code, Codex, and Grok Bot already save on your Mac: the usage Claude Code passes to its status line, Codex&#39;s session logs in <code>~/.codex/sessions</code>, and Grok Bot&#39;s local usage cache. It keeps a history of those readings in <code>~/Library/Application Support/Fuel Gauge</code>. It doesn&#39;t read browser cookies or need Full Disk Access. Your saved reading history stays on your Mac.</p>
@@ -239,7 +239,7 @@ PRIVACY = {
         <p>Codex reset tracking is on by default while Codex is tracked. Every five minutes, Fuel Gauge asks the installed Codex CLI for available reset credits using its existing sign-in; this contacts OpenAI. Fuel Gauge does not read or store Codex credentials, and never redeems a reset. Turn tracking off in Settings &gt; Resets; explicit opt-outs are preserved across updates.</p>
         <p>Cursor tracking is off by default. If enabled, it requests usage from cursor.com using the Cursor app&#39;s existing sign-in. The update check fetches a small feed from GitHub. These services see requests like other web requests, including your IP address.</p>
         <h2>fuelgauge.app</h2>
-        <p>This website uses <a href="https://usefathom.com">Fathom Analytics</a> for privacy-friendly visit counts and UserProof to see how visitors use the site (clicks, scrolling and page interactions, not anything you type). Neither sets cookies; UserProof keeps random ids in your browser&#39;s storage. No ad tracking, no personal data sold or shared. It&#39;s static pages hosted on Vercel, which keeps standard server logs, and it loads fonts from Google Fonts, which sees that request like any other web request.</p>
+        <p>This website uses the TracerKit tag manager and Headstream for visit analytics, and UserProof to see how visitors use the site (clicks, scrolling and page interactions, not anything you type). TracerKit and Headstream set first-party cookies and browser storage with random visitor and session ids so they can tell new visits from returning ones; UserProof sets no cookies and keeps random ids in your browser&#39;s storage. No ad tracking, no personal data sold or shared. It&#39;s static pages hosted on Vercel, which keeps standard server logs, and it loads fonts from Google Fonts, which sees that request like any other web request.</p>
         <h2>Downloads</h2>
         <p>The app is downloaded from GitHub Releases, or through Homebrew, which downloads it from GitHub. Their privacy policies cover those downloads.</p>
         <h2>Questions</h2>

@@ -9,6 +9,13 @@ import Observation
 @Observable
 final class UsageModel {
     private(set) var forecasts: [Forecast] = []
+    private(set) var forecastHistory: ForecastHistory
+    private(set) var usageEvents: [UsageEvent] = []
+    private(set) var usageWarnings: [String] = []
+    private(set) var scanningUsage = false
+    private(set) var usageUpdatedAt: Date?
+    private var usageScanner: UsageLogScanner?
+    private let usageCacheURL: URL
     private(set) var updatedAt: Date?
     private(set) var codexResetCredits: ResetCredits?
     private(set) var codexResetsCheckedAt: Date?
@@ -33,11 +40,13 @@ final class UsageModel {
     private let readsLiveData: Bool
 
     /// How much history forecasts and charts look at.
-    nonisolated static let history: TimeInterval = 8 * 24 * 3600
+    nonisolated static let history = ForecastEngine.historyDuration
 
     init(supportFolder: URL = Brand.supportFolder, readsLiveData: Bool = true,
          resetCredits: ResetCredits? = nil) {
         store = ReadingStore(folder: supportFolder.appending(path: "Readings"))
+        forecastHistory = ForecastHistory(folder: supportFolder)
+        usageCacheURL = supportFolder.appending(path: "usage-history-v1.json")
         codexStateURL = supportFolder.appending(path: "codex-state.json")
         let state = (try? Data(contentsOf: codexStateURL))
             .flatMap { try? JSONDecoder().decode(CodexLogReader.State.self, from: $0) }
@@ -65,6 +74,7 @@ final class UsageModel {
     /// Reads anything new, saves it, and recomputes the forecasts.
     func refresh() {
         refreshCodexResets()
+        refreshUsage()
         guard !isRefreshing else { return }
         isRefreshing = true
         let enabled = Tracking.enabled(installed: installedProviders)
@@ -78,10 +88,12 @@ final class UsageModel {
         let grokBot = grokBot
         let store = store
         let codexStateURL = codexStateURL
+        let forecastHistory = forecastHistory, recordsForecasts = readsLiveData
+        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
         // Demo data stands in for a set-up Mac, so it doesn't ask to set up Claude Code.
         claudeStatusLine = readsLiveData ? claude.state : .on
         Task {
-            let (readings, updatedCodex) = await Task.detached(priority: .utility) {
+            let (updatedForecasts, updatedCodex, history, refreshedAt) = await Task.detached(priority: .utility) {
                 var polled = codex
                 var fresh: [Reading] = []
                 if readsCodex { fresh += polled.poll() }
@@ -92,24 +104,78 @@ final class UsageModel {
                 var kept = codex
                 if (try? store.append(fresh)) != nil {
                     kept = polled
-                    if readsCodex, let data = try? JSONEncoder().encode(polled.state) {
-                        try? FileManager.default.createDirectory(
-                            at: codexStateURL.deletingLastPathComponent(), withIntermediateDirectories: true
-                        )
-                        try? data.write(to: codexStateURL, options: .atomic)
-                    }
+                    if readsCodex { Self.saveCodexState(polled.state, to: codexStateURL) }
                 }
-                let since = Date().addingTimeInterval(-Self.history)
-                return (store.load(since: since).filter { enabled.contains($0.provider) }, kept)
+                let now = Date()
+                let readings = store.load(since: now.addingTimeInterval(-Self.history))
+                    .filter { enabled.contains($0.provider) }
+                let forecasts = ForecastEngine.forecasts(from: readings, now: now).filter {
+                    $0.verdict != .reset || $0.resetsAt >= now.addingTimeInterval(-24 * 3600)
+                }
+                var history = forecastHistory
+                if recordsForecasts {
+                    history.refresh(forecasts: forecasts, readings: readings, now: now, appVersion: appVersion)
+                }
+                return (forecasts, kept, history, now)
             }.value
             self.codex = updatedCodex
-            forecasts = ForecastEngine.forecasts(from: readings).filter { !isStale($0) }
-            updatedAt = Date()
+            forecasts = updatedForecasts
+            self.forecastHistory = history
+            updatedAt = refreshedAt
             isRefreshing = false
             onChange?()
             onRefresh?(forecasts)
         }
     }
+
+    private nonisolated static func saveCodexState(_ state: CodexLogReader.State, to url: URL) {
+        guard let data = try? JSONEncoder().encode(state) else { return }
+        try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(),
+                                                withIntermediateDirectories: true)
+        try? data.write(to: url, options: .atomic)
+    }
+
+    var visibleUsage: [UsageEvent] {
+        let enabled = Set([Provider.claude, .codex].filter { Tracking.isEnabled($0) })
+        return usageEvents.filter { enabled.contains($0.provider) }
+    }
+
+    func todayUsage(for provider: Provider, now: Date = Date()) -> UsageSummary {
+        UsageSummary(UsageHistory.select(visibleUsage, interval: UsagePeriod.today.interval(now: now),
+                                         provider: provider))
+    }
+
+    private func refreshUsage() {
+        guard readsLiveData, !scanningUsage else { return }
+        scanningUsage = true
+        let scanner = usageScanner
+        let cacheURL = usageCacheURL
+        let enabled = Tracking.enabled(installed: installedProviders)
+        Task {
+            let (updated, events) = await Task.detached(priority: .utility) {
+                var reader = scanner ?? UsageLogScanner(cacheURL: cacheURL)
+                let events = reader.scan(enabled: enabled)
+                return (reader, events)
+            }.value
+            usageScanner = updated
+            usageEvents = events
+            usageWarnings = updated.warnings
+            usageUpdatedAt = Date()
+            scanningUsage = false
+            onChange?()
+        }
+    }
+
+    #if DEBUG
+    func setDemoUsage(_ events: [UsageEvent]) {
+        usageEvents = events
+        usageUpdatedAt = Date()
+    }
+
+    func setDemoForecastHistory(_ journal: ForecastJournal, now: Date) {
+        forecastHistory.summarize(journal, now: now)
+    }
+    #endif
 
     func refreshCodexResets(force: Bool = false) {
         guard readsLiveData else { return }
@@ -135,11 +201,6 @@ final class UsageModel {
         }
     }
 
-    /// A window that reset more than a day ago, with no reading since, isn't worth a card.
-    private func isStale(_ forecast: Forecast) -> Bool {
-        forecast.verdict == .reset && forecast.resetsAt < Date().addingTimeInterval(-24 * 3600)
-    }
-
     /// The forecast that matters most: one that runs out soonest, else the fullest.
     var mostUrgent: Forecast? {
         byUrgency.first
@@ -158,7 +219,7 @@ final class UsageModel {
         case .limitReached: return -1
         case .runsOut(let at, _, _): return at.timeIntervalSinceNow
         case .reset: return .greatestFiniteMagnitude
-        case .learning, .makesIt: return 1_000_000_000 - forecast.usedPercent
+        case .learning, .stale, .makesIt: return 1_000_000_000 - forecast.usedPercent
         }
     }
 

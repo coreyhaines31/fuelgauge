@@ -11,7 +11,9 @@ final class StatusItemController {
     private let model: UsageModel
     private var hosting: NSHostingController<PanelView>?
 
-    init(model: UsageModel, openSettings: @escaping () -> Void, openResetSettings: @escaping () -> Void,
+    init(model: UsageModel, openSettings: @escaping () -> Void, openUsage: @escaping () -> Void,
+         openForecasts: @escaping () -> Void,
+         openResetSettings: @escaping () -> Void,
          checkForUpdates: @escaping () -> Void) {
         self.model = model
         // New status items start at the far left on recent macOS, which is off-screen on a crowded menu bar.
@@ -28,6 +30,12 @@ final class StatusItemController {
         }, checkForUpdates: checkForUpdates, openResetSettings: { [weak popover] in
             popover?.performClose(nil)
             openResetSettings()
+        }, openUsage: { [weak popover] in
+            popover?.performClose(nil)
+            openUsage()
+        }, openForecasts: { [weak popover] in
+            popover?.performClose(nil)
+            openForecasts()
         })
         let hosting = NSHostingController(rootView: panel)
         hosting.sizingOptions = .preferredContentSize

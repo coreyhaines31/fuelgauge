@@ -1,90 +1,112 @@
 import FuelGaugeCore
+import PanelKit
 import SwiftUI
 
-/// What opens from the menu bar: a card per limit, most urgent first, plus setup for tools that need it.
+/// What opens from the menu bar: the fuel meter on the most urgent limit, the verdict, then a section per tool,
+/// most urgent first, plus setup for tools that need it.
 struct PanelView: View {
     let model: UsageModel
     let openSettings: () -> Void
     let checkForUpdates: () -> Void
     var openResetSettings: (() -> Void)?
+    var openUsage: () -> Void = {}
+    var openForecasts: () -> Void = {}
     @State private var setupError: String?
+    @State private var cardsHeight: CGFloat = 400
+    @Environment(\.panelTheme) private var theme
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 30)) { context in
-            VStack(alignment: .leading, spacing: 10) {
-                header(now: context.date)
-                if needsClaudeSetup {
-                    claudeSetup
-                }
-                if model.forecasts.isEmpty {
-                    emptyState
-                } else {
-                    ForEach(groups, id: \.provider) { group in
-                        ToolCard(provider: group.provider, forecasts: group.forecasts, now: context.date,
-                                 chartKey: chartKey, model: model,
-                                 openSettings: openResetSettings ?? openSettings)
+            Panel(accent: PanelAccent.fuelGauge) {
+                fascia(now: context.date)
+                verdict(now: context.date)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        if needsClaudeSetup {
+                            claudeSetup
+                        }
+                        ForEach(groups, id: \.provider) { group in
+                            ToolCard(provider: group.provider, forecasts: group.forecasts, now: context.date,
+                                     chartKey: chartKey, model: model,
+                                     openSettings: openResetSettings ?? openSettings, openUsage: openUsage)
+                        }
                     }
+                    .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { cardsHeight = $0 }
                 }
-                footer
-            }
-            .padding(14)
-            .frame(width: 360)
-            .background(Color(nsColor: .windowBackgroundColor))
-        }
-    }
-
-    private func header(now: Date) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .firstTextBaseline) {
-                Text(Brand.name).font(.system(size: 15, weight: .semibold))
-                Spacer()
-                if let updatedAt = model.updatedAt {
-                    Text("Updated \(ForecastText.time(updatedAt, now: now))")
-                        .font(.system(size: 11))
-                        .foregroundStyle(.secondary)
-                }
-            }
-            if !model.forecasts.isEmpty {
-                HStack(alignment: .top, spacing: 8) {
-                    Image(systemName: summarySymbol)
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundStyle(summaryTint)
-                        .padding(.top, 2)
-                        .accessibilityHidden(true)
-                    Text(ForecastText.summary(model.forecasts, now: now))
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(.primary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
+                .frame(height: min(cardsHeight, max(240, (NSScreen.main?.visibleFrame.height ?? 900) - 200)))
+                links
+            } footer: {
+                Footer(appName: Brand.name, openSettings: openSettings, quit: { NSApp.terminate(nil) })
             }
         }
     }
 
-    private var summarySymbol: String {
+    // MARK: Fascia and verdict
+
+    private func fascia(now: Date) -> some View {
+        let urgent = model.mostUrgent
+        let fuelLeft = urgent.map { min(max(1 - $0.usedPercent / 100, 0), 1) } ?? 0
+        return Fascia(
+            nameplate: "Fuel",
+            timestamp: model.updatedAt.map { "Updated \(ForecastText.time($0, now: now))" },
+            detail: urgent.map { "Most urgent · \($0.windowName)" },
+            label: urgent?.key.provider.name
+        ) {
+            Meter(
+                MeterConfig(
+                    majorTicks: 4, minorTicks: 4, zones: [0...0.12],
+                    labels: [.init(0, "E"), .init(0.25, "¼"), .init(0.5, "½"), .init(0.75, "¾"), .init(1, "F")],
+                    innerLabels: [.init(0, "0"), .init(0.5, "50"), .init(1, "100%")],
+                    word: "LIMIT", accessibilityLabel: "Fuel left in the most urgent limit"
+                ),
+                value: fuelLeft,
+                accessibilityValue: urgent.map {
+                    "\(ForecastText.percent(100 - $0.usedPercent)) left in \($0.key.provider.name) \($0.windowName)"
+                } ?? "No reading"
+            )
+        }
+    }
+
+    @ViewBuilder private func verdict(now: Date) -> some View {
+        if !model.forecasts.isEmpty {
+            // The summary's " · N more running short" tail reads better as the sentence under the title.
+            let parts = ForecastText.summary(model.forecasts, now: now).components(separatedBy: " · ")
+            let rest = parts.dropFirst().joined(separator: ". ")
+            Verdict(parts[0], message: rest.isEmpty ? nil : rest.prefix(1).uppercased() + rest.dropFirst() + ".",
+                    status: summaryStatus.status, statusLabel: summaryStatus.label)
+        } else if groups.isEmpty {
+            Verdict("No readings yet", message: emptyDetail, status: .off, statusLabel: "No readings")
+        }
+    }
+
+    /// The status light that replaces the old summary icon: coloured only when a limit is short or the reading
+    /// is good.
+    private var summaryStatus: (status: PanelStatus, label: String) {
         switch model.mostUrgent?.verdict {
-        case .limitReached: "exclamationmark.circle.fill"
-        case .runsOut: "exclamationmark.triangle.fill"
-        case .makesIt: "checkmark.circle"
-        case .reset: "arrow.clockwise"
-        case .learning, nil: "clock"
+        case .limitReached: (.stop, "Limit reached")
+        case .runsOut: (.caution, "Running short")
+        case .makesIt: (.go, "Makes it")
+        case .reset: (.off, "Reset")
+        case .stale: (.off, "Needs a reading")
+        case .learning, nil: (.off, "Learning")
         }
     }
 
-    private var summaryTint: Color {
-        guard let urgent = model.mostUrgent else { return .secondary }
-        return urgent.isShort ? WindowRow.tint(for: urgent.verdict) : .secondary
-    }
+    // MARK: Tools
 
     private struct Group {
         let provider: Provider
         let forecasts: [Forecast]
     }
 
-    /// A card per tool, the tool with the most urgent limit first; inside, the shortest window first.
+    /// A section per tool, the tool with the most urgent limit first; inside, the shortest window first.
     private var groups: [Group] {
         var order: [Provider] = []
         for forecast in model.byUrgency where !order.contains(forecast.key.provider) {
             order.append(forecast.key.provider)
+        }
+        for provider in [Provider.claude, .codex] where !order.contains(provider) {
+            if model.visibleUsage.contains(where: { $0.provider == provider }) { order.append(provider) }
         }
         return order.map { provider in
             Group(provider: provider, forecasts: model.forecasts
@@ -98,21 +120,16 @@ struct PanelView: View {
         model.byUrgency.first(where: \.isShort)?.key
     }
 
+    // MARK: Claude setup
+
     private var needsClaudeSetup: Bool {
         model.installedProviders.contains(.claude) && Tracking.isEnabled(.claude) && model.claudeStatusLine != .on
     }
 
     private var claudeSetup: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("See your Claude Code limits").font(.system(size: 12, weight: .semibold))
-            Text(claudeSetupDetail)
-                .font(.system(size: 11))
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-            if let setupError {
-                Label(setupError, systemImage: "exclamationmark.circle")
-                    .font(.system(size: 12)).foregroundStyle(.primary)
-            }
+        Notice("See your Claude Code limits",
+               message: setupError.map { claudeSetupDetail + "\n\n" + $0 } ?? claudeSetupDetail,
+               status: setupError == nil ? .caution : .stop) {
             Button("Turn On") {
                 do {
                     try model.setClaudeStatusLine(on: true)
@@ -121,11 +138,8 @@ struct PanelView: View {
                     setupError = "Couldn't update Claude Code's settings: \(error.localizedDescription)"
                 }
             }
-            .controlSize(.small)
+            .buttonStyle(.panelCompact)
         }
-        .padding(12)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.accentColor.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
     }
 
     private var claudeSetupDetail: String {
@@ -137,18 +151,7 @@ struct PanelView: View {
         return base
     }
 
-    private var emptyState: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("No readings yet").font(.system(size: 12, weight: .semibold))
-            Text(emptyDetail)
-                .font(.system(size: 11))
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(12)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 10))
-    }
+    // MARK: Empty state and links
 
     private var emptyDetail: String {
         let names = Tracking.enabled(installed: model.installedProviders).map(\.name)
@@ -159,20 +162,11 @@ struct PanelView: View {
         return "Readings appear as you use \(ListFormatter.localizedString(byJoining: names))."
     }
 
-    private var footer: some View {
-        HStack {
-            Spacer()
-            Menu {
-                Button("Settings…", action: openSettings)
-                Button("Check for Updates…", action: checkForUpdates)
-                Divider()
-                Button("Quit \(Brand.name)") { NSApp.terminate(nil) }
-            } label: {
-                Image(systemName: "gearshape")
-            }
-            .menuStyle(.borderlessButton)
-            .menuIndicator(.hidden)
-            .fixedSize()
+    private var links: some View {
+        LinkBar {
+            Button("View usage", action: openUsage)
+            Button("Forecast details", action: openForecasts)
+            Button("Check for Updates…", action: checkForUpdates)
         }
     }
 }

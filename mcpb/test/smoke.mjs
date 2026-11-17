@@ -27,6 +27,16 @@ const NO_READINGS =
   "Claude Code's limits only arrive through its status line: turn it on in Fuel Gauge's Settings > Tools.";
 // [fake mode, tool, arguments, should work, argv the CLI must get, exact answer]
 const fakeCalls = [
+  ["stale", "limits_status", {}, ok, "status --json", {
+    problem: false,
+    limits: [{ tool: "codex", window: "weekly", verdict: "stale", forecast_basis: "recent" }],
+    note: "Some limits have no reliable forecast. problem: false does not confirm they will last.",
+  }],
+  ["schedule", "limits_status", {}, ok, "status --json", {
+    problem: false,
+    limits: [{ tool: "claude", window: "weekly", verdict: "makes_it", forecast_basis: "schedule",
+      session_runs_out_at: "2026-10-29T22:40Z" }],
+  }],
   [
     "ok", "limits_status", {}, ok, "status --json",
     {

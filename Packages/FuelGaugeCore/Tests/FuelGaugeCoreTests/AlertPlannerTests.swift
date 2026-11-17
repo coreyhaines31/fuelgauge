@@ -7,22 +7,25 @@ import Testing
     let planner = AlertPlanner(settings: .init(alertWhenShort: true, thresholds: [80, 95]))
 
     /// A Claude 5-hour forecast: `used` percent now, climbing `perHour`, resetting `resetsIn` hours from now.
-    func forecast(used: Double, perHour: Double, resetsIn: Double = 3, resetOffset: TimeInterval = 0) -> Forecast {
+    func forecast(used: Double, perHour: Double, resetsIn: Double = 3, resetOffset: TimeInterval = 0,
+                  readingOffset: TimeInterval = 0) -> Forecast {
         let resetsAt = now.addingTimeInterval(resetsIn * 3600 + resetOffset)
+        let at = now.addingTimeInterval(readingOffset)
         let readings = [
             Reading(provider: .claude, limit: "five_hour", windowMinutes: 300, usedPercent: used - perHour,
-                    resetsAt: resetsAt, at: now.addingTimeInterval(-3600)),
+                    resetsAt: resetsAt, at: at.addingTimeInterval(-3600)),
             Reading(provider: .claude, limit: "five_hour", windowMinutes: 300, usedPercent: used,
-                    resetsAt: resetsAt, at: now)
+                    resetsAt: resetsAt, at: at)
         ]
-        return ForecastEngine.forecast(for: readings, now: now)!
+        return ForecastEngine.forecast(for: readings, now: at)!
     }
 
-    @Test func runOutNeedsTwoRefreshesInARow() {
+    @Test func runOutNeedsTwoFreshReadingsInARow() {
         let short = forecast(used: 40, perHour: 30)
         let (first, state) = planner.plan([short], state: .init(), now: now)
         #expect(first.isEmpty)
-        let (second, _) = planner.plan([short], state: state, now: now)
+        let next = forecast(used: 41, perHour: 30, readingOffset: 60)
+        let (second, _) = planner.plan([next], state: state, now: now.addingTimeInterval(60))
         #expect(second.map(\.id) == ["claude/five_hour|short"])
         #expect(second.first?.title.hasPrefix("Claude Code's 5-hour limit runs out around") == true)
     }
@@ -36,9 +39,11 @@ import Testing
     @Test func firesOncePerWindowEvenWhenTheResetDrifts() {
         var state = AlertPlanner.State()
         var fired: [String] = []
-        for offset: TimeInterval in [0, 0, 5 * 60, -4 * 60] {
-            let short = forecast(used: 40, perHour: 30, resetOffset: offset)
-            let (alerts, next) = planner.plan([short], state: state, now: now)
+        let offsets: [TimeInterval] = [0, 0, 5 * 60, -4 * 60]
+        for (index, offset) in offsets.enumerated() {
+            let elapsed = Double(index) * 60
+            let short = forecast(used: 40, perHour: 30, resetOffset: offset, readingOffset: elapsed)
+            let (alerts, next) = planner.plan([short], state: state, now: now.addingTimeInterval(elapsed))
             fired += alerts.map(\.id)
             state = next
         }
@@ -46,9 +51,11 @@ import Testing
     }
 
     @Test func aNewWindowCanAlertAgain() {
-        let state = AlertPlanner.State(fired: ["claude/five_hour|short": now.timeIntervalSince1970 - 5 * 3600],
-                                       shortLastTime: [LimitKey(provider: .claude, limit: "five_hour")])
-        let (alerts, _) = planner.plan([forecast(used: 40, perHour: 30)], state: state, now: now)
+        let state = AlertPlanner.State(fired: ["claude/five_hour|short": now.timeIntervalSince1970 - 5 * 3600])
+        let (first, pending) = planner.plan([forecast(used: 40, perHour: 30)], state: state, now: now)
+        #expect(first.isEmpty)
+        let next = forecast(used: 41, perHour: 30, readingOffset: 60)
+        let (alerts, _) = planner.plan([next], state: pending, now: now.addingTimeInterval(60))
         #expect(alerts.map(\.id) == ["claude/five_hour|short"])
     }
 

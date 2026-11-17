@@ -27,6 +27,21 @@ enum DemoMode {
         return try? ResetCredits.decode(Data(json.utf8))
     }
 
+    static func usageEvents(now: Date = Date()) -> [UsageEvent] {
+        (0..<60).flatMap { day in
+            [Provider.claude, .codex].map { provider in
+                let at = Calendar.current.date(byAdding: .day, value: -day, to: now)!.addingTimeInterval(-120)
+                let scale = Int64(8 + (day * 7) % 17)
+                return UsageEvent(id: "demo-\(provider.rawValue)-\(day)", provider: provider,
+                                  session: "session-\(day)",
+                                  project: day % 2 == 0 ? "/projects/fuelgauge" : "/projects/site",
+                                  model: provider == .claude ? "claude-sonnet-4-6" : "gpt-6.1-sol", at: at,
+                                  tokens: TokenUsage(input: scale * 12_000, output: scale * 2_000,
+                                                     cacheRead: scale * 35_000, cacheWrite: scale * 3_000))
+            }
+        }
+    }
+
     /// Writes sample readings: Claude's 5-hour window running short, its weekly window fine, Codex learning
     /// to be steady, Grok Bot nearly full.
     static func prepare(now: Date = Date()) {
@@ -54,6 +69,7 @@ enum DemoMode {
         readings += series(.grokBot, "weekly", minutes: 10080, resetsIn: 35, [
             (60 * 20, 72), (60 * 14, 78), (60 * 8, 84), (60 * 2, 89)
         ])
+        if CommandLine.arguments.contains("--forecast-demo") { readings = ForecastDemo.readings(now: now) }
         try? store.append(readings, now: now)
         NSApp.appearance = NSAppearance(named: CommandLine.arguments.contains("--dark") ? .darkAqua : .aqua)
     }
@@ -79,6 +95,30 @@ enum DemoMode {
     /// Draws the panel offscreen and saves it. An app can always draw its own views, so this works without
     /// Screen Recording permission.
     static func snapshot(model: UsageModel, updater: Updater, to url: URL) {
+        let detailsURL = url.deletingPathExtension().appendingPathExtension("details.png")
+        render(ForecastDetailsView(model: model).frame(width: 760, height: 900), to: detailsURL)
+        if CommandLine.arguments.contains("--forecast-demo") {
+            ForecastTimelineDemo.save(next: url)
+            SessionPlanDemo.save(next: url)
+            saveSchedules(model: model, next: url)
+            model.setDemoForecastHistory(ForecastDemo.journal(now: Date()), now: Date())
+            let learnedURL = url.deletingPathExtension().appendingPathExtension("learned.png")
+            let key = model.forecasts.first(where: { $0.key.provider == .codex })?.key.id ?? ""
+            render(ForecastDetailsView(model: model, selectedKey: key).frame(width: 760, height: 1200), to: learnedURL)
+            let staleURL = url.deletingPathExtension().appendingPathExtension("stale.png")
+            let staleKey = model.forecasts.first(where: { $0.verdict == .stale })?.key.id ?? ""
+            render(ForecastDetailsView(model: model, selectedKey: staleKey)
+                .frame(width: 760, height: 900), to: staleURL)
+            let details = VStack(alignment: .leading, spacing: 14) {
+                ForEach(model.forecasts, id: \.key) { forecast in
+                    ToolCard(provider: forecast.key.provider, forecasts: [forecast], now: Date(),
+                             chartKey: forecast.key)
+                }
+            }.padding(14).frame(width: 360)
+            render(details, to: url.deletingPathExtension().appendingPathExtension("forecasts.png"))
+        }
+        let usageURL = url.deletingPathExtension().appendingPathExtension("usage.png")
+        render(UsageView(model: model).frame(width: 900, height: 850), to: usageURL)
         let panes: [(String, AnyView)] = [
             ("general", AnyView(GeneralSettingsView(updater: updater))),
             ("tools", AnyView(ToolsSettingsView(model: model))),
@@ -96,7 +136,31 @@ enum DemoMode {
         }
     }
 
-    private static func render(_ view: some View, to url: URL, then done: (() -> Void)? = nil) {
+    private static func saveSchedules(model: UsageModel, next url: URL) {
+        if let forecast = model.forecasts.first(where: { $0.key.provider == .codex }),
+           let profile = forecast.scheduleProfile {
+            render(ScheduleProfileView(profile: profile, isApplied: forecast.basis == .schedule,
+                                       selectedID: "weekday-10").padding(20).frame(width: 700),
+                   to: url.deletingPathExtension().appendingPathExtension("schedule.png"))
+        }
+        let now = Date()
+        if let forecast = ForecastEngine.forecast(for: ForecastDemo.sparseReadings(now: now), now: now),
+           let profile = forecast.scheduleProfile {
+            for (name, selected) in [("sparse", "weekend-10"), ("unknown", "weekday-2")] {
+                render(ScheduleProfileView(profile: profile, isApplied: false, selectedID: selected)
+                    .padding(20).frame(width: 700),
+                       to: url.deletingPathExtension().appendingPathExtension("\(name).png"))
+            }
+        }
+        if let forecast = ForecastEngine.forecast(for: ForecastDemo.burstReadings(now: now), now: now),
+           let profile = forecast.scheduleProfile {
+            render(ScheduleProfileView(profile: profile, isApplied: forecast.basis == .schedule)
+                .padding(20).frame(width: 700),
+                   to: url.deletingPathExtension().appendingPathExtension("burst.png"))
+        }
+    }
+
+    static func render(_ view: some View, to url: URL, then done: (() -> Void)? = nil) {
         let hosting = NSHostingView(rootView: view.background(Color(nsColor: .windowBackgroundColor)))
         hosting.frame = NSRect(origin: .zero, size: hosting.fittingSize)
         let window = NSWindow(
@@ -107,6 +171,9 @@ enum DemoMode {
         window.orderFrontRegardless()
         hosting.layoutSubtreeIfNeeded()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            // The panel's scroll area sizes itself to its content after the first layout.
+            hosting.setFrameSize(hosting.fittingSize)
+            hosting.layoutSubtreeIfNeeded()
             guard let rep = hosting.bitmapImageRepForCachingDisplay(in: hosting.bounds) else { return }
             hosting.cacheDisplay(in: hosting.bounds, to: rep)
             try? rep.representation(using: .png, properties: [:])?.write(to: url)

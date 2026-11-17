@@ -18,22 +18,24 @@
   <meta name="twitter:image" content="https://fuelgauge.app/images/og/guides-claude-code-statusline.png">
   <meta name="twitter:title" content="Claude Code statusline: show your usage limits">
   <meta name="twitter:description" content="Set up a Claude Code statusline that shows your 5-hour and weekly usage and reset times: the JSON it gets, a ready-made script, and a forecast.">
-  <meta name="theme-color" content="#fbe9d6" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
-  <link rel="icon" href="/images/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/images/icon.png">
+  <meta name="theme-color" content="#e7e8e9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#2a2a2c" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@300;600;700&display=swap">
+  <link rel="stylesheet" href="/kit/brushed.css">
+  <link rel="stylesheet" href="/kit/popover.css">
   <link rel="stylesheet" href="/site.css">
-  <script src="https://cdn.usefathom.com/script.js" data-site="ETCPQLNF" defer></script>
+  <script async src="https://tracerkit.com/t.js" data-key="tk_bsPe2rM_f5F7Q4G8"></script>
   <script src="https://ingest.getuserproof.com/sdk.js" data-site="eb2393e8-b6bf-405b-a82f-9adf86865677" defer></script>
 </head>
-<body>
-  <div class="sky" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<body class="bx">
   <div class="nav">
     <div class="wrap">
-      <a class="brand" href="/"><img src="/images/icon.svg" alt="" width="28" height="28"> Fuel Gauge</a>
+      <a class="brand" href="/"><img src="/images/icon.svg" alt="" width="32" height="32"> Fuel Gauge</a>
       <nav>
         <a href="/#how">How it works</a>
         <a href="/limits">Limits</a>
@@ -149,13 +151,24 @@ echo "$line"</code></pre>
     </section>
   </main>
   <footer>
-    <div class="wrap">
-      <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a><a href="/limits/codex">Codex limits</a><a href="/limits/cursor">Cursor limits</a><a href="/limits/grok">Grok limits</a><a href="/limits/github-copilot">GitHub Copilot limits</a></nav>
-      <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a><a href="/guides/check-claude-usage">Check your Claude usage</a><a href="/guides/when-does-claude-limit-reset">When Claude limits reset</a><a href="/guides/claude-code-statusline">Claude Code status line</a><a href="/guides/stop-hitting-claude-limits">Stop hitting Claude limits</a></nav>
-      <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a><a href="/compare/claude-pro-vs-max">Claude Pro vs Max</a><a href="/compare/claude-code-vs-codex">Claude Code vs Codex</a><a href="/compare/cursor-vs-claude-code">Cursor vs Claude Code</a><a href="/compare/claude-code-pricing">Claude Code pricing</a><a href="/compare/codex-pricing">Codex pricing</a><a href="/alternatives/codexbar">CodexBar alternative</a><a href="/alternatives/ccusage">ccusage alternative</a><a href="/alternatives/ccstatusline">ccstatusline alternative</a><a href="/alternatives/claude-code-usage-monitor">Claude-Code-Usage-Monitor alternative</a></nav>
-      <nav class="footer-alts" aria-label="More free Mac apps"><a class="label" href="https://github.com/coreyhaines31">More free Mac apps</a><a href="https://midnightoil.app" title="Keep your Mac awake">Midnight Oil</a><a href="https://diskforecast.com" title="Know before your disk is full">Disk Forecast</a><a href="https://spareformac.com" title="See what&#x27;s using your Mac">Spare</a><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?">WiFi or ISP</a><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers">Green Room</a><a href="https://onhandformac.com" title="A clipboard manager for your Mac">On Hand</a><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides">Coat Check</a></nav>
-      <div class="footer-links"><span>© 2026 Corey Haines. Source available under the <a href="https://github.com/coreyhaines31/fuelgauge/blob/main/LICENSE">FSL-1.1-MIT License</a>.</span></div>
-      <div class="footer-links"><a href="https://github.com/coreyhaines31/fuelgauge">GitHub</a><a href="https://github.com/coreyhaines31/fuelgauge/releases">Releases</a><a href="https://github.com/coreyhaines31/fuelgauge/issues">Issues</a><a href="/privacy">Privacy</a><a href="/llms.txt">llms.txt</a></div>
+    <div class="foot-links">
+      <div class="wrap">
+        <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a><a href="/limits/codex">Codex limits</a><a href="/limits/cursor">Cursor limits</a><a href="/limits/grok">Grok limits</a><a href="/limits/github-copilot">GitHub Copilot limits</a></nav>
+        <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a><a href="/guides/check-claude-usage">Check your Claude usage</a><a href="/guides/when-does-claude-limit-reset">When Claude limits reset</a><a href="/guides/claude-code-statusline">Claude Code status line</a><a href="/guides/stop-hitting-claude-limits">Stop hitting Claude limits</a></nav>
+        <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a><a href="/compare/claude-pro-vs-max">Claude Pro vs Max</a><a href="/compare/claude-code-vs-codex">Claude Code vs Codex</a><a href="/compare/cursor-vs-claude-code">Cursor vs Claude Code</a><a href="/compare/claude-code-pricing">Claude Code pricing</a><a href="/compare/codex-pricing">Codex pricing</a><a href="/alternatives/codexbar">CodexBar alternative</a><a href="/alternatives/ccusage">ccusage alternative</a><a href="/alternatives/ccstatusline">ccstatusline alternative</a><a href="/alternatives/claude-code-usage-monitor">Claude-Code-Usage-Monitor alternative</a></nav>
+      </div>
+    </div>
+    <nav class="bx-family" aria-label="More free Mac apps">
+      <div class="bx-wrap">
+        <a class="bx-eyebrow" href="https://github.com/coreyhaines31">More free Mac apps</a>
+        <ul><li><a href="https://fuelgauge.app" aria-current="page"><img src="/images/family/fuel.png" alt="" width="56" height="56">Fuel Gauge</a></li><li><a href="https://spareformac.com" title="See what&#x27;s using your Mac"><img src="/images/family/spare.png" alt="" width="56" height="56">Spare</a></li><li><a href="https://diskforecast.com" title="Know before your disk is full"><img src="/images/family/disk.png" alt="" width="56" height="56">Disk Forecast</a></li><li><a href="https://midnightoil.app" title="Keep your Mac awake"><img src="/images/family/oil.png" alt="" width="56" height="56">Midnight Oil</a></li><li><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?"><img src="/images/family/wifi.png" alt="" width="56" height="56">WiFi or ISP</a></li><li><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers"><img src="/images/family/green.png" alt="" width="56" height="56">Green Room</a></li><li><a href="https://onhandformac.com" title="A clipboard manager for your Mac"><img src="/images/family/hand.png" alt="" width="56" height="56">On Hand</a></li><li><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides"><img src="/images/family/coat.png" alt="" width="56" height="56">Coat Check</a></li><li><a href="https://killcord.app" title="See your API spend before the bill does"><img src="/images/family/kill.png" alt="" width="56" height="56">Kill Cord</a></li></ul>
+      </div>
+    </nav>
+    <div class="bx-footer">
+      <div class="bx-wrap">
+        <div><span>© 2026 Corey Haines. Source available under the <a href="https://github.com/coreyhaines31/fuelgauge/blob/main/LICENSE">FSL-1.1-MIT License</a>.</span></div>
+        <div><a href="https://github.com/coreyhaines31/fuelgauge">GitHub</a><a href="https://github.com/coreyhaines31/fuelgauge/releases">Releases</a><a href="https://github.com/coreyhaines31/fuelgauge/issues">Issues</a><a href="/privacy">Privacy</a><a href="/llms.txt">llms.txt</a></div>
+      </div>
     </div>
   </footer>
   <script>

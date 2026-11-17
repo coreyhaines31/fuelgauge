@@ -17,31 +17,32 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 SECTIONS = {"limits": "Limits", "guides": "Guide", "compare": "Compare", "alternatives": "Compare"}
 
-TEMPLATE = """<!doctype html><html><head><meta charset="utf-8"><style>
+TEMPLATE = """<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600&family=Barlow+Semi+Condensed:wght@300;600;700&display=block">
+<style>
 * {{ box-sizing: border-box; }}
 html, body {{ margin: 0; width: 1200px; height: 630px; overflow: hidden; }}
-body {{ position: relative; background: #f5f6f8; color: #1d1d1f; letter-spacing: -0.012em;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }}
-.sky i {{ position: absolute; border-radius: 50%; opacity: 0.85; }}
-.sky i:nth-child(1) {{ width: 760px; height: 760px; left: -220px; top: -260px; background: radial-gradient(circle, #ffc98a, transparent 68%); }}
-.sky i:nth-child(2) {{ width: 640px; height: 640px; right: -160px; top: -240px; background: radial-gradient(circle, #ffe3a3, transparent 68%); }}
-.sky i:nth-child(3) {{ width: 600px; height: 600px; left: 380px; top: 250px; background: radial-gradient(circle, #c9e6ff, transparent 68%); }}
-.sky i:nth-child(4) {{ width: 520px; height: 520px; right: -60px; top: 230px; background: radial-gradient(circle, #ffd3c4, transparent 68%); }}
-.card {{ position: absolute; inset: 44px 52px; border-radius: 44px; padding: 56px 64px; display: flex; flex-direction: column;
-  justify-content: space-between; background: rgba(255,255,255,0.58);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 1px 2px rgba(55,30,15,0.05), 0 14px 40px rgba(55,30,15,0.10); }}
-.brand {{ display: flex; align-items: center; gap: 16px; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; }}
-.brand img {{ width: 64px; height: 64px; }}
-.kicker {{ font-size: 22px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #b84c06; }}
-h1 {{ font-size: {size}px; line-height: 1.04; font-weight: 700; margin: 14px 0 0; letter-spacing: -0.04em; max-width: 1000px; }}
-h1 em {{ font-style: normal; color: #e8670c; }}
-.url {{ font-size: 24px; color: #6e6e73; }}
+body {{ position: relative; color: #161616; font-family: "Barlow", "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,.22) 0 1px, rgba(0,0,0,.035) 1px 2px, transparent 2px 3px),
+    repeating-linear-gradient(0deg, rgba(0,0,0,.035) 0 1px, transparent 1px 7px),
+    linear-gradient(100deg, rgba(255,255,255,0) 18%, rgba(255,255,255,.5) 40%, rgba(255,255,255,0) 64%),
+    linear-gradient(180deg, #e7e8e9, #c3c5c7); }}
+.screw {{ position: absolute; width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff, #b9bbbd 45%, #77797b 80%); }}
+.card {{ position: absolute; inset: 0; padding: 64px 76px 0; display: flex; flex-direction: column; justify-content: space-between; }}
+.brand {{ display: flex; align-items: center; gap: 18px; font: 700 34px/1 "Barlow Semi Condensed", sans-serif; }}
+.brand img {{ width: 72px; height: 72px; }}
+.kicker {{ display: inline-flex; gap: 14px; align-items: center; font: 600 20px/1 "Barlow Semi Condensed", sans-serif; letter-spacing: .26em;
+  text-transform: uppercase; background: #1b1b1b; color: #d8d9da; padding: 10px 16px 10px 14px; border-radius: 3px; }}
+.kicker i {{ width: 11px; height: 11px; border-radius: 50%; background: #e06a1b; box-shadow: 0 0 9px #e06a1b; }}
+h1 {{ font: 600 {size}px/1.0 "Barlow Semi Condensed", sans-serif; margin: 22px 0 0; max-width: 1040px; text-wrap: balance; }}
+h1 em {{ font-style: normal; font-weight: 300; }}
+.foot {{ margin: 0 -76px; padding: 20px 76px 22px; background: #1b1b1b; color: #a9abad; font-size: 24px; font-weight: 500; letter-spacing: .02em; }}
 </style></head><body>
-<div class="sky"><i></i><i></i><i></i><i></i></div>
+<span class="screw" style="left:18px;top:18px"></span><span class="screw" style="right:18px;top:18px"></span>
 <div class="card">
   <div class="brand"><img src="file://{icon}" alt="">Fuel Gauge</div>
-  <div><div class="kicker">{kicker}</div><h1>{headline}</h1></div>
-  <div class="url">fuelgauge.app/{slug}</div>
+  <div><div class="kicker"><i></i>{kicker}</div><h1>{headline}</h1></div>
+  <div class="foot">fuelgauge.app/{slug}</div>
 </div>
 </body></html>"""
 
@@ -79,14 +80,14 @@ def main():
         if not title:
             continue
         length = len(text(title))
-        size = 88 if length < 30 else 72 if length < 55 else 58
+        size = 96 if length < 30 else 80 if length < 55 else 64
         source = TEMPLATE.format(icon=icon, kicker=kicker(page, slug), headline=title, slug=slug, size=size)
         image = os.path.join(out_dir, slug.replace("/", "-") + ".png")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False) as tmp:
             tmp.write(source)
         try:
             subprocess.run([CHROME, "--headless", "--hide-scrollbars", f"--screenshot={image}",
-                            "--window-size=1200,630", f"file://{tmp.name}"], capture_output=True, check=True)
+                            "--window-size=1200,630", "--virtual-time-budget=4000", f"file://{tmp.name}"], capture_output=True, check=True)
         finally:
             os.unlink(tmp.name)
         if not os.path.exists(image):

@@ -4,7 +4,7 @@ import { z } from "zod";
 import { runFuelGauge } from "./cli.js";
 import { shapeHistory, shapeStatus } from "./shape.js";
 
-const VERSION = "0.1.0";
+const VERSION = "0.1.1";
 
 const server = new McpServer(
   { name: "fuelgauge", version: VERSION },
@@ -37,8 +37,10 @@ server.registerTool(
     title: "Usage limit forecast",
     description:
       "How much Claude Code, Codex, and Grok Bot usage is left, when each limit resets, and whether it lasts " +
-      "until then. Each limit has used_percent, resets_at, a verdict (makes_it, runs_out, out, learning, reset), " +
-      "a one-line summary, and runs_out_at when it won't last. problem is true when a limit runs out before it " +
+      "until then. Each limit has used_percent, resets_at, a verdict (makes_it, runs_out, out, learning, stale, reset), " +
+      "a one-line summary, forecast_basis (recent or schedule), and runs_out_at when it won't last. " +
+      "session_runs_out_at is conditional on continuing the current session pace. Stale or learning means unknown. " +
+      "problem is true when a limit runs out before it " +
       "resets, or already has. Use for 'how much Claude Code do I have left?', 'will I hit my limit today?', " +
       "or 'when does my Codex limit reset?', and before a long task: if problem is true, tell the person which " +
       "limit runs out and when, and ask before starting. Covers AI usage limits only; for disk space, use " +

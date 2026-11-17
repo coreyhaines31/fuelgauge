@@ -19,6 +19,8 @@ const STATUS_FIELDS = [
   "rate_per_hour",
   "budget_per_hour",
   "last_reading_at",
+  "forecast_basis",
+  "session_runs_out_at",
 ] as const;
 const MAX_POINTS = 48;
 const TOKEN = /^[a-z0-9_-]{1,40}$/;
@@ -60,6 +62,9 @@ export function shapeStatus(stdout: string, code: 0 | 2): Shaped {
       return limit;
     });
   const answer: Record<string, unknown> = { problem: code === 2, limits };
+  if (limits.some((limit) => limit.verdict === "stale" || limit.verdict === "learning")) {
+    answer.note = "Some limits have no reliable forecast. problem: false does not confirm they will last.";
+  }
   if (limits.length === 0) answer.note = NO_READINGS;
   return { ok: true, text: JSON.stringify(answer) };
 }

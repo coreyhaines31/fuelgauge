@@ -23,26 +23,42 @@
   <meta name="twitter:image" content="https://fuelgauge.app/images/og-video.png">
   <meta name="twitter:title" content="Fuel Gauge: don&#39;t hit your limit mid-task">
   <meta name="twitter:description" content="Free for macOS. Know if your Claude Code, Codex, Grok Bot, and Cursor limits will last until they reset, from the menu bar.">
-  <meta name="theme-color" content="#fbe9d6" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
-  <link rel="icon" href="/images/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/images/icon.png">
+  <meta name="theme-color" content="#e7e8e9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#2a2a2c" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@300;600;700&display=swap">
+  <link rel="stylesheet" href="/kit/brushed.css">
+  <link rel="stylesheet" href="/kit/popover.css">
   <link rel="stylesheet" href="/site.css">
-  <script src="https://cdn.usefathom.com/script.js" data-site="ETCPQLNF" defer></script>
+  <script async src="https://tracerkit.com/t.js" data-key="tk_bsPe2rM_f5F7Q4G8"></script>
   <script src="https://ingest.getuserproof.com/sdk.js" data-site="eb2393e8-b6bf-405b-a82f-9adf86865677" defer></script>
 </head>
-<body>
+<body class="bx">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="alu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f2f2"></stop><stop offset=".55" stop-color="#cfd1d2"></stop><stop offset="1" stop-color="#b9bbbd"></stop></linearGradient>
+      <linearGradient id="sheen" x1="0" y1="0" x2="1" y2=".3"><stop offset=".15" stop-color="#fff" stop-opacity="0"></stop><stop offset=".42" stop-color="#fff" stop-opacity=".55"></stop><stop offset=".7" stop-color="#fff" stop-opacity="0"></stop></linearGradient>
+      <pattern id="brush" width="100" height="1.4" patternUnits="userSpaceOnUse"><rect width="100" height=".45" fill="#fff" opacity=".35"></rect><rect y=".8" width="100" height=".3" fill="#000" opacity=".05"></rect></pattern>
+      <linearGradient id="chrome" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbfbfb"></stop><stop offset=".35" stop-color="#8c8e90"></stop><stop offset=".55" stop-color="#eeeff0"></stop><stop offset=".8" stop-color="#6e7072"></stop><stop offset="1" stop-color="#d9dadb"></stop></linearGradient>
+      <radialGradient id="spun" cx=".45" cy=".4" r=".65"><stop offset="0" stop-color="#ffffff"></stop><stop offset=".45" stop-color="#c9cbcd"></stop><stop offset=".8" stop-color="#8f9193"></stop><stop offset="1" stop-color="#b8babc"></stop></radialGradient>
+      <radialGradient id="face" cx=".5" cy="1.1" r="1"><stop offset="0" stop-color="#e2ddcf"></stop><stop offset=".7" stop-color="#f4f2eb"></stop></radialGradient>
+      <radialGradient id="faceLit" cx=".5" cy="1.1" r="1"><stop offset="0" stop-color="#e4b768"></stop><stop offset=".75" stop-color="#f6dfaa"></stop></radialGradient>
+      <radialGradient id="glass" cx=".38" cy=".32" r=".7"><stop offset="0" stop-color="#4a5566"></stop><stop offset=".35" stop-color="#151a22"></stop><stop offset="1" stop-color="#05070a"></stop></radialGradient>
+      <linearGradient id="black" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b2b2c"></stop><stop offset="1" stop-color="#141415"></stop></linearGradient>
+    </defs>
+  </svg>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="g-fuel" viewBox="0 0 18 18"><rect x="1.75" y="3.5" width="14.5" height="11" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.5"></rect><path d="M3.5 7.95A7.4 7.4 0 0 1 14.5 7.95" fill="none" stroke="currentColor" stroke-width="1"></path><path d="M3.5 7.95A7.4 7.4 0 0 1 5.76 6.25" fill="none" stroke="currentColor" stroke-width="2.4"></path><line x1="9" y1="12.9" x2="13.32" y2="6.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></line><circle cx="9" cy="12.9" r="1.19" fill="currentColor"></circle></symbol><symbol id="g-spare" viewBox="0 0 18 18"><path d="M3.41 14.59A7.9 7.9 0 1 1 16.87 9.69" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"></path><path d="M16.87 9.69A7.9 7.9 0 0 1 14.59 14.59" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path><mask id="gk2" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18"><rect width="18" height="18" fill="#fff"></rect><line x1="7.62" y1="8.78" x2="4.85" y2="8.34" stroke="#010101" stroke-width="1.5" stroke-linecap="round"></line></mask><g mask="url(#gk2)"><circle cx="9" cy="9" r="5.3" fill="currentColor"></circle></g></symbol><symbol id="g-disk" viewBox="0 0 18 18"><mask id="gk3" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18"><rect width="18" height="18" fill="#fff"></rect><circle cx="9" cy="4.7" r="2.15" fill="#010101"></circle><circle cx="12.72" cy="11.15" r="2.15" fill="#010101"></circle><circle cx="5.28" cy="11.15" r="2.15" fill="#010101"></circle><circle cx="9" cy="9" r="4.67" fill="#fff"></circle><circle cx="9" cy="9" r="1" fill="#010101"></circle></mask><g mask="url(#gk3)"><circle cx="9" cy="9" r="8.1" fill="currentColor"></circle></g></symbol><symbol id="g-oil" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7.6" fill="none" stroke="currentColor" stroke-width="1.5"></circle><line x1="14.6" y1="9" x2="15.6" y2="9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"></line><line x1="9" y1="14.6" x2="9" y2="15.6" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"></line><line x1="3.4" y1="9" x2="2.4" y2="9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"></line><mask id="gk4" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18"><rect width="18" height="18" fill="#fff"></rect><line x1="8.31" y1="7.56" x2="6.68" y2="4.13" stroke="#010101" stroke-width="1.4" stroke-linecap="round"></line></mask><g mask="url(#gk4)"><path fill="currentColor" d="M1.4 9A7.6 7.6 0 0 1 16.6 9Z"></path></g><circle cx="9" cy="9" r="1.1" fill="currentColor"></circle></symbol><symbol id="g-wifi" viewBox="0 0 18 18"><rect x="0.75" y="4" width="7.5" height="10" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.5"></rect><line x1="4.5" y1="12.4" x2="7.78" y2="6.44" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"></line><circle cx="4.5" cy="12.4" r="0.94" fill="currentColor"></circle><rect x="9.75" y="4" width="7.5" height="10" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.5"></rect><line x1="13.5" y1="12.4" x2="16.27" y2="6.19" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"></line><circle cx="13.5" cy="12.4" r="0.94" fill="currentColor"></circle></symbol><symbol id="g-green" viewBox="0 0 18 18"><mask id="gk6" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18"><rect width="18" height="18" fill="#fff"></rect><circle cx="8.25" cy="10" r="4.5" fill="none" stroke="#010101" stroke-width="1.3"></circle></mask><g mask="url(#gk6)"><circle cx="8.25" cy="10" r="7.35" fill="currentColor"></circle></g><circle cx="15.4" cy="2.7" r="2.3" fill="currentColor"></circle></symbol><symbol id="g-hand" viewBox="0 0 18 18"><path fill="currentColor" d="M15.6 5.5V15.8" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"></path><path fill="currentColor" d="M17 7.5V14" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"></path><rect x="1.8" y="3" width="11.8" height="14" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.5"></rect><rect fill="currentColor" x="4.5" y="2" width="6.4" height="3.2" rx=".9"></rect><rect x="6.3" y=".6" width="2.8" height="2" rx=".9" fill="none" stroke="currentColor" stroke-width="1"></rect><line x1="4.6" y1="8.8" x2="10.8" y2="8.8" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"></line><line x1="4.6" y1="11.6" x2="10.8" y2="11.6" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"></line><line x1="4.6" y1="14.2" x2="8.8" y2="14.2" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"></line></symbol><symbol id="g-coat" viewBox="0 0 18 18"><rect fill="currentColor" x="3.8" y="2.5" width="2.1" height="13" rx=".8"></rect><rect fill="currentColor" x="12.1" y="2.5" width="2.1" height="13" rx=".8"></rect><mask id="gk8" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18"><rect width="18" height="18" fill="#fff"></rect><line x1="9" y1="3" x2="9" y2="15" stroke="#010101" stroke-width=".8"></line></mask><g mask="url(#gk8)"><path fill="currentColor" d="M6.2 4.2L7.6 7.4L9 4.2L10.4 7.4L11.8 4.2L11.8 13.8L10.4 10.6L9 13.8L7.6 10.6L6.2 13.8Z"></path></g></symbol></defs></svg>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-github" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></symbol>
   </svg>
-  <div class="sky" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
   <div class="nav">
     <div class="wrap">
-      <a class="brand" href="/"><img src="/images/icon.svg" alt="" width="28" height="28"> Fuel Gauge</a>
+      <a class="brand" href="/"><img src="/images/icon.svg" alt="" width="32" height="32"> Fuel Gauge</a>
       <nav>
         <a href="/#how">How it works</a>
         <a href="/limits">Limits</a>
@@ -60,13 +76,13 @@
         <div>
           <div class="badge"><i></i>Free, with the source on GitHub</div>
           <h1>Don&#39;t hit your limit <em>mid-task.</em></h1>
-          <p class="lede">Fuel Gauge watches your Claude Code, Codex, Grok Bot, and Cursor limits and tells you, at your current pace, whether you&#39;ll make it to the reset. If you won&#39;t, it tells you when you&#39;ll run out.</p>
+          <p class="lede">Fuel Gauge watches your Claude Code, Codex, Grok Bot, and Cursor limits and tells you, at your pace, whether each one lasts until it resets. If one won&#39;t, you see when it runs out before you start.</p>
           <div class="actions">
-            <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"><svg aria-hidden="true"><use href="#i-download"/></svg>Download for Mac</a>
+            <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"><svg aria-hidden="true"><use href="#i-download"/></svg>Download free for Mac</a>
             <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge"><svg aria-hidden="true"><use href="#i-github"/></svg>View source code</a>
           </div>
           <div class="copyline"><code id="brew">brew install --cask coreyhaines31/tap/fuelgauge</code><button type="button" class="copy" data-copy="brew">Copy</button></div>
-          <p class="fineprint">macOS 14 Sonoma or later · Apple Silicon and Intel · No account</p>
+          <p class="fineprint">macOS 14 Sonoma or later · Apple silicon and Intel · No account</p>
           <div class="ask" id="agent-install">
             <p>Or ask your coding agent:</p>
             <div class="prompt-box">
@@ -77,68 +93,31 @@
         </div>
 
         <!-- mockup:panel -->
-        <div class="desk mk" role="img" aria-label="The Mac menu bar with the Fuel Gauge pump glyph in orange at 55%, and its panel open. A summary line, then a card per tool, most urgent first. Claude Code 5-hour, 55%: Runs out around 11:50a, 1h 30m early, with a chart of usage so far and a dashed projection reaching 100% before the reset. Claude Code weekly, 41%: Makes it to reset, about 86% by then. Codex weekly, 62%: Makes it to reset, about 79% by then. Grok Bot weekly, 12%: Learning your pace.">
-          <div class="mk-menubar">
-            <div class="l"><svg class="apple" viewBox="0 0 14 17"><path d="M11.6 9c0-2 1.6-2.9 1.7-3-1-1.4-2.4-1.6-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7C3.4 4.4 2 5.2 1.3 6.6c-1.5 2.6-.4 6.4 1 8.5.7 1 1.5 2.1 2.6 2.1 1 0 1.4-.7 2.7-.7 1.2 0 1.6.7 2.6.7 1.1 0 1.8-1 2.5-2 .8-1.1 1.1-2.2 1.1-2.3 0 0-2.2-.8-2.2-3.4zM9.6 3c.6-.7 1-1.6.9-2.6-.8 0-1.8.6-2.4 1.3-.5.6-1 1.6-.9 2.5.9.1 1.8-.5 2.4-1.2z"/></svg><b>Terminal</b><span>Shell</span><span>Edit</span><span>View</span></div>
-            <div class="r">
-              <span class="item on warn"><svg class="gauge" viewBox="0 0 24 24"><rect x="3.7" y="3.7" width="11.2" height="16" rx="2.4" fill="none"/><rect x="5.7" y="12.3" width="7.2" height="5.4" rx=".8" fill="currentColor" stroke="none"/><rect x="1.9" y="20.4" width="14.9" height="2" rx="1" fill="currentColor" stroke="none"/><path d="M14.9 8H17.6Q19.5 8 19.5 9.9V16Q20.55 17.5 21.6 16V7.5L19.5 4.8" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>55%</span>
-              <svg viewBox="0 0 24 24" class="hide-sm"><path d="M2.5 9.5a14 14 0 0 1 19 0M5.6 13a9.5 9.5 0 0 1 12.8 0M8.8 16.4a5 5 0 0 1 6.4 0"/><circle cx="12" cy="19.5" r="0.8" fill="currentColor"/></svg>
-              <svg viewBox="0 0 24 24"><rect x="2" y="7.5" width="18" height="9" rx="2.5"/><path d="M22 10.5v3"/><rect x="4" y="9.5" width="11" height="5" rx="1" fill="currentColor" stroke="none"/></svg>
-              <svg viewBox="0 0 24 24" class="hide-sm"><rect x="3" y="4.5" width="18" height="6.5" rx="3.25"/><rect x="3" y="13" width="18" height="6.5" rx="3.25"/><circle cx="16.5" cy="7.75" r="1.6" fill="currentColor"/><circle cx="7.5" cy="16.25" r="1.6" fill="currentColor"/></svg>
-              <span>Mon 10:14 AM</span>
-            </div>
-          </div>
-          <div class="mk-panel">
-            <div class="fg-summary">Claude Code runs out today at 11:50a</div>
-            <div class="fg-card">
-              <div class="fg-tool">Claude Code</div>
-              <div class="fg-row warn">
-                <div class="fg-top"><b>5-hour</b><span>55%</span></div>
-                <div class="fg-bar"><i class="proj" style="width:100%"></i><i style="width:55%"></i></div>
-                <div class="fg-verdict">Runs out around 11:50a, 1h 30m early</div>
-                <div class="fg-line">55% used · resets 1:20p (in 3h 6m)</div>
-                <div class="fg-line">Using 28% an hour. You can use up to 15% an hour and still make it.</div>
-                <div class="fg-line">Between 11:31a and 12:14p at your recent pace.</div>
-                <div class="fg-chart">
-                  <svg viewBox="0 0 300 92" aria-hidden="true">
-                    <line class="full" x1="0" y1="8" x2="300" y2="8"/>
-                    <line class="base" x1="0" y1="88" x2="300" y2="88"/>
-                    <path class="area" d="M0 88 V78.4 H16 V74.4 H32 V68.8 H46 V64 H62 V59.2 H76 V53.6 H88 V48 H95 V44 V88 Z"/>
-                    <path class="used" d="M0 78.4 H16 V74.4 H32 V68.8 H46 V64 H62 V59.2 H76 V53.6 H88 V48 H95 V44"/>
-                    <path class="proj" d="M95 44 L246 8"/>
-                    <line class="reset" x1="95" y1="2" x2="95" y2="88"/>
-                    <circle class="dot" cx="95" cy="44" r="3"/>
-                  </svg>
-                  <div class="fg-axis"><span style="left:31.6%">Now</span><span style="left:82%">Out ~11:50a</span></div>
-                </div>
-              </div>
-              <div class="fg-row ok">
-                <div class="fg-top"><b>Weekly</b><span>41%</span></div>
-                <div class="fg-bar"><i class="proj" style="width:86%"></i><i style="width:41%"></i></div>
-                <div class="fg-compact">Makes it to reset, about 86% by then · resets Thu 9a</div>
-              </div>
-            </div>
-            <div class="fg-card">
-              <div class="fg-tool">Codex</div>
-              <div class="fg-row ok">
-                <div class="fg-top"><b>Weekly</b><span>62%</span></div>
-                <div class="fg-bar"><i class="proj" style="width:79%"></i><i style="width:62%"></i></div>
-                <div class="fg-compact">Makes it to reset, about 79% by then · resets Sat 6p</div>
-              </div>
-            </div>
-            <div class="fg-card">
-              <div class="fg-tool">Grok Bot</div>
-              <div class="fg-row learn">
-                <div class="fg-top"><b>Weekly</b><span>12%</span></div>
-                <div class="fg-bar"><i style="width:12%"></i></div>
-                <div class="fg-compact">Learning your pace, forecast in about 40m · resets Sun 2p</div>
-              </div>
-            </div>
-          </div>
+        <div class="bx-mount" role="group" aria-label="The Fuel Gauge menu bar popover, with sample data">
+          <span class="bx-screw"></span><span class="bx-screw"></span><span class="bx-screw"></span><span class="bx-screw"></span>
+          <div class="pop light" style="--acc:#e06a1b" data-pop="fuel"><div class="fas"><div class="fh"><span class="np"><i></i>FUEL</span><span class="ts">Updated 9:41 AM</span></div><svg viewBox="0 0 312 104" role="img" aria-label="Fuel meter, 18 percent left on the most urgent limit"><defs><clipPath id="m0"><rect x="3" y="3" width="306" height="98" rx="4"></rect></clipPath></defs><rect x="1.5" y="1.5" width="309" height="101" rx="5.5" fill="url(#chrome)"></rect><rect x="3" y="3" width="306" height="98" rx="4" fill="url(#face)"></rect><g clip-path="url(#m0)"><path d="M74.03 57.12A118 118 0 0 1 237.97 57.12" fill="none" stroke="#1d1d1d" stroke-width="1"></path><path d="M72.64 55.68A120 120 0 0 1 89.87 41.86" fill="none" stroke="#d1381f" stroke-width="3.2"></path><line x1="74.03" y1="57.12" x2="69.17" y2="52.08" stroke="#d1381f" stroke-width="1.4"></line><line x1="82.54" y1="49.65" x2="80.05" y2="46.52" stroke="#d1381f" stroke-width="0.8"></line><line x1="91.73" y1="43.04" x2="89.55" y2="39.68" stroke="#1d1d1d" stroke-width="0.8"></line><line x1="101.51" y1="37.33" x2="99.67" y2="33.78" stroke="#1d1d1d" stroke-width="0.8"></line><line x1="111.8" y1="32.59" x2="109.17" y2="26.1" stroke="#1d1d1d" stroke-width="1.4"></line><line x1="122.49" y1="28.86" x2="121.35" y2="25.02" stroke="#1d1d1d" stroke-width="0.8"></line><line x1="133.48" y1="26.17" x2="132.72" y2="22.24" stroke="#1d1d1d" stroke-width="0.8"></line><line x1="144.69" y1="24.54" x2="144.31" y2="20.56" stroke="#1d1d1d" stroke-width="0.8"></line><line x1="156" y1="24" x2="156" y2="17" stroke="#1d1d1d" stroke-width="1.4"></line><line x1="167.31" y1="24.54" x2="167.69" y2="20.56" stroke="#1d1d1d" stroke-width="0.8"></line><line x1="178.52" y1="26.17" x2="179.28" y2="22.24" stroke="#1d1d1d" stroke-width="0.8"></line><line x1="189.51" y1="28.86" x2="190.65" y2="25.02" stroke="#1d1d1d" stroke-width="0.8"></line><line x1="200.2" y1="32.59" x2="202.83" y2="26.1" stroke="#1d1d1d" stroke-width="1.4"></line><line x1="210.49" y1="37.33" x2="212.33" y2="33.78" stroke="#1d1d1d" stroke-width="0.8"></line><line x1="220.27" y1="43.04" x2="222.45" y2="39.68" stroke="#1d1d1d" stroke-width="0.8"></line><line x1="229.46" y1="49.65" x2="231.95" y2="46.52" stroke="#1d1d1d" stroke-width="0.8"></line><line x1="237.97" y1="57.12" x2="242.83" y2="52.08" stroke="#1d1d1d" stroke-width="1.4"></line><text x="63.61" y="49.73" text-anchor="middle" font-family="Barlow Semi Condensed, sans-serif" font-weight="600" font-size="10.5" fill="#d1381f">E</text><text x="106.18" y="22.08" text-anchor="middle" font-family="Barlow Semi Condensed, sans-serif" font-weight="600" font-size="10.5" fill="#1d1d1d">¼</text><text x="156" y="12.4" text-anchor="middle" font-family="Barlow Semi Condensed, sans-serif" font-weight="600" font-size="10.5" fill="#1d1d1d">½</text><text x="205.82" y="22.08" text-anchor="middle" font-family="Barlow Semi Condensed, sans-serif" font-weight="600" font-size="10.5" fill="#1d1d1d">¾</text><text x="248.39" y="49.73" text-anchor="middle" font-family="Barlow Semi Condensed, sans-serif" font-weight="600" font-size="10.5" fill="#1d1d1d">F</text><text x="82.37" y="68.35" text-anchor="middle" font-family="Barlow Semi Condensed, sans-serif" font-weight="500" font-size="7" fill="#1d1d1d" opacity=".7">0</text><text x="156" y="38.6" text-anchor="middle" font-family="Barlow Semi Condensed, sans-serif" font-weight="500" font-size="7" fill="#1d1d1d" opacity=".7">50</text><text x="229.63" y="68.35" text-anchor="middle" font-family="Barlow Semi Condensed, sans-serif" font-weight="500" font-size="7" fill="#1d1d1d" opacity=".7">100%</text><text x="156" y="82" text-anchor="middle" font-family="Barlow Semi Condensed, sans-serif" font-weight="300" font-size="22" letter-spacing="3" fill="#1d1d1d" opacity=".85">LIMIT</text><line x1="156" y1="142" x2="96.06" y2="30.03" stroke="#1d1d1d" stroke-width="1.5" stroke-linecap="round"></line><ellipse cx="156" cy="106" rx="49.92" ry="14" fill="#1b1b1b" opacity="0.8"></ellipse><rect x="3" y="3" width="306" height="14" fill="#fff" opacity="0.18"></rect></g><circle cx="11" cy="11" r="3" fill="#1b1b1b" opacity=".75"></circle></svg><div class="labs"><span class="lo">Most urgent · 5-hour</span><span class="ls">Codex</span></div></div><div class="verdict"><span class="led-l ca">Running short</span><b>Codex runs out today at 3:40p</b><p>1 more running short. Claude Code and Grok Bot make it to reset.</p></div><div class="sect"><span>Claude Code</span><span></span></div><div class="row noico"><span class="nm">5-hour</span><span class="vl">38%</span><span class="sb">Makes it to reset, about 70% by then · resets 1p</span></div><div class="tp"><span class="tape "><span style="width:38%"></span><i style="left:38%;width:32%"></i></span></div><div class="row noico"><span class="nm">Weekly</span><span class="vl">41%</span><span class="sb">Makes it to reset · resets Thu 9a</span></div><div class="tp"><span class="tape "><span style="width:41%"></span><i style="left:41%;width:25%"></i></span></div><div class="row noico"><span class="nm">Today · This Mac</span><span class="vl">1.2M tokens<small>$18.40</small></span><span class="sb">Estimated API cost · USD</span></div><div class="lk"><span>Details ›</span><span>Check resets in Claude Usage ↗</span></div><div class="sect"><span>Codex</span><span></span></div><div class="disc open"><div class="dh"><span class="tw" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M4.2 2.4 8 6l-3.8 3.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span class="dt"><b>5-hour · <span class="hotc">Runs out around 3:40p, 1h 20m early</span></b></span><span class="dr">82%</span></div><div class="db"><div class="tp"><span class="tape ca"><span style="width:82%"></span><i style="left:82%;width:18%"></i></span></div><p class="ln">82% used · resets 5p (in 3h 7m)</p><p class="ln">Using 6% an hour. You can use up to 4% an hour and still make it.</p><p class="ln">Between 2:50p and 4:30p at your recent pace.</p><div class="chart"><svg viewBox="0 0 300 78" role="img" aria-label="Codex 5-hour usage over time"><line x1="0" y1="8" x2="300" y2="8" stroke="var(--sub)" stroke-width=".7" stroke-dasharray="2 3"></line><text x="2" y="6" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">100%</text><path d="M0 60L20 60L20 52L55 52L55 44L90 44L90 33L128 33L128 24L150 24" fill="none" stroke="var(--fill)" stroke-width="1.6"></path><line x1="150" y1="4" x2="150" y2="66" stroke="var(--sub)" stroke-width=".7" stroke-dasharray="2 2"></line><path d="M150 24L232 8" fill="none" stroke="var(--ca)" stroke-width="1.6" stroke-dasharray="4 3"></path><circle cx="232" cy="8" r="3" fill="var(--ca)"></circle><line x1="286" y1="4" x2="286" y2="66" stroke="var(--sub)" stroke-width=".7" stroke-dasharray="2 2"></line><text x="150" y="75" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Now</text><text x="232" y="75" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" font-weight="600" fill="var(--ca)">Out ~3:40p</text><text x="298" y="75" text-anchor="end" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Reset 5p</text></svg></div></div></div><div class="row noico"><span class="nm">Weekly</span><span class="vl">71%</span><span class="sb">Makes it to reset, just · resets Mon 9a</span></div><div class="tp"><span class="tape "><span style="width:71%"></span><i style="left:71%;width:25%"></i></span></div><div class="row noico"><span class="nm">Today · This Mac</span><span class="vl">640K tokens<small>$9.10</small></span><span class="sb">Estimated API cost · USD</span></div><div class="row noico"><span class="nm">↺ 2 resets available</span><span class="vl"><span class="b sm">Refresh</span></span><span class="sb">Next expires Nov 22, 9:00a · Checked 9:40a · Redeem in Codex /usage</span></div><div class="lk"><span>Details ›</span></div><div class="sect"><span>Grok Bot</span><span></span></div><div class="row noico"><span class="nm">Weekly</span><span class="vl">69%</span><span class="sb">Makes it to reset · resets Sat 12a</span></div><div class="tp"><span class="tape "><span style="width:69%"></span><i style="left:69%;width:19%"></i></span></div><div class="lk"><span>View usage</span><span>Forecast details</span><span>Check for Updates…</span></div><div class="pf"><span>Settings… <span class="kbd">⌘,</span></span><span>Quit Fuel Gauge <span class="kbd">⌘Q</span></span></div></div>
         </div>
         <!-- /mockup:panel -->
       </div>
     </div>
+
+    <section id="story" class="lit">
+      <div class="wrap">
+        <div class="story">
+          <p class="eyebrow">Tuesday, 2:14 PM</p>
+          <h2>Forty files into a refactor. Then: <em>limit reached.</em></h2>
+          <div class="story-body">
+            <p>Claude Code is halfway through moving your tests to Vitest. Then the replies stop. You&#39;ve hit your 5-hour limit, and it resets at 5:00. The branch doesn&#39;t build, half the files are on the new runner, and you&#39;ve got nearly three hours to wait.</p>
+            <p>You checked your usage that morning. It said 55%, and 55% sounded fine. What it didn&#39;t say was that at the pace you were going, 55% at 11 a.m. meant out by 2.</p>
+          </div>
+        </div>
+        <div class="points glass asks">
+          <div><h3>“Can I start this now?”</h3><p>Before the big job, you want to know if the window will last, not how full it is.</p></div>
+          <div><h3>“Should I switch to Codex?”</h3><p>If one tool is running short and the other isn&#39;t, the next task should go to the one that makes it.</p></div>
+          <div><h3>“Will the weekly limit last until Thursday?”</h3><p>The weekly limit is the one that ends a week early, and you only find out when it does.</p></div>
+        </div>
+      </div>
+    </section>
 
     <section id="glance" class="lit">
       <div class="wrap">
@@ -147,10 +126,43 @@
           <p>It depends on how fast you&#39;re going and how long until the reset. Fuel Gauge does that math for every limit and gives you the answer in plain words: “Makes it to reset” or “Runs out around 11:50a.”</p>
         </div>
         <div class="points glass">
-          <div><h3>A pump that drains as you work</h3><p>The menu bar pump fills with the fuel left in whichever limit is closest to running out. It turns orange when one won&#39;t make it to the reset, and red when one is out.</p></div>
+          <div><h3>A meter that drains as you work</h3><p>The menu bar meter&#39;s needle shows the fuel left in whichever limit is closest to running out. It turns orange when one won&#39;t make it to the reset, and red when one is out.</p></div>
           <div><h3>A card per tool</h3><p>Claude Code&#39;s 5-hour and weekly limits together, then Codex, Grok Bot, and Cursor. The most urgent sits on top with a chart; the rest fold to one line until they need you.</p></div>
           <div><h3>Your hourly budget</h3><p>“Using 28% an hour. You can use up to 15% an hour and still make it.” Now you know whether to slow down, and by how much.</p></div>
         </div>
+      </div>
+    </section>
+
+    <section id="setup" class="lit">
+      <div class="wrap">
+        <div class="head center">
+          <h2>Set up in a minute.</h2>
+          <p>Codex and Grok Bot work as soon as the app is open. Claude Code takes one click.</p>
+        </div>
+        <div class="points glass">
+          <div><span class="n">1</span><h3>Install it</h3><p>Download the app and drag it to Applications, or run <code>brew install --cask coreyhaines31/tap/fuelgauge</code>. A 4.6 MB download.</p></div>
+          <div><span class="n">2</span><h3>Turn on Claude Code</h3><p>Click Turn On in the panel, or run <code>fuelgauge install-statusline</code>. Claude Code only shares its limits with a status line, so Fuel Gauge becomes one.</p></div>
+          <div><span class="n">3</span><h3>Keep working</h3><p>Readings arrive as you go. A 5-hour limit gets a forecast after about 10 minutes, a weekly one after about 3 hours. Codex&#39;s last 8 days are read on first launch, so its weekly forecast starts right away.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tools" class="lit">
+      <div class="wrap">
+        <div class="head">
+          <h2>Claude Code, Codex, and Grok Bot limits, read from your Mac.</h2>
+          <p>Fuel Gauge doesn&#39;t guess your plan or turn tokens into a quota. It reads the percentages your tools already report, then watches how fast they climb. Cursor is there too, off until you turn it on.</p>
+        </div>
+        <div class="table-card glass"><div class="table-scroll"><table class="compare">
+          <thead><tr><th>Tool</th><th>Limits it forecasts</th><th>Where the numbers come from</th><th>Setup</th></tr></thead>
+          <tbody>
+            <tr><td>Claude Code</td><td>5-hour and weekly, on Pro and Max plans</td><td>The usage Claude Code hands its status line after each reply</td><td>Turn on the status line once</td></tr>
+            <tr><td>Codex</td><td>The windows your plan reports: 5-hour and weekly, or weekly only on plans without a 5-hour limit</td><td>Codex&#39;s session logs in <code>~/.codex/sessions</code></td><td>None</td></tr>
+            <tr><td>Grok Bot</td><td>Weekly</td><td>The usage Grok Bot saves on your Mac while it&#39;s open</td><td>None</td></tr>
+            <tr><td>Cursor</td><td>Monthly</td><td>cursor.com, every 10 minutes, using the Cursor app&#39;s own sign-in</td><td>Off by default. Turn it on in Settings › Tools</td></tr>
+          </tbody>
+        </table></div></div>
+        <p class="table-foot">Claude on the web and in the desktop app share your account&#39;s limits, so that usage shows up at your next Claude Code reply. Claude Code only reports limits on Pro and Max. What each plan allows: <a href="/limits/claude-pro">Claude Pro</a>, <a href="/limits/claude-max">Claude Max</a>, <a href="/limits/codex">Codex</a>, <a href="/limits/grok">Grok</a>, <a href="/limits/cursor">Cursor</a>.</p>
       </div>
     </section>
 
@@ -158,8 +170,8 @@
       <div class="wrap">
         <div class="split">
           <div>
-            <h2>Your limits, right under the prompt.</h2>
-            <p>Turn on the status line and Claude Code shows the forecast after every reply. Orange means a limit is on pace to run out early.</p>
+            <h2>The forecast, right under your prompt.</h2>
+            <p>Turn on the status line and Claude Code shows the forecast after every reply. Orange means a limit is on pace to run out early, so you see it before you send the next big ask.</p>
             <ul class="checks">
               <li>Turn it on from the app, or with one command.</li>
               <li>Keeps your existing status line and adds a line under it.</li>
@@ -181,11 +193,35 @@
       </div>
     </section>
 
+    <section id="card" class="lit">
+      <div class="wrap">
+        <div class="head">
+          <h2>What each line on a card means.</h2>
+          <p>Each limit gets its own row on a tool&#39;s card: the verdict first, then the pace and reset math underneath.</p>
+        </div>
+        <div class="table-card glass"><div class="table-scroll"><table class="compare">
+          <thead><tr><th>When it says</th><th>It means</th></tr></thead>
+          <tbody>
+            <tr><td>Makes it to reset, about 70% by then</td><td>At your recent pace, you&#39;ll still have fuel when the window resets.</td></tr>
+            <tr><td>Runs out around 3:40p, 1h 20m early</td><td>At your recent pace, you&#39;ll hit the limit before it resets.</td></tr>
+            <tr><td>Between 2:50p and 4:30p at your recent pace</td><td>A range from measuring your recent pace over shorter and longer stretches, not one fake-precise minute.</td></tr>
+            <tr><td>Using 6% an hour</td><td>Your pace over the recent stretch: the last hour for a 5-hour window, the last day for a weekly one.</td></tr>
+            <tr><td>You can use up to 4% an hour and still make it</td><td>The fastest pace that still lasts until the reset. Slow to this and you&#39;re fine.</td></tr>
+            <tr><td>Based on your usual hours and recent activity</td><td>A learned weekly pattern is being used, including the nights and weekends it has seen.</td></tr>
+            <tr><td>If you keep this session&#39;s pace</td><td>A separate what-if for the current burst, kept apart from the main forecast.</td></tr>
+            <tr><td>Out until 5:00p</td><td>The limit is used up until the time shown.</td></tr>
+            <tr><td>Learning your pace</td><td>Not enough readings yet to forecast honestly.</td></tr>
+            <tr><td>Waiting for a reliable reading</td><td>Reports are too old or contradict one another. Use the tool once to refresh them.</td></tr>
+          </tbody>
+        </table></div></div>
+      </div>
+    </section>
+
     <section id="how" class="lit">
       <div class="wrap">
         <div class="head center">
           <h2>How the forecast works.</h2>
-          <p>No guesswork about your plan. It reads the same numbers your tools show you, and watches how fast they climb.</p>
+          <p>Read, measure, project. It runs every time a new reading arrives, entirely on your Mac.</p>
         </div>
         <div class="points glass">
           <div><span class="n">1</span><h3>It reads what&#39;s already there</h3><p>A reading every time Claude Code replies, through its status line. Codex&#39;s session logs and Grok Bot&#39;s local usage cache fill in the rest.</p></div>
@@ -193,6 +229,118 @@
           <div><span class="n">3</span><h3>It projects to the reset</h3><p>If that pace holds, do you hit 100% first? You get a verdict and a range, not a fake-precise minute.</p></div>
         </div>
         <p class="note-line">It waits for enough readings before it forecasts: 10 minutes for a 5-hour limit, 3 hours for a weekly one. Until then it says “Learning your pace.” It&#39;s an estimate from your recent pace, not a promise.</p>
+        <div class="split feature">
+          <div>
+            <h3>It learns your week.</h3>
+            <p>Weekly and monthly limits depend on when you work, not just how fast. After two weeks of readings, Fuel Gauge learns your usual hours, separately for weekdays and weekends. A forecast made on Friday night doesn&#39;t assume you&#39;ll code all weekend at Friday&#39;s pace.</p>
+            <p>The last three days nudge that pattern up or down, by up to 2×. A busy session counts for a few hours, then fades. Until there&#39;s enough history, it uses your recent pace. Hours it hasn&#39;t seen aren&#39;t assumed to be quiet; it falls back to your recent pace instead.</p>
+            <p><b>Forecast details</b> shows exactly what it learned: weekday and weekend bars by hour, the readings behind each one, and how this week compares with usual.</p>
+          </div>
+          <div class="bx-mount" role="group" aria-label="Forecast details, Your usual hours, with sample data">
+            <span class="bx-screw"></span><span class="bx-screw"></span><span class="bx-screw"></span><span class="bx-screw"></span>
+            <div class="pop light win" style="--acc:#e06a1b"><div class="fas"><div class="fh"><span class="np"><i></i>Forecast details</span><span class="ts">Claude Code · Weekly</span></div></div><div class="verdict"><span class="led-l go">Current forecast</span><b>Makes it to reset, about 82% by then</b><p>Based on your usual hours and recent activity</p></div><div class="sect"><span>Your usual hours</span><span>Both rows use the same scale</span></div><div class="chart"><svg viewBox="0 0 300 118" role="img" aria-label="Typical usage by hour. Weekdays climb from 8 a.m. and peak around 2 p.m., with a smaller evening bump. Weekends are lighter, with a few unknown hours in the afternoon. The 11 a.m. hour is selected."><text x="0" y="12" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)" font-weight="600">Weekdays</text><line x1="3.5" y1="47" x2="9.0" y2="47" stroke="var(--sub)" stroke-width="1"/><line x1="16.0" y1="47" x2="21.5" y2="47" stroke="var(--sub)" stroke-width="1"/><line x1="28.5" y1="47" x2="34.0" y2="47" stroke="var(--sub)" stroke-width="1"/><line x1="41.0" y1="47" x2="46.5" y2="47" stroke="var(--sub)" stroke-width="1"/><line x1="53.5" y1="47" x2="59.0" y2="47" stroke="var(--sub)" stroke-width="1"/><line x1="66.0" y1="47" x2="71.5" y2="47" stroke="var(--sub)" stroke-width="1"/><line x1="78.5" y1="47" x2="84.0" y2="47" stroke="var(--sub)" stroke-width="1"/><rect x="89.0" y="46.1" width="9.5" height="1.9" rx="1" fill="var(--fill)"/><rect x="101.5" y="38.7" width="9.5" height="9.3" rx="1" fill="var(--fill)"/><rect x="114.0" y="27.5" width="9.5" height="20.5" rx="1" fill="var(--fill)"/><rect x="126.5" y="21.9" width="9.5" height="26.1" rx="1" fill="var(--fill)"/><rect x="139.0" y="23.7" width="9.5" height="24.3" rx="1" fill="var(--fill)"/><rect x="151.5" y="33.1" width="9.5" height="14.9" rx="1" fill="var(--fill)"/><rect x="164.0" y="25.6" width="9.5" height="22.4" rx="1" fill="var(--fill)"/><rect x="176.5" y="20.0" width="9.5" height="28.0" rx="1" fill="var(--fill)"/><rect x="189.0" y="21.9" width="9.5" height="26.1" rx="1" fill="var(--fill)"/><rect x="201.5" y="27.5" width="9.5" height="20.5" rx="1" fill="var(--fill)"/><rect x="214.0" y="34.9" width="9.5" height="13.1" rx="1" fill="var(--fill)"/><rect x="226.5" y="42.4" width="9.5" height="5.6" rx="1" fill="var(--fill)"/><rect x="239.0" y="44.3" width="9.5" height="3.7" rx="1" fill="var(--fill)"/><rect x="251.5" y="38.7" width="9.5" height="9.3" rx="1" fill="var(--fill)"/><rect x="264.0" y="36.8" width="9.5" height="11.2" rx="1" fill="var(--fill)"/><rect x="276.5" y="42.4" width="9.5" height="5.6" rx="1" fill="var(--fill)"/><line x1="291.0" y1="47" x2="296.5" y2="47" stroke="var(--sub)" stroke-width="1"/><text x="0" y="66" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)" font-weight="600">Weekends</text><line x1="3.5" y1="101" x2="9.0" y2="101" stroke="var(--sub)" stroke-width="1"/><line x1="16.0" y1="101" x2="21.5" y2="101" stroke="var(--sub)" stroke-width="1"/><line x1="28.5" y1="101" x2="34.0" y2="101" stroke="var(--sub)" stroke-width="1"/><line x1="41.0" y1="101" x2="46.5" y2="101" stroke="var(--sub)" stroke-width="1"/><line x1="53.5" y1="101" x2="59.0" y2="101" stroke="var(--sub)" stroke-width="1"/><line x1="66.0" y1="101" x2="71.5" y2="101" stroke="var(--sub)" stroke-width="1"/><line x1="78.5" y1="101" x2="84.0" y2="101" stroke="var(--sub)" stroke-width="1"/><line x1="91.0" y1="101" x2="96.5" y2="101" stroke="var(--sub)" stroke-width="1"/><line x1="103.5" y1="101" x2="109.0" y2="101" stroke="var(--sub)" stroke-width="1"/><rect x="114.0" y="98.3" width="9.5" height="3.7" rx="1" fill="var(--fill)"/><rect x="126.5" y="90.8" width="9.5" height="11.2" rx="1" fill="var(--fill)"/><rect x="139.0" y="87.1" width="9.5" height="14.9" rx="1" fill="var(--fill)"/><rect x="151.5" y="88.9" width="9.5" height="13.1" rx="1" fill="var(--fill)"/><rect x="164.0" y="92.7" width="9.5" height="9.3" rx="1" fill="var(--fill)"/><rect x="176.5" y="96.4" width="9.5" height="5.6" rx="1" fill="var(--fill)"/><rect x="189.0" y="98.3" width="9.5" height="3.7" rx="1" fill="var(--sub)" opacity=".45"/><text x="206.25" y="100" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">?</text><text x="218.75" y="100" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">?</text><rect x="226.5" y="100.1" width="9.5" height="1.9" rx="1" fill="var(--fill)"/><rect x="239.0" y="96.4" width="9.5" height="5.6" rx="1" fill="var(--fill)"/><rect x="251.5" y="94.5" width="9.5" height="7.5" rx="1" fill="var(--fill)"/><rect x="264.0" y="98.3" width="9.5" height="3.7" rx="1" fill="var(--fill)"/><line x1="278.5" y1="101" x2="284.0" y2="101" stroke="var(--sub)" stroke-width="1"/><line x1="291.0" y1="101" x2="296.5" y2="101" stroke="var(--sub)" stroke-width="1"/><text x="1.5" y="114" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">12a</text><text x="76.5" y="114" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">6a</text><text x="151.5" y="114" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">12p</text><text x="226.5" y="114" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">6p</text><rect x="138.5" y="4" width="11.5" height="100" rx="2" fill="none" stroke="var(--ca)" stroke-width="1"/></svg></div><p class="ln strong">Weekdays, 11a–12p · 1.3 percentage points/hour</p><p class="ln">9 observed hours across 9 dates. Older readings receive less weight.</p><div class="sect"><span>Recent workload</span><span>1.4× usual</span></div><p class="ln">Forecast adjustment: 1.4×, easing back toward your usual pattern.</p><p class="ln cap">Shown with sample data</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="accuracy" class="lit">
+      <div class="wrap">
+        <div class="split feature flip">
+          <div>
+            <h2>It checks its own forecasts.</h2>
+            <p>Every hour, while the app is open, Fuel Gauge freezes its forecast for each limit: where you&#39;ll be in 1, 6, and 24 hours. When the real reading arrives, it scores the guess. You don&#39;t have to take the forecast on faith.</p>
+            <ul class="checks">
+              <li><b>Predicted vs. actual</b> plots saved predictions as diamonds and real readings as circles, with the gap between them. Pick 1, 6, or 24 hours ahead, over the last 7 or 30 days.</li>
+              <li>It shows the average error in percentage points for its own forecast and for the plain recent-pace method, on the same outcomes. A score appears once there are 20 comparisons across three days.</li>
+              <li>A missed reading stays a gap. It&#39;s never counted as zero usage.</li>
+              <li><code>fuelgauge backtest --days 7</code> replays your saved history to compare the two methods. Local and read-only.</li>
+            </ul>
+          </div>
+          <div class="bx-mount" role="group" aria-label="Forecast details, Predicted vs. actual, with sample data">
+            <span class="bx-screw"></span><span class="bx-screw"></span><span class="bx-screw"></span><span class="bx-screw"></span>
+            <div class="pop light win" style="--acc:#e06a1b"><div class="fas"><div class="fh"><span class="np"><i></i>Predicted vs. actual</span><span class="ts">Codex · Weekly</span></div></div><div class="tabs"><span>1h</span><span class="on">6h ahead</span><span>24h</span><span class="sp"></span><span class="on">7 days</span><span>30 days</span></div><div class="chart"><svg viewBox="0 0 300 124" role="img" aria-label="Predicted vs. actual, 6 hours ahead, last 7 days. Blue diamonds for saved predictions sit close to circles for actual readings, joined by short lines. Two forecasts have no actual reading and show as gaps."><rect x="229.5" y="8" width="16" height="100" rx="3" fill="var(--track)" opacity=".7"/><line x1="0" y1="12.0" x2="300" y2="12.0" stroke="var(--sub)" stroke-width=".7" stroke-dasharray="2 3"/><text x="2" y="10.0" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">100%</text><line x1="0" y1="108" x2="300" y2="108" stroke="var(--line)" stroke-width="1"/><line x1="12.0" y1="98.4" x2="12.0" y2="90.8" stroke="var(--sub)" stroke-width="1"/><circle cx="12.0" cy="90.8" r="3.4" fill="var(--field)" stroke="var(--fill)" stroke-width="1.4"/><path d="M12.0 94.4L16.0 98.4L12.0 102.4L8.0 98.4Z" fill="#4f7fe0"/><line x1="32.5" y1="92.1" x2="32.5" y2="85.5" stroke="var(--sub)" stroke-width="1"/><circle cx="32.5" cy="85.5" r="3.4" fill="var(--field)" stroke="var(--fill)" stroke-width="1.4"/><path d="M32.5 88.1L36.5 92.1L32.5 96.1L28.5 92.1Z" fill="#4f7fe0"/><line x1="53.0" y1="85.8" x2="53.0" y2="83.9" stroke="var(--sub)" stroke-width="1"/><circle cx="53.0" cy="83.9" r="3.4" fill="var(--field)" stroke="var(--fill)" stroke-width="1.4"/><path d="M53.0 81.8L57.0 85.8L53.0 89.8L49.0 85.8Z" fill="#4f7fe0"/><line x1="73.5" y1="67.4" x2="73.5" y2="73.2" stroke="var(--sub)" stroke-width="1"/><circle cx="73.5" cy="73.2" r="3.4" fill="var(--field)" stroke="var(--fill)" stroke-width="1.4"/><path d="M73.5 63.4L77.5 67.4L73.5 71.4L69.5 67.4Z" fill="#4f7fe0"/><line x1="94.0" y1="75.6" x2="94.0" y2="70.3" stroke="var(--sub)" stroke-width="1"/><circle cx="94.0" cy="70.3" r="3.4" fill="var(--field)" stroke="var(--fill)" stroke-width="1.4"/><path d="M94.0 71.6L98.0 75.6L94.0 79.6L90.0 75.6Z" fill="#4f7fe0"/><path d="M114.5 68.2L118.5 72.2L114.5 76.2L110.5 72.2Z" fill="#4f7fe0"/><line x1="135.0" y1="74.1" x2="135.0" y2="66.5" stroke="var(--sub)" stroke-width="1"/><circle cx="135.0" cy="66.5" r="3.4" fill="var(--field)" stroke="var(--fill)" stroke-width="1.4"/><path d="M135.0 70.1L139.0 74.1L135.0 78.1L131.0 74.1Z" fill="#4f7fe0"/><line x1="155.5" y1="53.9" x2="155.5" y2="62.1" stroke="var(--sub)" stroke-width="1"/><circle cx="155.5" cy="62.1" r="3.4" fill="var(--field)" stroke="var(--fill)" stroke-width="1.4"/><path d="M155.5 49.9L159.5 53.9L155.5 57.9L151.5 53.9Z" fill="#4f7fe0"/><line x1="176.0" y1="47.4" x2="176.0" y2="53.2" stroke="var(--sub)" stroke-width="1"/><circle cx="176.0" cy="53.2" r="3.4" fill="var(--field)" stroke="var(--fill)" stroke-width="1.4"/><path d="M176.0 43.4L180.0 47.4L176.0 51.4L172.0 47.4Z" fill="#4f7fe0"/><line x1="196.5" y1="55.2" x2="196.5" y2="49.3" stroke="var(--sub)" stroke-width="1"/><circle cx="196.5" cy="49.3" r="3.4" fill="var(--field)" stroke="var(--fill)" stroke-width="1.4"/><path d="M196.5 51.2L200.5 55.2L196.5 59.2L192.5 55.2Z" fill="#4f7fe0"/><path d="M217.0 42.5L221.0 46.5L217.0 50.5L213.0 46.5Z" fill="#4f7fe0"/><line x1="237.5" y1="34.8" x2="237.5" y2="41.6" stroke="var(--sub)" stroke-width="1"/><circle cx="237.5" cy="41.6" r="3.4" fill="var(--field)" stroke="var(--fill)" stroke-width="1.4"/><path d="M237.5 30.8L241.5 34.8L237.5 38.8L233.5 34.8Z" fill="#4f7fe0"/><line x1="258.0" y1="44.3" x2="258.0" y2="36.3" stroke="var(--sub)" stroke-width="1"/><circle cx="258.0" cy="36.3" r="3.4" fill="var(--field)" stroke="var(--fill)" stroke-width="1.4"/><path d="M258.0 40.3L262.0 44.3L258.0 48.3L254.0 44.3Z" fill="#4f7fe0"/><line x1="278.5" y1="31.0" x2="278.5" y2="34.3" stroke="var(--sub)" stroke-width="1"/><circle cx="278.5" cy="34.3" r="3.4" fill="var(--field)" stroke="var(--fill)" stroke-width="1.4"/><path d="M278.5 27.0L282.5 31.0L278.5 35.0L274.5 31.0Z" fill="#4f7fe0"/><text x="12.0" y="120" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Mon</text><text x="94.0" y="120" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Wed</text><text x="176.0" y="120" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Fri</text><text x="258.0" y="120" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Sun</text></svg></div><div class="sect"><span>Forecast 12 of 14</span><span>Sun 8:00a</span></div><div class="row noico"><span class="nm">Saved prediction</span><span class="vl">76%</span><span class="sb">Issued Sun 2:00a · Your usual hours</span></div><div class="row noico"><span class="nm">Actual reading</span><span class="vl">69%</span><span class="sb">Read at Sun 8:04a</span></div><div class="sect"><span>Measured forecast error</span><span>Last 30 days</span></div><div class="row noico"><span class="nm">Fuel Gauge</span><span class="vl">3.1 pts</span><span class="sb">6 hours ahead · 58 comparisons</span></div><div class="row noico"><span class="nm">Recent pace</span><span class="vl">4.6 pts</span><span class="sb">Same outcomes · lower is better</span></div><p class="ln cap">Shown with sample data</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="plan" class="lit">
+      <div class="wrap">
+        <div class="split feature">
+          <div>
+            <h2>Plan the next session before you start it.</h2>
+            <p>About to kick off something big? Open <b>Forecast details</b> and choose 30 minutes, 1 hour, 2 hours, or 4 hours more at this session&#39;s pace. You see every limit for that tool at once, and which one runs out first.</p>
+            <p>It needs a real session to measure: fresh readings over at least 10 minutes. Each projection stops at that limit&#39;s reset, and it never assumes you&#39;ll redeem a saved reset. It&#39;s a what-if, so your normal forecast and alerts don&#39;t change.</p>
+          </div>
+          <div class="bx-mount" role="group" aria-label="Plan your next session, with sample data">
+            <span class="bx-screw"></span><span class="bx-screw"></span><span class="bx-screw"></span><span class="bx-screw"></span>
+            <div class="pop light win" style="--acc:#e06a1b"><div class="fas"><div class="fh"><span class="np"><i></i>Next session</span><span class="ts">All tracked Claude Code limits</span></div></div><div class="tabs"><span>30m</span><span>1h</span><span class="on">2h</span><span>4h</span></div><div class="verdict"><span class="led-l ca">Continue working for 2h</span><b>5-hour limit runs out first, around 1:05p.</b></div><div class="sect"><span>5-hour</span><span>55% now</span></div><div class="tp"><span class="tape ca"><span style="width:55%"></span><i style="left:55%;width:45%"></i></span></div><p class="ln">Pace: 32.1 points/hour. Runs out around 1:05p (in 1h 24m).</p><div class="sect"><span>Weekly</span><span>41% now</span></div><div class="tp"><span class="tape"><span style="width:41%"></span><i style="left:41%;width:7%"></i></span></div><p class="ln">Pace: 3.4 points/hour. About 52% left at 3:41p.</p><p class="ln cap">Assumes this session&#39;s pace continues. Projections stop at quota resets; saved resets are not assumed to be redeemed. Shown with sample data.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="usage" class="lit">
+      <div class="wrap">
+        <div class="split feature flip">
+          <div>
+            <h2>Token usage, cache hits, and API cost, from your own logs.</h2>
+            <p>Choose <b>View usage</b> in the panel for what Claude Code and Codex used on this Mac: today, the last 7 days, or the last 30. Each tool card shows today&#39;s tokens and estimated cost too, even when there&#39;s no forecast yet.</p>
+            <ul class="checks">
+              <li>Tokens split into uncached input, output, cache reads, and cache writes, with your cache hit rate.</li>
+              <li>Breakdowns by tool, model, project folder, and session, so you can see where the tokens go. Hover a project for its full path.</li>
+              <li>Cost in US dollars at standard API rates, checked October 30, 2026. It&#39;s what those tokens would cost on the API, not your subscription bill.</li>
+              <li>Read from your own logs in <code>~/.claude/projects</code> and <code>~/.codex</code>. Prompt and response text is never saved.</li>
+            </ul>
+          </div>
+          <div class="bx-mount" role="group" aria-label="The Usage window, with sample data">
+            <span class="bx-screw"></span><span class="bx-screw"></span><span class="bx-screw"></span><span class="bx-screw"></span>
+            <div class="pop light win" style="--acc:#e06a1b"><div class="fas"><div class="fh"><span class="np"><i></i>Usage</span><span class="ts">This Mac · Claude Code &amp; Codex</span></div></div><div class="tabs"><span>Today</span><span class="on">7 days</span><span>30 days</span><span class="sp"></span><span class="on">Tokens</span><span>Cost</span></div><div class="chart"><svg viewBox="0 0 300 96" role="img" aria-label="Daily tokens for the last 7 days, Claude Code and Codex stacked, peaking on Friday."><rect x="14" y="47.2" width="24" height="32.8" rx="1.5" fill="var(--fill)"/><rect x="14" y="36.0" width="24" height="9.7" rx="1.5" fill="var(--sub)" opacity=".55"/><text x="26" y="93" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Tue</text><rect x="55" y="34.8" width="24" height="45.2" rx="1.5" fill="var(--fill)"/><rect x="55" y="19.3" width="24" height="14.0" rx="1.5" fill="var(--sub)" opacity=".55"/><text x="67" y="93" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Wed</text><rect x="96" y="62.8" width="24" height="17.2" rx="1.5" fill="var(--fill)"/><rect x="96" y="56.4" width="24" height="4.8" rx="1.5" fill="var(--sub)" opacity=".55"/><text x="108" y="93" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Thu</text><rect x="137" y="27.2" width="24" height="52.8" rx="1.5" fill="var(--fill)"/><rect x="137" y="9.0" width="24" height="16.7" rx="1.5" fill="var(--sub)" opacity=".55"/><text x="149" y="93" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Fri</text><rect x="178" y="39.6" width="24" height="40.4" rx="1.5" fill="var(--fill)"/><rect x="178" y="26.3" width="24" height="11.8" rx="1.5" fill="var(--sub)" opacity=".55"/><text x="190" y="93" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Sat</text><rect x="219" y="73.5" width="24" height="6.5" rx="1.5" fill="var(--fill)"/><text x="231" y="93" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Sun</text><rect x="260" y="55.2" width="24" height="24.8" rx="1.5" fill="var(--fill)"/><rect x="260" y="46.2" width="24" height="7.5" rx="1.5" fill="var(--sub)" opacity=".55"/><text x="272" y="93" text-anchor="middle" font-family="-apple-system, system-ui, sans-serif" font-size="8.5" fill="var(--sub)">Mon</text><line x1="0" y1="80.5" x2="300" y2="80.5" stroke="var(--line)" stroke-width="1"/></svg></div><div class="sect"><span>Breakdown</span><span>By tool</span></div><div class="row noico"><span class="nm">Claude Code</span><span class="vl">40.8M<small>$58.20</small></span><span class="sb">Cache hit rate 94%</span></div><div class="row noico"><span class="nm">Codex</span><span class="vl">12.0M<small>$14.70</small></span><span class="sb">Cache hit rate 88%</span></div><div class="sect"><span>Token breakdown</span><span>7 days</span></div><div class="grid2"><span>Cache reads</span><b>47.9M</b><span>Uncached input</span><b>2.6M</b><span>Cache writes</span><b>1.4M</b><span>Output</span><b>0.9M</b></div><p class="ln cap">Est. API cost · Rates checked October 30, 2026 · Shown with sample data</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="meter" class="lit">
+      <div class="wrap">
+        <div class="split feature">
+          <div>
+            <h2>A meter, an alert, and a few settings.</h2>
+            <p>The meter is the whole story at a glance: needle for fuel left, orange for running short, red for out. Next to it, show nothing, the percent used, or the time until you run out. Hover it for the most urgent limit&#39;s verdict.</p>
+            <p>You get one alert per window, and only when two fresh readings agree you&#39;ll run out at least 30 minutes early. Alerts at 80% and 95% used are on by default; 50% is there if you want it. macOS asks once, at the first alert, whether Fuel Gauge may send notifications.</p>
+          </div>
+          <div class="meter-demo" role="group" aria-label="Three menu bar states and an alert, with sample data">
+            <div class="mb-row"><span class="mb-say">Makes it</span><span class="mb-bar"><span class="mb-dim">Wed 9:41 AM</span><svg class="mb-g" aria-hidden="true"><use href="#g-fuel"/></svg><span>38%</span></span></div>
+            <div class="mb-row ca"><span class="mb-say">Running short</span><span class="mb-bar"><span class="mb-dim">Wed 11:02 AM</span><svg class="mb-g" aria-hidden="true"><use href="#g-fuel"/></svg><span>48m</span></span></div>
+            <div class="mb-row st"><span class="mb-say">Out</span><span class="mb-bar"><span class="mb-dim">Wed 11:52 AM</span><svg class="mb-g" aria-hidden="true"><use href="#g-fuel"/></svg><span>out</span></span></div>
+            <div class="notif"><img src="/images/icon.svg" alt="" width="34" height="34"><div><b>Claude Code&#39;s 5-hour limit runs out around 11:50a</b><p>That&#39;s 1h 30m before it resets at 1:20p.</p></div><span>now</span></div>
+            <p class="meter-cap">Shown with sample data</p>
+          </div>
+        </div>
+        <div class="table-card glass settings-table"><div class="table-scroll"><table class="compare">
+          <thead><tr><th>Settings tab</th><th>What&#39;s in it</th></tr></thead>
+          <tbody>
+            <tr><td>General</td><td>Launch at login (on by default, so readings keep coming after a restart), what shows next to the meter, the <code>fuelgauge</code> command, a copyable prompt for AI agents, and automatic update checks.</td></tr>
+            <tr><td>Tools</td><td>Which of Claude Code, Codex, Grok Bot, and Cursor to track, with where each one&#39;s numbers come from. The Claude Code status line turns on and off here.</td></tr>
+            <tr><td>Alerts</td><td>The early run-out alert, plus alerts at 50%, 80%, and 95% used. 80% and 95% start on.</td></tr>
+            <tr><td>Resets</td><td>Codex reset tracking, and a manual count of saved Claude resets.</td></tr>
+          </tbody>
+        </table></div></div>
+      </div>
+    </section>
+
+    <section id="resets" class="lit">
+      <div class="wrap">
+        <div class="head">
+          <h2>Know when you have a reset to spare.</h2>
+          <p>When a limit runs out, a saved reset can get you going again. Fuel Gauge shows what you have, and never spends one for you.</p>
+        </div>
+        <div class="points glass">
+          <div><h3>Codex</h3><p>The number of resets you can redeem and when the next one expires, checked every five minutes through your installed, signed-in Codex CLI. Redeem in Codex&#39;s <code>/usage</code> menu, then hit Refresh. On by default; turn it off in Settings › Resets.</p></div>
+          <div><h3>Claude</h3><p>Claude&#39;s status line doesn&#39;t include this, so save the count by hand, with an optional expiry. The card labels it as manual and shows when you recorded it.</p></div>
+          <div><h3>Forecasts stay honest</h3><p>A forecast never assumes you&#39;ll redeem a reset. If you&#39;re running short with two resets in hand, it still says you&#39;re running short.</p></div>
+        </div>
       </div>
     </section>
 
@@ -232,6 +380,20 @@
             <pre id="agent-rule">Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before starting, or switch to a cheaper model. `fuelgauge status --json` has the details.</pre>
           </div>
         </div>
+        <div class="rule">
+          <h3>The whole command line</h3>
+          <p>Homebrew puts <code>fuelgauge</code> on your PATH. Installed from the DMG? Use Settings › General › Install…</p>
+          <div class="table-card glass"><div class="table-scroll"><table class="compare cli-table">
+            <tbody>
+              <tr><td><code>fuelgauge status</code></td><td>Every limit in plain words. Exits 2 if one will run out before it resets, or already has.</td></tr>
+              <tr><td><code>fuelgauge status --json</code></td><td>The same, for scripts and agents, with a verdict per limit.</td></tr>
+              <tr><td><code>fuelgauge history --days 2</code></td><td>The readings behind the forecasts.</td></tr>
+              <tr><td><code>fuelgauge backtest --days 7</code></td><td>Compares forecasts with what happened. Local and read-only.</td></tr>
+              <tr><td><code>fuelgauge install-statusline</code></td><td>Makes Fuel Gauge Claude Code&#39;s status line, keeping yours above it.</td></tr>
+              <tr><td><code>fuelgauge uninstall-statusline</code></td><td>Puts your old status line back.</td></tr>
+            </tbody>
+          </table></div></div>
+        </div>
       </div>
     </section>
 
@@ -240,9 +402,9 @@
         <div class="split">
           <div>
             <p class="eyebrow">Claude Desktop extension</p>
-            <h2>Use Fuel Gauge from Claude.</h2>
+            <h2>Ask Claude if you&#39;ll make it.</h2>
             <p>Add Fuel Gauge to Claude Desktop and ask in plain words: how much Claude Code do I have left, will I hit my limit today, when does Codex reset. Claude reads the same forecast you see in the menu bar.</p>
-            <p>Answers come back short, so checking your limits barely touches them. The extension only reads, and nothing about your accounts leaves your Mac.</p>
+            <p>It adds two read-only tools: <code>limits_status</code> for each limit&#39;s percent, reset time, and verdict, and <code>limits_history</code> for the readings behind it, up to 30 days back. Answers stay compact, so asking Claude about your limits barely dents them. Nothing about your accounts leaves your Mac.</p>
             <div class="actions">
               <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/fuelgauge.mcpb"><svg aria-hidden="true"><use href="#i-download"/></svg>Download fuelgauge.mcpb</a>
               <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge/tree/main/mcpb"><svg aria-hidden="true"><use href="#i-github"/></svg>View the source</a>
@@ -265,19 +427,107 @@
       </div>
     </section>
 
+    <section id="who" class="lit">
+      <div class="wrap">
+        <div class="head">
+          <h2>Who it&#39;s for.</h2>
+          <p>If your work stops when a coding plan runs dry, it&#39;s for you. It fits these three best.</p>
+        </div>
+        <div class="points glass">
+          <div><h3>On Claude Pro, racing the 5-hour window</h3><p>The status line tells you after each reply whether this window will last. When it won&#39;t, you can wrap up, switch to a smaller model, or pause on your own terms before the limit cuts you off.</p></div>
+          <div><h3>On Max, running agents for hours</h3><p>The weekly limit is the one that bites. A forecast that knows your week, and one early alert, give you days of notice instead of minutes.</p></div>
+          <div><h3>Using more than one coding agent</h3><p>Both in one panel. When one is running short, hand the next job to the one that makes it to reset.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="compare" class="lit">
+      <div class="wrap">
+        <div class="head">
+          <h2>The other ways to check your Claude usage, honestly compared.</h2>
+          <p>You can see your usage without any app, and there are good free trackers. Here&#39;s how they differ, checked against each one&#39;s own docs and GitHub page on November 16, 2026. Deeper comparisons: <a href="/alternatives/codexbar">CodexBar</a>, <a href="/alternatives/ccusage">ccusage</a>, <a href="/alternatives/ccstatusline">ccstatusline</a>, <a href="/alternatives/claude-code-usage-monitor">Claude-Code-Usage-Monitor</a>.</p>
+        </div>
+        <div class="table-card glass"><div class="table-scroll"><table class="compare vs">
+          <thead><tr><th></th><th class="us">Fuel Gauge</th><th>Built-in views</th><th><a href="https://codexbar.app">CodexBar</a></th><th><a href="https://github.com/tddworks/ClaudeBar">ClaudeBar</a></th><th><a href="https://github.com/sirmalloc/ccstatusline">ccstatusline</a></th></tr></thead>
+          <tbody>
+            <tr><td>Where it lives</td><td class="us">Menu bar, Claude Code status line, Terminal</td><td>Claude Code&#39;s <code>/usage</code>, Codex&#39;s <code>/status</code>, and each provider&#39;s web page</td><td>Menu bar, plus a CLI</td><td>Menu bar</td><td>Claude Code status line</td></tr>
+            <tr><td>Covers</td><td class="us">Claude Code, Codex, Grok Bot, Cursor (opt-in)</td><td>One tool each</td><td>114 providers</td><td>20+ providers, including Claude, Codex, and Cursor</td><td>Claude Code</td></tr>
+            <tr><td>Percent used and reset time</td><td class="us">Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Says if you&#39;ll make it to reset</td><td class="us">Yes</td><td class="n">No</td><td>Yes, “runs out in” and a burn-down</td><td>Yes</td><td>Yes, forecast and limit-timer widgets</td></tr>
+            <tr><td>Learns your weekday and weekend hours</td><td class="us">Yes</td><td class="n">No</td><td class="n">Not documented</td><td class="n">Not documented</td><td class="n">Not documented</td></tr>
+            <tr><td>Scores its own forecasts</td><td class="us">Yes, predicted vs. actual</td><td class="n">No</td><td class="n">Not documented</td><td class="n">Not documented</td><td class="n">Not documented</td></tr>
+            <tr><td>For agents</td><td class="us">Exit code 2, JSON, Claude Desktop extension</td><td class="n">No</td><td>CLI</td><td class="n">Not documented</td><td class="n">Not documented</td></tr>
+            <tr><td>How it gets your numbers</td><td class="us">Local files and Claude Code&#39;s status line; Codex CLI for reset counts; cursor.com only if you turn Cursor on</td><td>Your account</td><td>OAuth, API keys, local files, opt-in browser cookies</td><td>Varies by provider</td><td>Claude Code&#39;s status line input</td></tr>
+            <tr><td>Price and license</td><td class="us">Free, FSL-1.1-MIT</td><td>Included</td><td>Free, MIT</td><td>Free, Apache-2.0</td><td>Free, MIT</td></tr>
+          </tbody>
+        </table></div></div>
+        <div class="points glass fair">
+          <div><h3>Where the built-ins win</h3><p>They&#39;re official and already installed. Claude Code&#39;s <code>/usage</code> also breaks down what&#39;s using your plan, like skills, subagents, and MCP servers, with suggestions. The usage page on claude.ai covers every device.</p></div>
+          <div><h3>Where the menu bar trackers win</h3><p>Breadth. If you use Gemini, Copilot, Z.ai, or a dozen other services, they cover them in one menu, and both already forecast when you&#39;ll run out. CodexBar also has a big community and a Linux CLI.</p></div>
+          <div><h3>Where ccstatusline wins</h3><p>If all you want is a status line, it&#39;s a deep one: forecast and limit-timer widgets alongside dozens of others, right where you type.</p></div>
+        </div>
+        <p class="table-foot">Also worth knowing: <a href="https://github.com/hamed-elfayome/Claude-Usage-Tracker">Claude Usage Tracker</a> and <a href="https://github.com/f-is-h/Usage4Claude">Usage4Claude</a> show Claude and Codex percentages and reset times in the menu bar, with pace markers, using a pasted session key or a sign-in. <a href="https://github.com/ccusage/ccusage">ccusage</a> reports tokens and cost across about 20 agent CLIs. Fuel Gauge&#39;s case is narrower: the verdict first, a forecast that knows your week and checks itself, an exit code your agents can use, and no browser cookies or pasted session keys.</p>
+      </div>
+    </section>
+
     <section id="privacy" class="lit">
       <div class="wrap">
         <div class="head center">
-          <h2>Quiet, and stays on your Mac.</h2>
-          <p>It reads only what Claude Code, Codex, and Grok Bot already save on your Mac.</p>
+          <h2>Your usage stays on your Mac.</h2>
+          <p>Exactly what it reads, what it saves, and the few times it goes online.</p>
         </div>
         <div class="points glass">
-          <div><h3>Local files only</h3><p>No browser cookies, no keychain, no sign-in. It never asks for your accounts.</p></div>
-          <div><h3>No Full Disk Access</h3><p>It doesn&#39;t need it. Everything it reads sits in your home folder.</p></div>
-          <div><h3>Zero telemetry</h3><p>The only network request is the check for updates, plus Cursor's usage if you turn Cursor on.</p></div>
-          <div><h3>One alert, early</h3><p>Once per window, when the forecast says you&#39;ll run out at least 30 minutes early. Alerts at 50, 80, or 95% used are optional.</p></div>
+          <div><h3>Local files only</h3><p>Claude Code&#39;s status line input and logs, Codex&#39;s logs in <code>~/.codex</code>, and Grok Bot&#39;s usage cache. No browser cookies, no keychain, and it never asks you to sign in. The few things that go online are listed under Zero telemetry.</p></div>
+          <div><h3>No Full Disk Access</h3><p>It doesn&#39;t need it. Everything it reads sits in your home folder. The only permission it asks for is notifications, at the first alert.</p></div>
+          <div><h3>Zero telemetry</h3><p>No analytics, nothing about your usage sent anywhere. It goes online for update checks, Codex reset counts through your Codex CLI (on by default, off in Settings › Resets), and Cursor if you turn it on.</p></div>
+          <div><h3>One alert, early</h3><p>Once per window, when the forecast says you&#39;ll run out at least 30 minutes early. Alerts at 80% and 95% used are on by default, 50% is there if you want it, and any of them can be turned off.</p></div>
           <div><h3>Track what you use</h3><p>Pick which tools it watches in Settings › Tools.</p></div>
           <div><h3>Free</h3><p>No trial, no subscription. Source on GitHub, signed and notarized by Apple.</p></div>
+        </div>
+        <p class="note-line">What it saves, all in <code>~/Library/Application Support/Fuel Gauge</code>: limit readings (tool, limit, percent, reset time), a usage cache of timestamps, model names, token counts, session IDs, and project paths, and its saved predictions. Each is kept for about two months, and none of it includes prompt or response text. Uninstalling with <code>brew uninstall --cask --zap fuelgauge</code> removes it all.</p>
+      </div>
+    </section>
+
+    <section id="free" class="lit">
+      <div class="wrap">
+        <div class="head">
+          <h2>Free, with the source on GitHub.</h2>
+          <p>No account, no trial, no subscription, no ads. Use it at home or at work.</p>
+        </div>
+        <div class="points glass proof">
+          <div><b>$0</b><p>Nothing to sign up for, nothing to cancel.</p></div>
+          <div><b>Source available</b><p>Every line is on <a href="https://github.com/coreyhaines31/fuelgauge">GitHub</a> under FSL-1.1-MIT. Read it, build it, change it. Each version becomes MIT two years after release.</p></div>
+          <div><b>4.6 MB</b><p>The whole download. Native Swift, one app for Apple silicon and Intel.</p></div>
+          <div><b>Notarized</b><p>Signed with Developer ID and checked by Apple, every release.</p></div>
+          <div><b>Updates</b><p>Sparkle checks for new versions, or turn that off in Settings. With Homebrew, <code>brew upgrade</code> works too.</p></div>
+          <div><b>0</b><p>Analytics, trackers, or accounts in the app.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="new" class="lit">
+      <div class="wrap">
+        <div class="split top">
+          <div>
+            <h2>What&#39;s new.</h2>
+            <ul class="news">
+              <li><b>1.11 · Nov 16, 2026</b><span>A new look: the fuel-meter menu bar glyph, a new icon, and a redesigned panel.</span></li>
+              <li><b>1.10 · Nov 8, 2026</b><span>Plan your next session: 30 minutes to 4 hours more at your current pace, across every limit.</span></li>
+              <li><b>1.9 · Nov 8, 2026</b><span>Predicted vs. actual: see how each saved forecast turned out.</span></li>
+            </ul>
+            <p class="fineprint"><a href="https://github.com/coreyhaines31/fuelgauge/releases">Every release, with notes</a></p>
+          </div>
+          <div>
+            <h2>System requirements.</h2>
+            <ul class="checks req">
+              <li>macOS 14 Sonoma or later</li>
+              <li>Apple silicon or Intel</li>
+              <li>4.6 MB download</li>
+              <li>For Claude limits: Claude Code on a Pro or Max plan</li>
+              <li>For the others: Codex, Grok Bot, or Cursor on this Mac</li>
+              <li>For the Claude Desktop extension: Claude Desktop</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -288,10 +538,14 @@
         <div class="faq glass">
           <details><summary>Is it accurate?</summary><p>It&#39;s an estimate from your recent pace, not a promise. Speed up or slow down and the forecast moves with you. That&#39;s why it shows a range, like “Between 11:31a and 12:14p at your recent pace,” instead of one exact minute, and why it waits for enough readings before it forecasts at all: 10 minutes for a 5-hour limit, 3 hours for a weekly one.</p></details>
           <details><summary>Does it work with Claude Pro and Max?</summary><p>Yes. It uses the 5-hour and weekly limits Claude Code reports for your plan, so it works on Pro and Max. The status line is where those readings come from, so turn it on.</p></details>
-          <details><summary>Which tools does it track?</summary><p>Claude Code&#39;s 5-hour and weekly limits, Codex&#39;s weekly limit, Grok Bot&#39;s weekly limit, and, if you turn it on, Cursor&#39;s usage. Choose which ones to watch in Settings › Tools.</p></details>
-          <details><summary>Does it send my data anywhere?</summary><p>No. It reads only what those tools already save on your Mac. No browser cookies, no Full Disk Access, no keychain, no sign-in, and zero telemetry. The only network request is the check for updates, plus Cursor's usage if you turn Cursor on.</p></details>
-          <details><summary>How is it different from CodexBar?</summary><p>CodexBar covers far more providers, over 100, and leads with percent used. Fuel Gauge covers four tools and leads with the verdict: will you make it to reset. It adds a Claude Code status line and an exit code agents can check, and it reads local files (Cursor, which keeps none, is the one opt-in exception). <a href="/alternatives/codexbar">The full comparison</a>.</p></details>
-          <details><summary>How do I remove it?</summary><p>Run <code>fuelgauge uninstall-statusline</code> first, so your Claude Code status line goes back to how it was. Then run <code>brew uninstall --cask fuelgauge</code>. If you installed from the DMG, drag Fuel Gauge from Applications to the Trash instead.</p></details>
+          <details><summary>Which tools does it track?</summary><p>Claude Code&#39;s 5-hour and weekly limits, Codex&#39;s limits (5-hour and weekly, or weekly only on plans without a 5-hour limit), Grok Bot&#39;s weekly limit, and, if you turn it on, Cursor&#39;s monthly usage. Choose which ones to watch in Settings › Tools.</p></details>
+          <details><summary>How is it different from Claude Code&#39;s /usage?</summary><p><code>/usage</code> tells you where you are: how much of each limit you&#39;ve used and when it resets, plus what&#39;s using it. Fuel Gauge tells you where you&#39;ll be at the reset, at your pace, without you asking. It also covers Codex and Grok Bot, and puts the answer in your menu bar and under your prompt.</p></details>
+          <details><summary>Does it send my data anywhere?</summary><p>No. Your usage stays on your Mac. No browser cookies, no Full Disk Access, no keychain, no sign-in, and zero telemetry. It goes online only to check for updates, to count Codex resets through your installed Codex CLI (turn that off in Settings › Resets), and for Cursor if you turn Cursor on.</p></details>
+          <details><summary>How is it different from CodexBar?</summary><p>CodexBar covers far more providers, over 100, and also shows when you&#39;ll run out. Fuel Gauge covers four tools and leads with the verdict: will you make it to reset. It learns your weekly pattern, scores its own forecasts, adds a Claude Code status line and an exit code agents can check, and never reads browser cookies. <a href="/alternatives/codexbar">The full comparison</a>.</p></details>
+          <details><summary>Will it break my existing status line?</summary><p>No. If you already have one, it keeps showing, with the forecast on a line under it. Your <code>settings.json</code> is backed up first, and <code>fuelgauge uninstall-statusline</code> puts everything back.</p></details>
+          <details><summary>Will it slow down my Mac or drain the battery?</summary><p>It checks once a minute. After the first import of your usage history, it reads only new log records and keeps a local cache. The status line runs once after each Claude Code reply: it saves one reading and prints one line.</p></details>
+          <details><summary>How do I remove it?</summary><p>Run <code>fuelgauge uninstall-statusline</code> first, so your Claude Code status line goes back to how it was. Then run <code>brew uninstall --cask --zap fuelgauge</code>, which also removes its saved readings. If you installed from the DMG, drag Fuel Gauge from Applications to the Trash, and trash <code>~/Library/Application Support/Fuel Gauge</code>.</p></details>
+          <details><summary>How do updates work?</summary><p>The app checks for new versions with Sparkle and installs them when you say so. Turn automatic checks off in Settings › General. If you installed with Homebrew, <code>brew upgrade --cask fuelgauge</code> works too.</p></details>
           <details><summary>Is it really free?</summary><p>Yes, at home or at work. No account, no trial, no subscription. The source is on GitHub under the FSL-1.1-MIT license.</p></details>
           <details><summary>Which Macs does it run on?</summary><p>Any Mac with macOS 14 Sonoma or later, Apple Silicon or Intel.</p></details>
         </div>
@@ -303,29 +557,71 @@
         <div class="cta-card glass">
           <img src="/images/icon.svg" alt="" width="96" height="96" loading="lazy">
           <h2>Make it to reset.</h2>
-          <p>Free. No account, no subscription.</p>
+          <p>Know before the big task whether your limits will last. Free, with no account and no subscription.</p>
           <div class="actions">
-            <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"><svg aria-hidden="true"><use href="#i-download"/></svg>Download for Mac</a>
+            <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"><svg aria-hidden="true"><use href="#i-download"/></svg>Download free for Mac</a>
             <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge"><svg aria-hidden="true"><use href="#i-github"/></svg>View source code</a>
           </div>
           <div class="copyline"><code id="brew-cta">brew install --cask coreyhaines31/tap/fuelgauge</code><button type="button" class="copy" data-copy="brew-cta">Copy</button></div>
-          <p class="fineprint">macOS 14 Sonoma or later · Apple Silicon and Intel · <a href="#agent-install">Or ask your coding agent</a></p>
+          <p class="fineprint">macOS 14 Sonoma or later · Apple silicon and Intel · <a href="#agent-install">Or ask your coding agent</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bx-section" id="why">
+      <div class="bx-wrap">
+        <div class="bx-maker">
+          <img src="/images/corey.jpg" alt="Corey Haines" width="76" height="76">
+          <div>
+            <span class="bx-strip">Why it exists</span>
+            <p>I run Claude Code and Codex all day, and I kept hitting a limit in the middle of a task with no warning. The usage pages showed me a percentage, but not the thing I actually wanted to know: will I make it to the reset? So I built the app I wanted. It watches my pace and tells me, before I start something big, whether I&#39;ll make it or when I&#39;ll run out. And it&#39;s free.</p>
+            <cite>Corey Haines, maker of Fuel Gauge and <a href="#apps">more free Mac apps</a></cite>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bx-section" id="apps">
+      <div class="bx-wrap">
+        <span class="bx-eyebrow">From the same bench</span>
+        <h2>More free Mac apps</h2>
+        <p class="bx-intro">Small, free menu bar apps that each answer one question about your Mac. Same look, same rules: nothing leaves your Mac, no account, no subscription.</p>
+        <div class="bx-apps">
+          <a href="https://spareformac.com"><img src="/images/family/spare.png" alt=""><div><b>Spare</b><span>See what&#39;s using your Mac</span></div></a>
+          <a href="https://diskforecast.com"><img src="/images/family/disk.png" alt=""><div><b>Disk Forecast</b><span>Know before your Mac runs out of space</span></div></a>
+          <a href="https://midnightoil.app"><img src="/images/family/oil.png" alt=""><div><b>Midnight Oil</b><span>Keep your Mac awake</span></div></a>
+          <a href="https://wifiorisp.com"><img src="/images/family/wifi.png" alt=""><div><b>WiFi or ISP</b><span>Is slow internet your Wi-Fi or your ISP?</span></div></a>
+          <a href="https://greenroomformac.com"><img src="/images/family/green.png" alt=""><div><b>Green Room</b><span>Check your camera, mic, and speakers</span></div></a>
+          <a href="https://onhandformac.com"><img src="/images/family/hand.png" alt=""><div><b>On Hand</b><span>Copy it once. Find it again.</span></div></a>
+          <a href="https://coatcheckformac.com"><img src="/images/family/coat.png" alt=""><div><b>Coat Check</b><span>Reach the menu bar icons the notch hides</span></div></a>
+          <a href="https://killcord.app"><img src="/images/family/kill.png" alt=""><div><b>Kill Cord</b><span>See your API spend before the bill does</span></div></a>
         </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="wrap">
-      <!-- footer -->
-      <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a><a href="/limits/codex">Codex limits</a><a href="/limits/cursor">Cursor limits</a><a href="/limits/grok">Grok limits</a><a href="/limits/github-copilot">GitHub Copilot limits</a></nav>
-      <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a><a href="/guides/check-claude-usage">Check your Claude usage</a><a href="/guides/when-does-claude-limit-reset">When Claude limits reset</a><a href="/guides/claude-code-statusline">Claude Code status line</a><a href="/guides/stop-hitting-claude-limits">Stop hitting Claude limits</a></nav>
-      <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a><a href="/compare/claude-pro-vs-max">Claude Pro vs Max</a><a href="/compare/claude-code-vs-codex">Claude Code vs Codex</a><a href="/compare/cursor-vs-claude-code">Cursor vs Claude Code</a><a href="/compare/claude-code-pricing">Claude Code pricing</a><a href="/compare/codex-pricing">Codex pricing</a><a href="/alternatives/codexbar">CodexBar alternative</a><a href="/alternatives/ccusage">ccusage alternative</a><a href="/alternatives/ccstatusline">ccstatusline alternative</a><a href="/alternatives/claude-code-usage-monitor">Claude-Code-Usage-Monitor alternative</a></nav>
-      <nav class="footer-alts" aria-label="More free Mac apps"><a class="label" href="https://github.com/coreyhaines31">More free Mac apps</a><a href="https://midnightoil.app" title="Keep your Mac awake">Midnight Oil</a><a href="https://diskforecast.com" title="Know before your disk is full">Disk Forecast</a><a href="https://spareformac.com" title="See what&#x27;s using your Mac">Spare</a><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?">WiFi or ISP</a><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers">Green Room</a><a href="https://onhandformac.com" title="A clipboard manager for your Mac">On Hand</a><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides">Coat Check</a></nav>
-      <div class="footer-links"><span>© 2026 Corey Haines. Source available under the <a href="https://github.com/coreyhaines31/fuelgauge/blob/main/LICENSE">FSL-1.1-MIT License</a>.</span></div>
-      <div class="footer-links"><a href="https://github.com/coreyhaines31/fuelgauge">GitHub</a><a href="https://github.com/coreyhaines31/fuelgauge/releases">Releases</a><a href="https://github.com/coreyhaines31/fuelgauge/issues">Issues</a><a href="/privacy">Privacy</a><a href="/llms.txt">llms.txt</a></div>
-      <!-- /footer -->
+    <!-- footer -->
+    <div class="foot-links">
+      <div class="wrap">
+        <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a><a href="/limits/codex">Codex limits</a><a href="/limits/cursor">Cursor limits</a><a href="/limits/grok">Grok limits</a><a href="/limits/github-copilot">GitHub Copilot limits</a></nav>
+        <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a><a href="/guides/check-claude-usage">Check your Claude usage</a><a href="/guides/when-does-claude-limit-reset">When Claude limits reset</a><a href="/guides/claude-code-statusline">Claude Code status line</a><a href="/guides/stop-hitting-claude-limits">Stop hitting Claude limits</a></nav>
+        <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a><a href="/compare/claude-pro-vs-max">Claude Pro vs Max</a><a href="/compare/claude-code-vs-codex">Claude Code vs Codex</a><a href="/compare/cursor-vs-claude-code">Cursor vs Claude Code</a><a href="/compare/claude-code-pricing">Claude Code pricing</a><a href="/compare/codex-pricing">Codex pricing</a><a href="/alternatives/codexbar">CodexBar alternative</a><a href="/alternatives/ccusage">ccusage alternative</a><a href="/alternatives/ccstatusline">ccstatusline alternative</a><a href="/alternatives/claude-code-usage-monitor">Claude-Code-Usage-Monitor alternative</a></nav>
+      </div>
     </div>
+    <nav class="bx-family" aria-label="More free Mac apps">
+      <div class="bx-wrap">
+        <a class="bx-eyebrow" href="https://github.com/coreyhaines31">More free Mac apps</a>
+        <ul><li><a href="https://fuelgauge.app" aria-current="page"><img src="/images/family/fuel.png" alt="" width="56" height="56">Fuel Gauge</a></li><li><a href="https://spareformac.com" title="See what&#x27;s using your Mac"><img src="/images/family/spare.png" alt="" width="56" height="56">Spare</a></li><li><a href="https://diskforecast.com" title="Know before your disk is full"><img src="/images/family/disk.png" alt="" width="56" height="56">Disk Forecast</a></li><li><a href="https://midnightoil.app" title="Keep your Mac awake"><img src="/images/family/oil.png" alt="" width="56" height="56">Midnight Oil</a></li><li><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?"><img src="/images/family/wifi.png" alt="" width="56" height="56">WiFi or ISP</a></li><li><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers"><img src="/images/family/green.png" alt="" width="56" height="56">Green Room</a></li><li><a href="https://onhandformac.com" title="A clipboard manager for your Mac"><img src="/images/family/hand.png" alt="" width="56" height="56">On Hand</a></li><li><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides"><img src="/images/family/coat.png" alt="" width="56" height="56">Coat Check</a></li><li><a href="https://killcord.app" title="See your API spend before the bill does"><img src="/images/family/kill.png" alt="" width="56" height="56">Kill Cord</a></li></ul>
+      </div>
+    </nav>
+    <div class="bx-footer">
+      <div class="bx-wrap">
+        <div><span>© 2026 Corey Haines. Source available under the <a href="https://github.com/coreyhaines31/fuelgauge/blob/main/LICENSE">FSL-1.1-MIT License</a>.</span></div>
+        <div><a href="https://github.com/coreyhaines31/fuelgauge">GitHub</a><a href="https://github.com/coreyhaines31/fuelgauge/releases">Releases</a><a href="https://github.com/coreyhaines31/fuelgauge/issues">Issues</a><a href="/privacy">Privacy</a><a href="/llms.txt">llms.txt</a></div>
+      </div>
+    </div>
+    <!-- /footer -->
   </footer>
   <script>
     // Copy buttons. Falls back to selecting the text when the clipboard is unavailable.
@@ -344,7 +640,7 @@
   </script>
   <!-- schema -->
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Fuel Gauge", "operatingSystem": "macOS 14 or later", "applicationCategory": "DeveloperApplication", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "downloadUrl": "https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg", "url": "https://fuelgauge.app/", "image": "https://fuelgauge.app/images/icon.png", "author": {"@type": "Person", "name": "Corey Haines"}}</script>
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is it accurate?", "acceptedAnswer": {"@type": "Answer", "text": "It's an estimate from your recent pace, not a promise. Speed up or slow down and the forecast moves with you. That's why it shows a range, like \u201cBetween 11:31a and 12:14p at your recent pace,\u201d instead of one exact minute, and why it waits for enough readings before it forecasts at all: 10 minutes for a 5-hour limit, 3 hours for a weekly one."}}, {"@type": "Question", "name": "Does it work with Claude Pro and Max?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It uses the 5-hour and weekly limits Claude Code reports for your plan, so it works on Pro and Max. The status line is where those readings come from, so turn it on."}}, {"@type": "Question", "name": "Which tools does it track?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code's 5-hour and weekly limits, Codex's weekly limit, Grok Bot's weekly limit, and, if you turn it on, Cursor's usage. Choose which ones to watch in Settings \u203a Tools."}}, {"@type": "Question", "name": "Does it send my data anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. It reads only what those tools already save on your Mac. No browser cookies, no Full Disk Access, no keychain, no sign-in, and zero telemetry. The only network request is the check for updates, plus Cursor's usage if you turn Cursor on."}}, {"@type": "Question", "name": "How is it different from CodexBar?", "acceptedAnswer": {"@type": "Answer", "text": "CodexBar covers far more providers, over 100, and leads with percent used. Fuel Gauge covers four tools and leads with the verdict: will you make it to reset. It adds a Claude Code status line and an exit code agents can check, and it reads local files (Cursor, which keeps none, is the one opt-in exception). The full comparison."}}, {"@type": "Question", "name": "How do I remove it?", "acceptedAnswer": {"@type": "Answer", "text": "Run fuelgauge uninstall-statusline first, so your Claude Code status line goes back to how it was. Then run brew uninstall --cask fuelgauge. If you installed from the DMG, drag Fuel Gauge from Applications to the Trash instead."}}, {"@type": "Question", "name": "Is it really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, at home or at work. No account, no trial, no subscription. The source is on GitHub under the FSL-1.1-MIT license."}}, {"@type": "Question", "name": "Which Macs does it run on?", "acceptedAnswer": {"@type": "Answer", "text": "Any Mac with macOS 14 Sonoma or later, Apple Silicon or Intel."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is it accurate?", "acceptedAnswer": {"@type": "Answer", "text": "It's an estimate from your recent pace, not a promise. Speed up or slow down and the forecast moves with you. That's why it shows a range, like \u201cBetween 11:31a and 12:14p at your recent pace,\u201d instead of one exact minute, and why it waits for enough readings before it forecasts at all: 10 minutes for a 5-hour limit, 3 hours for a weekly one."}}, {"@type": "Question", "name": "Does it work with Claude Pro and Max?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It uses the 5-hour and weekly limits Claude Code reports for your plan, so it works on Pro and Max. The status line is where those readings come from, so turn it on."}}, {"@type": "Question", "name": "Which tools does it track?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code's 5-hour and weekly limits, Codex's limits (5-hour and weekly, or weekly only on plans without a 5-hour limit), Grok Bot's weekly limit, and, if you turn it on, Cursor's monthly usage. Choose which ones to watch in Settings \u203a Tools."}}, {"@type": "Question", "name": "How is it different from Claude Code's /usage?", "acceptedAnswer": {"@type": "Answer", "text": "/usage tells you where you are: how much of each limit you've used and when it resets, plus what's using it. Fuel Gauge tells you where you'll be at the reset, at your pace, without you asking. It also covers Codex and Grok Bot, and puts the answer in your menu bar and under your prompt."}}, {"@type": "Question", "name": "Does it send my data anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. Your usage stays on your Mac. No browser cookies, no Full Disk Access, no keychain, no sign-in, and zero telemetry. It goes online only to check for updates, to count Codex resets through your installed Codex CLI (turn that off in Settings \u203a Resets), and for Cursor if you turn Cursor on."}}, {"@type": "Question", "name": "How is it different from CodexBar?", "acceptedAnswer": {"@type": "Answer", "text": "CodexBar covers far more providers, over 100, and also shows when you'll run out. Fuel Gauge covers four tools and leads with the verdict: will you make it to reset. It learns your weekly pattern, scores its own forecasts, adds a Claude Code status line and an exit code agents can check, and never reads browser cookies. The full comparison."}}, {"@type": "Question", "name": "Will it break my existing status line?", "acceptedAnswer": {"@type": "Answer", "text": "No. If you already have one, it keeps showing, with the forecast on a line under it. Your settings.json is backed up first, and fuelgauge uninstall-statusline puts everything back."}}, {"@type": "Question", "name": "Will it slow down my Mac or drain the battery?", "acceptedAnswer": {"@type": "Answer", "text": "It checks once a minute. After the first import of your usage history, it reads only new log records and keeps a local cache. The status line runs once after each Claude Code reply: it saves one reading and prints one line."}}, {"@type": "Question", "name": "How do I remove it?", "acceptedAnswer": {"@type": "Answer", "text": "Run fuelgauge uninstall-statusline first, so your Claude Code status line goes back to how it was. Then run brew uninstall --cask --zap fuelgauge, which also removes its saved readings. If you installed from the DMG, drag Fuel Gauge from Applications to the Trash, and trash ~/Library/Application Support/Fuel Gauge."}}, {"@type": "Question", "name": "How do updates work?", "acceptedAnswer": {"@type": "Answer", "text": "The app checks for new versions with Sparkle and installs them when you say so. Turn automatic checks off in Settings \u203a General. If you installed with Homebrew, brew upgrade --cask fuelgauge works too."}}, {"@type": "Question", "name": "Is it really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, at home or at work. No account, no trial, no subscription. The source is on GitHub under the FSL-1.1-MIT license."}}, {"@type": "Question", "name": "Which Macs does it run on?", "acceptedAnswer": {"@type": "Answer", "text": "Any Mac with macOS 14 Sonoma or later, Apple Silicon or Intel."}}]}</script>
   <!-- /schema -->
 </body>
 </html>

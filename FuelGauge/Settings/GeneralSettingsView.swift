@@ -40,7 +40,8 @@ struct GeneralSettingsView: View {
                     Button("Check Now") { updater.checkForUpdates() }
                 }
             } footer: {
-                Text("Update checks are the only thing that goes online. Your usage never leaves your Mac.")
+                Text("Fuel Gauge goes online to check for updates, to count Codex resets through your Codex CLI "
+                    + "(Settings › Resets), and for Cursor if you turn it on. Your usage never leaves your Mac.")
                     .font(.caption).foregroundStyle(.secondary)
             }
         }

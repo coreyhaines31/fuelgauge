@@ -9,8 +9,8 @@ struct AlertsSettingsView: View {
             Section {
                 Toggle("When a limit will run out before it resets", isOn: $alertWhenShort)
             } footer: {
-                Text("Once per window, when the forecast says you'll run out at least 30 minutes early. "
-                    + "Time to switch to a cheaper model or save the big job for after the reset.")
+                Text("Once per window, after two fresh readings confirm you'll run out at least 30 minutes early. "
+                    + "Both readings must be from the last 15 minutes.")
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section {

@@ -7,6 +7,7 @@ fuelgauge: will your Claude Code, Codex, and Grok Bot limits last until they res
 Usage:
   fuelgauge status [--json]
   fuelgauge history [--days 1] [--json]
+  fuelgauge backtest [--days 7] [--json]
   fuelgauge statusline
   fuelgauge install-statusline
   fuelgauge uninstall-statusline
@@ -15,6 +16,7 @@ Commands:
   status                Each limit: percent used, when it resets, and whether it lasts until then.
                         Exits 2 when a limit is forecast to run out before it resets, or already has.
   history               The readings behind the forecasts, per limit.
+  backtest              Compare recent and adaptive forecasts against saved observations. Read-only.
   statusline            Claude Code's status line command: reads Claude's limits from stdin, saves
                         them, and prints the forecast. Set up with install-statusline.
   install-statusline    Make Fuel Gauge Claude Code's status line. An existing status line keeps
@@ -49,7 +51,7 @@ func currentForecasts(now: Date = Date()) -> [Forecast] {
     if enabled.contains(.grokBot) {
         try? store.append(GrokBotReader().read(), now: now)
     }
-    let readings = store.load(since: now.addingTimeInterval(-8 * 24 * 3600))
+    let readings = store.load(since: now.addingTimeInterval(-ForecastEngine.historyDuration))
         .filter { enabled.contains($0.provider) }
     return ForecastEngine.forecasts(from: readings, now: now).filter {
         !($0.verdict == .reset && $0.resetsAt < now.addingTimeInterval(-24 * 3600))
@@ -73,6 +75,7 @@ func status() -> Never {
             print("\(name): \(ForecastText.headline(forecast, now: now))")
             print("  \(ForecastText.usage(forecast, now: now))")
             if let pace = ForecastText.pace(forecast) { print("  \(pace)") }
+            if let scenario = ForecastText.sessionScenario(forecast, now: now) { print("  \(scenario)") }
             if let range = ForecastText.range(forecast, now: now) { print("  \(range)") }
         }
     }
@@ -104,18 +107,23 @@ func history() -> Never {
     exit(0)
 }
 
+let nestedStatusLineKey = "FUEL_GAUGE_NESTED_STATUSLINE"
+
 /// Claude Code's status line: save the reading, print any wrapped status line, then the forecast strip.
 /// Never fails loudly, since anything on stderr is lost and a crash blanks the status line.
 func statusLine() -> Never {
     let input = FileHandle.standardInput.readDataToEndOfFile()
     let now = Date()
     let settings = ClaudeSettings()
-    if let wrapped = settings.wrappedCommand, let output = run(wrapped, input: input) {
+    // A wrapped command that leads back here (directly or through another tool's wrapper) would spawn
+    // status lines forever, so a nested run skips it.
+    let nested = ProcessInfo.processInfo.environment[nestedStatusLineKey] != nil
+    if !nested, let wrapped = settings.wrappedCommand, let output = run(wrapped, input: input) {
         print(output, terminator: output.hasSuffix("\n") ? "" : "\n")
     }
     guard Tracking.isEnabled(.claude) else { exit(0) }
     try? store.append(ClaudeStatusLine.readings(from: input, at: now), now: now)
-    let readings = store.load(since: now.addingTimeInterval(-8 * 24 * 3600), provider: .claude)
+    let readings = store.load(since: now.addingTimeInterval(-ForecastEngine.historyDuration), provider: .claude)
     let forecasts = ForecastEngine.forecasts(from: readings, now: now).filter { $0.verdict != .reset }
     if let strip = StatusLineStrip.render(forecasts, now: now) {
         print(strip)
@@ -145,7 +153,9 @@ func run(_ command: String, input: Data) -> String? {
     var pid: pid_t = 0
     let argv: [UnsafeMutablePointer<CChar>?] = [strdup("/bin/sh"), strdup("-c"), strdup(command), nil]
     defer { argv.forEach { free($0) } }
-    let spawned = posix_spawn(&pid, "/bin/sh", &actions, &attributes, argv, environ)
+    let envp = nestedEnvironment()
+    defer { envp.forEach { free($0) } }
+    let spawned = posix_spawn(&pid, "/bin/sh", &actions, &attributes, argv, envp)
     close(stdinPipe[0])
     close(stdoutPipe[1])
     guard spawned == 0 else {
@@ -178,6 +188,13 @@ func run(_ command: String, input: Data) -> String? {
     waitpid(pid, &status, 0)
     if timedOut { return nil }
     return output.data.isEmpty ? nil : String(bytes: output.data, encoding: .utf8)
+}
+
+/// This process's environment, marked so a `fuelgauge statusline` started inside it knows it's nested.
+func nestedEnvironment() -> [UnsafeMutablePointer<CChar>?] {
+    var environment = ProcessInfo.processInfo.environment
+    environment[nestedStatusLineKey] = "1"
+    return environment.map { strdup("\($0.key)=\($0.value)") } + [nil]
 }
 
 final class OutputBox: @unchecked Sendable {
@@ -221,6 +238,8 @@ case "status", nil:
     status()
 case "history":
     history()
+case "backtest":
+    backtest()
 case "statusline":
     statusLine()
 case "install-statusline":

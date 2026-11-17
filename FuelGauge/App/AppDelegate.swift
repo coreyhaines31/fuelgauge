@@ -1,5 +1,6 @@
 import AppKit
 import FuelGaugeCore
+import PanelKit
 import ServiceManagement
 
 @MainActor
@@ -8,9 +9,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var model: UsageModel?
     private var statusItemController: StatusItemController?
     private var settingsWindow: SettingsWindow?
+    private var usageWindow: HostedWindow?
+    private var forecastWindow: HostedWindow?
     private let alerts = Alerts()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        PanelFont.register()
         Preferences.registerDefaults()
         #if !DEBUG
         applyLaunchAtLoginDefault()
@@ -19,9 +23,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.model = model
         let settingsWindow = SettingsWindow(updater: updater, model: model)
         self.settingsWindow = settingsWindow
+        let usageWindow = HostedWindow(title: "Fuel Gauge Usage", size: NSSize(width: 900, height: 760)) {
+            UsageView(model: model)
+        }
+        self.usageWindow = usageWindow
+        let forecastWindow = HostedWindow(title: "Fuel Gauge Forecasts", size: NSSize(width: 760, height: 840)) {
+            ForecastDetailsView(model: model)
+        }
+        self.forecastWindow = forecastWindow
         statusItemController = StatusItemController(
             model: model,
             openSettings: { settingsWindow.show() },
+            openUsage: { usageWindow.show() },
+            openForecasts: { forecastWindow.show() },
             openResetSettings: { settingsWindow.show(tab: "Resets") },
             checkForUpdates: { [updater] in updater.checkForUpdates() }
         )
@@ -52,8 +66,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         #if DEBUG
         if DemoMode.isOn {
             DemoMode.prepare()
-            return UsageModel(supportFolder: DemoMode.folder, readsLiveData: false,
-                              resetCredits: DemoMode.resetCredits)
+            let model = UsageModel(supportFolder: DemoMode.folder, readsLiveData: false,
+                                   resetCredits: DemoMode.resetCredits)
+            model.setDemoUsage(DemoMode.usageEvents())
+            return model
         }
         #endif
         return UsageModel()

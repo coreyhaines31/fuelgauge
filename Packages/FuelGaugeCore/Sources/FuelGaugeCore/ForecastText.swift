@@ -8,6 +8,8 @@ public enum ForecastText {
         switch forecast.verdict {
         case .learning:
             "Learning your pace"
+        case .stale:
+            "Waiting for a reliable reading"
         case .limitReached:
             "Out until \(time(forecast.resetsAt, now: now))"
         case .reset:
@@ -45,6 +47,8 @@ public enum ForecastText {
         }
         if active.isEmpty { return "No readings yet" }
         if active.allSatisfy({ $0.verdict == .learning }) { return "Learning your pace" }
+        if active.contains(where: { $0.verdict == .stale }) { return "Some tools need fresh readings" }
+        if active.contains(where: { $0.verdict == .learning }) { return "Some tools are still learning" }
         return "Everything makes it to reset"
     }
 
@@ -82,9 +86,15 @@ public enum ForecastText {
         case .learning:
             let needed = duration(ForecastEngine.minimumCoverage(windowMinutes: forecast.windowMinutes))
             return "A forecast needs \(needed) of readings while you work."
+        case .stale:
+            return "Open the tool and use it to refresh its limits."
         case .limitReached, .reset:
             return nil
         case .makesIt, .runsOut:
+            if forecast.basis == .schedule {
+                return "Based on your usual hours and recent activity. "
+                    + "\(percent(max(0, 100 - forecast.usedPercent))) left until reset."
+            }
             guard let rate = forecast.ratePerHour, let budget = forecast.budgetPerHour else { return nil }
             let left = max(0, 100 - forecast.usedPercent)
             let using: String
@@ -106,6 +116,17 @@ public enum ForecastText {
         }
     }
 
+    public static func sessionScenario(_ forecast: Forecast, now: Date = Date()) -> String? {
+        guard !forecast.isShort, let at = forecast.sessionRunsOutAt else { return nil }
+        return "If you keep this session's pace: out around \(time(at, now: now))."
+    }
+
+    public static func context(_ forecast: Forecast, now: Date = Date()) -> String? {
+        if forecast.verdict == .stale { return "Open the tool and use it to refresh its limits." }
+        if let session = sessionScenario(forecast, now: now) { return session }
+        return forecast.basis == .schedule ? "Based on your usual hours and recent activity." : nil
+    }
+
     /// The range behind a run-out time: "Between 2:50p and 4:30p at your recent pace."
     public static func range(_ forecast: Forecast, now: Date = Date()) -> String? {
         guard case .runsOut(_, let earliest, let latest) = forecast.verdict else { return nil }
@@ -122,6 +143,7 @@ public enum ForecastText {
         let used = percent(forecast.usedPercent)
         switch forecast.verdict {
         case .learning: return "\(label) \(used) learning"
+        case .stale: return "\(label) \(used) stale"
         case .limitReached: return "\(label) out til \(time(forecast.resetsAt, now: now))"
         case .reset: return "\(label) reset"
         case .makesIt: return "\(label) \(used) ok"

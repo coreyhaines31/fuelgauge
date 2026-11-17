@@ -3,7 +3,7 @@
   "manifest_version": "0.4",
   "name": "fuelgauge",
   "display_name": "Fuel Gauge",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Ask Claude whether your Claude Code, Codex, and Grok Bot limits will last until they reset.",
   "long_description": "Fuel Gauge is a free menu bar app that forecasts whether your Claude Code, Codex, and Grok Bot usage limits last until they reset, and when they run out if they don't. This extension lets Claude read the same forecast through Fuel Gauge's `fuelgauge` command line tool.\n\nAsk things like \"how much Claude Code do I have left?\", \"will I hit my limit today?\", or \"when does my Codex limit reset?\".\n\nRequires the Fuel Gauge app (https://fuelgauge.app). Everything is read-only and local: no account details or tokens are read or sent. Fuel Gauge covers AI usage limits, not disk space or CPU and memory.",
   "author": {

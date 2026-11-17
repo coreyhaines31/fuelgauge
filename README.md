@@ -32,14 +32,18 @@ It's free, the source is on GitHub, and your usage never leaves your Mac.
 
 ## What it does
 
-- **Forecasts each limit.** For every window (Claude Code's 5-hour and weekly, Codex's, Grok Bot's weekly, Cursor's) it measures your pace over the recent stretch and says whether you'll make it to the reset, or when you'll run out.
-- **Shows a range, not a guess dressed up as a fact.** "Between 2:50p and 4:30p at your recent pace." Until it has about 10 minutes of readings, it says "Learning your pace" instead of making one up.
+- **Forecasts each limit.** Learns your usual hours and weekday/weekend patterns for daily, weekly, and monthly limits, with recent activity adjusting the forecast. Short windows and sparse histories use recent pace. Learning is automatic and local.
+- **Explains its assumptions.** Shows when a forecast uses your usual hours and when continuing the current session would run out sooner. Stale or conflicting readings say "Waiting for a reliable reading" instead of claiming you will make it.
+- **Shows what it has learned.** Forecast details compares weekday and weekend usage by hour. Select an hour for its estimate and supporting observations; quiet hours, missing data, and estimates borrowed from other days stay distinct. Recent workload shows whether usage is heavier or lighter than usual.
+- **Shows how predictions turned out.** In Forecast details, compare saved 1-, 6-, and 24-hour predictions with actual readings. Select a forecast to see its error and context; missed readings remain gaps, never zero usage.
+- **Helps plan the next session.** Choose another 30 minutes to four hours at your current pace and check all tracked limits for a tool together. See which limit runs out first; sparse activity and usage after quota resets stay unknown.
+- **Checks its predictions.** Open **Forecast details** for the current method, source freshness, schedule-learning progress, and measured error at 1, 6, and 24 hours. Predictions are recorded automatically on this Mac; scores appear after enough future outcomes arrive.
 - **Tells you your budget.** "You can use up to 9% an hour and still make it." That's the number that changes how you work.
 - **Lives in the menu bar.** A fuel pump fills with the fuel left in whichever limit is closest to running out. It turns orange when one will run out before it resets, and red when one is out.
 - **Shows up inside Claude Code.** A strip under the prompt: `⛽ 5h 55% out ~12:05p · wk 41% ok`. If you already have a status line, it stays, with the forecast under it.
-- **Warns you once.** A notification when a limit will run out at least 30 minutes before it resets, and optionally at 50%, 80%, and 95% used.
+- **Warns you once.** Two fresh readings must confirm that a limit will run out at least 30 minutes before it resets. Optional alerts at 50%, 80%, and 95% used remain based on observed usage.
 - **Works from Terminal.** The [`fuelgauge` command](#command-line) prints the forecast and exits with code 2 when a limit will run out, so an agent can check before starting a long task.
-- **Reads only what's already on your Mac.** No sign-in, no browser cookies, no Full Disk Access, no keychain, no telemetry. Checking for updates is the only time it goes online, plus Cursor if you turn it on.
+- **Reads only what's already on your Mac.** No sign-in, no browser cookies, no Full Disk Access, no keychain, no telemetry. It goes online only to check for updates, to track Codex reset credits through your installed Codex CLI (on by default, off in Settings › Resets), and for Cursor if you turn it on.
 
 ## Install
 
@@ -71,7 +75,7 @@ Click the fuel pump in the menu bar.
 | Grok Bot | Nothing. | Grok Bot saves its weekly usage on your Mac while it's open. |
 | Cursor | Turn it on in **Settings › Tools** (it's off by default). | Cursor keeps no usage on your Mac, so Fuel Gauge asks cursor.com every 10 minutes, signed in with the Cursor app's own sign-in. |
 
-Forecasts need about 10 minutes of readings while you work. Until then a card says "Learning your pace". Choose which tools to track in **Settings › Tools**.
+Recent-pace forecasts need about 10 minutes of readings for a 5-hour limit, or 3 hours for a weekly limit. Until then a card says "Learning your pace". Choose which tools to track in **Settings › Tools**.
 
 ## Reading a card
 
@@ -81,10 +85,13 @@ Forecasts need about 10 minutes of readings while you work. Until then a card sa
 | **Runs out around 3:40p, 1h 20m early** | At your recent pace, you'll hit the limit before it resets. |
 | **Out until 5:00p** | The limit is used up. |
 | **Learning your pace** | Not enough readings yet. |
+| **Waiting for a reliable reading** | Reports are too old or contradict one another. Open the tool and use it to refresh its limits. |
+| Based on your usual hours and recent activity | A learned schedule is being used, including observed nights and weekends. |
+| If you keep this session's pace | A conditional run-out estimate for continuing the current burst, separate from the main forecast. |
 | Using 6% an hour | Your pace over the recent stretch: the last hour for a 5-hour window, the last day for a weekly one. |
 | You can use up to 9% an hour | The fastest pace that still lasts until the reset. |
 
-It's an estimate from your recent pace, not a promise. A burst of work speeds it up and a break slows it down.
+Forecasts are estimates. Schedule learning uses up to eight weeks of local readings and starts only after two weeks, with observed intervals covering at least half of the latest fortnight. It falls back to recent pace when coverage is sparse; missing hours are not assumed quiet. Reset credits are a separate fallback and are never assumed to be redeemed. See [how forecasting works](docs/forecasting.md).
 
 ## Command line
 
@@ -94,6 +101,7 @@ The app includes a `fuelgauge` command. Homebrew puts it on your PATH; otherwise
 fuelgauge status              # every limit, in plain words; exits 2 if one will run out before it resets
 fuelgauge status --json       # the same, for scripts and agents
 fuelgauge history --days 2    # the readings behind the forecasts
+fuelgauge backtest --days 7   # compare forecasts against observed history; local and read-only
 fuelgauge install-statusline  # make Fuel Gauge Claude Code's status line
 fuelgauge uninstall-statusline
 ```
@@ -110,9 +118,44 @@ Download [`fuelgauge.mcpb`](https://github.com/coreyhaines31/fuelgauge/releases/
 
 The extension runs the `fuelgauge` tool from your installed Fuel Gauge app, so install Fuel Gauge first. It only reads (`status` and `history`), and its answers are trimmed short, since reading them uses the same limits. The source is in [`mcpb/`](mcpb/); `cd mcpb && npm install && npm run pack` builds `mcpb/dist/fuelgauge.mcpb`, and `npm test` calls every tool on your Mac.
 
+## Token usage and cost
+
+Choose **View usage** in the menu panel to see Claude Code and Codex usage on this Mac. Each tool card
+also shows today's tokens and estimated API cost. Usage remains available even when no quota forecast exists.
+
+- **Today / 7 days / 30 days:** daily token or cost charts, with an elapsed-period token comparison.
+- **Token categories:** uncached input, output, cache reads, and cache writes. Recorded reasoning is included
+  in output rather than added to the total again. Cache hit rate is the cached share of all prompt tokens.
+- **Breakdowns:** tool, model, project directory, and session, sorted by token usage. Hover a project for its full path.
+- **Cost:** USD equivalents at bundled standard short-context API rates, not your subscription bill.
+  Long-context premiums, service tiers, regional adjustments, and tool fees are excluded. Unknown models
+  show unavailable cost; mixed totals explicitly say “+ unpriced.” Cache writes without a recorded duration
+  use the short-duration rate. Rates were checked October 30, 2026 against
+  [OpenAI](https://developers.openai.com/api/docs/pricing) and
+  [Anthropic](https://platform.claude.com/docs/en/about-claude/pricing).
+
+The first import runs in the background and may take a few minutes for large histories. Later refreshes
+read appended records and reuse a local cache. Claude streaming snapshots and copied Codex token events
+are deduplicated. A missing or unreadable source does not erase cached history; read errors are shown in Usage.
+This is local history, so remote tasks, other devices, deleted transcripts before the first import, and other
+providers may be missing. It is independent of account-wide quota percentages.
+
+Sources: `$CLAUDE_CONFIG_DIR/projects` (default `~/.claude/projects`), and `$CODEX_HOME/sessions` plus
+`archived_sessions` (default `~/.codex`). Turn a tool off in **Settings › Tools** to stop importing and hide it.
+
+Screenshots: [previous panel](.github/images/contrast-light.png),
+[new panel](.github/images/usage-panel-light.png), [Usage light](.github/images/usage-light.png),
+[Usage dark](.github/images/usage-dark.png).
+
 ## Privacy
 
-Fuel Gauge reads three things, all on your Mac: the JSON Claude Code passes to its status line, Codex's session logs, and Grok Bot's usage cache. If you turn on Cursor, it also asks cursor.com for your Cursor usage every 10 minutes, using the sign-in the Cursor app stores; nothing else is sent. It saves readings (tool, limit, percent, reset time) in `~/Library/Application Support/Fuel Gauge/Readings` for about two months. It never signs in to anything, reads browser cookies, or asks for Full Disk Access, and it sends nothing anywhere. Codex reset tracking is on by default and contacts OpenAI through your installed Codex CLI; you can turn it off in Settings › Resets. Otherwise, apart from Cursor, the only network request is Sparkle's update check against this repo's releases.
+Fuel Gauge reads local data: Claude Code's status line JSON and session logs, Codex's session logs, and Grok Bot's usage cache. It saves readings (tool, limit, percent, reset time) in `~/Library/Application Support/Fuel Gauge/Readings` for about two months. Local usage metadata (timestamps, model names, token counts, session identifiers, and project paths) is cached alongside them in `usage-history-v1.json`, with about 61 days of usage events. Prompt and response text are not saved in that cache. Live prediction records are stored locally in `forecast-history-v1.json` for up to 60 days (10,000 records), containing quota readings, forecast metadata, and observed outcomes. It never signs in to anything, reads browser cookies, or asks for Full Disk Access, and it sends no telemetry. Your usage never leaves your Mac.
+
+It goes online for three things:
+
+- **Update checks**: Sparkle checks this repo's releases (off in Settings › General).
+- **Codex resets**: on by default, every 5 minutes it runs your installed Codex CLI (`codex app-server`), which asks OpenAI for your reset credits. Turn it off in Settings › Resets.
+- **Cursor**: only if you turn it on, every 10 minutes it asks cursor.com for your Cursor usage, using the sign-in the Cursor app stores.
 
 ## Troubleshooting
 
