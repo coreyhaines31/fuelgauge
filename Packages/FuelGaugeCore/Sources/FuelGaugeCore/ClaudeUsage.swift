@@ -36,6 +36,18 @@ public struct ClaudeUsage: Codable, Sendable, Equatable {
         self.checkedAt = checkedAt
     }
 
+    /// Where the app keeps the last answer, so the `fuelgauge` command can show it too.
+    public static var defaultURL: URL { Brand.supportFolder.appending(path: "claude-usage.json") }
+
+    public static func load(from url: URL = defaultURL) -> ClaudeUsage? {
+        (try? Data(contentsOf: url)).flatMap { try? JSONDecoder().decode(ClaudeUsage.self, from: $0) }
+    }
+
+    public func save(to url: URL = defaultURL) throws {
+        try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try JSONEncoder().encode(self).write(to: url, options: .atomic)
+    }
+
     public func model(named name: String) -> ModelAllowance? {
         models.first { $0.name.caseInsensitiveCompare(name) == .orderedSame }
     }

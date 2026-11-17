@@ -23,6 +23,14 @@ struct ClaudeUsageTests {
         #expect(reading.at == now)
     }
 
+    @Test func savesAndLoads() throws {
+        let url = temporaryFolder().appending(path: "claude-usage.json")
+        let usage = try #require(ClaudeUsage.decode(try sample(), at: Date(timeIntervalSince1970: 1_795_000_000)))
+        try usage.save(to: url)
+        #expect(ClaudeUsage.load(from: url) == usage)
+        #expect(ClaudeUsage.load(from: url.appending(path: "missing")) == nil)
+    }
+
     @Test func noPlanLimitsIsNil() {
         #expect(ClaudeUsage.decode(Data(#"{"rate_limits":null}"#.utf8)) == nil)
         #expect(ClaudeUsage.decode(Data("[]".utf8)) == nil)
