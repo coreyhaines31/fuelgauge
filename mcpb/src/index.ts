@@ -4,7 +4,7 @@ import { z } from "zod";
 import { runFuelGauge } from "./cli.js";
 import { shapeHistory, shapeResets, shapeStatus } from "./shape.js";
 
-const VERSION = "0.1.1";
+const VERSION = "0.1.2";
 
 const server = new McpServer(
   { name: "fuelgauge", version: VERSION },

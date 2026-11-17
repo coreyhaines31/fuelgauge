@@ -29,7 +29,7 @@ The build number is the commit count, so it always goes up.
 
 ## The Claude Desktop extension
 
-`mcpb/` is a small Node MCP server that runs the `fuelgauge` CLI (`status` and `history` only, read-only). To check it: `cd mcpb && npm ci && npm run lint && npm test`. To attach it to an existing release without cutting a new one:
+`mcpb/` is a small Node MCP server that runs the `fuelgauge` CLI (`status`, `resets`, and `history` only, read-only). To check it: `cd mcpb && npm ci && npm run lint && npm test`. To attach it to an existing release without cutting a new one:
 
 ```sh
 cd mcpb && npm ci && npm run pack
