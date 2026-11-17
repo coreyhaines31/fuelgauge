@@ -82,6 +82,11 @@ p { margin: 0 0 1em; }
 .hero .bx-mount .pop { margin-top: 6px; }
 @media (max-width: 880px) { .hero > .wrap { grid-template-columns: minmax(0, 1fr); } .hero > .wrap > div:first-child { padding-top: 24px; } }
 
+/* Tool marks beside section names: the vendors' own files, one colour in the panel ink (docs/third-party-marks.md) */
+.pop .sect span:has(> .tmark) { display: inline-flex; align-items: center; }
+.pop .sect .tmark { display: block; flex: none; width: 12px; height: 12px; margin: -1px 6px 0 0; color: #161616; }
+.pop .sect .tmark-openai { width: 17px; height: 17px; margin: -3.5px 3.5px -2.5px -2.5px; }
+
 /* The popover follows the visitor's light or dark setting, like a real Mac: the dark values from kit/popover.css */
 @media (prefers-color-scheme: dark) {
   .bx-mount .pop.light { background: #161617; color: #e6e7e8; --fas: var(--brush-d); --arrow-c: #2b2b2c; --line: #2a2a2c; --sub: #9a9c9e; --field: #0f0f10; --track: #2e2e30; --fill: #d0d1d2; --btn: #d6d7d8; --btn-ink: #161616; --b2: linear-gradient(180deg, #333436, #232425); --b2e: #4a4c4e; --plate: #c9cbcc; --plate-ink: #161616; --ink2: #c6c7c8; --go: #4fd06f; --ca: #f2b23a; --st: #ff5a3c; }
@@ -89,6 +94,7 @@ p { margin: 0 0 1em; }
   .bx-mount .pop.light .lo { border-color: #6a6c6e; }
   .bx-mount .pop.light .lk { color: #8fb0ff; }
   .bx-mount .pop.light .disc .tw { color: #e6e7e8; }
+  .bx-mount .pop.light .sect .tmark { color: #e6e7e8; }
   .bx-mount .pop.light rect[fill="url(#face)"] { fill: url(#faceLit); }
 }
 
