@@ -21,6 +21,11 @@ final class UsageModel {
     private(set) var codexResetsCheckedAt: Date?
     private(set) var checkingCodexResets = false
     private var codexResetsAttemptedAt: Date?
+    /// Claude's per-model allowances (Fable), from asking Claude Code. Nil until it answers.
+    private(set) var claudeUsage: ClaudeUsage?
+    private(set) var checkingClaudeUsage = false
+    private var claudeUsageAttemptedAt: Date?
+    private let claudeUsageURL: URL
     private(set) var claudeStatusLine: ClaudeSettings.State = .off
 
     var onChange: (() -> Void)?
@@ -43,11 +48,13 @@ final class UsageModel {
     nonisolated static let history = ForecastEngine.historyDuration
 
     init(supportFolder: URL = Brand.supportFolder, readsLiveData: Bool = true,
-         resetCredits: ResetCredits? = nil) {
+         resetCredits: ResetCredits? = nil, claudeUsage: ClaudeUsage? = nil) {
         store = ReadingStore(folder: supportFolder.appending(path: "Readings"))
         forecastHistory = ForecastHistory(folder: supportFolder)
         usageCacheURL = supportFolder.appending(path: "usage-history-v1.json")
         codexStateURL = supportFolder.appending(path: "codex-state.json")
+        claudeUsageURL = supportFolder.appending(path: "claude-usage.json")
+        self.claudeUsage = claudeUsage ?? (readsLiveData ? ClaudeUsage.load(from: claudeUsageURL) : nil)
         let state = (try? Data(contentsOf: codexStateURL))
             .flatMap { try? JSONDecoder().decode(CodexLogReader.State.self, from: $0) }
         codex = CodexLogReader(state: state ?? CodexLogReader.State())
@@ -73,8 +80,7 @@ final class UsageModel {
 
     /// Reads anything new, saves it, and recomputes the forecasts.
     func refresh() {
-        refreshCodexResets()
-        refreshUsage()
+        refreshAccountData()
         guard !isRefreshing else { return }
         isRefreshing = true
         let enabled = Tracking.enabled(installed: installedProviders)
@@ -126,6 +132,13 @@ final class UsageModel {
             onChange?()
             onRefresh?(forecasts)
         }
+    }
+
+    /// The checks that ask a tool's CLI or read its logs on their own schedules.
+    private func refreshAccountData() {
+        refreshCodexResets()
+        refreshClaudeUsage()
+        refreshUsage()
     }
 
     private nonisolated static func saveCodexState(_ state: CodexLogReader.State, to url: URL) {
@@ -199,6 +212,46 @@ final class UsageModel {
             codexResetsCheckedAt = credits == nil ? nil : Date()
             onChange?()
         }
+    }
+
+    /// Asks Claude Code for the Fable allowance once an hour, saves it as readings so it gets a forecast,
+    /// and keeps the answer for the planner and the command.
+    func refreshClaudeUsage(force: Bool = false) {
+        guard readsLiveData else { return }
+        guard UserDefaults.standard.bool(forKey: ResetPreferences.claudeUsageEnabled),
+              Tracking.enabled(installed: installedProviders).contains(.claude) else {
+            claudeUsage = nil
+            try? FileManager.default.removeItem(at: claudeUsageURL)
+            claudeUsageAttemptedAt = nil
+            return
+        }
+        guard !checkingClaudeUsage else { return }
+        guard force || claudeUsageAttemptedAt.map({ Date().timeIntervalSince($0) >= 3600 }) ?? true else { return }
+        checkingClaudeUsage = true
+        claudeUsageAttemptedAt = Date()
+        let store = store, url = claudeUsageURL
+        Task {
+            let usage = await Task.detached(priority: .utility) { ClaudeUsageReader().read() }.value
+            checkingClaudeUsage = false
+            // Turned off while the check ran: keep nothing from it.
+            guard UserDefaults.standard.bool(forKey: ResetPreferences.claudeUsageEnabled),
+                  Tracking.isEnabled(.claude) else { return }
+            // A failed check keeps the last answer: Fable's share of the week only grows until it resets.
+            guard let usage else { return }
+            claudeUsage = usage
+            await Task.detached(priority: .utility) {
+                try? store.append(usage.readings(), now: usage.checkedAt)
+                try? usage.save(to: url)
+            }.value
+            onChange?()
+            refresh()
+        }
+    }
+
+    /// What to do when Claude's week or Fable allowance runs short, from the recorded resets.
+    func resetAdvice(now: Date = Date()) -> ResetAdvice? {
+        ResetAdvice.suggest(forecasts: forecasts, usage: claudeUsage, resets: ClaudeResets.load(from: .standard),
+                            now: now)
     }
 
     /// The forecast that matters most: one that runs out soonest, else the fullest.

@@ -15,9 +15,15 @@ struct ToolCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            SectionHeader(provider.name)
+            ToolSectionHeader(provider: provider)
             ForEach(forecasts, id: \.key) { forecast in
-                WindowRow(forecast: forecast, now: now, showsChart: forecast.key == chartKey)
+                WindowRow(forecast: forecast, now: now, showsChart: forecast.key == chartKey,
+                          note: modelNote(forecast))
+            }
+            if let model, provider == .claude, let advice = model.resetAdvice(now: now) {
+                Notice(advice.title, message: advice.text) {
+                    Link("Open Claude Usage ↗", destination: URL(string: "https://claude.ai/settings/usage")!)
+                }
             }
             if let model, provider == .claude || provider == .codex {
                 usageRow(model)
@@ -36,6 +42,14 @@ struct ToolCard: View {
                 .padding(.bottom, 4)
             }
         }
+    }
+
+    /// "18% of your week so far · up to 50%" under a model's allowance, when Claude says.
+    private func modelNote(_ forecast: Forecast) -> String? {
+        guard let name = forecast.modelName, let allowance = model?.claudeUsage?.model(named: name),
+              allowance.resetsAt > now, let used = allowance.usedPercentOfWeekly else { return nil }
+        let cap = allowance.allowancePercentOfWeekly.map { " · up to \(ForecastText.percent($0))" } ?? ""
+        return "\(ForecastText.percent(used)) of your week so far\(cap)"
     }
 
     private func usageRow(_ model: UsageModel) -> some View {
@@ -59,6 +73,8 @@ struct WindowRow: View {
     let forecast: Forecast
     let now: Date
     let showsChart: Bool
+    /// An extra line, like a model allowance's share of the week.
+    var note: String?
     @Environment(\.panelTheme) private var theme
 
     var body: some View {
@@ -70,7 +86,7 @@ struct WindowRow: View {
             .subtitleTint(status)
         } else {
             Row(forecast.windowName,
-                subtitle: ([compactLine] + (ForecastText.context(forecast, now: now).map { [$0] } ?? []))
+                subtitle: ([compactLine] + [ForecastText.context(forecast, now: now), note].compactMap { $0 })
                     .joined(separator: "\n"),
                 value: ForecastText.percent(forecast.usedPercent),
                 tape: RowTape(forecast.usedPercent / 100, projection: projected.map { $0 / 100 }, status: status))
@@ -89,6 +105,9 @@ struct WindowRow: View {
                 }
                 if let range = ForecastText.range(forecast, now: now) {
                     Text(range)
+                }
+                if let note {
+                    Text(note)
                 }
             }
             .font(PanelFont.body(11.5))

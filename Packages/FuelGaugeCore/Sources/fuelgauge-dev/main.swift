@@ -53,3 +53,17 @@ if CommandLine.arguments.contains("--resets") {
         print("Codex reset availability unknown")
     }
 }
+
+if CommandLine.arguments.contains("--claude-usage") {
+    let start = Date()
+    if let usage = ClaudeUsageReader().read() {
+        print("Claude usage in \(String(format: "%.1f", Date().timeIntervalSince(start)))s")
+        for model in usage.models {
+            let share = model.usedPercentOfWeekly.map { ", \($0)% of the week" } ?? ""
+            print("  \(model.name): \(model.usedPercent)% used\(share), resets \(model.resetsAt)")
+        }
+        if usage.models.isEmpty { print("  No per-model allowances") }
+    } else {
+        print("Claude usage unavailable")
+    }
+}

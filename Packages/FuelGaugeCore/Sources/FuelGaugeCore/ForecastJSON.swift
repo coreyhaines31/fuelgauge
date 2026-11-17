@@ -4,6 +4,10 @@ import Foundation
 public struct ForecastJSON: Encodable {
     public let tool: String
     public let window: String
+    /// The limit's own name, like `seven_day` or `seven_day_model_fable`.
+    public let limit: String
+    /// The model a limit is scoped to, like "Fable"; nil for plan-wide limits.
+    public let model: String?
     public let usedPercent: Double
     public let resetsAt: Date
     public let verdict: String
@@ -22,7 +26,9 @@ public struct ForecastJSON: Encodable {
         forecastBasis = forecast.basis.rawValue
         sessionRunsOutAt = forecast.sessionRunsOutAt
         tool = forecast.key.provider.rawValue
-        window = forecast.windowName.lowercased()
+        window = WindowName.of(windowMinutes: forecast.windowMinutes).lowercased()
+        limit = forecast.key.limit
+        model = forecast.modelName
         usedPercent = forecast.usedPercent
         resetsAt = forecast.resetsAt
         ratePerHour = forecast.ratePerHour

@@ -114,7 +114,7 @@ public struct AlertPlanner: Sendable {
     }
 
     static func name(_ forecast: Forecast) -> String {
-        "\(forecast.key.provider.name)'s \(forecast.windowName.lowercased()) limit"
+        "\(forecast.key.provider.name)'s \(forecast.windowPhrase) limit"
     }
 
     static func shortTitle(_ forecast: Forecast, at: Date, now: Date) -> String {

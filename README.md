@@ -43,7 +43,7 @@ It's free, the source is on GitHub, and your usage never leaves your Mac.
 - **Shows up inside Claude Code.** A strip under the prompt: `⛽ 5h 55% out ~12:05p · wk 41% ok`. If you already have a status line, it stays, with the forecast under it.
 - **Warns you once.** Two fresh readings must confirm that a limit will run out at least 30 minutes before it resets. Optional alerts at 50%, 80%, and 95% used remain based on observed usage.
 - **Works from Terminal.** The [`fuelgauge` command](#command-line) prints the forecast and exits with code 2 when a limit will run out, so an agent can check before starting a long task.
-- **Reads only what's already on your Mac.** No sign-in, no browser cookies, no Full Disk Access, no keychain, no telemetry. It goes online only to check for updates, to track Codex reset credits through your installed Codex CLI (on by default, off in Settings › Resets), and for Cursor if you turn it on.
+- **Reads only what's already on your Mac.** No sign-in, no browser cookies, no Full Disk Access, no keychain, no telemetry. It goes online only to check for updates, to track Codex reset credits through your installed Codex CLI and read Claude's Fable allowance through your installed Claude Code (both on by default, off in Settings › Resets), and for Cursor if you turn it on.
 
 ## Install
 
@@ -100,6 +100,7 @@ The app includes a `fuelgauge` command. Homebrew puts it on your PATH; otherwise
 ```sh
 fuelgauge status              # every limit, in plain words; exits 2 if one will run out before it resets
 fuelgauge status --json       # the same, for scripts and agents
+fuelgauge resets --json       # Claude's recorded Fable and weekly resets, and which one would help
 fuelgauge history --days 2    # the readings behind the forecasts
 fuelgauge backtest --days 7   # compare forecasts against observed history; local and read-only
 fuelgauge install-statusline  # make Fuel Gauge Claude Code's status line
@@ -151,10 +152,11 @@ Screenshots: [previous panel](.github/images/contrast-light.png),
 
 Fuel Gauge reads local data: Claude Code's status line JSON and session logs, Codex's session logs, and Grok Bot's usage cache. It saves readings (tool, limit, percent, reset time) in `~/Library/Application Support/Fuel Gauge/Readings` for about two months. Local usage metadata (timestamps, model names, token counts, session identifiers, and project paths) is cached alongside them in `usage-history-v1.json`, with about 61 days of usage events. Prompt and response text are not saved in that cache. Live prediction records are stored locally in `forecast-history-v1.json` for up to 60 days (10,000 records), containing quota readings, forecast metadata, and observed outcomes. It never signs in to anything, reads browser cookies, or asks for Full Disk Access, and it sends no telemetry. Your usage never leaves your Mac.
 
-It goes online for three things:
+It goes online for four things:
 
 - **Update checks**: Sparkle checks this repo's releases (off in Settings › General).
 - **Codex resets**: on by default, every 5 minutes it runs your installed Codex CLI (`codex app-server`), which asks OpenAI for your reset credits. Turn it off in Settings › Resets.
+- **Claude's Fable allowance**: on by default, once an hour it runs your installed Claude Code CLI (`claude -p` with its `get_usage` request), which asks Anthropic for your plan usage. It sends no prompt, so it uses no tokens, and runs with your hooks, MCP servers, settings, and tools off. Fuel Gauge does not read or store Claude's credentials. Turn it off in Settings › Resets.
 - **Cursor**: only if you turn it on, every 10 minutes it asks cursor.com for your Cursor usage, using the sign-in the Cursor app stores.
 
 ## Troubleshooting
@@ -186,14 +188,22 @@ Open **Settings › Resets** to track resets you can redeem when you need more u
   for the available count every five minutes and shows the next known expiration. You can refresh it
   immediately after redeeming a reset in Codex's `/usage` menu. Missing data is shown as unknown, not zero.
   Turn it off in Settings › Resets; an explicit opt-out is preserved across updates.
-- **Claude:** Open Claude Usage from the card, then save a manual count and optional next expiration
-  in Settings › Resets. Claude's status line does not expose this balance. The card labels the count
-  as manual and shows when you recorded it; update it after redemption or switching accounts.
+- **Claude:** Claude has two kinds of limit reset. A **Fable reset** refills your Fable allowance and
+  gives back what Fable used this week; a **weekly reset** resets your whole week. Open Claude Usage from
+  the card, then save each count and its expiration in Settings › Resets. Claude doesn't share this
+  balance with other apps, so the counts are manual; the card shows when you recorded them, and warns a
+  week before a kind expires unused. Update them after using a reset or switching accounts.
+- **Fable allowance:** Fable has its own weekly allowance inside Claude's week. Fuel Gauge reads it, and
+  how much of the week Fable took, from your installed Claude Code once an hour, and forecasts it like
+  any other limit. When the week won't last, the card suggests the reset that fixes it: a Fable reset when
+  giving back Fable's share is enough at your pace, otherwise a weekly reset. It never says a reset was used.
 - **Grok Bot:** No saved-reset balance is currently tracked. Its documented additional usage credits
   are distinct from redeemable resets.
 
 Fuel Gauge never redeems a reset. Codex reset tracking is on by default and contacts OpenAI
-through the Codex CLI using its existing sign-in. Fuel Gauge does not read or store Codex credentials.
+through the Codex CLI using its existing sign-in. Reading the Fable allowance is on by default and
+contacts Anthropic through Claude Code using its existing sign-in. Fuel Gauge does not read or store
+Codex or Claude credentials.
 
 ## Building from source
 
@@ -211,3 +221,5 @@ The forecasting logic lives in `Packages/FuelGaugeCore` (`swift test` there). `s
 ## License
 
 Free to use. The source is available under the [Functional Source License 1.1, MIT Future License](LICENSE): you can read, modify, and use it for anything except a competing product, and each version becomes MIT two years after release. The name and icon are covered by [TRADEMARK.md](TRADEMARK.md).
+
+Logos are trademarks of their owners and are used only to identify the tools Fuel Gauge reads. Fuel Gauge isn't affiliated with or endorsed by them. Sources and terms: [docs/third-party-marks.md](docs/third-party-marks.md).

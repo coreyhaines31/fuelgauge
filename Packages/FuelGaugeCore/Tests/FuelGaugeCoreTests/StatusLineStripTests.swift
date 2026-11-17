@@ -26,6 +26,21 @@ import Testing
         #expect(strip?.hasSuffix(" · wk 41% ok") == true)
     }
 
+    @Test func labelsAModelLimitByItsModel() {
+        let forecasts = ForecastEngine.forecasts(
+            from: readings("seven_day", minutes: 10080, used: Array(repeating: 41, count: 13), resetsIn: 60)
+                + readings("seven_day_model_fable", minutes: 10080, used: Array(repeating: 12, count: 13),
+                           resetsIn: 60),
+            now: now
+        )
+        let strip = StatusLineStrip.render(forecasts, now: now, color: false)
+        #expect(strip == "⛽ wk 41% ok · fable 12% ok")
+        let fable = forecasts.first { $0.key.limit == "seven_day_model_fable" }
+        #expect(fable?.windowName == "Fable weekly")
+        #expect(fable?.windowPhrase == "Fable weekly")
+        #expect(forecasts.first?.windowPhrase == "weekly")
+    }
+
     @Test func nothingToShowWithoutForecasts() {
         #expect(StatusLineStrip.render([], now: now) == nil)
     }
@@ -51,5 +66,20 @@ import Testing
         #expect(object?["verdict"] as? String == "out")
         #expect(object?["used_percent"] as? Double == 100)
         #expect(object?["resets_at"] is String)
+        #expect(object?["limit"] as? String == "codex-10080")
+        #expect(object?["model"] == nil)
+    }
+
+    @Test func namesTheModelOfAModelLimit() throws {
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        let reading = Reading(
+            provider: .claude, limit: "seven_day_model_fable", windowMinutes: 10080, usedPercent: 20,
+            resetsAt: now.addingTimeInterval(86400), at: now
+        )
+        let data = try ForecastJSON.encode(ForecastEngine.forecasts(from: [reading], now: now), now: now)
+        let object = try #require(try JSONSerialization.jsonObject(with: data) as? [[String: Any]]).first
+        #expect(object?["window"] as? String == "weekly")
+        #expect(object?["model"] as? String == "Fable")
+        #expect(object?["limit"] as? String == "seven_day_model_fable")
     }
 }

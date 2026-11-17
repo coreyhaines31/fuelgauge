@@ -2,9 +2,9 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import { runFuelGauge } from "./cli.js";
-import { shapeHistory, shapeStatus } from "./shape.js";
+import { shapeHistory, shapeResets, shapeStatus } from "./shape.js";
 
-const VERSION = "0.1.1";
+const VERSION = "0.1.2";
 
 const server = new McpServer(
   { name: "fuelgauge", version: VERSION },
@@ -40,6 +40,11 @@ server.registerTool(
       "until then. Each limit has used_percent, resets_at, a verdict (makes_it, runs_out, out, learning, stale, reset), " +
       "a one-line summary, forecast_basis (recent or schedule), and runs_out_at when it won't last. " +
       "session_runs_out_at is conditional on continuing the current session pace. Stale or learning means unknown. " +
+      "A limit with a model (like Fable) is that model's own weekly allowance inside Claude's week. " +
+      "claude_resets lists the Claude limit resets the person recorded by hand (fable: refills Fable and gives back " +
+      "what Fable used this week; weekly: resets the whole week), each with usable and expires_at, Fable's share " +
+      "of the week (allowances), and advice naming the reset that would help when the week won't last. These " +
+      "tools can't use a reset; the person uses them in Claude's settings. " +
       "problem is true when a limit runs out before it " +
       "resets, or already has. Use for 'how much Claude Code do I have left?', 'will I hit my limit today?', " +
       "or 'when does my Codex limit reset?', and before a long task: if problem is true, tell the person which " +
@@ -50,7 +55,13 @@ server.registerTool(
   },
   async () => {
     const result = await runFuelGauge(["status"]);
-    return reply(result.ok ? shapeStatus(result.stdout, result.code) : result);
+    if (!result.ok) return reply(result);
+    const status = shapeStatus(result.stdout, result.code);
+    if (!status.ok) return reply(status);
+    // An older app has no `resets` command; the forecast still answers without it.
+    const resets = await runFuelGauge(["resets"]);
+    const shaped = resets.ok ? shapeResets(resets.stdout) : undefined;
+    return reply(shaped ? shapeStatus(result.stdout, result.code, shaped) : status);
   },
 );
 

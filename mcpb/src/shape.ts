@@ -8,6 +8,8 @@ export const NO_READINGS =
 const STATUS_FIELDS = [
   "tool",
   "window",
+  "limit",
+  "model",
   "verdict",
   "summary",
   "used_percent",
@@ -42,7 +44,59 @@ function clean(value: unknown): string | number | undefined {
   return undefined;
 }
 
-export function shapeStatus(stdout: string, code: 0 | 2): Shaped {
+const KIND_FIELDS = ["available", "usable", "expires_at", "expires_soon", "explanation"] as const;
+const ALLOWANCE_FIELDS = [
+  "model",
+  "used_percent",
+  "used_percent_of_weekly",
+  "allowance_percent_of_weekly",
+  "resets_at",
+  "checked_at",
+] as const;
+const ADVICE_FIELDS = ["reset", "title", "text"] as const;
+
+function pick(value: unknown, fields: readonly string[]): Record<string, string | number | boolean> | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined;
+  const source = value as Record<string, unknown>;
+  const picked: Record<string, string | number | boolean> = {};
+  for (const field of fields) {
+    const item = source[field];
+    const cleaned = typeof item === "boolean" ? item : clean(item);
+    if (cleaned !== undefined) picked[field] = cleaned;
+  }
+  return picked;
+}
+
+// Claude's recorded Fable and weekly resets, its per-model allowances, and the planner's suggestion, from
+// `fuelgauge resets --json`. Undefined when the output isn't that shape (an older app has no such command).
+export function shapeResets(stdout: string): Record<string, unknown> | undefined {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(stdout);
+  } catch {
+    return undefined;
+  }
+  const claude = (parsed as { claude?: unknown } | null)?.claude;
+  if (!claude || typeof claude !== "object") return undefined;
+  const source = claude as Record<string, unknown>;
+  const fable = pick(source.fable, KIND_FIELDS);
+  const weekly = pick(source.weekly, KIND_FIELDS);
+  if (!fable || !weekly) return undefined;
+  const shaped: Record<string, unknown> = { source: "manual", fable, weekly };
+  const recorded = clean(source.recorded_at);
+  if (recorded !== undefined) shaped.recorded_at = recorded;
+  if (Array.isArray(source.allowances)) {
+    shaped.allowances = source.allowances
+      .slice(0, 5)
+      .map((allowance) => pick(allowance, ALLOWANCE_FIELDS))
+      .filter(Boolean);
+  }
+  const advice = pick(source.advice, ADVICE_FIELDS);
+  if (advice) shaped.advice = advice;
+  return shaped;
+}
+
+export function shapeStatus(stdout: string, code: 0 | 2, resets?: Record<string, unknown>): Shaped {
   let parsed: unknown;
   try {
     parsed = JSON.parse(stdout);
@@ -62,6 +116,7 @@ export function shapeStatus(stdout: string, code: 0 | 2): Shaped {
       return limit;
     });
   const answer: Record<string, unknown> = { problem: code === 2, limits };
+  if (resets) answer.claude_resets = resets;
   if (limits.some((limit) => limit.verdict === "stale" || limit.verdict === "learning")) {
     answer.note = "Some limits have no reliable forecast. problem: false does not confirm they will last.";
   }

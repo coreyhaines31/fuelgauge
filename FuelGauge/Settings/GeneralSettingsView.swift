@@ -41,7 +41,8 @@ struct GeneralSettingsView: View {
                 }
             } footer: {
                 Text("Fuel Gauge goes online to check for updates, to count Codex resets through your Codex CLI "
-                    + "(Settings › Resets), and for Cursor if you turn it on. Your usage never leaves your Mac.")
+                    + "and read Claude's Fable allowance through Claude Code (Settings › Resets), and for Cursor "
+                    + "if you turn it on. Your usage never leaves your Mac.")
                     .font(.caption).foregroundStyle(.secondary)
             }
         }
