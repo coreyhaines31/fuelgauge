@@ -37,9 +37,11 @@ public struct UsageEvent: Codable, Identifiable, Sendable {
     public var model: String
     public var at: Date
     public var tokens: TokenUsage
+    /// The account's slug; nil for the default account.
+    public var account: String?
 
     public init(id: String, provider: Provider, session: String, project: String, model: String,
-                at: Date, tokens: TokenUsage) {
+                at: Date, tokens: TokenUsage, account: String? = nil) {
         self.id = id
         self.provider = provider
         self.session = session
@@ -47,6 +49,7 @@ public struct UsageEvent: Codable, Identifiable, Sendable {
         self.model = model
         self.at = at
         self.tokens = tokens
+        self.account = account
     }
 }
 
@@ -102,6 +105,11 @@ public enum UsageHistory {
         events.filter {
             $0.at >= interval.start && $0.at < interval.end && (provider == nil || $0.provider == provider)
         }
+    }
+
+    /// One account's events in `interval`.
+    public static func select(_ events: [UsageEvent], interval: DateInterval, account: Account) -> [UsageEvent] {
+        select(events, interval: interval, provider: account.provider).filter { $0.account == account.slug }
     }
 
     public static func deduplicate(_ events: [UsageEvent]) -> [UsageEvent] {

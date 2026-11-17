@@ -93,6 +93,29 @@ struct UsageLogTests {
         #expect(scanner.warnings.isEmpty)
     }
 
+    @Test func scannerTagsEachAccountsEvents() throws {
+        let temp = try #require(realpath(FileManager.default.temporaryDirectory.path, nil))
+        defer { free(temp) }
+        let home = URL(filePath: String(cString: temp)).appending(path: UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: home) }
+        let main = Account.defaultAccount(.codex, environment: [:], home: home)
+        let work = Account.make(.codex, folder: home.appending(path: ".codex-work").path, home: home)
+        for (account, input) in [(main, 100), (work, 200)] {
+            let sessions = account.folder.appending(path: "sessions")
+            try FileManager.default.createDirectory(at: sessions, withIntermediateDirectories: true)
+            try (codex(input: input, output: 10) + Data([10])).write(to: sessions.appending(path: "s.jsonl"))
+        }
+        let now = try Date("2026-10-30T14:00:00Z", strategy: .iso8601)
+        var scanner = UsageLogScanner(roots: UsageLogScanner.Root.of(main) + UsageLogScanner.Root.of(work))
+        let events = scanner.scan(enabled: [.codex], now: now)
+        let day = DateInterval(start: now.addingTimeInterval(-86400), end: now.addingTimeInterval(1))
+        #expect(UsageSummary(UsageHistory.select(events, interval: day, account: main)).tokens.total == 110)
+        #expect(UsageSummary(UsageHistory.select(events, interval: day, account: work)).tokens.total == 210)
+        // Removing an account stops reading its logs.
+        scanner.setRoots(UsageLogScanner.Root.of(main))
+        #expect(UsageSummary(scanner.scan(enabled: [.codex], now: now)).tokens.total == 110)
+    }
+
     @Test func scannerWritesItsCacheOnlyAfterChangesAndAtMostEveryTenMinutes() throws {
         // The real path: the temp folder sits behind the /var link, and the scanner sees files at /private/var.
         let temp = try #require(realpath(FileManager.default.temporaryDirectory.path, nil))
