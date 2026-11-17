@@ -117,8 +117,10 @@ func resetsCommand() -> Never {
     let forecasts = currentForecasts(now: now)
     if wantsJSON {
         let resets = ClaudeResets.load()
-        let usage = ClaudeUsage.load()
-        let advice = ResetAdvice.suggest(forecasts: forecasts, usage: usage, resets: resets, now: now)
+        // Claude Code turned off in Fuel Gauge: the recorded counts, but no allowance or advice.
+        let usage = Tracking.isEnabled(.claude) ? ClaudeUsage.load() : nil
+        let advice = Tracking.isEnabled(.claude)
+            ? ResetAdvice.suggest(forecasts: forecasts, usage: usage, resets: resets, now: now) : nil
         guard let data = try? ResetsJSON.encode(ResetsJSON(resets: resets, usage: usage, advice: advice, now: now))
         else { fail("couldn't encode the resets") }
         FileHandle.standardOutput.write(data + Data("\n".utf8))
