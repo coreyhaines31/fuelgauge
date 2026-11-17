@@ -15,7 +15,7 @@ struct ToolCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            SectionHeader(provider.name)
+            ToolSectionHeader(provider: provider)
             ForEach(forecasts, id: \.key) { forecast in
                 WindowRow(forecast: forecast, now: now, showsChart: forecast.key == chartKey)
             }
