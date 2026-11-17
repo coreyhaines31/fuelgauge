@@ -31,20 +31,27 @@ public struct Provider: RawRepresentable, Hashable, Codable, Sendable, Comparabl
     }
 }
 
-/// One limit of one tool, like Claude's 5-hour window or Codex's weekly window.
+/// One limit of one tool on one account, like Claude's 5-hour window or Codex's weekly window.
 public struct LimitKey: Hashable, Codable, Sendable, Comparable {
     public let provider: Provider
     public let limit: String
+    /// The account's slug; nil for the tool's default account, the only one before Fuel Gauge tracked several.
+    public let account: String?
 
-    public init(provider: Provider, limit: String) {
+    public init(provider: Provider, limit: String, account: String? = nil) {
         self.provider = provider
         self.limit = limit
+        self.account = account
     }
 
-    public var id: String { "\(provider.rawValue)/\(limit)" }
+    /// "claude/five_hour", or "claude@work_1a2b3c/five_hour" on another account. The default account's ids
+    /// are the ones Fuel Gauge always used, so saved alert state and forecast history still match.
+    public var id: String { "\(Account.qualifiedID(provider: provider, slug: account))/\(limit)" }
 
     public static func < (lhs: LimitKey, rhs: LimitKey) -> Bool {
-        lhs.provider == rhs.provider ? lhs.limit < rhs.limit : lhs.provider < rhs.provider
+        if lhs.provider != rhs.provider { return lhs.provider < rhs.provider }
+        if lhs.account != rhs.account { return (lhs.account ?? "") < (rhs.account ?? "") }
+        return lhs.limit < rhs.limit
     }
 }
 
@@ -57,20 +64,26 @@ public struct Reading: Codable, Hashable, Sendable {
     public var usedPercent: Double
     public var resetsAt: Date
     public var at: Date
+    /// The account's slug; nil for the tool's default account. Left out of the saved line when nil, so the
+    /// default account's readings are written exactly as before.
+    public var account: String?
 
-    public init(provider: Provider, limit: String, windowMinutes: Int?, usedPercent: Double, resetsAt: Date, at: Date) {
+    public init(provider: Provider, limit: String, windowMinutes: Int?, usedPercent: Double, resetsAt: Date, at: Date,
+                account: String? = nil) {
         self.provider = provider
         self.limit = limit
         self.windowMinutes = windowMinutes
         self.usedPercent = usedPercent
         self.resetsAt = resetsAt
         self.at = at
+        self.account = account
     }
 
-    public var key: LimitKey { LimitKey(provider: provider, limit: limit) }
+    public var key: LimitKey { LimitKey(provider: provider, limit: limit, account: account) }
 
     enum CodingKeys: String, CodingKey {
         case provider = "p", limit = "l", windowMinutes = "w", usedPercent = "u", resetsAt = "r", at = "t"
+        case account = "a"
     }
 }
 
