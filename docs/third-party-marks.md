@@ -1,6 +1,10 @@
 # Third-party marks
 
-Fuel Gauge shows each tool's mark next to its name so the sections are easy to tell apart. The logos are trademarks of their owners, used only to identify the tools. Fuel Gauge is not affiliated with or endorsed by any of them.
+Fuel Gauge shows each tool's mark next to its name so the sections are easy to tell apart.
+
+Logos are trademarks of their owners and are used only to identify the tools Fuel Gauge reads. Fuel Gauge is not affiliated with or endorsed by any of them.
+
+This is nominative use: each mark identifies the tool whose limits a section shows, and nothing more. We use it even where a vendor's guidelines ask for permission first, and accept that risk. The rules: the vendor's exact mark geometry from its own brand page or official assets (no redrawing, no distortion), one colour as a template image, the tool's name always shown as text, and nothing that implies endorsement.
 
 Each file in `FuelGauge/Assets.xcassets/ToolMarks/` and the matching inline SVG on fuelgauge.app is the vendor's own asset, unedited: same paths, same proportions, no added elements. The app draws them as one-colour template images in the panel's ink (near-black in light mode, near-white in dark), the vendors' own one-colour treatment, at about 12 pt beside the tool's name and never larger than it. The name stays visible; the mark's accessibility label is the tool name.
 
@@ -14,6 +18,15 @@ Downloaded 2026-11-17.
 | Cursor | Cube (2D) | https://cursor.com/brand, "Download brand assets" | `General Logos/Cube/SVG/CUBE_2D_LIGHT.svg` |
 
 ## Terms each vendor sets
+
+Who asks for permission:
+
+| Vendor | Asks for permission? |
+|---|---|
+| OpenAI | Yes. Its guidelines say not to use the logo without permission, and to send requests to partnercomms@openai.com. |
+| Anthropic | Publishes no usage terms. The press kit is meant for media. |
+| SpaceXSI (Grok) | No. Use is allowed if you follow its usage terms, with the logo used exactly as provided. |
+| Cursor | No. It states no terms beyond the name "Cursor". |
 
 **Anthropic.** The press kit has the Claude Spark, plus one-colour versions of the Claude and Claude Code logos. It comes without written usage rules. We use the Spark unaltered and only to identify Claude Code. Questions: press@anthropic.com.
 
