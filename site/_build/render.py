@@ -473,7 +473,7 @@ def render_llms():
 - Install prompt for a coding agent: "{INSTALL_PROMPT}"
 - Line for CLAUDE.md or AGENTS.md: "{AGENT_RULE}"
 - Uninstall: run `fuelgauge uninstall-statusline` first, then `brew uninstall --cask fuelgauge`.
-- Privacy: no browser cookies, no Full Disk Access, zero telemetry. Network requests include update checks, Codex reset checks through the installed CLI (on by default, with an opt-out), and optional Cursor usage. Details: {SITE}/privacy
+- Privacy: no browser cookies, no Full Disk Access, zero telemetry. Network requests include update checks, Codex reset checks through the installed Codex CLI and Claude Fable allowance checks through the installed Claude Code (both on by default, with an opt-out), and optional Cursor usage. Details: {SITE}/privacy
 
 ## Plan limits, explained
 
