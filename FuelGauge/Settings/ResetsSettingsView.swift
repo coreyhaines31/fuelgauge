@@ -62,7 +62,7 @@ struct ResetsSettingsView: View {
             } header: {
                 Text("Claude · Fable allowance")
             } footer: {
-                Text("On by default when tracking Claude Code. Every 10 minutes, Fuel Gauge asks the installed "
+                Text("On by default when tracking Claude Code. Once an hour, Fuel Gauge asks the installed "
                     + "Claude Code CLI for your plan usage, using its existing sign-in. It sends no prompt, so it "
                     + "uses no tokens, and runs with your hooks, MCP servers, and settings off. This contacts "
                     + "Anthropic.")

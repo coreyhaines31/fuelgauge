@@ -156,7 +156,7 @@ It goes online for four things:
 
 - **Update checks**: Sparkle checks this repo's releases (off in Settings › General).
 - **Codex resets**: on by default, every 5 minutes it runs your installed Codex CLI (`codex app-server`), which asks OpenAI for your reset credits. Turn it off in Settings › Resets.
-- **Claude's Fable allowance**: on by default, every 10 minutes it runs your installed Claude Code CLI (`claude -p` with its `get_usage` request), which asks Anthropic for your plan usage. It sends no prompt, so it uses no tokens, and runs with your hooks, MCP servers, settings, and tools off. Fuel Gauge does not read or store Claude's credentials. Turn it off in Settings › Resets.
+- **Claude's Fable allowance**: on by default, once an hour it runs your installed Claude Code CLI (`claude -p` with its `get_usage` request), which asks Anthropic for your plan usage. It sends no prompt, so it uses no tokens, and runs with your hooks, MCP servers, settings, and tools off. Fuel Gauge does not read or store Claude's credentials. Turn it off in Settings › Resets.
 - **Cursor**: only if you turn it on, every 10 minutes it asks cursor.com for your Cursor usage, using the sign-in the Cursor app stores.
 
 ## Troubleshooting
@@ -194,7 +194,7 @@ Open **Settings › Resets** to track resets you can redeem when you need more u
   balance with other apps, so the counts are manual; the card shows when you recorded them, and warns a
   week before a kind expires unused. Update them after using a reset or switching accounts.
 - **Fable allowance:** Fable has its own weekly allowance inside Claude's week. Fuel Gauge reads it, and
-  how much of the week Fable took, from your installed Claude Code every 10 minutes, and forecasts it like
+  how much of the week Fable took, from your installed Claude Code once an hour, and forecasts it like
   any other limit. When the week won't last, the card suggests the reset that fixes it: a Fable reset when
   giving back Fable's share is enough at your pace, otherwise a weekly reset. It never says a reset was used.
 - **Grok Bot:** No saved-reset balance is currently tracked. Its documented additional usage credits

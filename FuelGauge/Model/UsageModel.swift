@@ -214,7 +214,7 @@ final class UsageModel {
         }
     }
 
-    /// Asks Claude Code for the Fable allowance every 10 minutes, saves it as readings so it gets a forecast,
+    /// Asks Claude Code for the Fable allowance once an hour, saves it as readings so it gets a forecast,
     /// and keeps the answer for the planner and the command.
     func refreshClaudeUsage(force: Bool = false) {
         guard readsLiveData else { return }
@@ -226,7 +226,7 @@ final class UsageModel {
             return
         }
         guard !checkingClaudeUsage else { return }
-        guard force || claudeUsageAttemptedAt.map({ Date().timeIntervalSince($0) >= 600 }) ?? true else { return }
+        guard force || claudeUsageAttemptedAt.map({ Date().timeIntervalSince($0) >= 3600 }) ?? true else { return }
         checkingClaudeUsage = true
         claudeUsageAttemptedAt = Date()
         let store = store, url = claudeUsageURL
