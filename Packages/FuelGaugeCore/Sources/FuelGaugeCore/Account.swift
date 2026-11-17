@@ -249,6 +249,15 @@ public struct AccountList: Equatable, Sendable {
         return account(provider, slug: slug)?.name ?? slug
     }
 
+    /// The forecasts with their account names filled in, for every tool with more than one account.
+    public func label(_ forecasts: [Forecast]) -> [Forecast] {
+        forecasts.map { forecast in
+            var labelled = forecast
+            labelled.accountName = label(provider: forecast.key.provider, slug: forecast.key.account)
+            return labelled
+        }
+    }
+
     /// Folders in the home folder that look like other accounts (`~/.claude-work`, `~/.codex-client`) and
     /// aren't tracked yet. `~/.claude-worktrees` and folders without account data are skipped.
     public func candidates(home: URL = .homeDirectory) -> [Account] {

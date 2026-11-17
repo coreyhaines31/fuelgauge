@@ -3,6 +3,9 @@ import Foundation
 /// The shape of `fuelgauge status --json`: stable snake_case keys for scripts and agents.
 public struct ForecastJSON: Encodable {
     public let tool: String
+    /// The account's slug and name; left out for the default account of a tool with only one account.
+    public let account: String?
+    public let accountName: String?
     public let window: String
     /// The limit's own name, like `seven_day` or `seven_day_model_fable`.
     public let limit: String
@@ -26,6 +29,8 @@ public struct ForecastJSON: Encodable {
         forecastBasis = forecast.basis.rawValue
         sessionRunsOutAt = forecast.sessionRunsOutAt
         tool = forecast.key.provider.rawValue
+        account = forecast.key.account
+        accountName = forecast.accountName
         window = WindowName.of(windowMinutes: forecast.windowMinutes).lowercased()
         limit = forecast.key.limit
         model = forecast.modelName
