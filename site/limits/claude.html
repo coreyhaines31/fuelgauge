@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude usage limits (November 2026): every plan explained</title>
+  <meta name="description" content="How Claude usage limits work on Free, Pro, Max, Ultra, and Team: the 5-hour session limit, the weekly limit, the Fable cap, and how to check yours.">
+  <link rel="canonical" href="https://fuelgauge.app/limits/claude">
+  <meta property="og:title" content="Claude usage limits (November 2026): every plan explained">
+  <meta property="og:description" content="How Claude usage limits work on Free, Pro, Max, Ultra, and Team: the 5-hour session limit, the weekly limit, the Fable cap, and how to check yours.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Fuel Gauge">
+  <meta property="og:image" content="https://fuelgauge.app/images/og/limits-claude.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://fuelgauge.app/limits/claude">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://fuelgauge.app/images/og/limits-claude.png">
+  <meta name="twitter:title" content="Claude usage limits (November 2026): every plan explained">
+  <meta name="twitter:description" content="How Claude usage limits work on Free, Pro, Max, Ultra, and Team: the 5-hour session limit, the weekly limit, the Fable cap, and how to check yours.">
+  <meta name="theme-color" content="#e7e8e9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#2a2a2c" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@300;600;700&display=swap">
+  <link rel="stylesheet" href="/kit/brushed.css">
+  <link rel="stylesheet" href="/kit/popover.css">
+  <link rel="stylesheet" href="/site.css">
+  <script async src="https://tracerkit.com/t.js" data-key="tk_bsPe2rM_f5F7Q4G8"></script>
+  <script src="https://ingest.getuserproof.com/sdk.js" data-site="eb2393e8-b6bf-405b-a82f-9adf86865677" defer></script>
+</head>
+<body class="bx">
+  <div class="nav">
+    <div class="wrap">
+      <a class="brand" href="/"><img src="/images/icon.svg" alt="" width="32" height="32"> Fuel Gauge</a>
+      <nav>
+        <a href="/#how">How it works</a>
+        <a href="/limits">Limits</a>
+        <a href="/guides">Guides</a>
+        <a href="/compare">Compare</a>
+        <a href="/cli">For agents</a>
+        <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg">Download</a>
+      </nav>
+    </div>
+  </div>
+  <main>
+    <div class="sub-hero">
+      <div class="wrap narrow">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Fuel Gauge</a> <span>›</span> <a href="/limits">Limits</a></nav>
+        <div class="eyebrow">Claude</div>
+        <h1>Claude usage limits</h1>
+        <p class="lede">Paid Claude plans meter your usage in two windows: a session that resets five hours after your first message, and a week that resets at a fixed time set for your account. Chat, Claude Desktop, and Claude Code all draw from the same limits.</p>
+        <div class="tldr glass"><h2>The short answer</h2><p>Paid Claude plans have a 5-hour session limit and a weekly limit, shared across claude.ai, Claude Desktop, and Claude Code. Pro costs $20 a month. Max ($100) gives 5x Pro's usage every five hours and every week. Ultra ($200, formerly Max 20x) gives 10x Pro's weekly usage and has no 5-hour limit once your account is verified. Max and Ultra can spend up to half the weekly limit on Fable. Anthropic doesn't publish message counts for any plan. Settings › Usage shows where you stand.</p></div>
+      </div>
+    </div>
+    <section class="tight" id="facts">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>Claude usage limits by plan</h2>
+                <div class="table-card glass"><div class="table-scroll"><table class="compare facts"><tbody>
+            <tr><th scope="row">Free</th><td>$0 · A session limit that resets every five hours; how much fits changes with demand · No Claude Code</td></tr>
+            <tr><th scope="row">Pro</th><td>$20 a month, or $17 a month billed yearly · 5-hour and weekly limits · Fable runs on usage credits</td></tr>
+            <tr><th scope="row">Max</th><td>$100 a month · 5x Pro's usage every five hours and every week · Fable up to 50% of the weekly limit</td></tr>
+            <tr><th scope="row">Ultra</th><td>$200 a month · 10x Pro's usage every week · No 5-hour limit on verified accounts · Fable up to 50% of the weekly limit</td></tr>
+            <tr><th scope="row">Team</th><td>Standard seat: 1.25x Pro's per-session usage · Premium seat: 6.25x · Each member has their own weekly limit</td></tr>
+            <tr><th scope="row">Enterprise</th><td>Seat-based plans have seat limits; usage-based plans are billed by what you use</td></tr>
+            <tr><th scope="row">Shared by</th><td>claude.ai, Claude Desktop, and Claude Code, including Claude Code in VS Code, Cursor, and JetBrains</td></tr>
+            <tr><th scope="row">Check it</th><td><a href="https://claude.ai/settings/usage">Settings › Usage</a> on claude.ai, or <code>/usage</code> in Claude Code</td></tr>
+          </tbody></table></div></div>
+        <p class="table-foot">Anthropic states every allowance relative to another plan, never as a message or token count.</p>
+      </div></div>
+    </section>
+    <section class="tight lit" id="how">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>How the 5-hour limit works</h2>
+        <p>The session window starts when you send your first message and resets in full five hours later. If you hit the limit before then, you're paused until the reset. Settings › Usage shows the time left under <strong>Current session</strong>.</p>
+        <p>Verified Ultra accounts have no 5-hour limit, just the weekly one. A new Ultra account has a temporary limit until Anthropic verifies it, which happens on its own. If you don't see a Current session bar, your account is verified.</p>
+        <h2>How the weekly limit works</h2>
+        <p>The weekly limit covers every model and caps your total for the week, however you spread it across sessions. It resets at a fixed day and time assigned to your account. That time doesn't move when you change plans or when you start using Claude. The <a href="/limits/claude-weekly-limit">Claude weekly limit</a> page covers it in detail.</p>
+        <h2>The Fable allowance</h2>
+        <p>On Max, Ultra, and Team premium seats, Fable models come with the plan, and you can spend up to 50% of your weekly limit on them. That's a cap inside the weekly limit, not extra room on top of it. On Pro and Team standard seats, Fable isn't part of the plan's limits and runs on usage credits.</p>
+        <h3>What uses it up faster</h3>
+        <ul>
+          <li>Long conversations, since each message carries the history before it</li>
+          <li>Bigger models, Fable especially, and higher effort levels</li>
+          <li>Tools and connectors, which use a lot of tokens</li>
+          <li>Long chats that hit automatic context management, which summarizes earlier messages and costs extra usage</li>
+        </ul>
+      </div></div>
+    </section>
+    <section class="tight" id="limit">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>What happens when you hit a Claude limit</h2>
+        <p>Claude warns you as you get close. At the limit you have three options:</p>
+        <ul>
+          <li><strong>Wait</strong> for the session or the week to reset.</li>
+          <li><strong>Turn on <a href="https://support.claude.com/en/articles/12429409-manage-usage-credits-for-paid-claude-plans">usage credits</a></strong> and keep working at extra cost.</li>
+          <li><strong>Upgrade</strong>: Pro to Max, or Max to Ultra. The new limits apply right away.</li>
+        </ul>
+        <p>Sometimes Anthropic gives an account a <strong>limit reset</strong>, which refills the 5-hour or weekly limit on the spot. Use it from Settings › Usage or from the message you see at the limit. The button isn't in Claude Code in the terminal, but the usage it restores counts there too.</p>
+        <h3>In Claude Code</h3>
+        <p>If you hit the 5-hour limit partway through a response, Claude Code can finish the step in progress ("Usage limit reached · wrapping up"). On Pro that happens at most once per week; on Max it can happen at every 5-hour limit. It counts toward your weekly limit.</p>
+        <p>Two traps. If <code>ANTHROPIC_API_KEY</code> is set in your shell, Claude Code bills that key instead of your plan. And the monthly API credits that come with Max and Ultra don't cover Claude Code or the Claude apps.</p>
+      </div></div>
+    </section>
+    <section class="tight lit" id="check">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>How to see your Claude usage</h2>
+        <ul>
+          <li><strong><a href="https://claude.ai/settings/usage">Settings › Usage</a></strong> on claude.ai, Claude Desktop, or mobile: the current session, the weekly limit, the Fable allowance where your plan has one, and your next reset.</li>
+          <li><strong><code>/usage</code></strong> in Claude Code: plan usage bars, plus a breakdown of what used them.</li>
+          <li><strong>The Claude Code status line</strong> gets your 5-hour and weekly percentages after every reply on Pro, Max, and Ultra. <a href="/guides/claude-code-statusline">Here's how to show them</a>.</li>
+        </ul>
+        <p>More detail: <a href="/guides/check-claude-usage">every way to check your Claude usage</a>.</p>
+        <h2>Will you make it to the reset?</h2>
+        <p>A percentage says how much you've used. It doesn't say whether you'll run out before the window resets. <a href="/">Fuel Gauge</a> is a free Mac menu bar app that does that math: "Makes it to reset" or "Runs out around 3:40p, 1h 20m early". You find out in time to switch to a cheaper model or save the big job for after the reset.</p>
+        <p>What it can and can't see:</p>
+        <ul>
+          <li><strong>5-hour and weekly limits</strong> come from Claude Code, which reports them after every reply. They're your plan's numbers, so they include what you used in chat. They only refresh when Claude Code replies.</li>
+          <li><strong>The Fable allowance</strong> comes from your installed Claude Code once an hour. No prompt is sent, so it costs no usage.</li>
+          <li><strong>Plans</strong>: Pro, Max, and Ultra, the plans Claude Code reports limits for. If you only chat on claude.ai and never use Claude Code, Fuel Gauge has nothing to read.</li>
+        </ul>
+      </div></div>
+    </section>
+    <section class="tight" id="sources">
+      <div class="wrap narrow"><div class="prose">
+
+        <h2>Sources</h2>
+        <p>Checked on November 17, 2026. Plans change from time to time, so the providers' own pages are the final word.</p>
+        <ul><li><a href="https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work">How do usage and length limits work?</a></li><li><a href="https://claude.com/pricing">Claude pricing</a></li><li><a href="https://support.claude.com/en/articles/8325606-what-is-the-pro-plan">What is the Pro plan?</a></li><li><a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">What is the Max plan?</a></li><li><a href="https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan">What is the Ultra plan?</a></li><li><a href="https://support.claude.com/en/articles/9266767-what-is-the-team-plan">What is the Team plan?</a></li><li><a href="https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan">Claude Fable models on your plan</a></li><li><a href="https://support.claude.com/en/articles/17007452-what-is-a-limit-reset">What is a limit reset?</a></li><li><a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Use Claude Code with your Pro, Max, or Ultra plan</a></li><li><a href="https://support.claude.com/en/articles/8114491-get-started-with-claude">Get started with Claude (Free plan limits)</a></li><li><a href="https://code.claude.com/docs/en/statusline">Status line (Claude Code docs)</a></li></ul>
+      </div></div>
+    </section>
+    <section class="tight lit">
+      <div class="wrap">
+        <div class="head center head-sm"><h2>Questions</h2></div>
+        <div class="faq glass">
+          <details><summary>What are Claude&#x27;s usage limits?</summary><p>Paid plans have a session limit that resets five hours after your first message and a weekly limit that resets at a fixed time for your account. Max and Ultra also cap Fable at up to half the weekly limit. Free has a 5-hour session limit that changes with demand.</p></details>
+          <details><summary>Does Claude have a daily limit?</summary><p>No. The windows are a five-hour session and a week. Anthropic says it may add other caps to manage capacity.</p></details>
+          <details><summary>How many messages can I send on Claude?</summary><p>Anthropic doesn&#x27;t publish a number for any plan. It depends on conversation length, files, the model, the effort level, and the features you use.</p></details>
+          <details><summary>Do Claude and Claude Code share the same limit?</summary><p>Yes. claude.ai, Claude Desktop, and Claude Code all count toward the same limits.</p></details>
+          <details><summary>What happened to Claude Max 20x?</summary><p>It&#x27;s now the Ultra plan. Max 20x subscribers moved to Ultra automatically with no price change. Ultra gives 10x Pro&#x27;s weekly usage and has no 5-hour limit on verified accounts.</p></details>
+          <details><summary>Is there an unlimited Claude plan?</summary><p>No. Every plan has limits. On a paid plan, usage credits let you keep working past them, and usage-based Enterprise plans are billed by consumption.</p></details>
+        </div>
+      </div>
+    </section>
+    <section class="tight">
+      <div class="wrap narrow">
+        <h2 class="related-head">Keep reading</h2>
+        <div class="related"><a class="related-card glass" href="/limits/claude-weekly-limit"><strong>The Claude weekly limit</strong><span>When it resets and how Fable fits in</span></a><a class="related-card glass" href="/guides/when-does-claude-limit-reset"><strong>When do Claude limits reset?</strong><span>Session and weekly resets, explained</span></a><a class="related-card glass" href="/guides/stop-hitting-claude-limits"><strong>Stop hitting Claude limits</strong><span>What actually stretches your plan</span></a></div>
+      </div>
+    </section>
+    <section class="cta lit">
+      <div class="wrap">
+        <div class="cta-card glass">
+          <img src="/images/icon.svg" alt="" width="96" height="96" loading="lazy">
+          <h2>Know if you&#39;ll make it to reset.</h2>
+          <p>Free. No account, no subscription.</p>
+          <div class="actions">
+            <a class="btn" href="https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download for Mac</a>
+        <a class="btn-quiet" href="https://github.com/coreyhaines31/fuelgauge"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>View source code</a>
+          </div>
+          <div class="copyline"><code id="brew-cta">brew install --cask coreyhaines31/tap/fuelgauge</code><button type="button" class="copy" data-copy="brew-cta">Copy</button></div>
+          <div class="ask">
+            <p>Or ask your coding agent:</p>
+            <div class="prompt-box">
+              <button type="button" class="copy" data-copy="install-prompt">Copy</button>
+              <pre id="install-prompt">Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`.</pre>
+            </div>
+          </div>
+          <p class="fineprint">macOS 14 Sonoma or later · Apple Silicon and Intel</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="foot-links">
+      <div class="wrap">
+        <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude">Claude usage limits</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a><a href="/limits/codex">Codex limits</a><a href="/limits/cursor">Cursor limits</a><a href="/limits/grok">Grok limits</a><a href="/limits/github-copilot">GitHub Copilot limits</a></nav>
+        <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a><a href="/guides/check-claude-usage">Check your Claude usage</a><a href="/guides/when-does-claude-limit-reset">When Claude limits reset</a><a href="/guides/claude-code-statusline">Claude Code status line</a><a href="/guides/stop-hitting-claude-limits">Stop hitting Claude limits</a></nav>
+        <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a><a href="/compare/claude-pro-vs-max">Claude Pro vs Max</a><a href="/compare/claude-code-vs-codex">Claude Code vs Codex</a><a href="/compare/cursor-vs-claude-code">Cursor vs Claude Code</a><a href="/compare/claude-code-pricing">Claude Code pricing</a><a href="/compare/codex-pricing">Codex pricing</a><a href="/alternatives/codexbar">CodexBar alternative</a><a href="/alternatives/ccusage">ccusage alternative</a><a href="/alternatives/ccstatusline">ccstatusline alternative</a><a href="/alternatives/claude-code-usage-monitor">Claude-Code-Usage-Monitor alternative</a></nav>
+      </div>
+    </div>
+    <nav class="bx-family" aria-label="More free Mac apps">
+      <div class="bx-wrap">
+        <a class="bx-eyebrow" href="https://github.com/coreyhaines31">More free Mac apps</a>
+        <ul><li><a href="https://fuelgauge.app" aria-current="page"><img src="/images/family/fuel.png" alt="" width="56" height="56">Fuel Gauge</a></li><li><a href="https://spareformac.com" title="See what&#x27;s using your Mac"><img src="/images/family/spare.png" alt="" width="56" height="56">Spare</a></li><li><a href="https://diskforecast.com" title="Know before your disk is full"><img src="/images/family/disk.png" alt="" width="56" height="56">Disk Forecast</a></li><li><a href="https://midnightoil.app" title="Keep your Mac awake"><img src="/images/family/oil.png" alt="" width="56" height="56">Midnight Oil</a></li><li><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?"><img src="/images/family/wifi.png" alt="" width="56" height="56">WiFi or ISP</a></li><li><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers"><img src="/images/family/green.png" alt="" width="56" height="56">Green Room</a></li><li><a href="https://onhandformac.com" title="A clipboard manager for your Mac"><img src="/images/family/hand.png" alt="" width="56" height="56">On Hand</a></li><li><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides"><img src="/images/family/coat.png" alt="" width="56" height="56">Coat Check</a></li><li><a href="https://killcord.app" title="See your API spend before the bill does"><img src="/images/family/kill.png" alt="" width="56" height="56">Kill Cord</a></li></ul>
+      </div>
+    </nav>
+    <div class="bx-footer">
+      <div class="bx-wrap">
+        <div><span>© 2026 Corey Haines. Source available under the <a href="https://github.com/coreyhaines31/fuelgauge/blob/main/LICENSE">FSL-1.1-MIT License</a>.</span></div>
+        <div><a href="https://github.com/coreyhaines31/fuelgauge">GitHub</a><a href="https://github.com/coreyhaines31/fuelgauge/releases">Releases</a><a href="https://github.com/coreyhaines31/fuelgauge/issues">Issues</a><a href="/privacy">Privacy</a><a href="/llms.txt">llms.txt</a></div>
+      </div>
+    </div>
+  </footer>
+  <script>
+    // Copy buttons. Falls back to selecting the text when the clipboard is unavailable.
+    document.querySelectorAll("[data-copy]").forEach(button => {
+      button.addEventListener("click", async () => {
+        const source = document.getElementById(button.dataset.copy);
+        try {
+          await navigator.clipboard.writeText(source.textContent);
+          button.textContent = "Copied";
+          setTimeout(() => { button.textContent = "Copy"; }, 2000);
+        } catch (_) {
+          getSelection().selectAllChildren(source);
+        }
+      });
+    });
+  </script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What are Claude's usage limits?", "acceptedAnswer": {"@type": "Answer", "text": "Paid plans have a session limit that resets five hours after your first message and a weekly limit that resets at a fixed time for your account. Max and Ultra also cap Fable at up to half the weekly limit. Free has a 5-hour session limit that changes with demand."}}, {"@type": "Question", "name": "Does Claude have a daily limit?", "acceptedAnswer": {"@type": "Answer", "text": "No. The windows are a five-hour session and a week. Anthropic says it may add other caps to manage capacity."}}, {"@type": "Question", "name": "How many messages can I send on Claude?", "acceptedAnswer": {"@type": "Answer", "text": "Anthropic doesn't publish a number for any plan. It depends on conversation length, files, the model, the effort level, and the features you use."}}, {"@type": "Question", "name": "Do Claude and Claude Code share the same limit?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. claude.ai, Claude Desktop, and Claude Code all count toward the same limits."}}, {"@type": "Question", "name": "What happened to Claude Max 20x?", "acceptedAnswer": {"@type": "Answer", "text": "It's now the Ultra plan. Max 20x subscribers moved to Ultra automatically with no price change. Ultra gives 10x Pro's weekly usage and has no 5-hour limit on verified accounts."}}, {"@type": "Question", "name": "Is there an unlimited Claude plan?", "acceptedAnswer": {"@type": "Answer", "text": "No. Every plan has limits. On a paid plan, usage credits let you keep working past them, and usage-based Enterprise plans are billed by consumption."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Fuel Gauge", "item": "https://fuelgauge.app/"}, {"@type": "ListItem", "position": 2, "name": "Limits", "item": "https://fuelgauge.app/limits"}, {"@type": "ListItem", "position": 3, "name": "Claude usage limits", "item": "https://fuelgauge.app/limits/claude"}]}</script>
+</body>
+</html>
