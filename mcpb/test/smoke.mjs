@@ -102,7 +102,7 @@ const fakeCalls = [
   ["stderr", "limits_status", {}, fails, "status --json", "fake stderr error"],
   ["stderr", "limits_history", { days: 3 }, fails, "history --days 3 --json", "fake stderr error"],
 ];
-const expectedTools = ["limits_history", "limits_status"];
+const expectedTools = ["limits_history", "limits_status", "submit_feedback"];
 const server = process.env.SERVER ?? new URL("../server/index.mjs", import.meta.url).pathname;
 const fakeCli = new URL("./fake-cli.sh", import.meta.url).pathname;
 const max = Number(process.env.SMOKE_CHARS ?? 600);

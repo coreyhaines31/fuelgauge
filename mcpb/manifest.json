@@ -40,7 +40,8 @@
   },
   "tools": [
     { "name": "limits_status", "description": "Each limit's percent used, when it resets, and whether it lasts until then, plus Claude's recorded Fable and weekly resets" },
-    { "name": "limits_history", "description": "The usage readings behind the forecast, per limit, over the last N days" }
+    { "name": "limits_history", "description": "The usage readings behind the forecast, per limit, over the last N days" },
+    { "name": "submit_feedback", "description": "Drafts a GitHub issue link about a missing or broken tool for you to review and submit; sends nothing" }
   ],
   "compatibility": {
     "claude_desktop": ">=0.10.0",
