@@ -28,6 +28,21 @@ import Testing
         #expect(store.load(since: .distantPast, provider: .codex).isEmpty)
     }
 
+    @Test func keepsAccountsApart() throws {
+        let store = ReadingStore(folder: temporaryFolder())
+        var work = reading(70, at: 0)
+        work.account = "work_1a2b3c"
+        try store.append([reading(10, at: 0), work], now: later)
+        // An unchanged default reading right after is still skipped; the other account's doesn't hide it.
+        try store.append([reading(10, at: 1)], now: later)
+        let loaded = store.load(since: .distantPast, provider: .claude)
+        #expect(loaded.map(\.usedPercent).sorted() == [10, 70])
+        #expect(Set(loaded.map(\.key.id)) == ["claude/five_hour", "claude@work_1a2b3c/five_hour"])
+        let files = try FileManager.default.contentsOfDirectory(atPath: store.folder.path).sorted()
+        #expect(files == ["claude-2027-01.jsonl", "claude@work_1a2b3c-2027-01.jsonl"])
+        #expect(store.load(since: .distantPast, provider: .codex).isEmpty)
+    }
+
     @Test func dropsReadingsFromTheFuture() throws {
         let store = ReadingStore(folder: temporaryFolder())
         let now = Date(timeIntervalSince1970: 1_799_990_000)

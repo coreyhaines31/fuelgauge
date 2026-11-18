@@ -21,6 +21,19 @@ import Testing
         #expect(reader.poll(now: now).isEmpty, "a second poll reads only new lines")
     }
 
+    @Test func readsAnotherAccountsCodexHome() throws {
+        let home = temporaryFolder()
+        let account = Account.make(.codex, folder: home.appending(path: ".codex-work").path, home: home)
+        let day = account.folder.appending(path: "sessions/2026/10/13")
+        try FileManager.default.createDirectory(at: day, withIntermediateDirectories: true)
+        try FileManager.default.copyItem(at: try sample("codex-session.jsonl"), to: day.appending(path: "r.jsonl"))
+        var reader = CodexLogReader(account: account)
+        let readings = reader.poll(now: try Date("2026-10-14T00:00:00Z", strategy: .iso8601))
+        #expect(readings.count == 3)
+        #expect(readings.allSatisfy { $0.account == account.slug })
+        #expect(readings[0].key.id == "codex@\(account.slug!)/codex-10080")
+    }
+
     @Test func leavesAHalfWrittenLineForTheNextPoll() throws {
         let root = temporaryFolder()
         let file = root.appending(path: "rollout.jsonl")

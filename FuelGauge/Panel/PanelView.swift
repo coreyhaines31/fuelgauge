@@ -2,8 +2,8 @@ import FuelGaugeCore
 import PanelKit
 import SwiftUI
 
-/// What opens from the menu bar: the fuel meter on the most urgent limit, the verdict, then a section per tool,
-/// most urgent first, plus setup for tools that need it.
+/// What opens from the menu bar: the fuel meter on the most urgent limit, the verdict, then a section per tool
+/// account (a tool's accounts side by side), most urgent first, plus setup for accounts that need it.
 struct PanelView: View {
     let model: UsageModel
     let openSettings: () -> Void
@@ -11,7 +11,7 @@ struct PanelView: View {
     var openResetSettings: (() -> Void)?
     var openUsage: () -> Void = {}
     var openForecasts: () -> Void = {}
-    @State private var setupError: String?
+    @State private var setupError: (account: String, text: String)?
     @State private var cardsHeight: CGFloat = 400
     @Environment(\.panelTheme) private var theme
 
@@ -22,12 +22,12 @@ struct PanelView: View {
                 verdict(now: context.date)
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
-                        if needsClaudeSetup {
-                            claudeSetup
+                        ForEach(model.claudeAccountsNeedingSetup) { account in
+                            claudeSetup(account)
                         }
-                        ForEach(groups, id: \.provider) { group in
+                        ForEach(groups, id: \.id) { group in
                             ToolCard(provider: group.provider, forecasts: group.forecasts, now: context.date,
-                                     chartKey: chartKey, model: model,
+                                     chartKey: chartKey, account: group.account, model: model,
                                      openSettings: openResetSettings ?? openSettings, openUsage: openUsage)
                         }
                     }
@@ -50,7 +50,7 @@ struct PanelView: View {
             nameplate: "Fuel",
             timestamp: model.updatedAt.map { "Updated \(ForecastText.time($0, now: now))" },
             detail: urgent.map { "Most urgent · \($0.windowName)" },
-            label: urgent?.key.provider.name
+            label: urgent?.sourceLabel
         ) {
             Meter(
                 MeterConfig(
@@ -61,7 +61,7 @@ struct PanelView: View {
                 ),
                 value: fuelLeft,
                 accessibilityValue: urgent.map {
-                    "\(ForecastText.percent(100 - $0.usedPercent)) left in \($0.key.provider.name) \($0.windowName)"
+                    "\(ForecastText.percent(100 - $0.usedPercent)) left in \($0.sourceLabel) \($0.windowName)"
                 } ?? "No reading"
             )
         }
@@ -96,22 +96,37 @@ struct PanelView: View {
 
     private struct Group {
         let provider: Provider
+        /// Nil for a tool without accounts (Grok Bot, Cursor).
+        let account: Account?
         let forecasts: [Forecast]
+
+        var id: String { account?.id ?? provider.rawValue }
     }
 
-    /// A section per tool, the tool with the most urgent limit first; inside, the shortest window first.
+    /// A section per tool account. Tools go most urgent first, and a tool's accounts stay together, most urgent
+    /// first; inside each, the shortest window first.
     private var groups: [Group] {
         var order: [Provider] = []
-        for forecast in model.byUrgency where !order.contains(forecast.key.provider) {
-            order.append(forecast.key.provider)
+        var accountOrder: [Provider: [String?]] = [:]
+        func note(_ provider: Provider, _ slug: String?) {
+            if !order.contains(provider) { order.append(provider) }
+            if accountOrder[provider]?.contains(slug) != true { accountOrder[provider, default: []].append(slug) }
         }
-        for provider in [Provider.claude, .codex] where !order.contains(provider) {
-            if model.visibleUsage.contains(where: { $0.provider == provider }) { order.append(provider) }
+        for forecast in model.byUrgency { note(forecast.key.provider, forecast.key.account) }
+        for provider in Account.multiAccountProviders {
+            for account in model.accounts(for: provider)
+            where model.visibleUsage.contains(where: { $0.provider == provider && $0.account == account.slug }) {
+                note(provider, account.slug)
+            }
         }
-        return order.map { provider in
-            Group(provider: provider, forecasts: model.forecasts
-                .filter { $0.key.provider == provider }
-                .sorted { ($0.windowMinutes ?? .max) < ($1.windowMinutes ?? .max) })
+        return order.flatMap { provider in
+            (accountOrder[provider] ?? []).compactMap { slug -> Group? in
+                let account = model.accounts.account(provider, slug: slug)
+                if Account.multiAccountProviders.contains(provider), account == nil { return nil }
+                return Group(provider: provider, account: account, forecasts: model.forecasts
+                    .filter { $0.key.provider == provider && $0.key.account == slug }
+                    .sorted { ($0.windowMinutes ?? .max) < ($1.windowMinutes ?? .max) })
+            }
         }
     }
 
@@ -122,30 +137,29 @@ struct PanelView: View {
 
     // MARK: Claude setup
 
-    private var needsClaudeSetup: Bool {
-        model.installedProviders.contains(.claude) && Tracking.isEnabled(.claude) && model.claudeStatusLine != .on
-    }
-
-    private var claudeSetup: some View {
-        Notice("See your Claude Code limits",
-               message: setupError.map { claudeSetupDetail + "\n\n" + $0 } ?? claudeSetupDetail,
-               status: setupError == nil ? .caution : .stop) {
+    private func claudeSetup(_ account: Account) -> some View {
+        let error = setupError.flatMap { $0.account == account.id ? $0.text : nil }
+        let detail = claudeSetupDetail(account)
+        let title = model.accounts.label(provider: .claude, slug: account.slug)
+            .map { "See \($0)'s Claude Code limits" } ?? "See your Claude Code limits"
+        return Notice(title, message: error.map { detail + "\n\n" + $0 } ?? detail,
+                      status: error == nil ? .caution : .stop) {
             Button("Turn On") {
                 do {
-                    try model.setClaudeStatusLine(on: true)
+                    try model.setClaudeStatusLine(on: true, account: account)
                     setupError = nil
                 } catch {
-                    setupError = "Couldn't update Claude Code's settings: \(error.localizedDescription)"
+                    setupError = (account.id, "Couldn't update Claude Code's settings: \(error.localizedDescription)")
                 }
             }
             .buttonStyle(.panelCompact)
         }
     }
 
-    private var claudeSetupDetail: String {
+    private func claudeSetupDetail(_ account: Account) -> String {
         let base = "Claude Code shares its limits with its status line. Fuel Gauge adds a forecast there and "
             + "reads each update. Nothing goes online."
-        if case .otherCommand = model.claudeStatusLine {
+        if case .otherCommand = model.claudeStatusLine(for: account) {
             return base + " Your current status line keeps showing underneath."
         }
         return base

@@ -32,6 +32,33 @@ struct ClaudeUsageReaderTests {
         }
     }
 
+    /// Claude Code picks the account's Keychain sign-in by `CLAUDE_CONFIG_DIR`, so another account's check has to
+    /// run with it set, and the default account's without it.
+    @Test func runsAsTheAccountItAsksFor() throws {
+        try withCLI(#"""
+        [[ "${CLAUDE_CONFIG_DIR-unset}" == "$EXPECTED_DIR" ]] || exit 1
+        read -r initialize
+        printf '%s\n' '{"type":"control_response","response":{"subtype":"success","request_id":"fuelgauge-init"}}'
+        read -r usage
+        printf '%s' '{"type":"control_response","response":{"subtype":"success","request_id":"fuelgauge-usage",'
+        printf '%s\n' '"response":{"rate_limits":{"limits":[]}}}}'
+        read -r finish
+        """#) { executable in
+            let home = temporaryFolder()
+            let work = Account.make(.claude, folder: "~/.claude-work", home: home)
+            var reader = ClaudeUsageReader(account: work, executable: executable)
+            reader.environment["EXPECTED_DIR"] = work.folderPath
+            #expect(reader.read() != nil)
+            var main = ClaudeUsageReader(account: .defaultAccount(.claude, environment: [:], home: home),
+                                         executable: executable)
+            main.environment["EXPECTED_DIR"] = ProcessInfo.processInfo.environment["CLAUDE_CONFIG_DIR"] ?? "unset"
+            #expect(main.read() != nil)
+            reader.environment["EXPECTED_DIR"] = "/somewhere/else"
+            reader.timeout = 2
+            #expect(reader.read() == nil)
+        }
+    }
+
     @Test func errorReplyIsNil() throws {
         try withCLI(#"""
         read -r initialize

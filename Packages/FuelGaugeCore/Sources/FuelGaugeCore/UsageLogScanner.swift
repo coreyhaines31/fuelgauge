@@ -1,13 +1,31 @@
 import Foundation
 
 public struct UsageLogScanner: Sendable {
-    public struct Root: Sendable {
+    public struct Root: Sendable, Equatable {
         public let provider: Provider
         public let url: URL
+        /// The account the logs belong to; nil for the default one.
+        public let account: String?
 
-        public init(provider: Provider, url: URL) {
+        public init(provider: Provider, url: URL, account: String? = nil) {
             self.provider = provider
             self.url = url
+            self.account = account
+        }
+
+        /// Where an account's tool writes its session logs.
+        public static func of(_ account: Account) -> [Root] {
+            switch account.provider {
+            case .claude:
+                let projects = account.folder.appending(path: "projects")
+                return [Root(provider: .claude, url: projects, account: account.slug)]
+            case .codex:
+                return ["sessions", "archived_sessions"].map {
+                    Root(provider: .codex, url: account.folder.appending(path: $0), account: account.slug)
+                }
+            default:
+                return []
+            }
         }
     }
 
@@ -21,7 +39,7 @@ public struct UsageLogScanner: Sendable {
     }
 
     private var files: [String: FileState] = [:]
-    private let roots: [Root]
+    public private(set) var roots: [Root]
     private let cacheURL: URL?
     /// Something changed since the cache was last written.
     private var dirty = false
@@ -45,6 +63,11 @@ public struct UsageLogScanner: Sendable {
         return [Root(provider: .claude, url: claude.appending(path: "projects")),
                 Root(provider: .codex, url: codex),
                 Root(provider: .codex, url: codex.deletingLastPathComponent().appending(path: "archived_sessions"))]
+    }
+
+    /// Changes which folders are read, as accounts come and go. Files outside them are forgotten on the next scan.
+    public mutating func setRoots(_ roots: [Root]) {
+        self.roots = roots
     }
 
     public mutating func scan(enabled: [Provider], now: Date = Date()) -> [UsageEvent] {
@@ -89,7 +112,7 @@ public struct UsageLogScanner: Sendable {
             return
         }
         for case let url as URL in enumerator where url.pathExtension == "jsonl" {
-            do { try scanFile(url, provider: root.provider, cutoff: cutoff) } catch {
+            do { try scanFile(url, root: root, cutoff: cutoff) } catch {
                 warnings.append("Some \(root.provider.name) history could not be read. Showing saved usage.")
             }
         }
@@ -97,7 +120,8 @@ public struct UsageLogScanner: Sendable {
         warnings = Array(Set(warnings)).sorted()
     }
 
-    private mutating func scanFile(_ url: URL, provider: Provider, cutoff: Date) throws {
+    private mutating func scanFile(_ url: URL, root: Root, cutoff: Date) throws {
+        let provider = root.provider
         let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
         guard attributes[.type] as? FileAttributeType == .typeRegular,
               let modified = attributes[.modificationDate] as? Date,
@@ -121,7 +145,8 @@ public struct UsageLogScanner: Sendable {
             let complete = pending[...newline]
             state.offset += UInt64(complete.count)
             for line in complete.split(separator: 0x0A) where Self.isUsageLine(line, provider: provider) {
-                if let event = state.parser.parse(Data(line), provider: provider), event.at >= cutoff {
+                if var event = state.parser.parse(Data(line), provider: provider), event.at >= cutoff {
+                    event.account = root.account
                     if let prior = state.events[event.id], prior.tokens.total > event.tokens.total { continue }
                     state.events[event.id] = event
                 }

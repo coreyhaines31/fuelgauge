@@ -44,6 +44,26 @@ public struct Forecast: Sendable, Equatable {
     public var scheduleProfile: ScheduleProfile?
     public var scheduleStatus: ScheduleStatus = .collecting
 
+    /// The account's name when its tool has several accounts; nil otherwise, so one account reads as before.
+    /// Set by whoever loads the account list (`AccountList.label(_:)`).
+    public var accountName: String?
+
+    /// "Claude Code", or "Claude Code · Work" when the tool has several accounts. For labels.
+    public var sourceLabel: String {
+        accountName.map { "\(key.provider.name) · \($0)" } ?? key.provider.name
+    }
+
+    /// "Claude Code", or "Work's Claude Code". For the start of a sentence.
+    public var owner: String {
+        accountName.map { "\($0)'s \(key.provider.name)" } ?? key.provider.name
+    }
+
+    /// "Claude Code's weekly limit", or "Work's Claude Code weekly limit".
+    public var limitPhrase: String {
+        accountName.map { "\($0)'s \(key.provider.name) \(windowPhrase) limit" }
+            ?? "\(key.provider.name)'s \(windowPhrase) limit"
+    }
+
     /// "Weekly", or "Fable weekly" for a limit on one model.
     public var windowName: String {
         let window = WindowName.of(windowMinutes: windowMinutes)

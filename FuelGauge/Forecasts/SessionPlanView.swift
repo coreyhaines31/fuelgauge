@@ -13,8 +13,8 @@ struct SessionPlanView: View {
             HStack {
                 Text("Plan your next session").font(.headline)
                 Spacer()
-                if let provider = forecasts.first?.key.provider {
-                    Text("All tracked \(provider.name) limits").font(.caption).foregroundStyle(.secondary)
+                if let forecast = forecasts.first {
+                    Text("All tracked \(forecast.sourceLabel) limits").font(.caption).foregroundStyle(.secondary)
                 }
             }
             Picker("Continue working for", selection: $minutes) {

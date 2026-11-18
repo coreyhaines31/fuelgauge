@@ -23,6 +23,13 @@ public struct ClaudeSettings: Sendable {
         self.wrappedURL = wrappedURL
     }
 
+    /// One account's status line: its folder's `settings.json`, and its own saved copy of the command it
+    /// replaced, so turning one account's status line on or off never touches another's.
+    public init(account: Account, supportFolder: URL = Brand.supportFolder) {
+        self.init(settingsURL: account.folder.appending(path: "settings.json"),
+                  wrappedURL: account.supportFile("wrapped-statusline", extension: "json", in: supportFolder))
+    }
+
     public static var defaultSettingsURL: URL {
         let configDir = ProcessInfo.processInfo.environment["CLAUDE_CONFIG_DIR"].map { URL(filePath: $0) }
         return (configDir ?? URL.homeDirectory.appending(path: ".claude")).appending(path: "settings.json")
