@@ -146,7 +146,7 @@ def footer_inner():
     compare += "".join(f'<a href="/{p["slug"]}">{esc(p["competitor"])} alternative</a>' for p in COMPARISONS)
     family = "".join(
         f'<li><a href="{url}"{' aria-current="page"' if key == "fuel" else f' title="{esc(desc)}"'}>'
-        f'<img src="/images/family/{key}.png" alt="" width="56" height="56">{esc(name)}</a></li>'
+        f'<img src="/images/family/{key}.webp" alt="" width="56" height="56">{esc(name)}</a></li>'
         for name, url, desc, key in FAMILY)
     return (f'    <div class="foot-links">\n      <div class="wrap">\n'
             f'        <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a>{limits}</nav>\n'
