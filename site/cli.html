@@ -101,7 +101,7 @@ Claude Code · Weekly: Makes it to reset, about 86% by then
         <div class="prompt-box"><button type="button" class="copy" data-copy="agent-rule-cli">Copy</button><pre id="agent-rule-cli">Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before starting, or switch to a cheaper model. `fuelgauge status --json` has the details.</pre></div>
         <p>Then every agent session checks before the expensive stuff, and tells you which limit runs out and when instead of hitting the wall halfway through.</p>
         <h3>Install it with your agent</h3>
-        <div class="prompt-box"><button type="button" class="copy" data-copy="install-prompt-cli">Copy</button><pre id="install-prompt-cli">Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`.</pre></div>
+        <div class="prompt-box"><button type="button" class="copy" data-copy="install-prompt-cli">Copy</button><pre id="install-prompt-cli">Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`. Then ask me whether future agent sessions should check Fuel Gauge before long tasks. Only if I say yes, append this to your own global instructions file (~/.claude/CLAUDE.md for Claude Code, ~/.codex/AGENTS.md for Codex), unless it&#x27;s already there, and tell me which file you changed: Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before starting, or switch to a cheaper model. `fuelgauge status --json` has the details.</pre></div>
       </div></div>
     </section>
     <section class="tight lit" id="claude-desktop">
@@ -142,7 +142,7 @@ Claude Code · Weekly: Makes it to reset, about 86% by then
             <p>Or ask your coding agent:</p>
             <div class="prompt-box">
               <button type="button" class="copy" data-copy="install-prompt">Copy</button>
-              <pre id="install-prompt">Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`.</pre>
+              <pre id="install-prompt">Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`. Then ask me whether future agent sessions should check Fuel Gauge before long tasks. Only if I say yes, append this to your own global instructions file (~/.claude/CLAUDE.md for Claude Code, ~/.codex/AGENTS.md for Codex), unless it&#x27;s already there, and tell me which file you changed: Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before starting, or switch to a cheaper model. `fuelgauge status --json` has the details.</pre>
             </div>
           </div>
           <p class="fineprint">macOS 14 Sonoma or later · Apple Silicon and Intel</p>
