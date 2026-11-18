@@ -24,11 +24,15 @@ SITE = "https://fuelgauge.app"
 DOWNLOAD = "https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"
 REPO = "https://github.com/coreyhaines31/fuelgauge"
 BREW = "brew install --cask coreyhaines31/tap/fuelgauge"
-INSTALL_PROMPT = ("Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, "
-                  "then run `fuelgauge install-statusline` and `fuelgauge status`.")
 AGENT_RULE = ("Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, "
               "Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before "
               "starting, or switch to a cheaper model. `fuelgauge status --json` has the details.")
+INSTALL_PROMPT = ("Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, "
+                  "then run `fuelgauge install-statusline` and `fuelgauge status`."
+                  " Then ask me whether future agent sessions should check Fuel Gauge before long tasks. "
+                  "Only if I say yes, append this to your own global instructions file "
+                  "(~/.claude/CLAUDE.md for Claude Code, ~/.codex/AGENTS.md for Codex), unless it's already there, "
+                  "and tell me which file you changed: " + AGENT_RULE)
 
 DOWNLOAD_ICON = ('<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14" fill="none" '
                  'stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>')
