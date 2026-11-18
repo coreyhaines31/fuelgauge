@@ -32,6 +32,8 @@ final class UsageModel {
 
     private let store: ReadingStore
     private let supportFolder: URL
+    /// Where account folders are looked for. The demo uses its own, so its pictures never show real sign-ins.
+    let home: URL
     /// Each Codex account's place in its logs, by `Account.id`.
     private var codexReaders: [String: CodexLogReader] = [:]
     private let grokBot = GrokBotReader()
@@ -48,8 +50,9 @@ final class UsageModel {
     /// `accounts` stands in for the saved list (demo data); it's never saved.
     init(supportFolder: URL = Brand.supportFolder, readsLiveData: Bool = true,
          resetCredits: ResetCredits? = nil, accounts: AccountList? = nil,
-         accountDefaults: UserDefaults = Tracking.defaults) {
+         accountDefaults: UserDefaults = Tracking.defaults, home: URL = .homeDirectory) {
         self.supportFolder = supportFolder
+        self.home = home
         store = ReadingStore(folder: supportFolder.appending(path: "Readings"))
         forecastHistory = ForecastHistory(folder: supportFolder)
         usageCacheURL = supportFolder.appending(path: "usage-history-v1.json")

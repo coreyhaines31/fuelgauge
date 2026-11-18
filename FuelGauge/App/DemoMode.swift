@@ -8,10 +8,45 @@ import SwiftUI
 ///     --demo                    sample readings in a temporary folder; live readers off
 ///     --snapshot <file.png>     draw the panel to a PNG and quit (needs no Screen Recording)
 ///     --dark                    dark appearance
+///     --accounts                a second Claude Code account ("Work"), and a Codex folder to add
 @MainActor
 enum DemoMode {
     nonisolated static let isOn = CommandLine.arguments.contains("--demo")
     nonisolated static let folder = FileManager.default.temporaryDirectory.appending(path: "FuelGaugeDemo")
+    nonisolated static let showsAccounts = CommandLine.arguments.contains("--accounts")
+    /// A made-up home folder for the account folders, so pictures never show a real sign-in.
+    nonisolated static let home = folder.appending(path: "home")
+
+    /// The demo's accounts, never saved: Claude Code's default account and "Work", and Codex's default.
+    static var accounts: AccountList {
+        var list = AccountList([.defaultAccount(.claude, environment: [:], home: home),
+                                .defaultAccount(.codex, environment: [:], home: home)])
+        if showsAccounts { list.add(workAccount) }
+        return list
+    }
+
+    static var workAccount: Account {
+        Account.make(.claude, folder: home.appending(path: ".claude-work").path, home: home)
+    }
+
+    /// Account folders with who's signed in, plus a Codex folder that isn't tracked yet.
+    private static func prepareHome() {
+        let folders: [(String, [String: Any])] = [
+            (".claude", [:]),
+            (".claude-work", ["oauthAccount": ["emailAddress": "sam@acme.example", "organizationName": "Acme",
+                                               "planDisplayName": "Team"]]),
+            (".codex", [:]),
+            (".codex-client", [:])
+        ]
+        for (name, config) in folders {
+            let url = home.appending(path: name)
+            try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+            let file = name.hasPrefix(".codex") ? "auth.json" : ".claude.json"
+            try? JSONSerialization.data(withJSONObject: config).write(to: url.appending(path: file))
+        }
+        let main = ["oauthAccount": ["emailAddress": "sam@example.com", "planDisplayName": "Max"]]
+        try? JSONSerialization.data(withJSONObject: main).write(to: home.appending(path: ".claude.json"))
+    }
 
     static var snapshotURL: URL? {
         guard let index = CommandLine.arguments.firstIndex(of: "--snapshot"),
@@ -69,6 +104,19 @@ enum DemoMode {
         readings += series(.grokBot, "weekly", minutes: 10080, resetsIn: 35, [
             (60 * 20, 72), (60 * 14, 78), (60 * 8, 84), (60 * 2, 89)
         ])
+        if showsAccounts {
+            prepareHome()
+            let work = workAccount.slug
+            readings += series(.claude, "five_hour", minutes: 300, resetsIn: 1.4, [
+                (180, 10), (120, 18), (60, 24), (20, 27), (2, 28)
+            ]).map { var reading = $0; reading.account = work; return reading }
+            readings += series(.claude, "seven_day", minutes: 10080, resetsIn: 30, [
+                (60 * 48, 40), (60 * 36, 51), (60 * 24, 60), (60 * 12, 68), (60 * 4, 73), (2, 75)
+            ]).map { var reading = $0; reading.account = work; return reading }
+            readings += series(.claude, ModelLimit.limit(forModel: "Fable"), minutes: 10080, resetsIn: 64, [
+                (60 * 30, 8), (60 * 12, 14), (60, 19)
+            ])
+        }
         if CommandLine.arguments.contains("--forecast-demo") { readings = ForecastDemo.readings(now: now) }
         try? store.append(readings, now: now)
         NSApp.appearance = NSAppearance(named: CommandLine.arguments.contains("--dark") ? .darkAqua : .aqua)

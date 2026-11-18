@@ -38,12 +38,16 @@ struct ToolsSettingsView: View {
 
     /// Who's signed in to each account, and folders that look like more: file reads, so off the main thread.
     private func reloadAccounts() {
-        let list = model.accounts
+        let list = model.accounts, home = model.home
+        // The demo's home folder stands in for the Mac's, so its environment mustn't pick a real folder either.
+        let environment = home == .homeDirectory ? ProcessInfo.processInfo.environment : [:]
         Task {
             let (found, who) = await Task.detached(priority: .userInitiated) {
-                let found = list.candidates()
+                let found = list.candidates(home: home)
                 var who: [String: String] = [:]
-                for account in list.accounts + found { who[account.id] = account.signedInAs() }
+                for account in list.accounts + found {
+                    who[account.id] = account.signedInAs(home: home, environment: environment)
+                }
                 return (found, who)
             }.value
             candidates = found

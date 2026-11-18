@@ -31,14 +31,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             ForecastDetailsView(model: model)
         }
         self.forecastWindow = forecastWindow
-        statusItemController = StatusItemController(
-            model: model,
-            openSettings: { settingsWindow.show() },
-            openUsage: { usageWindow.show() },
-            openForecasts: { forecastWindow.show() },
-            openResetSettings: { settingsWindow.show(tab: "Resets") },
-            checkForUpdates: { [updater] in updater.checkForUpdates() }
-        )
+        statusItemController = makeStatusItem(model: model, settingsWindow: settingsWindow, usageWindow: usageWindow,
+                                              forecastWindow: forecastWindow)
         model.onChange = { [weak self] in self?.statusItemController?.update() }
         model.onRefresh = { [weak self] forecasts in
             #if DEBUG
@@ -62,12 +56,30 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         #endif
     }
 
+    private func makeStatusItem(model: UsageModel, settingsWindow: SettingsWindow, usageWindow: HostedWindow,
+                                forecastWindow: HostedWindow) -> StatusItemController? {
+        #if DEBUG
+        // A snapshot draws offscreen and quits; it never puts an item in the menu bar.
+        if DemoMode.snapshotURL != nil { return nil }
+        #endif
+        return StatusItemController(
+            model: model,
+            openSettings: { settingsWindow.show() },
+            openUsage: { usageWindow.show() },
+            openForecasts: { forecastWindow.show() },
+            openResetSettings: { settingsWindow.show(tab: "Resets") },
+            checkForUpdates: { [updater] in updater.checkForUpdates() }
+        )
+    }
+
     private func makeModel() -> UsageModel {
         #if DEBUG
         if DemoMode.isOn {
             DemoMode.prepare()
             let model = UsageModel(supportFolder: DemoMode.folder, readsLiveData: false,
-                                   resetCredits: DemoMode.resetCredits)
+                                   resetCredits: DemoMode.resetCredits, accounts: DemoMode.accounts,
+                                   accountDefaults: UserDefaults(suiteName: "FuelGaugeDemo") ?? .standard,
+                                   home: DemoMode.home)
             model.setDemoUsage(DemoMode.usageEvents())
             return model
         }

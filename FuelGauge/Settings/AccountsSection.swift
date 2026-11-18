@@ -80,15 +80,15 @@ struct AccountsSection: View {
     @ViewBuilder private func statusLineButton(_ account: Account) -> some View {
         switch model.claudeStatusLine(for: account) {
         case .on:
-            Button("Status Line Off") { setStatusLine(false, account) }
+            Button("Turn Off Status Line") { setStatusLine(false, account) }
         case .off, .otherCommand:
-            Button("Status Line On") { setStatusLine(true, account) }
+            Button("Turn On Status Line") { setStatusLine(true, account) }
         }
     }
 
     /// "~/.claude-work · ann@example.com · Max · status line on".
     private func detail(_ account: Account) -> String {
-        var parts = [Self.abbreviated(account.folderPath)]
+        var parts = [abbreviated(account.folderPath)]
         if let who = signedIn[account.id] { parts.append(who) }
         if account.isDefault, model.accounts(for: provider).count > 1 { parts.append("default") }
         if provider == .claude {
@@ -100,7 +100,7 @@ struct AccountsSection: View {
     private func candidateRow(_ candidate: Account) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Found \(Self.abbreviated(candidate.folderPath))")
+                Text("Found \(abbreviated(candidate.folderPath))")
                 Text(signedIn[candidate.id] ?? "Looks like another \(provider.name) account")
                     .font(.caption).foregroundStyle(.secondary)
             }
@@ -136,7 +136,7 @@ struct AccountsSection: View {
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = false
         panel.showsHiddenFiles = true
-        panel.directoryURL = .homeDirectory
+        panel.directoryURL = model.home
         panel.message = provider == .codex
             ? "Choose the folder an account's CODEX_HOME points at, like ~/.codex-work."
             : "Choose the folder an account's CLAUDE_CONFIG_DIR points at, like ~/.claude-work."
@@ -144,17 +144,18 @@ struct AccountsSection: View {
         guard panel.runModal() == .OK, let url = panel.url else { return }
         let account = model.accounts.account(provider, folder: url.path)
         if model.accounts(for: provider).contains(where: { $0.folderPath == account.folderPath }) {
-            message = "\(Self.abbreviated(account.folderPath)) is already tracked."
+            message = "\(abbreviated(account.folderPath)) is already tracked."
         } else if !account.hasAccountData {
-            message = "\(Self.abbreviated(account.folderPath)) has no \(provider.name) sign-in, settings, or logs "
+            message = "\(abbreviated(account.folderPath)) has no \(provider.name) sign-in, settings, or logs "
                 + "yet. Sign in with that folder first, then add it."
         } else {
             add(account)
         }
     }
 
-    static func abbreviated(_ path: String) -> String {
-        let home = URL.homeDirectory.path
+    /// "~/.claude-work".
+    private func abbreviated(_ path: String) -> String {
+        let home = model.home.path
         return path == home || path.hasPrefix(home + "/") ? "~" + path.dropFirst(home.count) : path
     }
 }
