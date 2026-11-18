@@ -2,6 +2,7 @@ import { execFile } from "node:child_process";
 import { accessSync, constants } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
+import { withBugHint } from "./feedback.js";
 
 export const INSTALL_MESSAGE =
   "Fuel Gauge isn't installed on this Mac, so there's no forecast to read yet. " +
@@ -93,13 +94,13 @@ export async function runFuelGauge(args: string[]): Promise<RunResult> {
           const message = stderr.trim().split("\n")[0]?.replace(/^fuelgauge: /, "");
           if (message) return resolve({ ok: false, text: message });
           if (error?.killed) {
-            return resolve({ ok: false, text: `Fuel Gauge didn't answer within ${TIMEOUT_MS / 1000} seconds.` });
+            return resolve({ ok: false, text: withBugHint(`Fuel Gauge didn't answer within ${TIMEOUT_MS / 1000} seconds.`) });
           }
-          resolve({ ok: false, text: `Fuel Gauge's command line tool failed: ${error?.message ?? "unknown error"}` });
+          resolve({ ok: false, text: withBugHint(`Fuel Gauge's command line tool failed: ${error?.message ?? "unknown error"}`) });
         },
       );
     } catch (error) {
-      resolve({ ok: false, text: `Couldn't start Fuel Gauge's command line tool at ${cli}: ${(error as Error).message}` });
+      resolve({ ok: false, text: withBugHint(`Couldn't start Fuel Gauge's command line tool at ${cli}: ${(error as Error).message}`) });
     }
   });
 }
