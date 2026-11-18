@@ -1,6 +1,6 @@
 # Guides, rendered by render.py. Same sourcing rule as limits.py: only what the official docs say.
 
-from limits import PLAN_NOTE, CODE, COSTS, LIMIT_RESET, MAX, SETTINGS, STATUSLINE, ULTRA, USAGE, sources
+from limits import CODE, COSTS, LIMIT_RESET, MAX, PLAN_NOTE, SETTINGS, STATUSLINE, ULTRA, USAGE, sources
 
 GUIDES = [
     {

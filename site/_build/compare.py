@@ -1,8 +1,8 @@
 # Plan comparisons, rendered by render.py with the same page template as limits and guides.
 # Same sourcing rule as limits.py: only what the providers' own pages say, with sources on each page.
 
-from limits import (CHECKED, CODE, PLAN_NOTE, CODEX_HELP, CODEX_PRICING, CURSOR_PRICING, CURSOR_USAGE, FABLE_PLAN, MAX, PRICING, PRO,
-                    SETTINGS, ULTRA, USAGE, sources)
+from limits import (CHECKED, CODE, CODEX_HELP, CODEX_PRICING, CURSOR_PRICING, CURSOR_USAGE, FABLE_PLAN, MAX, PLAN_NOTE, PRICING,
+                    PRO, SETTINGS, ULTRA, USAGE, sources)
 
 COMPARES = [
     {
