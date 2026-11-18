@@ -61,7 +61,7 @@
 
         <h2>How the status line works</h2>
         <p>The status line is a row under Claude Code's prompt. You point it at a command in <code>settings.json</code>; Claude Code runs it when a session starts, after each reply, and at a few other moments, passes it JSON about the session on stdin, and shows what it prints. Colors (ANSI codes) and multiple lines work.</p>
-        <p>The JSON includes the model, the working folder, context window use, cost, and on Pro and Max plans, <code>rate_limits</code>:</p>
+        <p>The JSON includes the model, the working folder, context window use, cost, and on Pro, Max, and Ultra plans, <code>rate_limits</code>:</p>
         <pre><code>"rate_limits": {
   "five_hour": { "used_percentage": 23.5, "resets_at": 1738425600 },
   "seven_day": { "used_percentage": 41.2, "resets_at": 1738857600 }
@@ -107,7 +107,8 @@ echo "$line"</code></pre>
 
         <h2>Sources</h2>
         <p>Checked on October 20, 2026. Plans change from time to time, so the providers' own pages are the final word.</p>
-        <ul><li><a href="https://code.claude.com/docs/en/statusline">Customize your status line (Claude Code docs)</a></li><li><a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Use Claude Code with your Pro or Max plan</a></li></ul>
+        <ul><li><a href="https://code.claude.com/docs/en/statusline">Customize your status line (Claude Code docs)</a></li><li><a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Use Claude Code with your Pro, Max, or Ultra plan</a></li></ul>
+        <p>Claude plan details rechecked on November 17, 2026.</p>
       </div></div>
     </section>
     <section class="tight lit">
@@ -115,8 +116,8 @@ echo "$line"</code></pre>
         <div class="head center head-sm"><h2>Questions</h2></div>
         <div class="faq glass">
           <details><summary>Where is the Claude Code statusline configured?</summary><p>In settings.json, usually ~/.claude/settings.json, under statusLine with a type of command and the command to run.</p></details>
-          <details><summary>Can the status line show my usage limits?</summary><p>Yes, on Pro and Max. Claude Code passes rate_limits.five_hour and rate_limits.seven_day, each with used_percentage and resets_at, to the status line command.</p></details>
-          <details><summary>Why doesn&#x27;t my status line show rate limits?</summary><p>They appear only for Pro and Max subscribers, and only after the first reply in a session. A window drops out once its reset time passes.</p></details>
+          <details><summary>Can the status line show my usage limits?</summary><p>Yes, on Pro, Max, and Ultra. Claude Code passes rate_limits.five_hour and rate_limits.seven_day, each with used_percentage and resets_at, to the status line command.</p></details>
+          <details><summary>Why doesn&#x27;t my status line show rate limits?</summary><p>They appear only for Pro, Max, and Ultra subscribers (or behind a gateway with a spend limit), and only after the first reply in a session. A window can be missing on its own, such as the 5-hour one on a verified Ultra account, and drops out once its reset time passes.</p></details>
           <details><summary>Can I use two status line tools?</summary><p>Claude Code runs one command. Fuel Gauge&#x27;s installer wraps your existing one, so both print: yours first, the forecast under it.</p></details>
         </div>
       </div>
@@ -186,7 +187,7 @@ echo "$line"</code></pre>
       });
     });
   </script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Where is the Claude Code statusline configured?", "acceptedAnswer": {"@type": "Answer", "text": "In settings.json, usually ~/.claude/settings.json, under statusLine with a type of command and the command to run."}}, {"@type": "Question", "name": "Can the status line show my usage limits?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, on Pro and Max. Claude Code passes rate_limits.five_hour and rate_limits.seven_day, each with used_percentage and resets_at, to the status line command."}}, {"@type": "Question", "name": "Why doesn't my status line show rate limits?", "acceptedAnswer": {"@type": "Answer", "text": "They appear only for Pro and Max subscribers, and only after the first reply in a session. A window drops out once its reset time passes."}}, {"@type": "Question", "name": "Can I use two status line tools?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code runs one command. Fuel Gauge's installer wraps your existing one, so both print: yours first, the forecast under it."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Where is the Claude Code statusline configured?", "acceptedAnswer": {"@type": "Answer", "text": "In settings.json, usually ~/.claude/settings.json, under statusLine with a type of command and the command to run."}}, {"@type": "Question", "name": "Can the status line show my usage limits?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, on Pro, Max, and Ultra. Claude Code passes rate_limits.five_hour and rate_limits.seven_day, each with used_percentage and resets_at, to the status line command."}}, {"@type": "Question", "name": "Why doesn't my status line show rate limits?", "acceptedAnswer": {"@type": "Answer", "text": "They appear only for Pro, Max, and Ultra subscribers (or behind a gateway with a spend limit), and only after the first reply in a session. A window can be missing on its own, such as the 5-hour one on a verified Ultra account, and drops out once its reset time passes."}}, {"@type": "Question", "name": "Can I use two status line tools?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code runs one command. Fuel Gauge's installer wraps your existing one, so both print: yours first, the forecast under it."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Fuel Gauge", "item": "https://fuelgauge.app/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://fuelgauge.app/guides"}, {"@type": "ListItem", "position": 3, "name": "Claude Code status line", "item": "https://fuelgauge.app/guides/claude-code-statusline"}]}</script>
 </body>
 </html>

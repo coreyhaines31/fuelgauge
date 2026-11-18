@@ -34,6 +34,8 @@ FABLE_OFFERS = "https://support.claude.com/en/articles/17506494-claude-fable-5-2
 GET_STARTED = "https://support.claude.com/en/articles/8114491-get-started-with-claude"
 STATUSLINE = "https://code.claude.com/docs/en/statusline"
 CHECKED = "November 17, 2026"
+# For a page whose other facts weren't rechecked: says which part was, and when.
+PLAN_NOTE = f"\n        <p>Claude plan details rechecked on {CHECKED}.</p>"
 
 
 def sources(*links, checked=VERIFIED):
@@ -380,8 +382,7 @@ LIMITS = [
             {"id": "sources", "html": sources(
                 ("Use Claude Code with your Pro, Max, or Ultra plan", CODE),
                 ("Manage costs effectively (Claude Code docs)", COSTS),
-                ("How do usage and length limits work?", USAGE),
-                checked=CHECKED)},
+                ("How do usage and length limits work?", USAGE)) + PLAN_NOTE},
         ],
         "faqs": [
             ("Does Claude Code have its own usage limit?", "Not on Pro, Max, or Ultra. It shares your plan's session and weekly limits with claude.ai and Claude Desktop."),

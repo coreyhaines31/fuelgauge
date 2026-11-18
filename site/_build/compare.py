@@ -1,7 +1,7 @@
 # Plan comparisons, rendered by render.py with the same page template as limits and guides.
 # Same sourcing rule as limits.py: only what the providers' own pages say, with sources on each page.
 
-from limits import (CHECKED, CODE, CODEX_HELP, CODEX_PRICING, CURSOR_PRICING, CURSOR_USAGE, FABLE_PLAN, MAX, PRICING, PRO,
+from limits import (CHECKED, CODE, PLAN_NOTE, CODEX_HELP, CODEX_PRICING, CURSOR_PRICING, CURSOR_USAGE, FABLE_PLAN, MAX, PRICING, PRO,
                     SETTINGS, ULTRA, USAGE, sources)
 
 COMPARES = [
@@ -98,7 +98,7 @@ COMPARES = [
                 ("Use Claude Code with your Pro, Max, or Ultra plan", CODE),
                 ("Claude pricing", PRICING),
                 ("Codex pricing", CODEX_PRICING),
-                ("Using Codex with your ChatGPT plan", CODEX_HELP)) + "\n        <p>Claude plan details rechecked on " + CHECKED + ".</p>"},
+                ("Using Codex with your ChatGPT plan", CODEX_HELP)) + PLAN_NOTE},
         ],
         "faqs": [
             ("Does Codex have a 5-hour limit like Claude Code?", "On Plus and Business, yes. Pro plans currently have no five-hour limit, though weekly limits may apply."),
@@ -144,7 +144,7 @@ COMPARES = [
                 ("Usage limits (Cursor help)", CURSOR_USAGE),
                 ("Cursor pricing", "https://cursor.com/pricing"),
                 ("Use Claude Code with your Pro, Max, or Ultra plan", CODE),
-                ("Claude pricing", PRICING)) + "\n        <p>Claude plan details rechecked on " + CHECKED + ".</p>"},
+                ("Claude pricing", PRICING)) + PLAN_NOTE},
         ],
         "faqs": [
             ("Is Cursor or Claude Code cheaper?", "Cursor's paid plans start at $8 a month; Claude Code starts with Claude Pro at $20. What you get differs: Cursor's pool covers Cursor models, while Claude plans include Claude models."),
