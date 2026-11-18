@@ -6,6 +6,7 @@ import SwiftUI
 /// account (a tool's accounts side by side), most urgent first, plus setup for accounts that need it.
 struct PanelView: View {
     let model: UsageModel
+    var space = PanelSpace()
     let openSettings: () -> Void
     let checkForUpdates: () -> Void
     var openResetSettings: (() -> Void)?
@@ -13,13 +14,19 @@ struct PanelView: View {
     var openForecasts: () -> Void = {}
     @State private var setupError: (account: String, text: String)?
     @State private var cardsHeight: CGFloat = 400
+    /// The heights of everything outside the cards' scroll area, measured as drawn.
+    @State private var chrome: [ChromePart: CGFloat] = [:]
     @Environment(\.panelTheme) private var theme
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 30)) { context in
             Panel(accent: PanelAccent.fuelGauge) {
                 fascia(now: context.date)
-                verdict(now: context.date)
+                    .onHeightChange { chrome[.fascia] = $0 }
+                VStack(alignment: .leading, spacing: 0) {
+                    verdict(now: context.date)
+                }
+                .onHeightChange { chrome[.verdict] = $0 }
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         ForEach(model.claudeAccountsNeedingSetup) { account in
@@ -31,14 +38,26 @@ struct PanelView: View {
                                      openSettings: openResetSettings ?? openSettings, openUsage: openUsage)
                         }
                     }
-                    .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { cardsHeight = $0 }
+                    .onHeightChange { cardsHeight = $0 }
                 }
-                .frame(height: min(cardsHeight, max(240, (NSScreen.main?.visibleFrame.height ?? 900) - 200)))
+                .frame(height: cardsAreaHeight)
                 links
+                    .onHeightChange { chrome[.links] = $0 }
             } footer: {
                 Footer(appName: Brand.name, openSettings: openSettings, quit: { NSApp.terminate(nil) })
+                    .onHeightChange { chrome[.footer] = $0 }
             }
         }
+    }
+
+    private enum ChromePart { case fascia, verdict, links, footer }
+
+    /// The cards scroll so the fascia and footer always fit below the menu bar. Until the chrome is measured,
+    /// assume it takes 400pt.
+    private var cardsAreaHeight: CGFloat {
+        let measured = chrome.values.reduce(0, +)
+        return PanelLayout.cardsHeight(content: cardsHeight, available: space.availableHeight,
+                                       chrome: chrome.count < 4 ? max(measured, 400) : measured)
     }
 
     // MARK: Fascia and verdict
@@ -182,5 +201,11 @@ struct PanelView: View {
             Button("Forecast details", action: openForecasts)
             Button("Check for Updates…", action: checkForUpdates)
         }
+    }
+}
+
+private extension View {
+    func onHeightChange(_ action: @escaping (CGFloat) -> Void) -> some View {
+        onGeometryChange(for: CGFloat.self, of: { $0.size.height }, action: action)
     }
 }
