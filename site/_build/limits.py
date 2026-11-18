@@ -28,11 +28,11 @@ COPILOT_PLANS = "https://github.com/features/copilot/plans"
 COPILOT_LEGACY = "https://docs.github.com/en/copilot/concepts/billing/copilot-requests"
 
 
-def sources(*links):
+def sources(*links, checked=VERIFIED):
     items = "".join(f'<li><a href="{url}">{name}</a></li>' for name, url in links)
     return f"""
         <h2>Sources</h2>
-        <p>Checked on {VERIFIED}. Plans change from time to time, so the providers' own pages are the final word.</p>
+        <p>Checked on {checked}. Plans change from time to time, so the providers' own pages are the final word.</p>
         <ul>{items}</ul>"""
 
 
