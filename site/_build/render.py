@@ -16,7 +16,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from compare import COMPARES  # noqa: E402
 from guides import GUIDES  # noqa: E402
-from limits import LIMITS, VERIFIED  # noqa: E402
+from limits import CHECKED, LIMITS, VERIFIED  # noqa: E402
 from pages import CLI, COMPARISONS, PRIVACY  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
@@ -24,11 +24,15 @@ SITE = "https://fuelgauge.app"
 DOWNLOAD = "https://github.com/coreyhaines31/fuelgauge/releases/latest/download/FuelGauge.dmg"
 REPO = "https://github.com/coreyhaines31/fuelgauge"
 BREW = "brew install --cask coreyhaines31/tap/fuelgauge"
-INSTALL_PROMPT = ("Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, "
-                  "then run `fuelgauge install-statusline` and `fuelgauge status`.")
 AGENT_RULE = ("Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, "
               "Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before "
               "starting, or switch to a cheaper model. `fuelgauge status --json` has the details.")
+INSTALL_PROMPT = ("Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, "
+                  "then run `fuelgauge install-statusline` and `fuelgauge status`."
+                  " Then ask me whether future agent sessions should check Fuel Gauge before long tasks. "
+                  "Only if I say yes, append this to your own global instructions file "
+                  "(~/.claude/CLAUDE.md for Claude Code, ~/.codex/AGENTS.md for Codex), unless it's already there, "
+                  "and tell me which file you changed: " + AGENT_RULE)
 
 DOWNLOAD_ICON = ('<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14" fill="none" '
                  'stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>')
@@ -40,7 +44,18 @@ GITHUB_ICON = ('<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                '.21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>')
 CTAS = (f'<a class="btn" href="{DOWNLOAD}">{DOWNLOAD_ICON}Download for Mac</a>\n'
         f'        <a class="btn-quiet" href="{REPO}">{GITHUB_ICON}View source code</a>')
-FONTS = "https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@300;600;700&display=swap"
+# Self-hosted Barlow from mac-app-kit site-kit/sections/fonts.html (files in /fonts/).
+FONTS = """  <link rel="preload" href="/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/barlow-semi-condensed-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/barlow-semi-condensed-300.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 400; font-display: optional; src: url(/fonts/barlow-400.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 500; font-display: optional; src: url(/fonts/barlow-500.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 600; font-display: optional; src: url(/fonts/barlow-600.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 300; font-display: optional; src: url(/fonts/barlow-semi-condensed-300.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 600; font-display: optional; src: url(/fonts/barlow-semi-condensed-600.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 700; font-display: optional; src: url(/fonts/barlow-semi-condensed-700.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+  </style>"""
 
 # The Mac app family, cross-linked from every footer, in the family's order. Fuel Gauge is marked as this site.
 FAMILY = [
@@ -109,9 +124,7 @@ def head(title, description, path):
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="{FONTS}">
+{FONTS}
   <link rel="stylesheet" href="/kit/brushed.css">
   <link rel="stylesheet" href="/kit/popover.css">
   <link rel="stylesheet" href="/site.css">
@@ -146,7 +159,7 @@ def footer_inner():
     compare += "".join(f'<a href="/{p["slug"]}">{esc(p["competitor"])} alternative</a>' for p in COMPARISONS)
     family = "".join(
         f'<li><a href="{url}"{' aria-current="page"' if key == "fuel" else f' title="{esc(desc)}"'}>'
-        f'<img src="/images/family/{key}.png" alt="" width="56" height="56">{esc(name)}</a></li>'
+        f'<img src="/images/family/{key}.webp" alt="" width="56" height="56">{esc(name)}</a></li>'
         for name, url, desc, key in FAMILY)
     return (f'    <div class="foot-links">\n      <div class="wrap">\n'
             f'        <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a>{limits}</nav>\n'
@@ -389,10 +402,10 @@ def render_hubs():
     limits_table = ('        <div class="table-card glass"><div class="table-scroll"><table class="compare">'
                     '<thead><tr><td></td><th scope="col">Limits</th><th scope="col">Resets</th></tr></thead>'
                     f'<tbody>{rows}</tbody></table></div></div>\n'
-                    f'        <p class="table-foot">Checked against each provider\'s own help pages on {VERIFIED}.</p>\n')
+                    f'        <p class="table-foot">Checked against each provider\'s own help pages: Claude plans on {CHECKED}, the rest on {VERIFIED}.</p>\n')
     render_hub("/limits", "Limits",
                "AI coding usage limits: Claude, Codex, Cursor, Copilot, Grok",
-               "How usage limits work on Claude Pro and Max, Claude Code, Codex, Cursor, Grok, and GitHub Copilot: the windows, when each resets, and how to check.",
+               "How usage limits work on Claude Pro, Max, and Ultra, Claude Code, Codex, Cursor, Grok, and GitHub Copilot: the windows, when each resets, and how to check.",
                "Usage limits, <em>plan by plan.</em>",
                "What each plan limits, when it resets, and how to see what you have left. Checked against the official help pages.",
                [(p["short"], p["card"], p["path"]) for p in LIMITS], limits_table)

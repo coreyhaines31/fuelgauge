@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Claude Max limits (October 2026): 5x vs 20x, weekly reset</title>
-  <meta name="description" content="How Claude Max 5x and 20x usage limits work: per-session allowance vs Pro, the weekly limit and separate Fable limit, when they reset, and how to check them.">
+  <title>Claude Max limits (November 2026): 5x Pro, weekly, Fable</title>
+  <meta name="description" content="How Claude Max usage limits work: 5x Pro&#x27;s usage every five hours and every week, the Fable cap, when they reset, and what changed with Ultra.">
   <link rel="canonical" href="https://fuelgauge.app/limits/claude-max">
-  <meta property="og:title" content="Claude Max limits (October 2026): 5x vs 20x, weekly reset">
-  <meta property="og:description" content="How Claude Max 5x and 20x usage limits work: per-session allowance vs Pro, the weekly limit and separate Fable limit, when they reset, and how to check them.">
+  <meta property="og:title" content="Claude Max limits (November 2026): 5x Pro, weekly, Fable">
+  <meta property="og:description" content="How Claude Max usage limits work: 5x Pro&#x27;s usage every five hours and every week, the Fable cap, when they reset, and what changed with Ultra.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Fuel Gauge">
   <meta property="og:image" content="https://fuelgauge.app/images/og/limits-claude-max.png">
@@ -16,16 +16,24 @@
   <meta property="og:url" content="https://fuelgauge.app/limits/claude-max">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://fuelgauge.app/images/og/limits-claude-max.png">
-  <meta name="twitter:title" content="Claude Max limits (October 2026): 5x vs 20x, weekly reset">
-  <meta name="twitter:description" content="How Claude Max 5x and 20x usage limits work: per-session allowance vs Pro, the weekly limit and separate Fable limit, when they reset, and how to check them.">
+  <meta name="twitter:title" content="Claude Max limits (November 2026): 5x Pro, weekly, Fable">
+  <meta name="twitter:description" content="How Claude Max usage limits work: 5x Pro&#x27;s usage every five hours and every week, the Fable cap, when they reset, and what changed with Ultra.">
   <meta name="theme-color" content="#e7e8e9" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#2a2a2c" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@300;600;700&display=swap">
+  <link rel="preload" href="/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/barlow-semi-condensed-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/barlow-semi-condensed-300.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 400; font-display: optional; src: url(/fonts/barlow-400.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 500; font-display: optional; src: url(/fonts/barlow-500.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 600; font-display: optional; src: url(/fonts/barlow-600.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 300; font-display: optional; src: url(/fonts/barlow-semi-condensed-300.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 600; font-display: optional; src: url(/fonts/barlow-semi-condensed-600.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 700; font-display: optional; src: url(/fonts/barlow-semi-condensed-700.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+  </style>
   <link rel="stylesheet" href="/kit/brushed.css">
   <link rel="stylesheet" href="/kit/popover.css">
   <link rel="stylesheet" href="/site.css">
@@ -52,8 +60,8 @@
         <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Fuel Gauge</a> <span>›</span> <a href="/limits">Limits</a></nav>
         <div class="eyebrow">Claude Max</div>
         <h1>Claude Max usage limits</h1>
-        <p class="lede">Max comes in two sizes: 5x or 20x Pro's usage per five-hour session. Both also have a weekly limit across all models, plus a separate weekly limit for Fable.</p>
-        <div class="tldr glass"><h2>The short answer</h2><p>Claude Max 5x ($100 a month) gives five times Pro's per-session usage, and Max 20x ($200 a month) gives twenty times. Sessions reset every five hours. A weekly limit applies across all models and resets at a fixed time assigned to your account, and Max has a separate weekly limit for Fable.</p></div>
+        <p class="lede">Max is one plan now: $100 a month for 5x Pro's usage, every five hours and every week. The old Max 20x is called Ultra.</p>
+        <div class="tldr glass"><h2>The short answer</h2><p>Claude Max costs $100 a month and gives five times the Pro plan's usage every five hours and every week. It has a 5-hour session limit, a weekly limit across all models, and a separate Fable cap: up to 50% of the weekly limit can go to Fable models. The weekly limit resets at a fixed time assigned to your account. The plan once called Max 20x is now Ultra.</p></div>
       </div>
     </div>
     <section class="tight" id="facts">
@@ -61,32 +69,35 @@
 
         <h2>Claude Max limits at a glance</h2>
                 <div class="table-card glass"><div class="table-scroll"><table class="compare facts"><tbody>
-            <tr><th scope="row">Price</th><td>Max 5x: $100 a month · Max 20x: $200 a month (monthly only)</td></tr>
-            <tr><th scope="row">Usage</th><td>5x or 20x the Pro plan's per-session allowance</td></tr>
-            <tr><th scope="row">Session limit</th><td>Resets every five hours</td></tr>
+            <tr><th scope="row">Price</th><td>$100 a month (monthly only)</td></tr>
+            <tr><th scope="row">Usage</th><td>5x the Pro plan's usage every five hours and every week</td></tr>
+            <tr><th scope="row">Session limit</th><td>Resets five hours after your first message</td></tr>
             <tr><th scope="row">Weekly limit</th><td>Across all models, resets at a fixed time assigned to your account</td></tr>
-            <tr><th scope="row">Fable</th><td>Has its own separate weekly limit on Max</td></tr>
+            <tr><th scope="row">Fable</th><td>Included, up to 50% of your weekly limit</td></tr>
             <tr><th scope="row">Shared with</th><td>claude.ai, Claude Desktop, Claude Code</td></tr>
             <tr><th scope="row">Check it</th><td><a href="https://claude.ai/settings/usage">Settings › Usage</a> shows your next reset; <code>/usage</code> in Claude Code shows plan usage bars</td></tr>
-            <tr><th scope="row">At the limit</th><td>Wait, turn on usage credits, or move from 5x to 20x</td></tr>
+            <tr><th scope="row">At the limit</th><td>Wait, turn on usage credits, or upgrade to Ultra</td></tr>
           </tbody></table></div></div>
       </div></div>
     </section>
     <section class="tight lit" id="how">
       <div class="wrap narrow"><div class="prose">
 
-        <h2>5x or 20x: what the multiplier means</h2>
-        <p>The multiplier is per session. Max 5x gives you five times what Pro allows in a five-hour session; Max 20x gives twenty times. It doesn't say how many messages that is, because Anthropic doesn't publish a count for any plan.</p>
-        <p>The weekly limit is the one heavy Claude Code users run into on Max. It applies across all models and resets at a fixed time assigned to your account, not on a calendar day everyone shares. Settings › Usage on claude.ai shows when yours resets.</p>
-        <p>Fable has its own weekly limit on Max, separate from the all-models one. When you hit a model-specific limit, switching to a model outside that family with <code>/model</code> keeps you working. That doesn't help with the session or weekly limits, which cover every model.</p>
+        <h2>What 5x means</h2>
+        <p>Max gives five times what Pro allows, in both windows: each five-hour session and each week. It doesn't say how many messages that is, because Anthropic doesn't publish a count for any plan.</p>
+        <p>The weekly limit is the one heavy Claude Code users run into. It applies across all models and resets at a fixed time assigned to your account, not on a calendar day everyone shares. Settings › Usage on claude.ai shows when yours resets.</p>
+        <h2>The Fable cap</h2>
+        <p>Fable models are part of Max. You can spend up to 50% of your weekly limit on them, and they use it faster than other models. That's a cap inside the weekly limit, not extra room. At the cap, switch to another model to stay within your plan, or keep using Fable on usage credits. See <a href="/limits/claude-weekly-limit">the Claude weekly limit</a> for how the two fit together.</p>
+        <h2>What happened to Max 20x?</h2>
+        <p>Max 20x is now the Ultra plan, at the same $200 a month. Subscribers moved over automatically. Ultra gives 10x Pro's usage every week, and verified Ultra accounts have no 5-hour limit. <a href="/limits/claude">Claude usage limits</a> compares every plan.</p>
       </div></div>
     </section>
     <section class="tight" id="limit">
       <div class="wrap narrow"><div class="prose">
 
         <h2>What happens when you hit it</h2>
-        <p>Wait for the reset, turn on usage credits, or move from 5x to 20x, which applies right away. The monthly API credits that come with Max can't be used in Claude Code or the Claude apps.</p>
-        <p>In Claude Code, the wrap-up allowance lets the current step finish when you hit the 5-hour limit mid-response. On Max it can apply each time you reach a 5-hour limit, as long as you're inside your weekly limit. Claude Code 2.1.234 and later can also wait for the reset and continue the interrupted task on its own.</p>
+        <p>Wait for the reset, turn on usage credits, or upgrade to Ultra, which applies right away. Usage credits also let you keep using Fable past its cap. The $100 a month in API credits that comes with Max can't be used in Claude Code or the Claude apps.</p>
+        <p>In Claude Code, the wrap-up allowance lets the current step finish when you hit the 5-hour limit mid-response. On Max it can apply each time you reach a 5-hour limit, as long as you're inside your weekly limit.</p>
         <h2>Will you make it to the reset?</h2>
         <p>A percentage tells you how much you've used. It doesn't tell you whether, at the pace you're going, you'll run out before the window resets. <a href="/">Fuel Gauge</a> does that math: a free Mac menu bar app that reads your Claude Code limits after every reply and says "Makes it to reset" or "Runs out around 3:40p, 1h 20m early". It can put the same line under your Claude Code prompt.</p>
       </div></div>
@@ -95,25 +106,25 @@
       <div class="wrap narrow"><div class="prose">
 
         <h2>Sources</h2>
-        <p>Checked on October 20, 2026. Plans change from time to time, so the providers' own pages are the final word.</p>
-        <ul><li><a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">What is the Max plan?</a></li><li><a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Use Claude Code with your Pro or Max plan</a></li><li><a href="https://code.claude.com/docs/en/costs">Manage costs effectively (Claude Code docs)</a></li></ul>
+        <p>Checked on November 17, 2026. Plans change from time to time, so the providers' own pages are the final word.</p>
+        <ul><li><a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">What is the Max plan?</a></li><li><a href="https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan">What is the Ultra plan?</a></li><li><a href="https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan">Claude Fable models on your plan</a></li><li><a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Use Claude Code with your Pro, Max, or Ultra plan</a></li><li><a href="https://claude.com/pricing">Claude pricing</a></li></ul>
       </div></div>
     </section>
     <section class="tight lit">
       <div class="wrap">
         <div class="head center head-sm"><h2>Questions</h2></div>
         <div class="faq glass">
-          <details><summary>What&#x27;s the difference between Max 5x and Max 20x?</summary><p>Max 5x gives five times Pro&#x27;s usage per five-hour session for $100 a month. Max 20x gives twenty times for $200 a month. Both have weekly limits.</p></details>
-          <details><summary>Does Claude Max have a weekly limit?</summary><p>Yes. A weekly limit applies across all models and resets at a fixed time assigned to your account. Max also has a separate weekly limit for Fable.</p></details>
+          <details><summary>Is there still a Claude Max 20x plan?</summary><p>No. Max 20x is now called Ultra, at $200 a month. Existing Max 20x subscribers moved to Ultra automatically with no price change.</p></details>
+          <details><summary>Does Claude Max have a weekly limit?</summary><p>Yes. A weekly limit applies across all models and resets at a fixed time assigned to your account. Max also caps Fable at up to 50% of the weekly limit.</p></details>
           <details><summary>When does the Claude Max weekly limit reset?</summary><p>At a fixed time assigned to your account, once a week. Settings › Usage on claude.ai shows your next reset.</p></details>
-          <details><summary>Can I use Max&#x27;s API credits in Claude Code?</summary><p>No. The monthly API credits included with Max can&#x27;t be used in Claude Code or the Claude apps, including for extra usage.</p></details>
+          <details><summary>Can I use Max&#x27;s API credits in Claude Code?</summary><p>No. The monthly API credits included with Max can&#x27;t be used in Claude Code or the Claude apps, including for usage credits.</p></details>
         </div>
       </div>
     </section>
     <section class="tight">
       <div class="wrap narrow">
         <h2 class="related-head">Keep reading</h2>
-        <div class="related"><a class="related-card glass" href="/limits/claude-pro"><strong>Claude Pro limits</strong><span>The plan Max multiplies</span></a><a class="related-card glass" href="/limits/claude-code"><strong>Claude Code limits</strong><span>How Claude Code counts against your plan</span></a><a class="related-card glass" href="/guides/when-does-claude-limit-reset"><strong>When do Claude limits reset?</strong><span>Session and weekly resets, explained</span></a></div>
+        <div class="related"><a class="related-card glass" href="/limits/claude"><strong>Claude usage limits</strong><span>Every plan, including Ultra</span></a><a class="related-card glass" href="/limits/claude-weekly-limit"><strong>The Claude weekly limit</strong><span>When it resets and how Fable fits in</span></a><a class="related-card glass" href="/limits/claude-code"><strong>Claude Code limits</strong><span>How Claude Code counts against your plan</span></a></div>
       </div>
     </section>
     <section class="cta lit">
@@ -131,7 +142,7 @@
             <p>Or ask your coding agent:</p>
             <div class="prompt-box">
               <button type="button" class="copy" data-copy="install-prompt">Copy</button>
-              <pre id="install-prompt">Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`.</pre>
+              <pre id="install-prompt">Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`. Then ask me whether future agent sessions should check Fuel Gauge before long tasks. Only if I say yes, append this to your own global instructions file (~/.claude/CLAUDE.md for Claude Code, ~/.codex/AGENTS.md for Codex), unless it&#x27;s already there, and tell me which file you changed: Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before starting, or switch to a cheaper model. `fuelgauge status --json` has the details.</pre>
             </div>
           </div>
           <p class="fineprint">macOS 14 Sonoma or later · Apple Silicon and Intel</p>
@@ -142,7 +153,7 @@
   <footer>
     <div class="foot-links">
       <div class="wrap">
-        <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a><a href="/limits/codex">Codex limits</a><a href="/limits/cursor">Cursor limits</a><a href="/limits/grok">Grok limits</a><a href="/limits/github-copilot">GitHub Copilot limits</a></nav>
+        <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude">Claude usage limits</a><a href="/limits/claude-weekly-limit">Claude weekly limit</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a><a href="/limits/codex">Codex limits</a><a href="/limits/cursor">Cursor limits</a><a href="/limits/grok">Grok limits</a><a href="/limits/github-copilot">GitHub Copilot limits</a></nav>
         <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a><a href="/guides/check-claude-usage">Check your Claude usage</a><a href="/guides/when-does-claude-limit-reset">When Claude limits reset</a><a href="/guides/claude-code-statusline">Claude Code status line</a><a href="/guides/stop-hitting-claude-limits">Stop hitting Claude limits</a></nav>
         <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a><a href="/compare/claude-pro-vs-max">Claude Pro vs Max</a><a href="/compare/claude-code-vs-codex">Claude Code vs Codex</a><a href="/compare/cursor-vs-claude-code">Cursor vs Claude Code</a><a href="/compare/claude-code-pricing">Claude Code pricing</a><a href="/compare/codex-pricing">Codex pricing</a><a href="/alternatives/codexbar">CodexBar alternative</a><a href="/alternatives/ccusage">ccusage alternative</a><a href="/alternatives/ccstatusline">ccstatusline alternative</a><a href="/alternatives/claude-code-usage-monitor">Claude-Code-Usage-Monitor alternative</a></nav>
       </div>
@@ -150,7 +161,7 @@
     <nav class="bx-family" aria-label="More free Mac apps">
       <div class="bx-wrap">
         <a class="bx-eyebrow" href="https://github.com/coreyhaines31">More free Mac apps</a>
-        <ul><li><a href="https://fuelgauge.app" aria-current="page"><img src="/images/family/fuel.png" alt="" width="56" height="56">Fuel Gauge</a></li><li><a href="https://spareformac.com" title="See what&#x27;s using your Mac"><img src="/images/family/spare.png" alt="" width="56" height="56">Spare</a></li><li><a href="https://diskforecast.com" title="Know before your disk is full"><img src="/images/family/disk.png" alt="" width="56" height="56">Disk Forecast</a></li><li><a href="https://midnightoil.app" title="Keep your Mac awake"><img src="/images/family/oil.png" alt="" width="56" height="56">Midnight Oil</a></li><li><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?"><img src="/images/family/wifi.png" alt="" width="56" height="56">WiFi or ISP</a></li><li><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers"><img src="/images/family/green.png" alt="" width="56" height="56">Green Room</a></li><li><a href="https://onhandformac.com" title="A clipboard manager for your Mac"><img src="/images/family/hand.png" alt="" width="56" height="56">On Hand</a></li><li><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides"><img src="/images/family/coat.png" alt="" width="56" height="56">Coat Check</a></li><li><a href="https://killcord.app" title="See your API spend before the bill does"><img src="/images/family/kill.png" alt="" width="56" height="56">Kill Cord</a></li></ul>
+        <ul><li><a href="https://fuelgauge.app" aria-current="page"><img src="/images/family/fuel.webp" alt="" width="56" height="56">Fuel Gauge</a></li><li><a href="https://spareformac.com" title="See what&#x27;s using your Mac"><img src="/images/family/spare.webp" alt="" width="56" height="56">Spare</a></li><li><a href="https://diskforecast.com" title="Know before your disk is full"><img src="/images/family/disk.webp" alt="" width="56" height="56">Disk Forecast</a></li><li><a href="https://midnightoil.app" title="Keep your Mac awake"><img src="/images/family/oil.webp" alt="" width="56" height="56">Midnight Oil</a></li><li><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?"><img src="/images/family/wifi.webp" alt="" width="56" height="56">WiFi or ISP</a></li><li><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers"><img src="/images/family/green.webp" alt="" width="56" height="56">Green Room</a></li><li><a href="https://onhandformac.com" title="A clipboard manager for your Mac"><img src="/images/family/hand.webp" alt="" width="56" height="56">On Hand</a></li><li><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides"><img src="/images/family/coat.webp" alt="" width="56" height="56">Coat Check</a></li><li><a href="https://killcord.app" title="See your API spend before the bill does"><img src="/images/family/kill.webp" alt="" width="56" height="56">Kill Cord</a></li></ul>
       </div>
     </nav>
     <div class="bx-footer">
@@ -175,7 +186,7 @@
       });
     });
   </script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What's the difference between Max 5x and Max 20x?", "acceptedAnswer": {"@type": "Answer", "text": "Max 5x gives five times Pro's usage per five-hour session for $100 a month. Max 20x gives twenty times for $200 a month. Both have weekly limits."}}, {"@type": "Question", "name": "Does Claude Max have a weekly limit?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. A weekly limit applies across all models and resets at a fixed time assigned to your account. Max also has a separate weekly limit for Fable."}}, {"@type": "Question", "name": "When does the Claude Max weekly limit reset?", "acceptedAnswer": {"@type": "Answer", "text": "At a fixed time assigned to your account, once a week. Settings \u203a Usage on claude.ai shows your next reset."}}, {"@type": "Question", "name": "Can I use Max's API credits in Claude Code?", "acceptedAnswer": {"@type": "Answer", "text": "No. The monthly API credits included with Max can't be used in Claude Code or the Claude apps, including for extra usage."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is there still a Claude Max 20x plan?", "acceptedAnswer": {"@type": "Answer", "text": "No. Max 20x is now called Ultra, at $200 a month. Existing Max 20x subscribers moved to Ultra automatically with no price change."}}, {"@type": "Question", "name": "Does Claude Max have a weekly limit?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. A weekly limit applies across all models and resets at a fixed time assigned to your account. Max also caps Fable at up to 50% of the weekly limit."}}, {"@type": "Question", "name": "When does the Claude Max weekly limit reset?", "acceptedAnswer": {"@type": "Answer", "text": "At a fixed time assigned to your account, once a week. Settings \u203a Usage on claude.ai shows your next reset."}}, {"@type": "Question", "name": "Can I use Max's API credits in Claude Code?", "acceptedAnswer": {"@type": "Answer", "text": "No. The monthly API credits included with Max can't be used in Claude Code or the Claude apps, including for usage credits."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Fuel Gauge", "item": "https://fuelgauge.app/"}, {"@type": "ListItem", "position": 2, "name": "Limits", "item": "https://fuelgauge.app/limits"}, {"@type": "ListItem", "position": 3, "name": "Claude Max limits", "item": "https://fuelgauge.app/limits/claude-max"}]}</script>
 </body>
 </html>

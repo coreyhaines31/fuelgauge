@@ -18,8 +18,12 @@ CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 SECTIONS = {"limits": "Limits", "guides": "Guide", "compare": "Compare", "alternatives": "Compare"}
 
 TEMPLATE = """<!doctype html><html><head><meta charset="utf-8">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600&family=Barlow+Semi+Condensed:wght@300;600;700&display=block">
 <style>
+@font-face {{ font-family: "Barlow"; font-weight: 500; src: url("file://{fonts}/barlow-500.woff2"); }}
+@font-face {{ font-family: "Barlow"; font-weight: 600; src: url("file://{fonts}/barlow-600.woff2"); }}
+@font-face {{ font-family: "Barlow Semi Condensed"; font-weight: 300; src: url("file://{fonts}/barlow-semi-condensed-300.woff2"); }}
+@font-face {{ font-family: "Barlow Semi Condensed"; font-weight: 600; src: url("file://{fonts}/barlow-semi-condensed-600.woff2"); }}
+@font-face {{ font-family: "Barlow Semi Condensed"; font-weight: 700; src: url("file://{fonts}/barlow-semi-condensed-700.woff2"); }}
 * {{ box-sizing: border-box; }}
 html, body {{ margin: 0; width: 1200px; height: 630px; overflow: hidden; }}
 body {{ position: relative; color: #161616; font-family: "Barlow", "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased;
@@ -81,7 +85,7 @@ def main():
             continue
         length = len(text(title))
         size = 96 if length < 30 else 80 if length < 55 else 64
-        source = TEMPLATE.format(icon=icon, kicker=kicker(page, slug), headline=title, slug=slug, size=size)
+        source = TEMPLATE.format(icon=icon, fonts=os.path.join(ROOT, "fonts"), kicker=kicker(page, slug), headline=title, slug=slug, size=size)
         image = os.path.join(out_dir, slug.replace("/", "-") + ".png")
         with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False) as tmp:
             tmp.write(source)

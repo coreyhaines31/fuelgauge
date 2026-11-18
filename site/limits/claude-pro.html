@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Claude Pro usage limits (October 2026): session and weekly</title>
+  <title>Claude Pro usage limits (November 2026): session and weekly</title>
   <meta name="description" content="How Claude Pro&#x27;s limits work: a 5-hour session limit and a weekly limit, shared across Claude and Claude Code. When they reset and how to check.">
   <link rel="canonical" href="https://fuelgauge.app/limits/claude-pro">
-  <meta property="og:title" content="Claude Pro usage limits (October 2026): session and weekly">
+  <meta property="og:title" content="Claude Pro usage limits (November 2026): session and weekly">
   <meta property="og:description" content="How Claude Pro&#x27;s limits work: a 5-hour session limit and a weekly limit, shared across Claude and Claude Code. When they reset and how to check.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Fuel Gauge">
@@ -16,16 +16,24 @@
   <meta property="og:url" content="https://fuelgauge.app/limits/claude-pro">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://fuelgauge.app/images/og/limits-claude-pro.png">
-  <meta name="twitter:title" content="Claude Pro usage limits (October 2026): session and weekly">
+  <meta name="twitter:title" content="Claude Pro usage limits (November 2026): session and weekly">
   <meta name="twitter:description" content="How Claude Pro&#x27;s limits work: a 5-hour session limit and a weekly limit, shared across Claude and Claude Code. When they reset and how to check.">
   <meta name="theme-color" content="#e7e8e9" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#2a2a2c" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@300;600;700&display=swap">
+  <link rel="preload" href="/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/barlow-semi-condensed-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/barlow-semi-condensed-300.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 400; font-display: optional; src: url(/fonts/barlow-400.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 500; font-display: optional; src: url(/fonts/barlow-500.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 600; font-display: optional; src: url(/fonts/barlow-600.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 300; font-display: optional; src: url(/fonts/barlow-semi-condensed-300.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 600; font-display: optional; src: url(/fonts/barlow-semi-condensed-600.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 700; font-display: optional; src: url(/fonts/barlow-semi-condensed-700.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+  </style>
   <link rel="stylesheet" href="/kit/brushed.css">
   <link rel="stylesheet" href="/kit/popover.css">
   <link rel="stylesheet" href="/site.css">
@@ -53,7 +61,7 @@
         <div class="eyebrow">Claude Pro</div>
         <h1>Claude Pro usage limits</h1>
         <p class="lede">Pro has two limits: a session limit that resets every five hours, and a weekly limit. Claude, Claude Desktop, and Claude Code all draw from both.</p>
-        <div class="tldr glass"><h2>The short answer</h2><p>Claude Pro ($20 a month, or $17 a month billed yearly) gives you at least 5x the per-session usage of the Free plan. Usage is capped by a 5-hour session limit and a weekly limit, shared across claude.ai, Claude Desktop, and Claude Code. Anthropic doesn't publish a message count; how far it goes depends on conversation length, model, features, and effort.</p></div>
+        <div class="tldr glass"><h2>The short answer</h2><p>Claude Pro ($20 a month, or $17 a month billed yearly) gives you more usage per session than the Free plan. Usage is capped by a 5-hour session limit and a weekly limit, shared across claude.ai, Claude Desktop, and Claude Code. Anthropic doesn't publish a message count; how far it goes depends on conversation length, model, features, and effort. Fable models aren't part of Pro's limits; they run on usage credits.</p></div>
       </div>
     </div>
     <section class="tight" id="facts">
@@ -62,13 +70,14 @@
         <h2>Claude Pro limits at a glance</h2>
                 <div class="table-card glass"><div class="table-scroll"><table class="compare facts"><tbody>
             <tr><th scope="row">Price</th><td>$20 a month, or $17 a month billed yearly ($200 up front)</td></tr>
-            <tr><th scope="row">Usage</th><td>At least 5x the Free plan's usage per 5-hour session</td></tr>
+            <tr><th scope="row">Usage</th><td>More per session than the Free plan; Anthropic doesn't publish a multiple</td></tr>
+            <tr><th scope="row">Fable</th><td>Not in the plan's limits; runs on usage credits</td></tr>
             <tr><th scope="row">Session limit</th><td>Resets every five hours</td></tr>
             <tr><th scope="row">Weekly limit</th><td>Yes, resets once a week</td></tr>
             <tr><th scope="row">Shared with</th><td>claude.ai, Claude Desktop, Claude Code, and Claude Code in VS Code, Cursor, and JetBrains</td></tr>
             <tr><th scope="row">Claude Code</th><td>Included</td></tr>
             <tr><th scope="row">Check it</th><td><a href="https://claude.ai/settings/usage">Settings › Usage</a> on claude.ai, or <code>/usage</code> in Claude Code</td></tr>
-            <tr><th scope="row">At the limit</th><td>Wait for the reset, turn on usage credits, or upgrade to Max</td></tr>
+            <tr><th scope="row">At the limit</th><td>Wait for the reset, turn on usage credits, or upgrade to Max or Ultra</td></tr>
           </tbody></table></div></div>
       </div></div>
     </section>
@@ -92,7 +101,7 @@
       <div class="wrap narrow"><div class="prose">
 
         <h2>What happens when you hit it</h2>
-        <p>You'll see warnings as you get close. At the limit you can wait for the reset, <a href="https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans">turn on usage credits</a> to keep working at extra cost, or upgrade to Max 5x, which applies right away.</p>
+        <p>You'll see warnings as you get close. At the limit you can wait for the reset, <a href="https://support.claude.com/en/articles/12429409-manage-usage-credits-for-paid-claude-plans">turn on usage credits</a> to keep working at extra cost, or upgrade to Max (5x Pro's usage) or Ultra (10x Pro's weekly usage), which applies right away.</p>
         <p>In Claude Code, if you hit the 5-hour limit mid-response, Claude Code can finish the current step ("Usage limit reached · wrapping up"). On Pro this wrap-up allowance applies at most once per weekly period, and it counts toward your weekly limit.</p>
         <p>One trap: if <code>ANTHROPIC_API_KEY</code> is set in your shell, Claude Code bills that API key instead of your Pro plan.</p>
         <h2>Will you make it to the reset?</h2>
@@ -103,8 +112,8 @@
       <div class="wrap narrow"><div class="prose">
 
         <h2>Sources</h2>
-        <p>Checked on October 20, 2026. Plans change from time to time, so the providers' own pages are the final word.</p>
-        <ul><li><a href="https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work">How do usage and length limits work?</a></li><li><a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Use Claude Code with your Pro or Max plan</a></li><li><a href="https://claude.com/pricing">Claude pricing</a></li></ul>
+        <p>Checked on November 17, 2026. Plans change from time to time, so the providers' own pages are the final word.</p>
+        <ul><li><a href="https://support.claude.com/en/articles/8325606-what-is-the-pro-plan">What is the Pro plan?</a></li><li><a href="https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work">How do usage and length limits work?</a></li><li><a href="https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan">Claude Fable models on your plan</a></li><li><a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Use Claude Code with your Pro, Max, or Ultra plan</a></li><li><a href="https://claude.com/pricing">Claude pricing</a></li></ul>
       </div></div>
     </section>
     <section class="tight lit">
@@ -112,7 +121,7 @@
         <div class="head center head-sm"><h2>Questions</h2></div>
         <div class="faq glass">
           <details><summary>Does Claude Pro have a limit?</summary><p>Yes. Pro has a session limit that resets every five hours and a weekly limit. Both are shared across claude.ai, Claude Desktop, and Claude Code.</p></details>
-          <details><summary>How many messages do you get on Claude Pro?</summary><p>Anthropic doesn&#x27;t publish a number. It depends on how long your conversations are, which model and effort level you use, and which features are on. Pro gives at least 5x the per-session usage of Free.</p></details>
+          <details><summary>How many messages do you get on Claude Pro?</summary><p>Anthropic doesn&#x27;t publish a number. It depends on how long your conversations are, which model and effort level you use, and which features are on. Pro gives more usage per session than Free.</p></details>
           <details><summary>Does Claude Code use the same limit as Claude?</summary><p>Yes. Activity in Claude and Claude Code counts against the same limits.</p></details>
           <details><summary>When does the Claude Pro limit reset?</summary><p>The session limit resets every five hours. The weekly limit resets once a week at a time set for your account; Settings › Usage on claude.ai shows the next reset.</p></details>
         </div>
@@ -121,7 +130,7 @@
     <section class="tight">
       <div class="wrap narrow">
         <h2 class="related-head">Keep reading</h2>
-        <div class="related"><a class="related-card glass" href="/limits/claude-max"><strong>Claude Max limits</strong><span>5x or 20x Pro&#x27;s usage per session</span></a><a class="related-card glass" href="/limits/claude-code"><strong>Claude Code limits</strong><span>How Claude Code counts against your plan</span></a><a class="related-card glass" href="/guides/when-does-claude-limit-reset"><strong>When do Claude limits reset?</strong><span>Session and weekly resets, explained</span></a></div>
+        <div class="related"><a class="related-card glass" href="/limits/claude-max"><strong>Claude Max limits</strong><span>5x Pro&#x27;s usage, plus a Fable allowance</span></a><a class="related-card glass" href="/limits/claude-code"><strong>Claude Code limits</strong><span>How Claude Code counts against your plan</span></a><a class="related-card glass" href="/guides/when-does-claude-limit-reset"><strong>When do Claude limits reset?</strong><span>Session and weekly resets, explained</span></a></div>
       </div>
     </section>
     <section class="cta lit">
@@ -139,7 +148,7 @@
             <p>Or ask your coding agent:</p>
             <div class="prompt-box">
               <button type="button" class="copy" data-copy="install-prompt">Copy</button>
-              <pre id="install-prompt">Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`.</pre>
+              <pre id="install-prompt">Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`. Then ask me whether future agent sessions should check Fuel Gauge before long tasks. Only if I say yes, append this to your own global instructions file (~/.claude/CLAUDE.md for Claude Code, ~/.codex/AGENTS.md for Codex), unless it&#x27;s already there, and tell me which file you changed: Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before starting, or switch to a cheaper model. `fuelgauge status --json` has the details.</pre>
             </div>
           </div>
           <p class="fineprint">macOS 14 Sonoma or later · Apple Silicon and Intel</p>
@@ -150,7 +159,7 @@
   <footer>
     <div class="foot-links">
       <div class="wrap">
-        <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a><a href="/limits/codex">Codex limits</a><a href="/limits/cursor">Cursor limits</a><a href="/limits/grok">Grok limits</a><a href="/limits/github-copilot">GitHub Copilot limits</a></nav>
+        <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude">Claude usage limits</a><a href="/limits/claude-weekly-limit">Claude weekly limit</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a><a href="/limits/codex">Codex limits</a><a href="/limits/cursor">Cursor limits</a><a href="/limits/grok">Grok limits</a><a href="/limits/github-copilot">GitHub Copilot limits</a></nav>
         <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a><a href="/guides/check-claude-usage">Check your Claude usage</a><a href="/guides/when-does-claude-limit-reset">When Claude limits reset</a><a href="/guides/claude-code-statusline">Claude Code status line</a><a href="/guides/stop-hitting-claude-limits">Stop hitting Claude limits</a></nav>
         <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a><a href="/compare/claude-pro-vs-max">Claude Pro vs Max</a><a href="/compare/claude-code-vs-codex">Claude Code vs Codex</a><a href="/compare/cursor-vs-claude-code">Cursor vs Claude Code</a><a href="/compare/claude-code-pricing">Claude Code pricing</a><a href="/compare/codex-pricing">Codex pricing</a><a href="/alternatives/codexbar">CodexBar alternative</a><a href="/alternatives/ccusage">ccusage alternative</a><a href="/alternatives/ccstatusline">ccstatusline alternative</a><a href="/alternatives/claude-code-usage-monitor">Claude-Code-Usage-Monitor alternative</a></nav>
       </div>
@@ -158,7 +167,7 @@
     <nav class="bx-family" aria-label="More free Mac apps">
       <div class="bx-wrap">
         <a class="bx-eyebrow" href="https://github.com/coreyhaines31">More free Mac apps</a>
-        <ul><li><a href="https://fuelgauge.app" aria-current="page"><img src="/images/family/fuel.png" alt="" width="56" height="56">Fuel Gauge</a></li><li><a href="https://spareformac.com" title="See what&#x27;s using your Mac"><img src="/images/family/spare.png" alt="" width="56" height="56">Spare</a></li><li><a href="https://diskforecast.com" title="Know before your disk is full"><img src="/images/family/disk.png" alt="" width="56" height="56">Disk Forecast</a></li><li><a href="https://midnightoil.app" title="Keep your Mac awake"><img src="/images/family/oil.png" alt="" width="56" height="56">Midnight Oil</a></li><li><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?"><img src="/images/family/wifi.png" alt="" width="56" height="56">WiFi or ISP</a></li><li><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers"><img src="/images/family/green.png" alt="" width="56" height="56">Green Room</a></li><li><a href="https://onhandformac.com" title="A clipboard manager for your Mac"><img src="/images/family/hand.png" alt="" width="56" height="56">On Hand</a></li><li><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides"><img src="/images/family/coat.png" alt="" width="56" height="56">Coat Check</a></li><li><a href="https://killcord.app" title="See your API spend before the bill does"><img src="/images/family/kill.png" alt="" width="56" height="56">Kill Cord</a></li></ul>
+        <ul><li><a href="https://fuelgauge.app" aria-current="page"><img src="/images/family/fuel.webp" alt="" width="56" height="56">Fuel Gauge</a></li><li><a href="https://spareformac.com" title="See what&#x27;s using your Mac"><img src="/images/family/spare.webp" alt="" width="56" height="56">Spare</a></li><li><a href="https://diskforecast.com" title="Know before your disk is full"><img src="/images/family/disk.webp" alt="" width="56" height="56">Disk Forecast</a></li><li><a href="https://midnightoil.app" title="Keep your Mac awake"><img src="/images/family/oil.webp" alt="" width="56" height="56">Midnight Oil</a></li><li><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?"><img src="/images/family/wifi.webp" alt="" width="56" height="56">WiFi or ISP</a></li><li><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers"><img src="/images/family/green.webp" alt="" width="56" height="56">Green Room</a></li><li><a href="https://onhandformac.com" title="A clipboard manager for your Mac"><img src="/images/family/hand.webp" alt="" width="56" height="56">On Hand</a></li><li><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides"><img src="/images/family/coat.webp" alt="" width="56" height="56">Coat Check</a></li><li><a href="https://killcord.app" title="See your API spend before the bill does"><img src="/images/family/kill.webp" alt="" width="56" height="56">Kill Cord</a></li></ul>
       </div>
     </nav>
     <div class="bx-footer">
@@ -183,7 +192,7 @@
       });
     });
   </script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does Claude Pro have a limit?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Pro has a session limit that resets every five hours and a weekly limit. Both are shared across claude.ai, Claude Desktop, and Claude Code."}}, {"@type": "Question", "name": "How many messages do you get on Claude Pro?", "acceptedAnswer": {"@type": "Answer", "text": "Anthropic doesn't publish a number. It depends on how long your conversations are, which model and effort level you use, and which features are on. Pro gives at least 5x the per-session usage of Free."}}, {"@type": "Question", "name": "Does Claude Code use the same limit as Claude?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Activity in Claude and Claude Code counts against the same limits."}}, {"@type": "Question", "name": "When does the Claude Pro limit reset?", "acceptedAnswer": {"@type": "Answer", "text": "The session limit resets every five hours. The weekly limit resets once a week at a time set for your account; Settings \u203a Usage on claude.ai shows the next reset."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does Claude Pro have a limit?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Pro has a session limit that resets every five hours and a weekly limit. Both are shared across claude.ai, Claude Desktop, and Claude Code."}}, {"@type": "Question", "name": "How many messages do you get on Claude Pro?", "acceptedAnswer": {"@type": "Answer", "text": "Anthropic doesn't publish a number. It depends on how long your conversations are, which model and effort level you use, and which features are on. Pro gives more usage per session than Free."}}, {"@type": "Question", "name": "Does Claude Code use the same limit as Claude?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Activity in Claude and Claude Code counts against the same limits."}}, {"@type": "Question", "name": "When does the Claude Pro limit reset?", "acceptedAnswer": {"@type": "Answer", "text": "The session limit resets every five hours. The weekly limit resets once a week at a time set for your account; Settings \u203a Usage on claude.ai shows the next reset."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Fuel Gauge", "item": "https://fuelgauge.app/"}, {"@type": "ListItem", "position": 2, "name": "Limits", "item": "https://fuelgauge.app/limits"}, {"@type": "ListItem", "position": 3, "name": "Claude Pro limits", "item": "https://fuelgauge.app/limits/claude-pro"}]}</script>
 </body>
 </html>

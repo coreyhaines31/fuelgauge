@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Claude Code pricing (October 2026): every plan and the API</title>
-  <meta name="description" content="What Claude Code costs: Pro $20, Max $100 or $200, Team and Enterprise seats, or API billing per token. What each plan&#x27;s limits mean, and how to pick.">
+  <title>Claude Code pricing (November 2026): every plan and the API</title>
+  <meta name="description" content="What Claude Code costs: Pro $20, Max $100, Ultra $200, Team and Enterprise seats, or API billing per token. What each plan&#x27;s limits mean, and how to pick.">
   <link rel="canonical" href="https://fuelgauge.app/compare/claude-code-pricing">
-  <meta property="og:title" content="Claude Code pricing (October 2026): every plan and the API">
-  <meta property="og:description" content="What Claude Code costs: Pro $20, Max $100 or $200, Team and Enterprise seats, or API billing per token. What each plan&#x27;s limits mean, and how to pick.">
+  <meta property="og:title" content="Claude Code pricing (November 2026): every plan and the API">
+  <meta property="og:description" content="What Claude Code costs: Pro $20, Max $100, Ultra $200, Team and Enterprise seats, or API billing per token. What each plan&#x27;s limits mean, and how to pick.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Fuel Gauge">
   <meta property="og:image" content="https://fuelgauge.app/images/og/compare-claude-code-pricing.png">
@@ -16,16 +16,24 @@
   <meta property="og:url" content="https://fuelgauge.app/compare/claude-code-pricing">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://fuelgauge.app/images/og/compare-claude-code-pricing.png">
-  <meta name="twitter:title" content="Claude Code pricing (October 2026): every plan and the API">
-  <meta name="twitter:description" content="What Claude Code costs: Pro $20, Max $100 or $200, Team and Enterprise seats, or API billing per token. What each plan&#x27;s limits mean, and how to pick.">
+  <meta name="twitter:title" content="Claude Code pricing (November 2026): every plan and the API">
+  <meta name="twitter:description" content="What Claude Code costs: Pro $20, Max $100, Ultra $200, Team and Enterprise seats, or API billing per token. What each plan&#x27;s limits mean, and how to pick.">
   <meta name="theme-color" content="#e7e8e9" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#2a2a2c" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@300;600;700&display=swap">
+  <link rel="preload" href="/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/barlow-semi-condensed-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/barlow-semi-condensed-300.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 400; font-display: optional; src: url(/fonts/barlow-400.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 500; font-display: optional; src: url(/fonts/barlow-500.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 600; font-display: optional; src: url(/fonts/barlow-600.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 300; font-display: optional; src: url(/fonts/barlow-semi-condensed-300.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 600; font-display: optional; src: url(/fonts/barlow-semi-condensed-600.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 700; font-display: optional; src: url(/fonts/barlow-semi-condensed-700.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+  </style>
   <link rel="stylesheet" href="/kit/brushed.css">
   <link rel="stylesheet" href="/kit/popover.css">
   <link rel="stylesheet" href="/site.css">
@@ -53,7 +61,7 @@
         <div class="eyebrow">Pricing</div>
         <h1>Claude Code pricing</h1>
         <p class="lede">There's no separate Claude Code subscription. It comes with every paid Claude plan, or you pay per token through the Claude Console.</p>
-        <div class="tldr glass"><h2>The short answer</h2><p>Claude Code is included with Claude Pro ($20 a month, or $17 billed yearly), Max 5x ($100), Max 20x ($200), Team, and Enterprise. It isn't included in Claude Free. On a plan, Claude Code shares the plan's 5-hour session limit and weekly limit with your Claude chats. You can also skip the plan and pay per token at standard API rates through the Claude Console.</p></div>
+        <div class="tldr glass"><h2>The short answer</h2><p>Claude Code is included with Claude Pro ($20 a month, or $17 billed yearly), Max ($100), Ultra ($200), Team, and Enterprise. It isn't included in Claude Free. On a plan, Claude Code shares the plan's 5-hour session limit and weekly limit with your Claude chats. You can also skip the plan and pay per token at standard API rates through the Claude Console.</p></div>
       </div>
     </div>
     <section class="tight" id="facts">
@@ -63,21 +71,21 @@
                 <div class="table-card glass"><div class="table-scroll"><table class="compare facts"><tbody>
             <tr><th scope="row">Free</th><td>$0 · Claude Code not included</td></tr>
             <tr><th scope="row">Pro</th><td>$20 a month, or $17 a month billed yearly ($200 up front)</td></tr>
-            <tr><th scope="row">Max 5x</th><td>$100 a month · 5x Pro's usage per session</td></tr>
-            <tr><th scope="row">Max 20x</th><td>$200 a month · 20x Pro's usage per session</td></tr>
+            <tr><th scope="row">Max</th><td>$100 a month · 5x Pro's usage every five hours and every week</td></tr>
+            <tr><th scope="row">Ultra</th><td>$200 a month · 10x Pro's usage every week · No 5-hour limit on verified accounts</td></tr>
             <tr><th scope="row">Team</th><td>Standard seat $20 billed yearly ($25 monthly) · Premium seat $100 yearly ($125 monthly) · 2 to 150 people</td></tr>
             <tr><th scope="row">Enterprise</th><td>$20 a seat a month billed yearly, 20-seat minimum, plus usage that scales with model and task</td></tr>
             <tr><th scope="row">API (Claude Console)</th><td>No subscription; pay per token at standard API rates</td></tr>
           </tbody></table></div></div>
-        <p class="table-foot">Prices in US dollars, from Anthropic's pricing page on October 20, 2026.</p>
+        <p class="table-foot">Prices in US dollars, from Anthropic's pricing page on November 17, 2026.</p>
       </div></div>
     </section>
     <section class="tight lit" id="limits">
       <div class="wrap narrow"><div class="prose">
 
         <h2>What the price buys: limits, not messages</h2>
-        <p>Anthropic doesn't sell Claude Code by the message or the token on a subscription. Each plan buys a share of usage, capped two ways: a session limit that resets every five hours, and a weekly limit. Claude, Claude Desktop, and Claude Code all draw from the same limits, so heavy chat use leaves less for coding.</p>
-        <p>That makes the plans hard to compare on paper. Pro gives at least five times the Free plan's usage per session, Max 5x five times Pro's, and Max 20x twenty times Pro's, but none of them comes with a message count. The details are on the <a href="/limits/claude-pro">Pro</a>, <a href="/limits/claude-max">Max</a>, and <a href="/limits/claude-code">Claude Code</a> limits pages.</p>
+        <p>Anthropic doesn't sell Claude Code by the message or the token on a subscription. Each plan buys a share of usage, capped two ways: a session limit that resets every five hours (verified Ultra accounts don't have one), and a weekly limit. Claude, Claude Desktop, and Claude Code all draw from the same limits, so heavy chat use leaves less for coding.</p>
+        <p>That makes the plans hard to compare on paper. Pro gives more than Free, Max five times Pro's, and Ultra ten times Pro's weekly usage, but none of them comes with a message count. The details are on the <a href="/limits/claude-pro">Pro</a>, <a href="/limits/claude-max">Max</a>, and <a href="/limits/claude-code">Claude Code</a> limits pages.</p>
       </div></div>
     </section>
     <section class="tight" id="pick">
@@ -86,8 +94,8 @@
         <h2>Which plan to pick</h2>
         <ul>
           <li><strong>Start on Pro</strong> unless you already know you work in long agent sessions. It's the cheapest way to find out how fast you use a session.</li>
-          <li><strong>Move to Max 5x</strong> when you hit the 5-hour limit most working days. Upgrading applies right away and is prorated. <a href="/compare/claude-pro-vs-max">Pro vs Max</a> goes through the signs.</li>
-          <li><strong>Max 20x</strong> is for running Claude Code most of the day, with subagents or loops.</li>
+          <li><strong>Move to Max</strong> when you hit the 5-hour limit most working days. Upgrading applies right away. <a href="/compare/claude-pro-vs-max">Pro vs Max</a> goes through the signs.</li>
+          <li><strong>Ultra</strong> is for running Claude Code most of the day, with subagents or loops. It has no 5-hour limit once verified.</li>
           <li><strong>Pay per token</strong> if you use Claude Code a few times a month, or need it billed to a company API account.</li>
         </ul>
       </div></div>
@@ -96,8 +104,8 @@
       <div class="wrap narrow"><div class="prose">
 
         <h2>Subscription or API billing?</h2>
-        <p>Claude Code can bill API credits at standard API rates instead of your plan. That's useful as overflow, but easy to do by accident: if an <code>ANTHROPIC_API_KEY</code> is set in your environment, Claude Code uses it. To stay on your plan, run <code>claude logout</code>, then <code>claude login</code> and sign in with your Pro or Max account.</p>
-        <p>The monthly API credits that come with Max can't be used in Claude Code or the Claude apps. Usage credits can: turn them on in <a href="https://claude.ai/settings/usage">Settings › Usage</a> to keep working past a limit at API rates.</p>
+        <p>Claude Code can bill API credits at standard API rates instead of your plan. That's useful as overflow, but easy to do by accident: if an <code>ANTHROPIC_API_KEY</code> is set in your environment, Claude Code uses it. To stay on your plan, run <code>claude logout</code>, then <code>claude login</code> and sign in with your Claude plan.</p>
+        <p>The monthly API credits that come with Max and Ultra can't be used in Claude Code or the Claude apps. Usage credits can: turn them on in <a href="https://claude.ai/settings/usage">Settings › Usage</a> to keep working past a limit at API rates.</p>
       </div></div>
     </section>
     <section class="tight" id="pace">
@@ -111,15 +119,15 @@
       <div class="wrap narrow"><div class="prose">
 
         <h2>Sources</h2>
-        <p>Checked on October 20, 2026. Plans change from time to time, so the providers' own pages are the final word.</p>
-        <ul><li><a href="https://claude.com/pricing">Claude pricing</a></li><li><a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Use Claude Code with your Pro or Max plan</a></li><li><a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">What is the Max plan?</a></li><li><a href="https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work">How do usage and length limits work?</a></li></ul>
+        <p>Checked on November 17, 2026. Plans change from time to time, so the providers' own pages are the final word.</p>
+        <ul><li><a href="https://claude.com/pricing">Claude pricing</a></li><li><a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Use Claude Code with your Pro, Max, or Ultra plan</a></li><li><a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">What is the Max plan?</a></li><li><a href="https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan">What is the Ultra plan?</a></li><li><a href="https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work">How do usage and length limits work?</a></li></ul>
       </div></div>
     </section>
     <section class="tight lit">
       <div class="wrap">
         <div class="head center head-sm"><h2>Questions</h2></div>
         <div class="faq glass">
-          <details><summary>How much does Claude Code cost?</summary><p>Claude Code comes with Claude Pro ($20 a month, or $17 billed yearly), Max ($100 or $200 a month), Team, and Enterprise. Or you can pay per token at API rates through the Claude Console.</p></details>
+          <details><summary>How much does Claude Code cost?</summary><p>Claude Code comes with Claude Pro ($20 a month, or $17 billed yearly), Max ($100 a month), Ultra ($200 a month), Team, and Enterprise. Or you can pay per token at API rates through the Claude Console.</p></details>
           <details><summary>Is Claude Code free?</summary><p>No. Claude Free doesn&#x27;t include Claude Code. Pro at $20 a month is the cheapest plan that does.</p></details>
           <details><summary>Can I use Claude Code with an API key instead of a plan?</summary><p>Yes. Claude Code can bill API credits at standard API rates through the Claude Console. If ANTHROPIC_API_KEY is set, Claude Code uses it instead of your subscription.</p></details>
           <details><summary>Do the Max plan&#x27;s API credits work in Claude Code?</summary><p>No. The monthly API credits included with Max can&#x27;t be used in Claude Code or the Claude apps.</p></details>
@@ -147,7 +155,7 @@
             <p>Or ask your coding agent:</p>
             <div class="prompt-box">
               <button type="button" class="copy" data-copy="install-prompt">Copy</button>
-              <pre id="install-prompt">Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`.</pre>
+              <pre id="install-prompt">Install Fuel Gauge on my Mac: run `brew install --cask coreyhaines31/tap/fuelgauge`, open Fuel Gauge, then run `fuelgauge install-statusline` and `fuelgauge status`. Then ask me whether future agent sessions should check Fuel Gauge before long tasks. Only if I say yes, append this to your own global instructions file (~/.claude/CLAUDE.md for Claude Code, ~/.codex/AGENTS.md for Codex), unless it&#x27;s already there, and tell me which file you changed: Before starting a long or expensive task, run `fuelgauge status`. If it exits with code 2, a Claude Code, Codex, or Grok Bot limit is forecast to run out before it resets: tell me which one and when, and ask before starting, or switch to a cheaper model. `fuelgauge status --json` has the details.</pre>
             </div>
           </div>
           <p class="fineprint">macOS 14 Sonoma or later · Apple Silicon and Intel</p>
@@ -158,7 +166,7 @@
   <footer>
     <div class="foot-links">
       <div class="wrap">
-        <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a><a href="/limits/codex">Codex limits</a><a href="/limits/cursor">Cursor limits</a><a href="/limits/grok">Grok limits</a><a href="/limits/github-copilot">GitHub Copilot limits</a></nav>
+        <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a><a href="/limits/claude">Claude usage limits</a><a href="/limits/claude-weekly-limit">Claude weekly limit</a><a href="/limits/claude-pro">Claude Pro limits</a><a href="/limits/claude-max">Claude Max limits</a><a href="/limits/claude-code">Claude Code limits</a><a href="/limits/claude-free">Claude Free limits</a><a href="/limits/codex">Codex limits</a><a href="/limits/cursor">Cursor limits</a><a href="/limits/grok">Grok limits</a><a href="/limits/github-copilot">GitHub Copilot limits</a></nav>
         <nav class="footer-alts" aria-label="Guides"><a class="label" href="/guides">Guides</a><a href="/guides/check-claude-usage">Check your Claude usage</a><a href="/guides/when-does-claude-limit-reset">When Claude limits reset</a><a href="/guides/claude-code-statusline">Claude Code status line</a><a href="/guides/stop-hitting-claude-limits">Stop hitting Claude limits</a></nav>
         <nav class="footer-alts" aria-label="Compare"><a class="label" href="/compare">Compare</a><a href="/compare/claude-pro-vs-max">Claude Pro vs Max</a><a href="/compare/claude-code-vs-codex">Claude Code vs Codex</a><a href="/compare/cursor-vs-claude-code">Cursor vs Claude Code</a><a href="/compare/claude-code-pricing">Claude Code pricing</a><a href="/compare/codex-pricing">Codex pricing</a><a href="/alternatives/codexbar">CodexBar alternative</a><a href="/alternatives/ccusage">ccusage alternative</a><a href="/alternatives/ccstatusline">ccstatusline alternative</a><a href="/alternatives/claude-code-usage-monitor">Claude-Code-Usage-Monitor alternative</a></nav>
       </div>
@@ -166,7 +174,7 @@
     <nav class="bx-family" aria-label="More free Mac apps">
       <div class="bx-wrap">
         <a class="bx-eyebrow" href="https://github.com/coreyhaines31">More free Mac apps</a>
-        <ul><li><a href="https://fuelgauge.app" aria-current="page"><img src="/images/family/fuel.png" alt="" width="56" height="56">Fuel Gauge</a></li><li><a href="https://spareformac.com" title="See what&#x27;s using your Mac"><img src="/images/family/spare.png" alt="" width="56" height="56">Spare</a></li><li><a href="https://diskforecast.com" title="Know before your disk is full"><img src="/images/family/disk.png" alt="" width="56" height="56">Disk Forecast</a></li><li><a href="https://midnightoil.app" title="Keep your Mac awake"><img src="/images/family/oil.png" alt="" width="56" height="56">Midnight Oil</a></li><li><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?"><img src="/images/family/wifi.png" alt="" width="56" height="56">WiFi or ISP</a></li><li><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers"><img src="/images/family/green.png" alt="" width="56" height="56">Green Room</a></li><li><a href="https://onhandformac.com" title="A clipboard manager for your Mac"><img src="/images/family/hand.png" alt="" width="56" height="56">On Hand</a></li><li><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides"><img src="/images/family/coat.png" alt="" width="56" height="56">Coat Check</a></li><li><a href="https://killcord.app" title="See your API spend before the bill does"><img src="/images/family/kill.png" alt="" width="56" height="56">Kill Cord</a></li></ul>
+        <ul><li><a href="https://fuelgauge.app" aria-current="page"><img src="/images/family/fuel.webp" alt="" width="56" height="56">Fuel Gauge</a></li><li><a href="https://spareformac.com" title="See what&#x27;s using your Mac"><img src="/images/family/spare.webp" alt="" width="56" height="56">Spare</a></li><li><a href="https://diskforecast.com" title="Know before your disk is full"><img src="/images/family/disk.webp" alt="" width="56" height="56">Disk Forecast</a></li><li><a href="https://midnightoil.app" title="Keep your Mac awake"><img src="/images/family/oil.webp" alt="" width="56" height="56">Midnight Oil</a></li><li><a href="https://wifiorisp.com" title="Is slow internet your Wi-Fi or your ISP?"><img src="/images/family/wifi.webp" alt="" width="56" height="56">WiFi or ISP</a></li><li><a href="https://greenroomformac.com" title="Check your camera, mic, and speakers"><img src="/images/family/green.webp" alt="" width="56" height="56">Green Room</a></li><li><a href="https://onhandformac.com" title="A clipboard manager for your Mac"><img src="/images/family/hand.webp" alt="" width="56" height="56">On Hand</a></li><li><a href="https://coatcheckformac.com" title="Reach the menu bar icons the notch hides"><img src="/images/family/coat.webp" alt="" width="56" height="56">Coat Check</a></li><li><a href="https://killcord.app" title="See your API spend before the bill does"><img src="/images/family/kill.webp" alt="" width="56" height="56">Kill Cord</a></li></ul>
       </div>
     </nav>
     <div class="bx-footer">
@@ -191,7 +199,7 @@
       });
     });
   </script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does Claude Code cost?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code comes with Claude Pro ($20 a month, or $17 billed yearly), Max ($100 or $200 a month), Team, and Enterprise. Or you can pay per token at API rates through the Claude Console."}}, {"@type": "Question", "name": "Is Claude Code free?", "acceptedAnswer": {"@type": "Answer", "text": "No. Claude Free doesn't include Claude Code. Pro at $20 a month is the cheapest plan that does."}}, {"@type": "Question", "name": "Can I use Claude Code with an API key instead of a plan?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Claude Code can bill API credits at standard API rates through the Claude Console. If ANTHROPIC_API_KEY is set, Claude Code uses it instead of your subscription."}}, {"@type": "Question", "name": "Do the Max plan's API credits work in Claude Code?", "acceptedAnswer": {"@type": "Answer", "text": "No. The monthly API credits included with Max can't be used in Claude Code or the Claude apps."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does Claude Code cost?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code comes with Claude Pro ($20 a month, or $17 billed yearly), Max ($100 a month), Ultra ($200 a month), Team, and Enterprise. Or you can pay per token at API rates through the Claude Console."}}, {"@type": "Question", "name": "Is Claude Code free?", "acceptedAnswer": {"@type": "Answer", "text": "No. Claude Free doesn't include Claude Code. Pro at $20 a month is the cheapest plan that does."}}, {"@type": "Question", "name": "Can I use Claude Code with an API key instead of a plan?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Claude Code can bill API credits at standard API rates through the Claude Console. If ANTHROPIC_API_KEY is set, Claude Code uses it instead of your subscription."}}, {"@type": "Question", "name": "Do the Max plan's API credits work in Claude Code?", "acceptedAnswer": {"@type": "Answer", "text": "No. The monthly API credits included with Max can't be used in Claude Code or the Claude apps."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Fuel Gauge", "item": "https://fuelgauge.app/"}, {"@type": "ListItem", "position": 2, "name": "Compare", "item": "https://fuelgauge.app/compare"}, {"@type": "ListItem", "position": 3, "name": "Claude Code pricing", "item": "https://fuelgauge.app/compare/claude-code-pricing"}]}</script>
 </body>
 </html>

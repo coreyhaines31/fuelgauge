@@ -9,7 +9,6 @@ VERIFIED = "October 20, 2026"
 USAGE = "https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work"
 MAX = "https://support.claude.com/en/articles/11049741-what-is-the-max-plan"
 CODE = "https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan"
-FREE = "https://support.claude.com/en/articles/8602283-about-free-claude-usage"
 PRICING = "https://claude.com/pricing"
 COSTS = "https://code.claude.com/docs/en/costs"
 SETTINGS = "https://claude.ai/settings/usage"
@@ -26,13 +25,24 @@ COPILOT_BILLING = "https://docs.github.com/en/copilot/concepts/billing/billing-f
 COPILOT_ORGS = "https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises"
 COPILOT_PLANS = "https://github.com/features/copilot/plans"
 COPILOT_LEGACY = "https://docs.github.com/en/copilot/concepts/billing/copilot-requests"
+ULTRA = "https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan"
+PRO = "https://support.claude.com/en/articles/8325606-what-is-the-pro-plan"
+TEAM = "https://support.claude.com/en/articles/9266767-what-is-the-team-plan"
+FABLE_PLAN = "https://support.claude.com/en/articles/15424964-claude-fable-models-on-your-plan"
+LIMIT_RESET = "https://support.claude.com/en/articles/17007452-what-is-a-limit-reset"
+FABLE_OFFERS = "https://support.claude.com/en/articles/17506494-claude-fable-5-2-launch-offers"
+GET_STARTED = "https://support.claude.com/en/articles/8114491-get-started-with-claude"
+STATUSLINE = "https://code.claude.com/docs/en/statusline"
+CHECKED = "November 17, 2026"
+# For a page whose other facts weren't rechecked: says which part was, and when.
+PLAN_NOTE = f"\n        <p>Claude plan details rechecked on {CHECKED}.</p>"
 
 
-def sources(*links):
+def sources(*links, checked=VERIFIED):
     items = "".join(f'<li><a href="{url}">{name}</a></li>' for name, url in links)
     return f"""
         <h2>Sources</h2>
-        <p>Checked on {VERIFIED}. Plans change from time to time, so the providers' own pages are the final word.</p>
+        <p>Checked on {checked}. Plans change from time to time, so the providers' own pages are the final word.</p>
         <ul>{items}</ul>"""
 
 
@@ -42,27 +52,202 @@ FORECAST = """
 
 LIMITS = [
     {
+        "path": "/limits/claude",
+        "short": "Claude usage limits",
+        "card": "Every plan: the 5-hour session, the weekly limit, and Fable",
+        "hub_windows": "5-hour session (none on verified Ultra), weekly, weekly Fable cap on Max and Ultra",
+        "hub_reset": "5 hours after your first message; weekly at a set time for your account",
+        "title": "Claude usage limits (November 2026): every plan explained",
+        "description": "How Claude usage limits work on Free, Pro, Max, Ultra, and Team: the 5-hour session limit, the weekly limit, the Fable cap, and how to check yours.",
+        "eyebrow": "Claude",
+        "h1": "Claude usage limits",
+        "lede": "Paid Claude plans meter your usage in two windows: a session that resets five hours after your first message, and a week that resets at a fixed time set for your account. Chat, Claude Desktop, and Claude Code all draw from the same limits.",
+        "answer": "Paid Claude plans have a 5-hour session limit and a weekly limit, shared across claude.ai, Claude Desktop, and Claude Code. Pro costs $20 a month. Max ($100) gives 5x Pro's usage every five hours and every week. Ultra ($200, formerly Max 20x) gives 10x Pro's weekly usage and has no 5-hour limit once your account is verified. Max and Ultra can spend up to half the weekly limit on Fable. Anthropic doesn't publish message counts for any plan. Settings › Usage shows where you stand.",
+        "sections": [
+            {"id": "facts", "facts": [
+                ("Free", "$0 · A session limit that resets every five hours; how much fits changes with demand · No Claude Code"),
+                ("Pro", "$20 a month, or $17 a month billed yearly · 5-hour and weekly limits · Fable runs on usage credits"),
+                ("Max", "$100 a month · 5x Pro's usage every five hours and every week · Fable up to 50% of the weekly limit"),
+                ("Ultra", "$200 a month · 10x Pro's usage every week · No 5-hour limit on verified accounts · Fable up to 50% of the weekly limit"),
+                ("Team", "Standard seat: 1.25x Pro's per-session usage · Premium seat: 6.25x · Each member has their own weekly limit"),
+                ("Enterprise", "Seat-based plans have seat limits; usage-based plans are billed by what you use"),
+                ("Shared by", "claude.ai, Claude Desktop, and Claude Code, including Claude Code in VS Code, Cursor, and JetBrains"),
+                ("Check it", f'<a href="{SETTINGS}">Settings › Usage</a> on claude.ai, or <code>/usage</code> in Claude Code'),
+            ], "html": """
+        <h2>Claude usage limits by plan</h2>
+        {{FACTS}}
+        <p class="table-foot">Anthropic states every allowance relative to another plan, never as a message or token count.</p>"""},
+            {"id": "how", "lit": True, "html": """
+        <h2>How the 5-hour limit works</h2>
+        <p>The session window starts when you send your first message and resets in full five hours later. If you hit the limit before then, you're paused until the reset. Settings › Usage shows the time left under <strong>Current session</strong>.</p>
+        <p>Verified Ultra accounts have no 5-hour limit, just the weekly one. A new Ultra account has a temporary limit until Anthropic verifies it, which happens on its own. If you don't see a Current session bar, your account is verified.</p>
+        <h2>How the weekly limit works</h2>
+        <p>The weekly limit covers every model and caps your total for the week, however you spread it across sessions. It resets at a fixed day and time assigned to your account. It stays the same regardless of when your subscription began or when you started using Claude. The <a href="/limits/claude-weekly-limit">Claude weekly limit</a> page covers it in detail.</p>
+        <h2>The Fable allowance</h2>
+        <p>On Max, Ultra, and Team premium seats, Fable models come with the plan, and you can spend up to 50% of your weekly limit on them. That's a cap inside the weekly limit, not extra room on top of it. On Pro and Team standard seats, Fable isn't part of the plan's limits and runs on usage credits.</p>
+        <h3>What uses it up faster</h3>
+        <ul>
+          <li>Long conversations, since each message carries the history before it</li>
+          <li>Bigger models, Fable especially, and higher effort levels</li>
+          <li>Tools and connectors, which use a lot of tokens</li>
+          <li>Long chats that hit automatic context management, which summarizes earlier messages and costs extra usage</li>
+        </ul>"""},
+            {"id": "limit", "html": """
+        <h2>What happens when you hit a Claude limit</h2>
+        <p>Claude warns you as you get close. At the limit you have three options:</p>
+        <ul>
+          <li><strong>Wait</strong> for the session or the week to reset.</li>
+          <li><strong>Turn on <a href="https://support.claude.com/en/articles/12429409-manage-usage-credits-for-paid-claude-plans">usage credits</a></strong> and keep working at extra cost.</li>
+          <li><strong>Upgrade</strong>: Pro to Max, or Max to Ultra. The new limits apply right away.</li>
+        </ul>
+        <p>Sometimes Anthropic gives an account a <strong>limit reset</strong>, which refills the 5-hour or weekly limit on the spot. Use it from Settings › Usage or from the message you see at the limit. The button isn't in Claude Code in the terminal, but the usage it restores counts there too.</p>
+        <h3>In Claude Code</h3>
+        <p>If you hit the 5-hour limit partway through a response, Claude Code can finish the step in progress ("Usage limit reached · wrapping up"). On Pro that happens at most once per week; on Max it can happen at every 5-hour limit. It counts toward your weekly limit.</p>
+        <p>Two traps. If <code>ANTHROPIC_API_KEY</code> is set in your shell, Claude Code bills that key instead of your plan. And the monthly API credits that come with Max and Ultra don't cover Claude Code or the Claude apps.</p>"""},
+            {"id": "check", "lit": True, "html": """
+        <h2>How to see your Claude usage</h2>
+        <ul>
+          <li><strong><a href="https://claude.ai/settings/usage">Settings › Usage</a></strong> on claude.ai, Claude Desktop, or mobile: the current session, the weekly limit, the Fable allowance where your plan has one, and your next reset.</li>
+          <li><strong><code>/usage</code></strong> in Claude Code: plan usage bars, plus a breakdown of what used them.</li>
+          <li><strong>The Claude Code status line</strong> gets your 5-hour and weekly percentages after every reply on Pro, Max, and Ultra. <a href="/guides/claude-code-statusline">Here's how to show them</a>.</li>
+        </ul>
+        <p>More detail: <a href="/guides/check-claude-usage">every way to check your Claude usage</a>.</p>
+        <h2>Will you make it to the reset?</h2>
+        <p>A percentage says how much you've used. It doesn't say whether you'll run out before the window resets. <a href="/">Fuel Gauge</a> is a free Mac menu bar app that does that math: "Makes it to reset" or "Runs out around 3:40p, 1h 20m early". You find out in time to switch to a cheaper model or save the big job for after the reset.</p>
+        <p>What it can and can't see:</p>
+        <ul>
+          <li><strong>5-hour and weekly limits</strong> come from Claude Code, which reports them after every reply. They're your plan's numbers, so they include what you used in chat. They only refresh when Claude Code replies.</li>
+          <li><strong>The Fable allowance</strong> comes from your installed Claude Code once an hour. No prompt is sent, so it costs no usage.</li>
+          <li><strong>Plans</strong>: Pro, Max, and Ultra, the plans Claude Code reports limits for. If you only chat on claude.ai and never use Claude Code, Fuel Gauge has nothing to read.</li>
+        </ul>"""},
+            {"id": "sources", "html": sources(
+                ("How do usage and length limits work?", USAGE),
+                ("Claude pricing", PRICING),
+                ("What is the Pro plan?", PRO),
+                ("What is the Max plan?", MAX),
+                ("What is the Ultra plan?", ULTRA),
+                ("What is the Team plan?", TEAM),
+                ("Claude Fable models on your plan", FABLE_PLAN),
+                ("What is a limit reset?", LIMIT_RESET),
+                ("Use Claude Code with your Pro, Max, or Ultra plan", CODE),
+                ("Get started with Claude (Free plan limits)", GET_STARTED),
+                ("Status line (Claude Code docs)", STATUSLINE),
+                checked=CHECKED)},
+        ],
+        "faqs": [
+            ("What are Claude's usage limits?", "Paid plans have a session limit that resets five hours after your first message and a weekly limit that resets at a fixed time for your account. Max and Ultra also cap Fable at up to half the weekly limit. Free has a 5-hour session limit that changes with demand."),
+            ("Does Claude have a daily limit?", "No. The windows are a five-hour session and a week. Anthropic says it may add other caps to manage capacity."),
+            ("How many messages can I send on Claude?", "Anthropic doesn't publish a number for any plan. It depends on conversation length, files, the model, the effort level, and the features you use."),
+            ("Do Claude and Claude Code share the same limit?", "Yes. claude.ai, Claude Desktop, and Claude Code all count toward the same limits."),
+            ("What happened to Claude Max 20x?", "It's now the Ultra plan. Max 20x subscribers moved to Ultra automatically with no price change. Ultra gives 10x Pro's weekly usage and has no 5-hour limit on verified accounts."),
+            ("Is there an unlimited Claude plan?", "No. Every plan has limits. On a paid plan, usage credits let you keep working past them, and usage-based Enterprise plans are billed by consumption."),
+        ],
+        "related": [
+            ("The Claude weekly limit", "When it resets and how Fable fits in", "/limits/claude-weekly-limit"),
+            ("When do Claude limits reset?", "Session and weekly resets, explained", "/guides/when-does-claude-limit-reset"),
+            ("Stop hitting Claude limits", "What actually stretches your plan", "/guides/stop-hitting-claude-limits"),
+        ],
+    },
+    {
+        "path": "/limits/claude-weekly-limit",
+        "short": "Claude weekly limit",
+        "card": "The fixed weekly reset, the Fable cap, and limit resets",
+        "hub_windows": "Weekly, across all models; Fable capped at half on Max and Ultra",
+        "hub_reset": "Once a week, at a fixed day and time for your account",
+        "title": "Claude weekly limit (November 2026): how it works and resets",
+        "description": "How Claude's weekly limit works on Pro, Max, Ultra, and Team: the fixed weekly reset time, the Fable cap, limit resets, and what to do when you hit it.",
+        "eyebrow": "Claude",
+        "h1": "The Claude weekly limit",
+        "lede": "The weekly limit caps your total for the week, however you spread it across sessions. It resets at the same day and time every week, set for your account.",
+        "answer": "Every paid Claude plan has a weekly limit. It applies across all models and is shared by claude.ai, Claude Desktop, and Claude Code. It resets at a fixed time each week assigned to your account, not when you subscribed or first used Claude, and you get the full allowance back each cycle. On Max and Ultra, Fable can use up to half of it. Settings › Usage shows your next reset.",
+        "sections": [
+            {"id": "facts", "facts": [
+                ("Plans", "Pro, Max, Ultra, and Team seats"),
+                ("Covers", "All models, across claude.ai, Claude Desktop, and Claude Code"),
+                ("Resets", "Once a week, at a fixed day and time assigned to your account"),
+                ("Doesn't depend on", "When your subscription began or when you started using Claude"),
+                ("Size", "Max: 5x Pro's · Ultra: 10x Pro's · Anthropic doesn't publish it as a message count"),
+                ("Fable", "Max, Ultra, Team premium seats: up to 50% of the weekly limit · Pro, Team standard seats: usage credits instead"),
+                ("Check it", f'<a href="{SETTINGS}">Settings › Usage</a> shows your next reset'),
+                ("At the limit", "Wait, turn on usage credits, upgrade, or use a limit reset if you have one"),
+            ], "html": """
+        <h2>The Claude weekly limit at a glance</h2>
+        {{FACTS}}"""},
+            {"id": "how", "lit": True, "html": """
+        <h2>Weekly limit vs the 5-hour limit</h2>
+        <p><strong>The 5-hour limit</strong> starts with your first message and resets five hours later. It's the one that stops a long afternoon session.</p>
+        <p><strong>The weekly limit</strong> adds up every session. A few heavy days can use it up even if no single session hit its cap, and then you wait for the weekly reset, not the next five-hour window.</p>
+        <p>On a verified Ultra account there's no 5-hour limit at all, so the weekly limit is the only one you'll hit.</p>
+        <h3>Switching models won't get you around it</h3>
+        <p>The weekly limit covers every model. Moving to a smaller model stretches what's left, but once the limit is reached, every model is paused until the reset.</p>
+        <h2>How the Fable cap fits in</h2>
+        <p>On Max, Ultra, and Team premium seats, you can spend up to 50% of your weekly limit on Fable models. That's a cap inside the weekly limit, not 50% extra. Say you've used 40% of your week on Fable and 30% on other models: you can spend another 10% on Fable, and 30% of the week is left in total.</p>
+        <p>When you hit the Fable cap, switch to another model to keep working within your plan, or keep using Fable on usage credits. On Pro and Team standard seats, Fable runs on usage credits from the start and doesn't count toward the weekly limit.</p>"""},
+            {"id": "resets", "html": """
+        <h2>Limit resets</h2>
+        <p>Anthropic occasionally gives accounts a limit reset. A weekly reset refills your weekly limit right away. A Fable reset gives back only what you spent on Fable, and refills the 5-hour window if you have one. Either way, your regular reset day and time stay the same.</p>
+        <p>To use one, open Settings › Usage on the web, desktop, or mobile app and choose "Reset for free". The same button appears on the message you see at the limit. It isn't in Claude Code in the terminal, but the usage it restores applies there too. A reset can't be undone, and it's gone if you downgrade or cancel first.</p>
+        <p>For the Fable 5.2 launch, Max, Ultra, and Team premium subscribers with paid billing in place before 10:00 am PT on November 9, 2026 got one to three Fable resets, depending on how long they've subscribed. Those expire March 8, 2027 at 11:59 pm PT.</p>
+        <h2>What to do when you hit it</h2>
+        <ul>
+          <li><strong>Wait</strong> for the weekly reset. Settings › Usage shows when.</li>
+          <li><strong>Turn on usage credits</strong> to keep going at extra cost. On Max and Ultra they also work past the Fable cap.</li>
+          <li><strong>Upgrade</strong> from Pro to Max, or Max to Ultra. The new limit applies right away.</li>
+        </ul>
+        <p>In Claude Code, the wrap-up allowance that lets a step finish at the 5-hour limit counts toward your weekly limit. The monthly API credits on Max and Ultra can't be used in Claude Code or the Claude apps.</p>"""},
+            {"id": "forecast", "lit": True, "html": """
+        <h2>Will your week last?</h2>
+        <p>With three days to go, 60% used can be fine or a problem. It depends on how you'll use the rest of the week. <a href="/">Fuel Gauge</a>, a free Mac menu bar app, reads your weekly limit from Claude Code after every reply and forecasts whether you'll make it to the reset: "Makes it to reset, about 70% by then", or when you'll run out.</p>
+        <p>After about two weeks of readings it learns your usual hours and your weekday and weekend patterns, so a quiet weekend ahead counts. It tracks the Fable cap as its own limit. When your week won't last, it says whether one of your saved limit resets would fix it, and which one. It can't use a reset for you.</p>
+        <p>It works with Pro, Max, and Ultra, through Claude Code. Your chat usage is in the numbers, since the limit is shared, but the reading only updates when Claude Code replies.</p>"""},
+            {"id": "sources", "html": sources(
+                ("How do usage and length limits work?", USAGE),
+                ("What is the Max plan?", MAX),
+                ("What is the Ultra plan?", ULTRA),
+                ("What is the Team plan?", TEAM),
+                ("Claude Fable models on your plan", FABLE_PLAN),
+                ("What is a limit reset?", LIMIT_RESET),
+                ("Claude Fable 5.2 launch offers", FABLE_OFFERS),
+                ("Use Claude Code with your Pro, Max, or Ultra plan", CODE),
+                checked=CHECKED)},
+        ],
+        "faqs": [
+            ("When does the Claude weekly limit reset?", "Once a week, at a fixed day and time assigned to your account. Settings › Usage on claude.ai shows your next reset."),
+            ("Why does my weekly limit reset on a different day than someone else's?", "Each account gets its own weekly reset time. It isn't a calendar day everyone shares."),
+            ("Does my subscription date set my weekly reset?", "No. Your reset day and time stay the same regardless of when your subscription began or when you started using Claude."),
+            ("Does the Fable limit add to my weekly limit?", "No. On Max and Ultra you can spend up to half your weekly limit on Fable, but all models draw from the same weekly limit."),
+            ("Can I reset my Claude weekly limit early?", "Only with a limit reset, if Anthropic has given your account one. Otherwise usage credits let you keep working until the reset."),
+            ("Does Claude Code have its own weekly limit?", "No. Claude Code shares your plan's weekly limit with claude.ai and Claude Desktop."),
+        ],
+        "related": [
+            ("Claude usage limits", "Every plan's limits in one place", "/limits/claude"),
+            ("When do Claude limits reset?", "Session and weekly resets, explained", "/guides/when-does-claude-limit-reset"),
+            ("Check your Claude usage", "Every place to see what's left", "/guides/check-claude-usage"),
+        ],
+    },
+    {
         "path": "/limits/claude-pro",
         "short": "Claude Pro limits",
         "card": "5-hour session and weekly limits, shared with Claude Code",
         "hub_windows": "5-hour session, weekly",
         "hub_reset": "Every 5 hours; weekly at a set time for your account",
-        "title": "Claude Pro usage limits (October 2026): session and weekly",
+        "title": "Claude Pro usage limits (November 2026): session and weekly",
         "description": "How Claude Pro's limits work: a 5-hour session limit and a weekly limit, shared across Claude and Claude Code. When they reset and how to check.",
         "eyebrow": "Claude Pro",
         "h1": "Claude Pro usage limits",
         "lede": "Pro has two limits: a session limit that resets every five hours, and a weekly limit. Claude, Claude Desktop, and Claude Code all draw from both.",
-        "answer": "Claude Pro ($20 a month, or $17 a month billed yearly) gives you at least 5x the per-session usage of the Free plan. Usage is capped by a 5-hour session limit and a weekly limit, shared across claude.ai, Claude Desktop, and Claude Code. Anthropic doesn't publish a message count; how far it goes depends on conversation length, model, features, and effort.",
+        "answer": "Claude Pro ($20 a month, or $17 a month billed yearly) gives you more usage per session than the Free plan. Usage is capped by a 5-hour session limit and a weekly limit, shared across claude.ai, Claude Desktop, and Claude Code. Anthropic doesn't publish a message count; how far it goes depends on conversation length, model, features, and effort. Fable models aren't part of Pro's limits; they run on usage credits.",
         "sections": [
             {"id": "facts", "facts": [
                 ("Price", "$20 a month, or $17 a month billed yearly ($200 up front)"),
-                ("Usage", "At least 5x the Free plan's usage per 5-hour session"),
+                ("Usage", "More per session than the Free plan; Anthropic doesn't publish a multiple"),
+                ("Fable", "Not in the plan's limits; runs on usage credits"),
                 ("Session limit", "Resets every five hours"),
                 ("Weekly limit", "Yes, resets once a week"),
                 ("Shared with", "claude.ai, Claude Desktop, Claude Code, and Claude Code in VS Code, Cursor, and JetBrains"),
                 ("Claude Code", "Included"),
                 ("Check it", f'<a href="{SETTINGS}">Settings › Usage</a> on claude.ai, or <code>/usage</code> in Claude Code'),
-                ("At the limit", "Wait for the reset, turn on usage credits, or upgrade to Max"),
+                ("At the limit", "Wait for the reset, turn on usage credits, or upgrade to Max or Ultra"),
             ], "html": """
         <h2>Claude Pro limits at a glance</h2>
         {{FACTS}}"""},
@@ -80,22 +265,25 @@ LIMITS = [
         </ul>"""},
             {"id": "limit", "html": """
         <h2>What happens when you hit it</h2>
-        <p>You'll see warnings as you get close. At the limit you can wait for the reset, <a href="https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans">turn on usage credits</a> to keep working at extra cost, or upgrade to Max 5x, which applies right away.</p>
+        <p>You'll see warnings as you get close. At the limit you can wait for the reset, <a href="https://support.claude.com/en/articles/12429409-manage-usage-credits-for-paid-claude-plans">turn on usage credits</a> to keep working at extra cost, or upgrade to Max (5x Pro's usage) or Ultra (10x Pro's weekly usage), which applies right away.</p>
         <p>In Claude Code, if you hit the 5-hour limit mid-response, Claude Code can finish the current step ("Usage limit reached · wrapping up"). On Pro this wrap-up allowance applies at most once per weekly period, and it counts toward your weekly limit.</p>
         <p>One trap: if <code>ANTHROPIC_API_KEY</code> is set in your shell, Claude Code bills that API key instead of your Pro plan.</p>""" + FORECAST},
             {"id": "sources", "html": sources(
+                ("What is the Pro plan?", PRO),
                 ("How do usage and length limits work?", USAGE),
-                ("Use Claude Code with your Pro or Max plan", CODE),
-                ("Claude pricing", PRICING))},
+                ("Claude Fable models on your plan", FABLE_PLAN),
+                ("Use Claude Code with your Pro, Max, or Ultra plan", CODE),
+                ("Claude pricing", PRICING),
+                checked=CHECKED)},
         ],
         "faqs": [
             ("Does Claude Pro have a limit?", "Yes. Pro has a session limit that resets every five hours and a weekly limit. Both are shared across claude.ai, Claude Desktop, and Claude Code."),
-            ("How many messages do you get on Claude Pro?", "Anthropic doesn't publish a number. It depends on how long your conversations are, which model and effort level you use, and which features are on. Pro gives at least 5x the per-session usage of Free."),
+            ("How many messages do you get on Claude Pro?", "Anthropic doesn't publish a number. It depends on how long your conversations are, which model and effort level you use, and which features are on. Pro gives more usage per session than Free."),
             ("Does Claude Code use the same limit as Claude?", "Yes. Activity in Claude and Claude Code counts against the same limits."),
             ("When does the Claude Pro limit reset?", "The session limit resets every five hours. The weekly limit resets once a week at a time set for your account; Settings › Usage on claude.ai shows the next reset."),
         ],
         "related": [
-            ("Claude Max limits", "5x or 20x Pro's usage per session", "/limits/claude-max"),
+            ("Claude Max limits", "5x Pro's usage, plus a Fable allowance", "/limits/claude-max"),
             ("Claude Code limits", "How Claude Code counts against your plan", "/limits/claude-code"),
             ("When do Claude limits reset?", "Session and weekly resets, explained", "/guides/when-does-claude-limit-reset"),
         ],
@@ -103,70 +291,76 @@ LIMITS = [
     {
         "path": "/limits/claude-max",
         "short": "Claude Max limits",
-        "card": "5x or 20x Pro's usage per session, plus weekly limits",
-        "hub_windows": "5-hour session, weekly, separate weekly Fable limit",
+        "card": "5x Pro's usage every five hours and every week, plus Fable",
+        "hub_windows": "5-hour session, weekly, Fable up to half the week",
         "hub_reset": "Every 5 hours; weekly at a set time for your account",
-        "title": "Claude Max limits (October 2026): 5x vs 20x, weekly reset",
-        "description": "How Claude Max 5x and 20x usage limits work: per-session allowance vs Pro, the weekly limit and separate Fable limit, when they reset, and how to check them.",
+        "title": "Claude Max limits (November 2026): 5x Pro, weekly, Fable",
+        "description": "How Claude Max usage limits work: 5x Pro's usage every five hours and every week, the Fable cap, when they reset, and what changed with Ultra.",
         "eyebrow": "Claude Max",
         "h1": "Claude Max usage limits",
-        "lede": "Max comes in two sizes: 5x or 20x Pro's usage per five-hour session. Both also have a weekly limit across all models, plus a separate weekly limit for Fable.",
-        "answer": "Claude Max 5x ($100 a month) gives five times Pro's per-session usage, and Max 20x ($200 a month) gives twenty times. Sessions reset every five hours. A weekly limit applies across all models and resets at a fixed time assigned to your account, and Max has a separate weekly limit for Fable.",
+        "lede": "Max is one plan now: $100 a month for 5x Pro's usage, every five hours and every week. The old Max 20x is called Ultra.",
+        "answer": "Claude Max costs $100 a month and gives five times the Pro plan's usage every five hours and every week. It has a 5-hour session limit, a weekly limit across all models, and a separate Fable cap: up to 50% of the weekly limit can go to Fable models. The weekly limit resets at a fixed time assigned to your account. The plan once called Max 20x is now Ultra.",
         "sections": [
             {"id": "facts", "facts": [
-                ("Price", "Max 5x: $100 a month · Max 20x: $200 a month (monthly only)"),
-                ("Usage", "5x or 20x the Pro plan's per-session allowance"),
-                ("Session limit", "Resets every five hours"),
+                ("Price", "$100 a month (monthly only)"),
+                ("Usage", "5x the Pro plan's usage every five hours and every week"),
+                ("Session limit", "Resets five hours after your first message"),
                 ("Weekly limit", "Across all models, resets at a fixed time assigned to your account"),
-                ("Fable", "Has its own separate weekly limit on Max"),
+                ("Fable", "Included, up to 50% of your weekly limit"),
                 ("Shared with", "claude.ai, Claude Desktop, Claude Code"),
                 ("Check it", f'<a href="{SETTINGS}">Settings › Usage</a> shows your next reset; <code>/usage</code> in Claude Code shows plan usage bars'),
-                ("At the limit", "Wait, turn on usage credits, or move from 5x to 20x"),
+                ("At the limit", "Wait, turn on usage credits, or upgrade to Ultra"),
             ], "html": """
         <h2>Claude Max limits at a glance</h2>
         {{FACTS}}"""},
             {"id": "how", "lit": True, "html": """
-        <h2>5x or 20x: what the multiplier means</h2>
-        <p>The multiplier is per session. Max 5x gives you five times what Pro allows in a five-hour session; Max 20x gives twenty times. It doesn't say how many messages that is, because Anthropic doesn't publish a count for any plan.</p>
-        <p>The weekly limit is the one heavy Claude Code users run into on Max. It applies across all models and resets at a fixed time assigned to your account, not on a calendar day everyone shares. Settings › Usage on claude.ai shows when yours resets.</p>
-        <p>Fable has its own weekly limit on Max, separate from the all-models one. When you hit a model-specific limit, switching to a model outside that family with <code>/model</code> keeps you working. That doesn't help with the session or weekly limits, which cover every model.</p>"""},
+        <h2>What 5x means</h2>
+        <p>Max gives five times what Pro allows, in both windows: each five-hour session and each week. It doesn't say how many messages that is, because Anthropic doesn't publish a count for any plan.</p>
+        <p>The weekly limit is the one heavy Claude Code users run into. It applies across all models and resets at a fixed time assigned to your account, not on a calendar day everyone shares. Settings › Usage on claude.ai shows when yours resets.</p>
+        <h2>The Fable cap</h2>
+        <p>Fable models are part of Max. You can spend up to 50% of your weekly limit on them, and they use it faster than other models. That's a cap inside the weekly limit, not extra room. At the cap, switch to another model to stay within your plan, or keep using Fable on usage credits. See <a href="/limits/claude-weekly-limit">the Claude weekly limit</a> for how the two fit together.</p>
+        <h2>What happened to Max 20x?</h2>
+        <p>Max 20x is now the Ultra plan, at the same $200 a month. Subscribers moved over automatically. Ultra gives 10x Pro's usage every week, and verified Ultra accounts have no 5-hour limit. <a href="/limits/claude">Claude usage limits</a> compares every plan.</p>"""},
             {"id": "limit", "html": """
         <h2>What happens when you hit it</h2>
-        <p>Wait for the reset, turn on usage credits, or move from 5x to 20x, which applies right away. The monthly API credits that come with Max can't be used in Claude Code or the Claude apps.</p>
-        <p>In Claude Code, the wrap-up allowance lets the current step finish when you hit the 5-hour limit mid-response. On Max it can apply each time you reach a 5-hour limit, as long as you're inside your weekly limit. Claude Code 2.1.234 and later can also wait for the reset and continue the interrupted task on its own.</p>""" + FORECAST},
+        <p>Wait for the reset, turn on usage credits, or upgrade to Ultra, which applies right away. Usage credits also let you keep using Fable past its cap. The $100 a month in API credits that comes with Max can't be used in Claude Code or the Claude apps.</p>
+        <p>In Claude Code, the wrap-up allowance lets the current step finish when you hit the 5-hour limit mid-response. On Max it can apply each time you reach a 5-hour limit, as long as you're inside your weekly limit.</p>""" + FORECAST},
             {"id": "sources", "html": sources(
                 ("What is the Max plan?", MAX),
-                ("Use Claude Code with your Pro or Max plan", CODE),
-                ("Manage costs effectively (Claude Code docs)", COSTS))},
+                ("What is the Ultra plan?", ULTRA),
+                ("Claude Fable models on your plan", FABLE_PLAN),
+                ("Use Claude Code with your Pro, Max, or Ultra plan", CODE),
+                ("Claude pricing", PRICING),
+                checked=CHECKED)},
         ],
         "faqs": [
-            ("What's the difference between Max 5x and Max 20x?", "Max 5x gives five times Pro's usage per five-hour session for $100 a month. Max 20x gives twenty times for $200 a month. Both have weekly limits."),
-            ("Does Claude Max have a weekly limit?", "Yes. A weekly limit applies across all models and resets at a fixed time assigned to your account. Max also has a separate weekly limit for Fable."),
+            ("Is there still a Claude Max 20x plan?", "No. Max 20x is now called Ultra, at $200 a month. Existing Max 20x subscribers moved to Ultra automatically with no price change."),
+            ("Does Claude Max have a weekly limit?", "Yes. A weekly limit applies across all models and resets at a fixed time assigned to your account. Max also caps Fable at up to 50% of the weekly limit."),
             ("When does the Claude Max weekly limit reset?", "At a fixed time assigned to your account, once a week. Settings › Usage on claude.ai shows your next reset."),
-            ("Can I use Max's API credits in Claude Code?", "No. The monthly API credits included with Max can't be used in Claude Code or the Claude apps, including for extra usage."),
+            ("Can I use Max's API credits in Claude Code?", "No. The monthly API credits included with Max can't be used in Claude Code or the Claude apps, including for usage credits."),
         ],
         "related": [
-            ("Claude Pro limits", "The plan Max multiplies", "/limits/claude-pro"),
+            ("Claude usage limits", "Every plan, including Ultra", "/limits/claude"),
+            ("The Claude weekly limit", "When it resets and how Fable fits in", "/limits/claude-weekly-limit"),
             ("Claude Code limits", "How Claude Code counts against your plan", "/limits/claude-code"),
-            ("When do Claude limits reset?", "Session and weekly resets, explained", "/guides/when-does-claude-limit-reset"),
         ],
     },
     {
         "path": "/limits/claude-code",
         "short": "Claude Code limits",
-        "card": "How Claude Code counts against your Pro or Max plan",
+        "card": "How Claude Code counts against your Pro, Max, or Ultra plan",
         "hub_windows": "Your plan's 5-hour session and weekly limits",
         "hub_reset": "Same as your plan",
-        "title": "Claude Code usage limits on Pro and Max (October 2026)",
-        "description": "How Claude Code usage limits work on Pro and Max: shared session and weekly limits, the wrap-up allowance, /usage, and what to do at the limit.",
+        "title": "Claude Code usage limits on Pro, Max, Ultra (Nov 2026)",
+        "description": "How Claude Code usage limits work on Pro, Max, and Ultra: shared session and weekly limits, the wrap-up allowance, /usage, and what to do at the limit.",
         "eyebrow": "Claude Code",
         "h1": "Claude Code usage limits",
-        "lede": "Claude Code doesn't have limits of its own on Pro and Max. It draws from your plan's session and weekly limits, the same pool as your chats.",
-        "answer": "On Pro and Max, Claude Code shares your plan's 5-hour session limit and weekly limit with claude.ai and Claude Desktop, including Claude Code inside VS Code, Cursor, and JetBrains. Run /usage to see your plan usage bars. At the limit you can wait, turn on usage credits, upgrade, or switch to API billing through the Claude Console.",
+        "lede": "Claude Code doesn't have limits of its own on Pro, Max, or Ultra. It draws from your plan's session and weekly limits, the same pool as your chats.",
+        "answer": "On Pro, Max, and Ultra, Claude Code shares your plan's 5-hour session limit (none on verified Ultra accounts) and weekly limit with claude.ai and Claude Desktop, including Claude Code inside VS Code, Cursor, and JetBrains. Run /usage to see your plan usage bars. At the limit you can wait, turn on usage credits, upgrade, or switch to API billing through the Claude Console.",
         "sections": [
             {"id": "facts", "facts": [
-                ("Plans", "Pro, Max 5x, Max 20x (not Free)"),
-                ("Limits", "Your plan's 5-hour session limit and weekly limit; Max also has a weekly Fable limit"),
+                ("Plans", "Pro, Max, Ultra (not Free)"),
+                ("Limits", "Your plan's 5-hour session limit and weekly limit; Max and Ultra also cap Fable at half the week"),
                 ("Shared with", "claude.ai, Claude Desktop, and Claude Code in VS Code, Cursor, and JetBrains"),
                 ("Check it", "<code>/usage</code> shows plan usage bars and what's using them"),
                 ("Mid-response at the limit", "A small wrap-up allowance lets the current step finish"),
@@ -183,18 +377,18 @@ LIMITS = [
         <p>Claude Code sends the whole conversation with every request, and again with every batch of tool results. A one-line question in a session that's been open all day still pays for the whole history. <code>/clear</code> between unrelated tasks is the biggest saver. Subagents, agent teams, scheduled loops, and <code>/compact</code> on a huge context all add up too.</p>"""},
             {"id": "limit", "html": """
         <h2>What happens when you hit it</h2>
-        <p>"You've hit your session limit" and "You've hit your weekly limit" cover every model, so <code>/model</code> won't get you around them. The message tells you when the window resets. A model-specific message, like "You've hit your Opus limit", is different: switching to a model outside that family keeps you going.</p>
-        <p>Your options: wait (Claude Code 2.1.234 and later can wait for the reset and continue the interrupted task on its own), turn on usage credits with <code>/usage-credits</code>, upgrade (Pro to Max 5x, or Max 5x to 20x), or use API credits through a Claude Console account, billed at API rates.</p>""" + FORECAST},
+        <p>"You've hit your session limit" and "You've hit your weekly limit" cover every model, so <code>/model</code> won't get you around them. The message tells you when the window resets. The Fable cap on Max and Ultra is different: switching to a model outside the Fable family keeps you going within your plan.</p>
+        <p>Your options: wait (Claude Code 2.1.234 and later can wait for the reset and continue the interrupted task on its own), turn on usage credits with <code>/usage-credits</code>, upgrade (Pro to Max, or Max to Ultra), or use API credits through a Claude Console account, billed at API rates.</p>""" + FORECAST},
             {"id": "sources", "html": sources(
-                ("Use Claude Code with your Pro or Max plan", CODE),
+                ("Use Claude Code with your Pro, Max, or Ultra plan", CODE),
                 ("Manage costs effectively (Claude Code docs)", COSTS),
-                ("How do usage and length limits work?", USAGE))},
+                ("How do usage and length limits work?", USAGE)) + PLAN_NOTE},
         ],
         "faqs": [
-            ("Does Claude Code have its own usage limit?", "Not on Pro and Max. It shares your plan's session and weekly limits with claude.ai and Claude Desktop."),
+            ("Does Claude Code have its own usage limit?", "Not on Pro, Max, or Ultra. It shares your plan's session and weekly limits with claude.ai and Claude Desktop."),
             ("How do I check my Claude Code usage?", "Run /usage in Claude Code for your plan usage bars and a breakdown of what used them, or see Settings › Usage on claude.ai."),
-            ("Is Claude Code included in the Free plan?", "No. Claude Code comes with Pro and Max."),
-            ("Why did Claude Code bill my API key?", "If ANTHROPIC_API_KEY is set in your environment, Claude Code uses it instead of your subscription. Unset it and log in with your Pro or Max account."),
+            ("Is Claude Code included in the Free plan?", "No. Claude Code comes with Pro, Max, Ultra, Team, and Enterprise."),
+            ("Why did Claude Code bill my API key?", "If ANTHROPIC_API_KEY is set in your environment, Claude Code uses it instead of your subscription. Unset it and log in with your Claude subscription."),
         ],
         "related": [
             ("Check your Claude usage", "Every place to see what's left", "/guides/check-claude-usage"),
@@ -208,12 +402,12 @@ LIMITS = [
         "card": "A 5-hour session limit that moves with demand",
         "hub_windows": "5-hour session",
         "hub_reset": "Every 5 hours",
-        "title": "Claude Free plan usage limits (October 2026)",
+        "title": "Claude Free plan usage limits (November 2026)",
         "description": "How the Claude Free plan's usage limit works: a session limit that resets every five hours, why the message count changes with demand, and what Pro adds.",
         "eyebrow": "Claude Free",
         "h1": "Claude Free plan limits",
         "lede": "Free has a session limit that resets every five hours. How much fits in a session changes with demand.",
-        "answer": "The Claude Free plan has a session-based usage limit that resets every five hours. The number of messages you can send varies with demand, and Anthropic may add other limits to keep access fair. Claude Code isn't included; Pro gives at least 5x Free's usage per session.",
+        "answer": "The Claude Free plan has a session-based usage limit that resets every five hours. The number of messages you can send varies with demand, and Anthropic may add other limits to keep access fair. Claude Code isn't included; Pro gives more usage per session.",
         "sections": [
             {"id": "facts", "facts": [
                 ("Price", "$0"),
@@ -221,7 +415,7 @@ LIMITS = [
                 ("How much", "Varies with demand; Anthropic doesn't publish a number"),
                 ("Other limits", "Anthropic may add other kinds of limits to keep access fair"),
                 ("Claude Code", "Not included"),
-                ("Next step up", "Pro: at least 5x Free's usage per 5-hour session, plus Claude Code"),
+                ("Next step up", "Pro: more usage per session, a weekly limit, and Claude Code"),
             ], "html": """
         <h2>Claude Free limits at a glance</h2>
         {{FACTS}}"""},
@@ -230,19 +424,20 @@ LIMITS = [
         <p>On Free, how many messages fit in a five-hour session depends on demand: when lots of people are using Claude, the free allowance shrinks. Long conversations and file uploads use it up faster, since each message carries the conversation before it.</p>
         <p>Claude tells you when you've reached the limit. Starting a new chat for a new topic, and keeping prompts and files short, stretches it.</p>
         <h2>When Free stops being enough</h2>
-        <p>If you hit the limit most days, or want Claude Code, Pro is the next step: at least 5x Free's usage per session, a weekly limit on top, and Claude Code included. See <a href="/limits/claude-pro">Claude Pro limits</a>.</p>
-        <p>Fuel Gauge forecasts the paid plans' limits through Claude Code, so it's for Pro and Max.</p>"""},
+        <p>If you hit the limit most days, or want Claude Code, Pro is the next step: more usage per session, a weekly limit on top, and Claude Code included. See <a href="/limits/claude-pro">Claude Pro limits</a>.</p>
+        <p>Fuel Gauge forecasts the paid plans' limits through Claude Code, so it's for Pro, Max, and Ultra.</p>"""},
             {"id": "sources", "html": sources(
-                ("About free Claude usage", FREE),
-                ("Claude pricing", PRICING))},
+                ("Get started with Claude (Free plan limits)", GET_STARTED),
+                ("Claude pricing", PRICING),
+                checked=CHECKED)},
         ],
         "faqs": [
             ("How many messages does Claude Free give you?", "Anthropic doesn't publish a number. It varies with demand and with how long your conversations are."),
             ("When does the Claude Free limit reset?", "The session limit resets every five hours."),
-            ("Does Claude Free include Claude Code?", "No. Claude Code comes with Pro and Max."),
+            ("Does Claude Free include Claude Code?", "No. Claude Code comes with Pro, Max, Ultra, Team, and Enterprise."),
         ],
         "related": [
-            ("Claude Pro limits", "At least 5x Free's usage per session", "/limits/claude-pro"),
+            ("Claude Pro limits", "More usage per session, plus Claude Code", "/limits/claude-pro"),
             ("When do Claude limits reset?", "Session and weekly resets, explained", "/guides/when-does-claude-limit-reset"),
             ("Check your Claude usage", "Every place to see what's left", "/guides/check-claude-usage"),
         ],
