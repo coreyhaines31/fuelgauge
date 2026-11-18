@@ -25,9 +25,11 @@ struct ForecastDetailsView: View {
                     if let forecast {
                         picker
                         current(forecast, now: context.date)
-                        SessionPlanView(forecasts: model.forecasts.filter { $0.key.provider == forecast.key.provider },
-                                        now: context.date)
-                            .id(forecast.key.provider)
+                        // A session runs on one account, so it plans against that account's limits only.
+                        SessionPlanView(forecasts: model.forecasts.filter {
+                            $0.key.provider == forecast.key.provider && $0.key.account == forecast.key.account
+                        }, now: context.date)
+                            .id(Account.qualifiedID(provider: forecast.key.provider, slug: forecast.key.account))
                         ForecastTimelineView(history: model.forecastHistory.comparisons[forecast.key] ?? [],
                                              now: context.date)
                             .id(forecast.key)
@@ -62,7 +64,7 @@ struct ForecastDetailsView: View {
     private var picker: some View {
         Picker("Limit", selection: Binding(get: { forecast?.key.id ?? "" }, set: { selected = $0 })) {
             ForEach(model.forecasts, id: \.key) { forecast in
-                Text("\(forecast.key.provider.name) · \(forecast.windowName)").tag(forecast.key.id)
+                Text("\(forecast.sourceLabel) · \(forecast.windowName)").tag(forecast.key.id)
             }
         }
         .frame(maxWidth: 320)

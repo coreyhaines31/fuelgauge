@@ -2,34 +2,37 @@ import FuelGaugeCore
 import PanelKit
 import SwiftUI
 
-/// One tool's limits as a panel section: a row per window, shortest window first, then usage and resets.
+/// One tool account's limits as a panel section: a row per window, shortest window first, then usage and
+/// resets. Headed by the account's name when the tool has several.
 struct ToolCard: View {
     let provider: Provider
     let forecasts: [Forecast]
     let now: Date
     /// The one window in the whole panel that gets a chart: the most urgent one that's running short.
     let chartKey: LimitKey?
+    /// Nil for a tool without accounts (Grok Bot, Cursor).
+    var account: Account?
     var model: UsageModel?
     var openSettings: () -> Void = {}
     var openUsage: () -> Void = {}
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ToolSectionHeader(provider: provider)
+            ToolSectionHeader(provider: provider, accountName: accountName)
             ForEach(forecasts, id: \.key) { forecast in
                 WindowRow(forecast: forecast, now: now, showsChart: forecast.key == chartKey,
                           note: modelNote(forecast))
             }
-            if let model, provider == .claude, let advice = model.resetAdvice(now: now) {
+            if let model, let account, provider == .claude, let advice = model.resetAdvice(for: account, now: now) {
                 Notice(advice.title, message: advice.text) {
                     Link("Open Claude Usage ↗", destination: URL(string: "https://claude.ai/settings/usage")!)
                 }
             }
-            if let model, provider == .claude || provider == .codex {
-                usageRow(model)
+            if let model, let account {
+                usageRow(model, account: account)
             }
-            if let model {
-                ResetCreditRow(provider: provider, model: model, now: now, openSettings: openSettings)
+            if let model, let account {
+                ResetCreditRow(account: account, model: model, now: now, openSettings: openSettings)
             }
             if model != nil, provider == .claude || provider == .codex {
                 LinkBar {
@@ -44,16 +47,23 @@ struct ToolCard: View {
         }
     }
 
+    /// The account's name when its tool has several; nil keeps the header as it always was.
+    private var accountName: String? {
+        forecasts.first?.accountName
+            ?? account.flatMap { model?.accounts.label(provider: provider, slug: $0.slug) }
+    }
+
     /// "18% of your week so far · up to 50%" under a model's allowance, when Claude says.
     private func modelNote(_ forecast: Forecast) -> String? {
-        guard let name = forecast.modelName, let allowance = model?.claudeUsage?.model(named: name),
+        guard let name = forecast.modelName, let account,
+              let allowance = model?.claudeUsage(for: account)?.model(named: name),
               allowance.resetsAt > now, let used = allowance.usedPercentOfWeekly else { return nil }
         let cap = allowance.allowancePercentOfWeekly.map { " · up to \(ForecastText.percent($0))" } ?? ""
         return "\(ForecastText.percent(used)) of your week so far\(cap)"
     }
 
-    private func usageRow(_ model: UsageModel) -> some View {
-        let summary = model.todayUsage(for: provider, now: now)
+    private func usageRow(_ model: UsageModel, account: Account) -> some View {
+        let summary = model.todayUsage(for: account, now: now)
         return Group {
             if summary.events > 0 {
                 Row("Today · This Mac", subtitle: "Estimated API cost · USD",

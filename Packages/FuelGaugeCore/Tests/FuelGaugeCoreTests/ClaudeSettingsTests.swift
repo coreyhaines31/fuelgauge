@@ -24,6 +24,25 @@ import Testing
         #expect(settings.wrappedCommand == nil)
     }
 
+    @Test func eachAccountWrapsItsOwnStatusLine() throws {
+        let home = temporaryFolder(), support = temporaryFolder()
+        let main = Account.defaultAccount(.claude, environment: [:], home: home)
+        let work = Account.make(.claude, folder: "~/.claude-work", home: home)
+        for (account, command) in [(main, "~/bin/main.sh"), (work, "~/bin/work.sh")] {
+            try FileManager.default.createDirectory(at: account.folder, withIntermediateDirectories: true)
+            try Data(#"{"statusLine":{"type":"command","command":"\#(command)"}}"#.utf8)
+                .write(to: account.folder.appending(path: "settings.json"))
+            try ClaudeSettings(account: account, supportFolder: support).install(command: "fuelgauge statusline")
+        }
+        #expect(ClaudeSettings(account: main, supportFolder: support).wrappedCommand == "~/bin/main.sh")
+        #expect(ClaudeSettings(account: work, supportFolder: support).wrappedCommand == "~/bin/work.sh")
+        #expect(ClaudeSettings(account: main, supportFolder: support).wrappedURL.lastPathComponent
+            == "wrapped-statusline.json")
+        try ClaudeSettings(account: work, supportFolder: support).uninstall()
+        #expect(ClaudeSettings(account: work, supportFolder: support).state == .otherCommand("~/bin/work.sh"))
+        #expect(ClaudeSettings(account: main, supportFolder: support).state == .on)
+    }
+
     @Test func installsIntoEmptySettings() throws {
         let folder = temporaryFolder()
         let settings = ClaudeSettings(

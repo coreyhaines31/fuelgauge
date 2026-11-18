@@ -11,12 +11,20 @@ public struct CodexLogReader: Sendable {
 
     public let root: URL
     public var state: State
+    /// The account these logs belong to; nil for the default one.
+    public let account: String?
     /// How far back the first read goes, so a weekly window has history from the start.
     public var backfill: TimeInterval = 8 * 24 * 3600
 
-    public init(root: URL = Self.defaultRoot, state: State = State()) {
+    public init(root: URL = Self.defaultRoot, state: State = State(), account: String? = nil) {
         self.root = root
         self.state = state
+        self.account = account
+    }
+
+    /// One account's logs, in its `CODEX_HOME`.
+    public init(account: Account, state: State = State()) {
+        self.init(root: account.folder.appending(path: "sessions"), state: state, account: account.slug)
     }
 
     public static var defaultRoot: URL {
@@ -38,7 +46,7 @@ public struct CodexLogReader: Sendable {
             let offset = state.offsets[url.path] ?? 0
             let (lines, end) = Self.newLines(in: url, from: offset)
             state.offsets[url.path] = end
-            readings += lines.flatMap(Self.readings(fromLine:))
+            readings += lines.flatMap { Self.readings(fromLine: $0, account: account) }
         }
         // Forget files that dropped out of the backfill period.
         state.offsets = state.offsets.filter { seen.contains($0.key) }
@@ -84,7 +92,7 @@ public struct CodexLogReader: Sendable {
 
     private static let marker = Data("\"rate_limits\"".utf8)
 
-    static func readings(fromLine line: Data) -> [Reading] {
+    static func readings(fromLine line: Data, account: String? = nil) -> [Reading] {
         guard line.range(of: marker) != nil,
               let event = try? decoder.decode(Event.self, from: line),
               let limits = event.payload?.rateLimits,
@@ -94,7 +102,8 @@ public struct CodexLogReader: Sendable {
             guard let window, let minutes = window.windowMinutes, let resetsAt = window.resetsAt else { return nil }
             return Reading(
                 provider: .codex, limit: "\(name)-\(minutes)", windowMinutes: minutes,
-                usedPercent: window.usedPercent, resetsAt: Date(timeIntervalSince1970: resetsAt), at: at
+                usedPercent: window.usedPercent, resetsAt: Date(timeIntervalSince1970: resetsAt), at: at,
+                account: account
             )
         }
     }

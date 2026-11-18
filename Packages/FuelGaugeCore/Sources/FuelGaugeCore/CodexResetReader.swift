@@ -5,10 +5,19 @@ import Foundation
 public struct CodexResetReader: Sendable {
     public var executable: URL?
     public var timeout: TimeInterval
+    /// Set for the run, on top of Fuel Gauge's own environment: another account's `CODEX_HOME`.
+    public var environment: [String: String]
 
-    public init(executable: URL? = Self.findExecutable(), timeout: TimeInterval = 15) {
+    public init(executable: URL? = Self.findExecutable(), timeout: TimeInterval = 15,
+                environment: [String: String] = [:]) {
         self.executable = executable
         self.timeout = timeout
+        self.environment = environment
+    }
+
+    /// Asks as one account.
+    public init(account: Account, executable: URL? = Self.findExecutable()) {
+        self.init(executable: executable, environment: account.environment)
     }
 
     public static func findExecutable() -> URL? {
@@ -35,7 +44,7 @@ public struct CodexResetReader: Sendable {
         process.executableURL = executable
         process.arguments = ["app-server", "--stdio"]
         // npm launchers need node beside codex even when launched from a GUI app.
-        var environment = ProcessInfo.processInfo.environment
+        var environment = ProcessInfo.processInfo.environment.merging(self.environment) { $1 }
         environment["PATH"] = executable.deletingLastPathComponent().path + ":"
             + (environment["PATH"] ?? "/usr/bin:/bin")
         process.environment = environment

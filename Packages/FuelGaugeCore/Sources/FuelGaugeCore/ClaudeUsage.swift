@@ -39,6 +39,12 @@ public struct ClaudeUsage: Codable, Sendable, Equatable {
     /// Where the app keeps the last answer, so the `fuelgauge` command can show it too.
     public static var defaultURL: URL { Brand.supportFolder.appending(path: "claude-usage.json") }
 
+    /// Each account's last answer: `claude-usage.json` for the default one, `claude-usage-<slug>.json` otherwise.
+    public static func url(for account: Account?, in folder: URL = Brand.supportFolder) -> URL {
+        account?.supportFile("claude-usage", extension: "json", in: folder)
+            ?? folder.appending(path: "claude-usage.json")
+    }
+
     public static func load(from url: URL = defaultURL) -> ClaudeUsage? {
         (try? Data(contentsOf: url)).flatMap { try? JSONDecoder().decode(ClaudeUsage.self, from: $0) }
     }
@@ -53,10 +59,10 @@ public struct ClaudeUsage: Codable, Sendable, Equatable {
     }
 
     /// One reading per allowance, for the store, so each one gets a forecast like any other limit.
-    public func readings() -> [Reading] {
+    public func readings(account: String? = nil) -> [Reading] {
         models.map {
             Reading(provider: .claude, limit: $0.limit, windowMinutes: 10080, usedPercent: $0.usedPercent,
-                    resetsAt: $0.resetsAt, at: checkedAt)
+                    resetsAt: $0.resetsAt, at: checkedAt, account: account)
         }
     }
 

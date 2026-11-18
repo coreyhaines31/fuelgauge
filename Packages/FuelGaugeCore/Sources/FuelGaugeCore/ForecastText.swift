@@ -32,14 +32,14 @@ public enum ForecastText {
         let active = forecasts.filter { $0.verdict != .reset }
         if let out = active.first(where: { $0.verdict == .limitReached }) {
             let until = time(out.resetsAt, now: now)
-            return "\(out.key.provider.name)'s \(out.windowPhrase) limit is out until \(until)"
+            return "\(out.limitPhrase) is out until \(until)"
         }
         let short = active.compactMap { forecast -> (Forecast, Date)? in
             guard case .runsOut(let at, _, _) = forecast.verdict else { return nil }
             return (forecast, at)
         }.sorted { $0.1 < $1.1 }
         if let (first, at) = short.first {
-            let name = first.key.provider.name
+            let name = first.owner
             let today = Calendar.current.isDate(at, inSameDayAs: now)
             let when = today ? "today at \(time(at, now: now))" : time(at, now: now)
             let more = short.count > 1 ? " · \(short.count - 1) more running short" : ""

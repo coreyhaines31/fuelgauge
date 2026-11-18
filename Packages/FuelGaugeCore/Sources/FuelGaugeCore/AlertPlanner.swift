@@ -113,8 +113,9 @@ public struct AlertPlanner: Sendable {
         return at
     }
 
+    /// "Claude Code's weekly limit", or "Work's Claude Code weekly limit" when the tool has several accounts.
     static func name(_ forecast: Forecast) -> String {
-        "\(forecast.key.provider.name)'s \(forecast.windowPhrase) limit"
+        forecast.limitPhrase
     }
 
     static func shortTitle(_ forecast: Forecast, at: Date, now: Date) -> String {

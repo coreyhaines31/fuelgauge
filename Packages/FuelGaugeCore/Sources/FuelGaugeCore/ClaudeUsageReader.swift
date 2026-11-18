@@ -7,10 +7,20 @@ import Foundation
 public struct ClaudeUsageReader: Sendable {
     public var executable: URL?
     public var timeout: TimeInterval
+    /// Set for the run, on top of Fuel Gauge's own environment. Another account's `CLAUDE_CONFIG_DIR` goes here:
+    /// Claude Code picks the Keychain sign-in by that folder, so the check runs as that account.
+    public var environment: [String: String]
 
-    public init(executable: URL? = Self.findExecutable(), timeout: TimeInterval = 30) {
+    public init(executable: URL? = Self.findExecutable(), timeout: TimeInterval = 30,
+                environment: [String: String] = [:]) {
         self.executable = executable
         self.timeout = timeout
+        self.environment = environment
+    }
+
+    /// Asks as one account.
+    public init(account: Account, executable: URL? = Self.findExecutable()) {
+        self.init(executable: executable, environment: account.environment)
     }
 
     static let arguments = [
@@ -46,7 +56,7 @@ public struct ClaudeUsageReader: Sendable {
         let folder = FileManager.default.temporaryDirectory.appending(path: "FuelGaugeClaudeUsage")
         try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         process.currentDirectoryURL = folder
-        var environment = ProcessInfo.processInfo.environment
+        var environment = ProcessInfo.processInfo.environment.merging(self.environment) { $1 }
         environment["PATH"] = executable.deletingLastPathComponent().path + ":"
             + (environment["PATH"] ?? "/usr/bin:/bin")
         process.environment = environment

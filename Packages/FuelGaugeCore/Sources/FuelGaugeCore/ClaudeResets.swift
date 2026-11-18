@@ -67,25 +67,29 @@ public struct ClaudeResets: Equatable, Sendable {
         set { if kind == .fable { fable = newValue } else { weekly = newValue } }
     }
 
-    public static func load(from defaults: UserDefaults = Tracking.defaults) -> ClaudeResets {
+    /// Each account's resets are its own. The default account's use the keys Fuel Gauge always used; another
+    /// account's add its slug: `claudeResetCount.work_1a2b3c`.
+    public static func load(from defaults: UserDefaults = Tracking.defaults, account: Account? = nil) -> ClaudeResets {
+        func key(_ base: String) -> String { account?.defaultsKey(base) ?? base }
         func balance(_ kind: Kind) -> Balance {
-            let expiry = defaults.double(forKey: kind.expiryKey)
-            return Balance(available: max(0, defaults.integer(forKey: kind.countKey)),
+            let expiry = defaults.double(forKey: key(kind.expiryKey))
+            return Balance(available: max(0, defaults.integer(forKey: key(kind.countKey))),
                            expiresAt: expiry > 0 ? Date(timeIntervalSince1970: expiry) : nil)
         }
-        let recorded = defaults.double(forKey: recordedAtKey)
+        let recorded = defaults.double(forKey: key(recordedAtKey))
         return ClaudeResets(fable: balance(.fable), weekly: balance(.weekly),
                             recordedAt: recorded > 0 ? Date(timeIntervalSince1970: recorded) : nil)
     }
 
-    public func save(to defaults: UserDefaults = Tracking.defaults) {
+    public func save(to defaults: UserDefaults = Tracking.defaults, account: Account? = nil) {
+        func key(_ base: String) -> String { account?.defaultsKey(base) ?? base }
         for kind in Kind.allCases {
             let balance = self[kind]
-            defaults.set(balance.available, forKey: kind.countKey)
+            defaults.set(balance.available, forKey: key(kind.countKey))
             let expiry = balance.available > 0 ? balance.expiresAt?.timeIntervalSince1970 ?? 0 : 0
-            defaults.set(expiry, forKey: kind.expiryKey)
+            defaults.set(expiry, forKey: key(kind.expiryKey))
         }
-        defaults.set(recordedAt?.timeIntervalSince1970 ?? 0, forKey: Self.recordedAtKey)
+        defaults.set(recordedAt?.timeIntervalSince1970 ?? 0, forKey: key(Self.recordedAtKey))
     }
 
     /// Resets of this kind that can still be used. A past expiry means the recorded count is out of date.

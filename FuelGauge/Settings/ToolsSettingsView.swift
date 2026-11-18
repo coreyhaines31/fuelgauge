@@ -1,11 +1,12 @@
 import FuelGaugeCore
 import SwiftUI
 
-/// Which tools Fuel Gauge tracks, and where each one's numbers come from.
+/// Which tools Fuel Gauge tracks, where each one's numbers come from, and each tool's accounts.
 struct ToolsSettingsView: View {
     let model: UsageModel
     @State private var enabled: [Provider: Bool] = [:]
-    @State private var claudeError: String?
+    @State private var signedIn: [String: String] = [:]
+    @State private var candidates: [Account] = []
 
     private let installed = Tracking.installed()
 
@@ -21,18 +22,38 @@ struct ToolsSettingsView: View {
                     + "in Settings › Resets. Cursor usage goes online only if you turn it on.")
                     .font(.caption).foregroundStyle(.secondary)
             }
-            if installed.contains(.claude) {
-                claudeSection
+            ForEach(Account.multiAccountProviders.filter(installed.contains), id: \.self) { provider in
+                AccountsSection(provider: provider, model: model, signedIn: signedIn,
+                                candidates: candidates, reload: reloadAccounts)
             }
         }
         .formStyle(.grouped)
-        .frame(height: 430)
+        .frame(height: 620)
         .onAppear {
             let states = Self.tools.map { ($0.provider, Tracking.isEnabled($0.provider)) }
             enabled = Dictionary(uniqueKeysWithValues: states)
+            reloadAccounts()
         }
     }
 
+    /// Who's signed in to each account, and folders that look like more: file reads, so off the main thread.
+    private func reloadAccounts() {
+        let list = model.accounts, home = model.home
+        // The demo's home folder stands in for the Mac's, so its environment mustn't pick a real folder either.
+        let environment = home == .homeDirectory ? ProcessInfo.processInfo.environment : [:]
+        Task {
+            let (found, who) = await Task.detached(priority: .userInitiated) {
+                let found = list.candidates(home: home)
+                var who: [String: String] = [:]
+                for account in list.accounts + found {
+                    who[account.id] = account.signedInAs(home: home, environment: environment)
+                }
+                return (found, who)
+            }.value
+            candidates = found
+            signedIn = who
+        }
+    }
     private struct Tool {
         let provider: Provider
         let source: String
@@ -66,44 +87,5 @@ struct ToolsSettingsView: View {
             }
         }
         .disabled(!isInstalled)
-    }
-
-    private var claudeSection: some View {
-        Section {
-            LabeledContent("Status line") {
-                switch model.claudeStatusLine {
-                case .on:
-                    Button("Turn Off") { setClaude(false) }
-                case .off, .otherCommand:
-                    Button("Turn On") { setClaude(true) }
-                }
-            }
-        } header: {
-            Text("Claude Code")
-        } footer: {
-            Text(claudeError ?? claudeFooter)
-                .font(.caption).foregroundStyle(claudeError == nil ? .secondary : Color.red)
-        }
-    }
-
-    private var claudeFooter: String {
-        switch model.claudeStatusLine {
-        case .on:
-            "Claude Code shows the forecast under the prompt and Fuel Gauge reads each update. Turning it off "
-                + "puts your old status line back."
-        case .otherCommand:
-            "You have your own status line. Turning this on keeps it, with the forecast underneath."
-        case .off:
-            "Claude Code only shares its limits with a status line. Settings are backed up first."
-        }
-    }
-
-    private func setClaude(_ on: Bool) {
-        do {
-            try model.setClaudeStatusLine(on: on)
-            claudeError = nil
-        } catch {
-            claudeError = "Couldn't update Claude Code's settings: \(error.localizedDescription)"
-        }
     }
 }

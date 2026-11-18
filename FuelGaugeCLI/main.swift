@@ -16,8 +16,9 @@ Usage:
 Commands:
   status                Each limit: percent used, when it resets, and whether it lasts until then.
                         Exits 2 when a limit is forecast to run out before it resets, or already has.
-  resets                Claude's recorded Fable and weekly resets, its Fable allowance, and which
-                        reset would help if the week won't last. Read-only: it never uses a reset.
+  resets                Each Claude account's recorded Fable and weekly resets, its Fable allowance,
+                        and which reset would help if the week won't last. With --json, the account
+                        in CLAUDE_CONFIG_DIR, else the default one. Read-only: it never uses a reset.
   history               The readings behind the forecasts, per limit.
   backtest              Compare recent and adaptive forecasts against saved observations. Read-only.
   statusline            Claude Code's status line command: reads Claude's limits from stdin, saves
@@ -25,6 +26,10 @@ Commands:
   install-statusline    Make Fuel Gauge Claude Code's status line. An existing status line keeps
                         showing, above the forecast. Backs up settings.json first.
   uninstall-statusline  Put Claude Code's status line back the way it was.
+
+Several accounts: Claude Code keeps each sign-in in its own folder (CLAUDE_CONFIG_DIR=~/.claude-work
+claude). Run install-statusline once per account, with that account's CLAUDE_CONFIG_DIR set, or turn it
+on in Fuel Gauge's Settings › Tools. Each account's readings stay its own.
 
 For agents: run `fuelgauge status` before a long task. If it exits 2, tell the person which limit
 runs out and when, and ask before starting, or switch to a cheaper model.
@@ -42,6 +47,14 @@ signal(SIGPIPE, SIG_IGN)
 let arguments = Array(CommandLine.arguments.dropFirst())
 let wantsJSON = arguments.contains("--json")
 let store = ReadingStore()
+// The command's own CLAUDE_CONFIG_DIR names the account it runs for, so it never decides the default folder.
+let accounts = AccountList.load(environment: [:])
+
+/// The Claude Code account this command runs for: the one its `CLAUDE_CONFIG_DIR` points at, else the default.
+func currentClaudeAccount() -> Account {
+    accounts.account(.claude, environment: ProcessInfo.processInfo.environment)
+        ?? Account.defaultAccount(.claude, environment: [:])
+}
 
 func option(_ name: String) -> String? {
     guard let index = arguments.firstIndex(of: name), index + 1 < arguments.count else { return nil }
@@ -54,11 +67,14 @@ func currentForecasts(now: Date = Date()) -> [Forecast] {
     if enabled.contains(.grokBot) {
         try? store.append(GrokBotReader().read(), now: now)
     }
-    let readings = store.load(since: now.addingTimeInterval(-ForecastEngine.historyDuration))
-        .filter { enabled.contains($0.provider) }
-    return ForecastEngine.forecasts(from: readings, now: now).filter {
-        !($0.verdict == .reset && $0.resetsAt < now.addingTimeInterval(-24 * 3600))
+    // Tracked accounts only, named when a tool has several.
+    let readings = store.load(since: now.addingTimeInterval(-ForecastEngine.historyDuration)).filter {
+        enabled.contains($0.provider) && (!Account.multiAccountProviders.contains($0.provider)
+            || accounts.account($0.provider, slug: $0.account) != nil)
     }
+    return accounts.label(ForecastEngine.forecasts(from: readings, now: now).filter {
+        !($0.verdict == .reset && $0.resetsAt < now.addingTimeInterval(-24 * 3600))
+    })
 }
 
 func status() -> Never {
@@ -69,12 +85,12 @@ func status() -> Never {
         FileHandle.standardOutput.write(data + Data("\n".utf8))
     } else if forecasts.isEmpty {
         print("No readings yet. Open Fuel Gauge, and use Claude Code, Codex, or Grok Bot for a few minutes.")
-        if Tracking.isEnabled(.claude), ClaudeSettings().state != .on {
+        if Tracking.isEnabled(.claude), ClaudeSettings(account: currentClaudeAccount()).state != .on {
             print("For Claude Code limits, run: fuelgauge install-statusline")
         }
     } else {
         for forecast in forecasts {
-            let name = "\(forecast.key.provider.name) · \(forecast.windowName)"
+            let name = "\(forecast.sourceLabel) · \(forecast.windowName)"
             print("\(name): \(ForecastText.headline(forecast, now: now))")
             print("  \(ForecastText.usage(forecast, now: now))")
             if let pace = ForecastText.pace(forecast) { print("  \(pace)") }
@@ -87,24 +103,41 @@ func status() -> Never {
     exit(forecasts.contains(where: \.isShort) ? 2 : 0)
 }
 
+/// The app's last Fable check for an account.
+func claudeUsage(_ account: Account) -> ClaudeUsage? {
+    ClaudeUsage.load(from: ClaudeUsage.url(for: account))
+}
+
 /// "18% of your week so far · up to 50%" for a model allowance, from the app's last check.
 func modelShare(_ forecast: Forecast, now: Date) -> String? {
-    guard let name = forecast.modelName, let allowance = ClaudeUsage.load()?.model(named: name),
+    guard let name = forecast.modelName,
+          let account = accounts.account(forecast.key.provider, slug: forecast.key.account),
+          let allowance = claudeUsage(account)?.model(named: name),
           allowance.resetsAt > now, let used = allowance.usedPercentOfWeekly else { return nil }
     let cap = allowance.allowancePercentOfWeekly.map { " · up to \(ForecastText.percent($0))" } ?? ""
     return "\(ForecastText.percent(used)) of your week so far\(cap)"
 }
 
-/// Claude's recorded resets and the planner's suggestion, as text.
+/// Each Claude account's recorded resets and the planner's suggestion, as text.
 func printResets(forecasts: [Forecast], now: Date, headerOnlyIfAny: Bool) {
-    let resets = ClaudeResets.load()
-    let advice = ResetAdvice.suggest(forecasts: forecasts, usage: ClaudeUsage.load(), resets: resets, now: now)
+    for account in accounts.accounts(for: .claude) {
+        let own = forecasts.filter { $0.key.provider == .claude && $0.key.account == account.slug }
+        let label = accounts.label(provider: .claude, slug: account.slug).map { "Claude Code · \($0)" }
+        printResets(account, label: label ?? "Claude Code", forecasts: own, now: now, headerOnlyIfAny: headerOnlyIfAny)
+    }
+}
+
+func printResets(_ account: Account, label: String, forecasts: [Forecast], now: Date, headerOnlyIfAny: Bool) {
+    let resets = ClaudeResets.load(account: account)
+    let advice = ResetAdvice.suggest(forecasts: forecasts, usage: claudeUsage(account), resets: resets, now: now)
     guard let recorded = resets.recordedAt else {
-        if let advice { print("Claude Code · \(advice.title)\n  \(advice.text)") }
-        if !headerOnlyIfAny { print("No Claude resets recorded. Record them in Fuel Gauge's Settings › Resets.") }
+        if let advice { print("\(label) · \(advice.title)\n  \(advice.text)") }
+        if !headerOnlyIfAny {
+            print("\(label): no resets recorded. Record them in Fuel Gauge's Settings › Resets.")
+        }
         return
     }
-    print("Claude Code · Resets (recorded by hand \(ForecastText.time(recorded, now: now)))")
+    print("\(label) · Resets (recorded by hand \(ForecastText.time(recorded, now: now)))")
     for kind in ClaudeResets.Kind.allCases {
         let expiry = resets.expiry(kind, now: now).map { ". \($0)" } ?? ""
         print("  \(resets.summary(kind, now: now)): \(kind.explanation)\(expiry)")
@@ -116,11 +149,14 @@ func resetsCommand() -> Never {
     let now = Date()
     let forecasts = currentForecasts(now: now)
     if wantsJSON {
-        let resets = ClaudeResets.load()
+        // The default account, or the one CLAUDE_CONFIG_DIR points at.
+        let account = currentClaudeAccount()
+        let resets = ClaudeResets.load(account: account)
+        let own = forecasts.filter { $0.key.provider == .claude && $0.key.account == account.slug }
         // Claude Code turned off in Fuel Gauge: the recorded counts, but no allowance or advice.
-        let usage = Tracking.isEnabled(.claude) ? ClaudeUsage.load() : nil
+        let usage = Tracking.isEnabled(.claude) ? claudeUsage(account) : nil
         let advice = Tracking.isEnabled(.claude)
-            ? ResetAdvice.suggest(forecasts: forecasts, usage: usage, resets: resets, now: now) : nil
+            ? ResetAdvice.suggest(forecasts: own, usage: usage, resets: resets, now: now) : nil
         guard let data = try? ResetsJSON.encode(ResetsJSON(resets: resets, usage: usage, advice: advice, now: now))
         else { fail("couldn't encode the resets") }
         FileHandle.standardOutput.write(data + Data("\n".utf8))
@@ -138,17 +174,22 @@ func history() -> Never {
         encoder.dateEncodingStrategy = .iso8601
         encoder.outputFormatting = [.sortedKeys]
         for reading in readings {
-            let line: [String: String] = [
-                "tool": reading.provider.rawValue, "limit": reading.limit, "at": reading.at.ISO8601Format(),
+            var line: [String: String] = [
+                "tool": reading.provider.rawValue,
+                "limit": reading.limit, "at": reading.at.ISO8601Format(),
                 "used_percent": String(reading.usedPercent), "resets_at": reading.resetsAt.ISO8601Format()
             ]
+            if let account = reading.account { line["account"] = account }
             if let data = try? encoder.encode(line), let text = String(bytes: data, encoding: .utf8) { print(text) }
         }
     } else {
         for (key, group) in Dictionary(grouping: readings, by: \.key).sorted(by: { $0.key < $1.key }) {
             let window = WindowName.of(windowMinutes: group.last?.windowMinutes)
             let name = ModelLimit.modelName(of: key.limit).map { "\($0) \(window.lowercased())" } ?? window
-            print("\(key.provider.name) · \(name)")
+            // An account that isn't added in Fuel Gauge yet still shows apart, by its slug.
+            let source = (accounts.label(provider: key.provider, slug: key.account) ?? key.account)
+                .map { "\(key.provider.name) · \($0)" } ?? key.provider.name
+            print("\(source) · \(name)")
             for reading in group {
                 print("  \(ForecastText.time(reading.at))  \(ForecastText.percent(reading.usedPercent))")
             }
@@ -164,7 +205,8 @@ let nestedStatusLineKey = "FUEL_GAUGE_NESTED_STATUSLINE"
 func statusLine() -> Never {
     let input = FileHandle.standardInput.readDataToEndOfFile()
     let now = Date()
-    let settings = ClaudeSettings()
+    let account = currentClaudeAccount()
+    let settings = ClaudeSettings(account: account)
     // A wrapped command that leads back here (directly or through another tool's wrapper) would spawn
     // status lines forever, so a nested run skips it.
     let nested = ProcessInfo.processInfo.environment[nestedStatusLineKey] != nil
@@ -172,8 +214,10 @@ func statusLine() -> Never {
         print(output, terminator: output.hasSuffix("\n") ? "" : "\n")
     }
     guard Tracking.isEnabled(.claude) else { exit(0) }
-    try? store.append(ClaudeStatusLine.readings(from: input, at: now), now: now)
+    try? store.append(ClaudeStatusLine.readings(from: input, at: now, account: account.slug), now: now)
+    // Only this session's account: another account's limits say nothing about this one.
     let readings = store.load(since: now.addingTimeInterval(-ForecastEngine.historyDuration), provider: .claude)
+        .filter { $0.account == account.slug }
     let forecasts = ForecastEngine.forecasts(from: readings, now: now).filter { $0.verdict != .reset }
     if let strip = StatusLineStrip.render(forecasts, now: now) {
         print(strip)
@@ -252,7 +296,7 @@ final class OutputBox: @unchecked Sendable {
 }
 
 func installStatusLine() -> Never {
-    let settings = ClaudeSettings()
+    let settings = ClaudeSettings(account: currentClaudeAccount())
     let path = Bundle.main.executableURL?.resolvingSymlinksInPath().path ?? "fuelgauge"
     let linked = ["/opt/homebrew/bin/fuelgauge", "/usr/local/bin/fuelgauge"].first {
         URL(filePath: $0).resolvingSymlinksInPath().path == path
@@ -271,7 +315,7 @@ func installStatusLine() -> Never {
 }
 
 func uninstallStatusLine() -> Never {
-    let settings = ClaudeSettings()
+    let settings = ClaudeSettings(account: currentClaudeAccount())
     do {
         try settings.uninstall()
     } catch {

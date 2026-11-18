@@ -1,6 +1,7 @@
 import Foundation
 
-/// Readings on disk, one JSON line each, in a file per tool per month: `Readings/claude-2026-10.jsonl`.
+/// Readings on disk, one JSON line each, in a file per tool per month: `Readings/claude-2026-10.jsonl`, or
+/// `Readings/claude@work_1a2b3c-2026-10.jsonl` for another account.
 /// The app and the `fuelgauge statusline` command both append, so files are only ever appended to or
 /// deleted whole, never rewritten.
 public struct ReadingStore: Sendable {
@@ -58,7 +59,7 @@ public struct ReadingStore: Sendable {
     // MARK: - Files
 
     private func write(_ reading: Reading) throws {
-        let url = folder.appending(path: "\(reading.provider.rawValue)-\(Self.monthName(reading.at)).jsonl")
+        let url = folder.appending(path: "\(Self.stem(reading.key))-\(Self.monthName(reading.at)).jsonl")
         var line = try Self.encoder.encode(reading)
         line.append(0x0A)
         // O_APPEND keeps concurrent writers from overwriting each other's lines.
@@ -71,7 +72,7 @@ public struct ReadingStore: Sendable {
 
     private func lastReading(for key: LimitKey) -> Reading? {
         let candidates = allFiles()
-            .filter { $0.lastPathComponent.hasPrefix(key.provider.rawValue + "-") }
+            .filter { $0.lastPathComponent.hasPrefix(Self.stem(key) + "-") }
             .sorted { $0.lastPathComponent > $1.lastPathComponent }
         for url in candidates {
             if let reading = Self.readings(in: url, tailBytes: 64 * 1024).last(where: { $0.key == key }) {
@@ -89,10 +90,21 @@ public struct ReadingStore: Sendable {
     private func files(since date: Date, provider: Provider?) -> [URL] {
         let first = Calendar.utc.dateInterval(of: .month, for: date)?.start ?? date
         return allFiles().filter { url in
-            if let provider, !url.lastPathComponent.hasPrefix(provider.rawValue + "-") { return false }
+            if let provider, !Self.holds(provider, url) { return false }
             guard let month = Self.month(of: url) else { return false }
             return month >= first
         }
+    }
+
+    /// The start of a limit's file names: the tool, plus the account when it isn't the default one.
+    static func stem(_ key: LimitKey) -> String {
+        Account.qualifiedID(provider: key.provider, slug: key.account)
+    }
+
+    /// Whether a file holds readings for any of this tool's accounts.
+    private static func holds(_ provider: Provider, _ url: URL) -> Bool {
+        let name = url.lastPathComponent
+        return name.hasPrefix(provider.rawValue + "-") || name.hasPrefix(provider.rawValue + "@")
     }
 
     static func readings(in url: URL) -> [Reading] {
