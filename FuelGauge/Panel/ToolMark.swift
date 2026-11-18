@@ -34,9 +34,11 @@ struct ToolMark: View {
     }
 }
 
-/// PanelKit's `SectionHeader` with the tool's mark before the name.
+/// PanelKit's `SectionHeader` with the tool's mark before the name, and the account's name after it when the
+/// tool has several.
 struct ToolSectionHeader: View {
     let provider: Provider
+    var accountName: String?
 
     @Environment(\.panelTheme) private var theme
 
@@ -48,7 +50,7 @@ struct ToolSectionHeader: View {
             ToolMark(provider: provider)
                 .foregroundStyle(theme.ink)
                 .alignmentGuide(.firstTextBaseline) { $0[VerticalAlignment.center] + Self.capHeight / 2 }
-            Text(provider.name)
+            Text(accountName.map { "\(provider.name) · \($0)" } ?? provider.name)
                 .font(PanelFont.condensed(10, .semibold))
                 .tracking(10 * 0.2)
                 .textCase(.uppercase)

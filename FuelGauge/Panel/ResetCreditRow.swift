@@ -2,19 +2,34 @@ import FuelGaugeCore
 import PanelKit
 import SwiftUI
 
-/// Reset credits under Codex, and Claude's recorded Fable and weekly resets under Claude Code. The "Check resets
+/// Reset credits under a Codex account, and a Claude account's recorded Fable and weekly resets. The "Check resets
 /// in Claude Usage" link sits in the Claude Code section's link bar.
 struct ResetCreditRow: View {
-    let provider: Provider
+    let account: Account
     let model: UsageModel
     let now: Date
     let openSettings: () -> Void
     @AppStorage(ResetPreferences.codexEnabled) private var codexEnabled = true
-    @AppStorage(ResetPreferences.claudeCount) private var claudeCount = 0
-    @AppStorage(ResetPreferences.claudeExpiry) private var claudeExpiry = 0.0
-    @AppStorage(ResetPreferences.claudeCheckedAt) private var claudeCheckedAt = 0.0
-    @AppStorage(ResetPreferences.claudeFableCount) private var fableCount = 0
-    @AppStorage(ResetPreferences.claudeFableExpiry) private var fableExpiry = 0.0
+    // Each account's own keys; the default account's are the ones Fuel Gauge always used.
+    @AppStorage private var claudeCount: Int
+    @AppStorage private var claudeExpiry: Double
+    @AppStorage private var claudeCheckedAt: Double
+    @AppStorage private var fableCount: Int
+    @AppStorage private var fableExpiry: Double
+
+    init(account: Account, model: UsageModel, now: Date, openSettings: @escaping () -> Void) {
+        self.account = account
+        self.model = model
+        self.now = now
+        self.openSettings = openSettings
+        _claudeCount = AppStorage(wrappedValue: 0, account.defaultsKey(ResetPreferences.claudeCount))
+        _claudeExpiry = AppStorage(wrappedValue: 0, account.defaultsKey(ResetPreferences.claudeExpiry))
+        _claudeCheckedAt = AppStorage(wrappedValue: 0, account.defaultsKey(ResetPreferences.claudeCheckedAt))
+        _fableCount = AppStorage(wrappedValue: 0, account.defaultsKey(ResetPreferences.claudeFableCount))
+        _fableExpiry = AppStorage(wrappedValue: 0, account.defaultsKey(ResetPreferences.claudeFableExpiry))
+    }
+
+    private var provider: Provider { account.provider }
 
     var body: some View {
         if provider == .codex {
@@ -25,14 +40,14 @@ struct ResetCreditRow: View {
     }
 
     @ViewBuilder private var codex: some View {
-        if codexEnabled || model.codexResetCredits != nil {
-            Row("↺ " + (model.codexResetCredits?.summary(now: now) ?? "Reset availability unknown"),
+        if codexEnabled || model.codexResetCredits(for: account) != nil {
+            Row("↺ " + (model.codexResetCredits(for: account)?.summary(now: now) ?? "Reset availability unknown"),
                 subtitle: codexLines.isEmpty ? nil : codexLines.joined(separator: "\n")) {
-                Button(model.checkingCodexResets ? "Checking…" : "Refresh") {
-                    model.refreshCodexResets(force: true)
+                Button(model.checkingCodexResets == account.id ? "Checking…" : "Refresh") {
+                    model.refreshCodexResets(force: true, account: account)
                 }
                 .buttonStyle(.panelCompact)
-                .disabled(model.checkingCodexResets)
+                .disabled(model.checkingCodexResets != nil)
             }
             .subtitleLineLimit(nil)
         } else {
@@ -45,11 +60,11 @@ struct ResetCreditRow: View {
 
     private var codexLines: [String] {
         var lines: [String] = []
-        if let credits = model.codexResetCredits, credits.availableCount > 0,
+        if let credits = model.codexResetCredits(for: account), credits.availableCount > 0,
            let expiry = credits.nextExpiration, expiry > now {
             lines.append("Next expires \(expiry.formatted(date: .abbreviated, time: .shortened))")
         }
-        if let checked = model.codexResetsCheckedAt {
+        if let checked = model.codexResetsCheckedAt(for: account) {
             lines.append("Checked \(checked.formatted(date: .omitted, time: .shortened)) · Redeem in Codex /usage")
         }
         return lines
