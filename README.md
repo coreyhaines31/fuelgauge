@@ -70,7 +70,7 @@ Click the fuel pump in the menu bar.
 
 | Tool | What to do | Where the numbers come from |
 | --- | --- | --- |
-| Claude Code | Click **Turn On** in the panel (or run `fuelgauge install-statusline`). | Claude Code passes its 5-hour and weekly limits to its status line after each reply. Fuel Gauge becomes the status line, saves each reading, and prints the forecast. Your `settings.json` is backed up first, and an existing status line keeps showing. Claude limits appear for Pro and Max plans. |
+| Claude Code | Click **Turn On** in the panel (or run `fuelgauge install-statusline`). | Claude Code passes its 5-hour and weekly limits to its status line after each reply. Fuel Gauge becomes the status line, saves each reading, and prints the forecast. Your `settings.json` is backed up first, and an existing status line keeps showing. Claude limits appear for Pro, Max, and Ultra plans (a verified Ultra account has no 5-hour limit, so only its weekly one shows). |
 | Codex | Nothing. | Codex records its limits in its session logs in `~/.codex/sessions`. The last 8 days are read on first launch, so weekly forecasts start right away. |
 | Grok Bot | Nothing. | Grok Bot saves its weekly usage on your Mac while it's open. |
 | Cursor | Turn it on in **Settings › Tools** (it's off by default). | Cursor keeps no usage on your Mac, so Fuel Gauge asks cursor.com every 10 minutes, signed in with the Cursor app's own sign-in. |
@@ -165,7 +165,7 @@ It goes online for four things:
 
 ## Troubleshooting
 
-**No Claude Code card.** Turn on the status line (panel or `fuelgauge install-statusline`), then send Claude a message: readings arrive with each reply. Claude Code only shares limits on Pro and Max plans. If you use Claude on the web or the desktop app, that usage shows up at your next Claude Code reply.
+**No Claude Code card.** Turn on the status line (panel or `fuelgauge install-statusline`), then send Claude a message: readings arrive with each reply. Claude Code only shares limits on Pro, Max, and Ultra plans. If you use Claude on the web or the desktop app, that usage shows up at your next Claude Code reply.
 
 **"Learning your pace" doesn't go away.** It needs readings at least 10 minutes apart. For Claude Code that means a couple of replies 10 minutes apart; for Grok Bot, Grok Bot has to be open.
 

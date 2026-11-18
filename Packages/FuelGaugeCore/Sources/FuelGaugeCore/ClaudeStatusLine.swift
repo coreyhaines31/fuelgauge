@@ -1,7 +1,7 @@
 import Foundation
 
 /// Claude Code runs its status line command after each message and passes it JSON on stdin, including
-/// `rate_limits.five_hour` and `seven_day` for Pro and Max plans. `fuelgauge statusline` is that command:
+/// `rate_limits.five_hour` and `seven_day` for Pro, Max, and Ultra plans. `fuelgauge statusline` is that command:
 /// it saves a reading from the JSON, then prints the forecast strip.
 public enum ClaudeStatusLine {
     /// The readings in one status line input, for the account the session runs as. Empty when the plan has no
