@@ -2,9 +2,10 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import { runFuelGauge } from "./cli.js";
+import { registerFeedbackTool } from "./feedback.js";
 import { shapeHistory, shapeResets, shapeStatus } from "./shape.js";
 
-const VERSION = "0.1.2";
+const VERSION = "0.1.3";
 
 const server = new McpServer(
   { name: "fuelgauge", version: VERSION },
@@ -90,5 +91,7 @@ server.registerTool(
     return reply(result.ok ? shapeHistory(result.stdout, days) : result);
   },
 );
+
+registerFeedbackTool(server, VERSION);
 
 await server.connect(new StdioServerTransport());

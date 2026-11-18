@@ -1,5 +1,6 @@
 // Turns the CLI's JSON into short answers for Claude. Only the listed fields pass through, so nothing
 // the CLI might add later (or anything unexpected) reaches the conversation by accident.
+import { withBugHint } from "./feedback.js";
 
 export const NO_READINGS =
   "No readings yet. Open Fuel Gauge and use Claude Code, Codex, or Grok Bot for a few minutes. " +
@@ -101,9 +102,9 @@ export function shapeStatus(stdout: string, code: 0 | 2, resets?: Record<string,
   try {
     parsed = JSON.parse(stdout);
   } catch {
-    return { ok: false, text: "Couldn't read Fuel Gauge's forecast." };
+    return { ok: false, text: withBugHint("Couldn't read Fuel Gauge's forecast.") };
   }
-  if (!Array.isArray(parsed)) return { ok: false, text: "Couldn't read Fuel Gauge's forecast." };
+  if (!Array.isArray(parsed)) return { ok: false, text: withBugHint("Couldn't read Fuel Gauge's forecast.") };
 
   const limits = parsed
     .filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === "object")
@@ -160,7 +161,7 @@ export function shapeHistory(stdout: string, days: number): Shaped {
     try {
       reading = JSON.parse(line);
     } catch {
-      return { ok: false, text: "Couldn't read Fuel Gauge's history." };
+      return { ok: false, text: withBugHint("Couldn't read Fuel Gauge's history.") };
     }
     const { tool, limit, at, resets_at: resetsAt } = reading;
     const used = Number(reading.used_percent);

@@ -9,6 +9,8 @@ import SwiftUI
 ///     --snapshot <file.png>     draw the panel to a PNG and quit (needs no Screen Recording)
 ///     --dark                    dark appearance
 ///     --accounts                a second Claude Code account ("Work"), and a Codex folder to add
+///     --limit-reached           Grok Bot's weekly limit used up, for the longest verdict
+///     --panel-height <points>   the room below the menu bar the panel gets, to check it fits
 @MainActor
 enum DemoMode {
     nonisolated static let isOn = CommandLine.arguments.contains("--demo")
@@ -46,6 +48,12 @@ enum DemoMode {
         }
         let main = ["oauthAccount": ["emailAddress": "sam@example.com", "planDisplayName": "Max"]]
         try? JSONSerialization.data(withJSONObject: main).write(to: home.appending(path: ".claude.json"))
+    }
+
+    static var panelHeight: CGFloat? {
+        guard let index = CommandLine.arguments.firstIndex(of: "--panel-height"),
+              index + 1 < CommandLine.arguments.count else { return nil }
+        return Double(CommandLine.arguments[index + 1]).map { CGFloat($0) }
     }
 
     static var snapshotURL: URL? {
@@ -101,8 +109,9 @@ enum DemoMode {
         readings += series(.codex, "codex-10080", minutes: 10080, resetsIn: 51, [
             (60 * 40, 2), (60 * 30, 4), (60 * 20, 6), (60 * 10, 8), (60 * 2, 9), (5, 9)
         ])
+        let grokNow: Double = CommandLine.arguments.contains("--limit-reached") ? 100 : 89
         readings += series(.grokBot, "weekly", minutes: 10080, resetsIn: 35, [
-            (60 * 20, 72), (60 * 14, 78), (60 * 8, 84), (60 * 2, 89)
+            (60 * 20, 72), (60 * 14, 78), (60 * 8, 84), (60 * 2, grokNow)
         ])
         if showsAccounts {
             prepareHome()
@@ -177,7 +186,8 @@ enum DemoMode {
             let paneURL = url.deletingPathExtension().appendingPathExtension("\(name).png")
             render(pane.frame(width: SettingsWindow.paneWidth), to: paneURL)
         }
-        let view = PanelView(model: model, openSettings: {}, checkForUpdates: {})
+        let view = PanelView(model: model, space: PanelSpace(availableHeight: panelHeight), openSettings: {},
+                             checkForUpdates: {})
         render(view, to: url) {
             saveGlyphs(next: url)
             NSApp.terminate(nil)

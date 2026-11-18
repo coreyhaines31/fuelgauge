@@ -8,6 +8,8 @@ import { join } from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
+// Appended to failures the person can't fix, like a crash or output the server can't read.
+const hint = " If this looks like a bug in Fuel Gauge, report it with `submit_feedback`.";
 const ok = true;
 const fails = false;
 // [tool, arguments, should work, top-level key the answer must have]
@@ -97,12 +99,12 @@ const fakeCalls = [
     },
   ],
   ["empty", "limits_history", { days: 30 }, ok, "history --days 30 --json", { days: 30, limits: [], note: NO_READINGS }],
-  ["garbage", "limits_status", {}, fails, "status --json", "Couldn't read Fuel Gauge's forecast."],
-  ["garbage", "limits_history", {}, fails, "history --days 1 --json", "Couldn't read Fuel Gauge's history."],
+  ["garbage", "limits_status", {}, fails, "status --json", `Couldn't read Fuel Gauge's forecast.${hint}`],
+  ["garbage", "limits_history", {}, fails, "history --days 1 --json", `Couldn't read Fuel Gauge's history.${hint}`],
   ["stderr", "limits_status", {}, fails, "status --json", "fake stderr error"],
   ["stderr", "limits_history", { days: 3 }, fails, "history --days 3 --json", "fake stderr error"],
 ];
-const expectedTools = ["limits_history", "limits_status"];
+const expectedTools = ["limits_history", "limits_status", "submit_feedback"];
 const server = process.env.SERVER ?? new URL("../server/index.mjs", import.meta.url).pathname;
 const fakeCli = new URL("./fake-cli.sh", import.meta.url).pathname;
 const max = Number(process.env.SMOKE_CHARS ?? 600);
