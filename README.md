@@ -77,6 +77,10 @@ Click the fuel pump in the menu bar.
 
 Recent-pace forecasts need about 10 minutes of readings for a 5-hour limit, or 3 hours for a weekly limit. Until then a card says "Learning your pace". Choose which tools to track in **Settings › Tools**.
 
+### Several accounts
+
+If you run more than one Claude Code or Codex account by giving each its own config folder (`CLAUDE_CONFIG_DIR=~/.claude-work claude`, `CODEX_HOME=~/.codex-work codex`), add each folder in **Settings › Tools**. Fuel Gauge offers folders like `~/.claude-*` and `~/.codex-*` it finds with a sign-in or logs in them, or choose one with **Add Folder…**. Each account gets its own card, forecast, alerts, Fable check, and recorded resets, and the menu bar shows the tightest limit across all of them. For Claude Code, turn the status line on for each account; `fuelgauge statusline` reads `CLAUDE_CONFIG_DIR` to know which account a session is. Your first account keeps all its history.
+
 ## Reading a card
 
 | Line | Meaning |
