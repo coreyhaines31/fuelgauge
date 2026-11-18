@@ -5,7 +5,7 @@ import { runFuelGauge } from "./cli.js";
 import { registerFeedbackTool } from "./feedback.js";
 import { shapeHistory, shapeResets, shapeStatus } from "./shape.js";
 
-const VERSION = "0.1.2";
+const VERSION = "0.1.3";
 
 const server = new McpServer(
   { name: "fuelgauge", version: VERSION },
