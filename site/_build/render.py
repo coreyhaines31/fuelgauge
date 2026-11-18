@@ -40,7 +40,17 @@ GITHUB_ICON = ('<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                '.21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>')
 CTAS = (f'<a class="btn" href="{DOWNLOAD}">{DOWNLOAD_ICON}Download for Mac</a>\n'
         f'        <a class="btn-quiet" href="{REPO}">{GITHUB_ICON}View source code</a>')
-FONTS = "https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@300;600;700&display=swap"
+# Self-hosted Barlow from mac-app-kit site-kit/sections/fonts.html (files in /fonts/).
+FONTS = """  <link rel="preload" href="/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/barlow-semi-condensed-600.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 400; font-display: optional; src: url(/fonts/barlow-400.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 500; font-display: optional; src: url(/fonts/barlow-500.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow"; font-style: normal; font-weight: 600; font-display: optional; src: url(/fonts/barlow-600.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 300; font-display: optional; src: url(/fonts/barlow-semi-condensed-300.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 600; font-display: optional; src: url(/fonts/barlow-semi-condensed-600.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    @font-face {font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 700; font-display: optional; src: url(/fonts/barlow-semi-condensed-700.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+  </style>"""
 
 # The Mac app family, cross-linked from every footer, in the family's order. Fuel Gauge is marked as this site.
 FAMILY = [
@@ -109,9 +119,7 @@ def head(title, description, path):
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="{FONTS}">
+{FONTS}
   <link rel="stylesheet" href="/kit/brushed.css">
   <link rel="stylesheet" href="/kit/popover.css">
   <link rel="stylesheet" href="/site.css">
@@ -146,7 +154,7 @@ def footer_inner():
     compare += "".join(f'<a href="/{p["slug"]}">{esc(p["competitor"])} alternative</a>' for p in COMPARISONS)
     family = "".join(
         f'<li><a href="{url}"{' aria-current="page"' if key == "fuel" else f' title="{esc(desc)}"'}>'
-        f'<img src="/images/family/{key}.png" alt="" width="56" height="56">{esc(name)}</a></li>'
+        f'<img src="/images/family/{key}.webp" alt="" width="56" height="56">{esc(name)}</a></li>'
         for name, url, desc, key in FAMILY)
     return (f'    <div class="foot-links">\n      <div class="wrap">\n'
             f'        <nav class="footer-alts" aria-label="Limits"><a class="label" href="/limits">Limits</a>{limits}</nav>\n'
