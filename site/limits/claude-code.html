@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Claude Code usage limits on Pro and Max (October 2026)</title>
-  <meta name="description" content="How Claude Code usage limits work on Pro and Max: shared session and weekly limits, the wrap-up allowance, /usage, and what to do at the limit.">
+  <title>Claude Code usage limits on Pro, Max, Ultra (Nov 2026)</title>
+  <meta name="description" content="How Claude Code usage limits work on Pro, Max, and Ultra: shared session and weekly limits, the wrap-up allowance, /usage, and what to do at the limit.">
   <link rel="canonical" href="https://fuelgauge.app/limits/claude-code">
-  <meta property="og:title" content="Claude Code usage limits on Pro and Max (October 2026)">
-  <meta property="og:description" content="How Claude Code usage limits work on Pro and Max: shared session and weekly limits, the wrap-up allowance, /usage, and what to do at the limit.">
+  <meta property="og:title" content="Claude Code usage limits on Pro, Max, Ultra (Nov 2026)">
+  <meta property="og:description" content="How Claude Code usage limits work on Pro, Max, and Ultra: shared session and weekly limits, the wrap-up allowance, /usage, and what to do at the limit.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Fuel Gauge">
   <meta property="og:image" content="https://fuelgauge.app/images/og/limits-claude-code.png">
@@ -16,8 +16,8 @@
   <meta property="og:url" content="https://fuelgauge.app/limits/claude-code">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://fuelgauge.app/images/og/limits-claude-code.png">
-  <meta name="twitter:title" content="Claude Code usage limits on Pro and Max (October 2026)">
-  <meta name="twitter:description" content="How Claude Code usage limits work on Pro and Max: shared session and weekly limits, the wrap-up allowance, /usage, and what to do at the limit.">
+  <meta name="twitter:title" content="Claude Code usage limits on Pro, Max, Ultra (Nov 2026)">
+  <meta name="twitter:description" content="How Claude Code usage limits work on Pro, Max, and Ultra: shared session and weekly limits, the wrap-up allowance, /usage, and what to do at the limit.">
   <meta name="theme-color" content="#e7e8e9" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#2a2a2c" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -59,8 +59,8 @@
         <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Fuel Gauge</a> <span>›</span> <a href="/limits">Limits</a></nav>
         <div class="eyebrow">Claude Code</div>
         <h1>Claude Code usage limits</h1>
-        <p class="lede">Claude Code doesn't have limits of its own on Pro and Max. It draws from your plan's session and weekly limits, the same pool as your chats.</p>
-        <div class="tldr glass"><h2>The short answer</h2><p>On Pro and Max, Claude Code shares your plan's 5-hour session limit and weekly limit with claude.ai and Claude Desktop, including Claude Code inside VS Code, Cursor, and JetBrains. Run /usage to see your plan usage bars. At the limit you can wait, turn on usage credits, upgrade, or switch to API billing through the Claude Console.</p></div>
+        <p class="lede">Claude Code doesn't have limits of its own on Pro, Max, or Ultra. It draws from your plan's session and weekly limits, the same pool as your chats.</p>
+        <div class="tldr glass"><h2>The short answer</h2><p>On Pro, Max, and Ultra, Claude Code shares your plan's 5-hour session limit (none on verified Ultra accounts) and weekly limit with claude.ai and Claude Desktop, including Claude Code inside VS Code, Cursor, and JetBrains. Run /usage to see your plan usage bars. At the limit you can wait, turn on usage credits, upgrade, or switch to API billing through the Claude Console.</p></div>
       </div>
     </div>
     <section class="tight" id="facts">
@@ -68,8 +68,8 @@
 
         <h2>Claude Code limits at a glance</h2>
                 <div class="table-card glass"><div class="table-scroll"><table class="compare facts"><tbody>
-            <tr><th scope="row">Plans</th><td>Pro, Max 5x, Max 20x (not Free)</td></tr>
-            <tr><th scope="row">Limits</th><td>Your plan's 5-hour session limit and weekly limit; Max also has a weekly Fable limit</td></tr>
+            <tr><th scope="row">Plans</th><td>Pro, Max, Ultra (not Free)</td></tr>
+            <tr><th scope="row">Limits</th><td>Your plan's 5-hour session limit and weekly limit; Max and Ultra also cap Fable at half the week</td></tr>
             <tr><th scope="row">Shared with</th><td>claude.ai, Claude Desktop, and Claude Code in VS Code, Cursor, and JetBrains</td></tr>
             <tr><th scope="row">Check it</th><td><code>/usage</code> shows plan usage bars and what's using them</td></tr>
             <tr><th scope="row">Mid-response at the limit</th><td>A small wrap-up allowance lets the current step finish</td></tr>
@@ -92,8 +92,8 @@
       <div class="wrap narrow"><div class="prose">
 
         <h2>What happens when you hit it</h2>
-        <p>"You've hit your session limit" and "You've hit your weekly limit" cover every model, so <code>/model</code> won't get you around them. The message tells you when the window resets. A model-specific message, like "You've hit your Opus limit", is different: switching to a model outside that family keeps you going.</p>
-        <p>Your options: wait (Claude Code 2.1.234 and later can wait for the reset and continue the interrupted task on its own), turn on usage credits with <code>/usage-credits</code>, upgrade (Pro to Max 5x, or Max 5x to 20x), or use API credits through a Claude Console account, billed at API rates.</p>
+        <p>"You've hit your session limit" and "You've hit your weekly limit" cover every model, so <code>/model</code> won't get you around them. The message tells you when the window resets. The Fable cap on Max and Ultra is different: switching to a model outside the Fable family keeps you going within your plan.</p>
+        <p>Your options: wait (Claude Code 2.1.234 and later can wait for the reset and continue the interrupted task on its own), turn on usage credits with <code>/usage-credits</code>, upgrade (Pro to Max, or Max to Ultra), or use API credits through a Claude Console account, billed at API rates.</p>
         <h2>Will you make it to the reset?</h2>
         <p>A percentage tells you how much you've used. It doesn't tell you whether, at the pace you're going, you'll run out before the window resets. <a href="/">Fuel Gauge</a> does that math: a free Mac menu bar app that reads your Claude Code limits after every reply and says "Makes it to reset" or "Runs out around 3:40p, 1h 20m early". It can put the same line under your Claude Code prompt.</p>
       </div></div>
@@ -103,17 +103,18 @@
 
         <h2>Sources</h2>
         <p>Checked on October 20, 2026. Plans change from time to time, so the providers' own pages are the final word.</p>
-        <ul><li><a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Use Claude Code with your Pro or Max plan</a></li><li><a href="https://code.claude.com/docs/en/costs">Manage costs effectively (Claude Code docs)</a></li><li><a href="https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work">How do usage and length limits work?</a></li></ul>
+        <ul><li><a href="https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan">Use Claude Code with your Pro, Max, or Ultra plan</a></li><li><a href="https://code.claude.com/docs/en/costs">Manage costs effectively (Claude Code docs)</a></li><li><a href="https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work">How do usage and length limits work?</a></li></ul>
+        <p>Claude plan details rechecked on November 17, 2026.</p>
       </div></div>
     </section>
     <section class="tight lit">
       <div class="wrap">
         <div class="head center head-sm"><h2>Questions</h2></div>
         <div class="faq glass">
-          <details><summary>Does Claude Code have its own usage limit?</summary><p>Not on Pro and Max. It shares your plan&#x27;s session and weekly limits with claude.ai and Claude Desktop.</p></details>
+          <details><summary>Does Claude Code have its own usage limit?</summary><p>Not on Pro, Max, or Ultra. It shares your plan&#x27;s session and weekly limits with claude.ai and Claude Desktop.</p></details>
           <details><summary>How do I check my Claude Code usage?</summary><p>Run /usage in Claude Code for your plan usage bars and a breakdown of what used them, or see Settings › Usage on claude.ai.</p></details>
-          <details><summary>Is Claude Code included in the Free plan?</summary><p>No. Claude Code comes with Pro and Max.</p></details>
-          <details><summary>Why did Claude Code bill my API key?</summary><p>If ANTHROPIC_API_KEY is set in your environment, Claude Code uses it instead of your subscription. Unset it and log in with your Pro or Max account.</p></details>
+          <details><summary>Is Claude Code included in the Free plan?</summary><p>No. Claude Code comes with Pro, Max, Ultra, Team, and Enterprise.</p></details>
+          <details><summary>Why did Claude Code bill my API key?</summary><p>If ANTHROPIC_API_KEY is set in your environment, Claude Code uses it instead of your subscription. Unset it and log in with your Claude subscription.</p></details>
         </div>
       </div>
     </section>
@@ -182,7 +183,7 @@
       });
     });
   </script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does Claude Code have its own usage limit?", "acceptedAnswer": {"@type": "Answer", "text": "Not on Pro and Max. It shares your plan's session and weekly limits with claude.ai and Claude Desktop."}}, {"@type": "Question", "name": "How do I check my Claude Code usage?", "acceptedAnswer": {"@type": "Answer", "text": "Run /usage in Claude Code for your plan usage bars and a breakdown of what used them, or see Settings \u203a Usage on claude.ai."}}, {"@type": "Question", "name": "Is Claude Code included in the Free plan?", "acceptedAnswer": {"@type": "Answer", "text": "No. Claude Code comes with Pro and Max."}}, {"@type": "Question", "name": "Why did Claude Code bill my API key?", "acceptedAnswer": {"@type": "Answer", "text": "If ANTHROPIC_API_KEY is set in your environment, Claude Code uses it instead of your subscription. Unset it and log in with your Pro or Max account."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does Claude Code have its own usage limit?", "acceptedAnswer": {"@type": "Answer", "text": "Not on Pro, Max, or Ultra. It shares your plan's session and weekly limits with claude.ai and Claude Desktop."}}, {"@type": "Question", "name": "How do I check my Claude Code usage?", "acceptedAnswer": {"@type": "Answer", "text": "Run /usage in Claude Code for your plan usage bars and a breakdown of what used them, or see Settings \u203a Usage on claude.ai."}}, {"@type": "Question", "name": "Is Claude Code included in the Free plan?", "acceptedAnswer": {"@type": "Answer", "text": "No. Claude Code comes with Pro, Max, Ultra, Team, and Enterprise."}}, {"@type": "Question", "name": "Why did Claude Code bill my API key?", "acceptedAnswer": {"@type": "Answer", "text": "If ANTHROPIC_API_KEY is set in your environment, Claude Code uses it instead of your subscription. Unset it and log in with your Claude subscription."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Fuel Gauge", "item": "https://fuelgauge.app/"}, {"@type": "ListItem", "position": 2, "name": "Limits", "item": "https://fuelgauge.app/limits"}, {"@type": "ListItem", "position": 3, "name": "Claude Code limits", "item": "https://fuelgauge.app/limits/claude-code"}]}</script>
 </body>
 </html>

@@ -16,7 +16,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from compare import COMPARES  # noqa: E402
 from guides import GUIDES  # noqa: E402
-from limits import LIMITS, VERIFIED  # noqa: E402
+from limits import CHECKED, LIMITS, VERIFIED  # noqa: E402
 from pages import CLI, COMPARISONS, PRIVACY  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
@@ -397,10 +397,10 @@ def render_hubs():
     limits_table = ('        <div class="table-card glass"><div class="table-scroll"><table class="compare">'
                     '<thead><tr><td></td><th scope="col">Limits</th><th scope="col">Resets</th></tr></thead>'
                     f'<tbody>{rows}</tbody></table></div></div>\n'
-                    f'        <p class="table-foot">Checked against each provider\'s own help pages on {VERIFIED}.</p>\n')
+                    f'        <p class="table-foot">Checked against each provider\'s own help pages: Claude plans on {CHECKED}, the rest on {VERIFIED}.</p>\n')
     render_hub("/limits", "Limits",
                "AI coding usage limits: Claude, Codex, Cursor, Copilot, Grok",
-               "How usage limits work on Claude Pro and Max, Claude Code, Codex, Cursor, Grok, and GitHub Copilot: the windows, when each resets, and how to check.",
+               "How usage limits work on Claude Pro, Max, and Ultra, Claude Code, Codex, Cursor, Grok, and GitHub Copilot: the windows, when each resets, and how to check.",
                "Usage limits, <em>plan by plan.</em>",
                "What each plan limits, when it resets, and how to see what you have left. Checked against the official help pages.",
                [(p["short"], p["card"], p["path"]) for p in LIMITS], limits_table)

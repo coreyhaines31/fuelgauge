@@ -1,15 +1,13 @@
 # Guides, rendered by render.py. Same sourcing rule as limits.py: only what the official docs say.
 
-from limits import CODE, COSTS, MAX, SETTINGS, USAGE, sources
-
-STATUSLINE = "https://code.claude.com/docs/en/statusline"
+from limits import CODE, COSTS, LIMIT_RESET, MAX, PLAN_NOTE, SETTINGS, STATUSLINE, ULTRA, USAGE, sources
 
 GUIDES = [
     {
         "path": "/guides/check-claude-usage",
         "short": "Check your Claude usage",
         "card": "Settings › Usage, /usage, the status line, and a forecast",
-        "title": "How to check your Claude usage (Pro, Max, Claude Code)",
+        "title": "How to check your Claude usage (Pro, Max, Ultra, Code)",
         "description": "Every way to see how much of your Claude plan you've used: Settings › Usage on claude.ai, /usage in Claude Code, the status line, and a menu bar forecast.",
         "eyebrow": "Guide",
         "h1": "How to check your Claude usage",
@@ -18,11 +16,11 @@ GUIDES = [
         "sections": [
             {"id": "settings", "html": f"""
         <h2>1. Settings › Usage on claude.ai</h2>
-        <p>Open <a href="{SETTINGS}">claude.ai/settings/usage</a>. It shows how much of your session and weekly limits you've used and when each resets. It's also where Pro and Max subscribers turn usage credits on or off and see what they've spent.</p>
+        <p>Open <a href="{SETTINGS}">claude.ai/settings/usage</a>. It shows how much of your session and weekly limits you've used and when each resets. It's also where Pro, Max, and Ultra subscribers turn usage credits on or off and see what they've spent.</p>
         <p>Because Claude, Claude Desktop, and Claude Code share the same limits, this page covers all of them.</p>"""},
             {"id": "usage", "lit": True, "html": """
         <h2>2. <code>/usage</code> in Claude Code</h2>
-        <p>Type <code>/usage</code> in Claude Code. On Pro and Max you get your plan usage bars and a breakdown of what used them: skills, subagents, plugins, MCP servers, and scheduled loops. Press <code>d</code> or <code>w</code> to switch between the last day and the last week.</p>
+        <p>Type <code>/usage</code> in Claude Code. On Pro, Max, Ultra, Team, and Enterprise plans you get your plan usage bars and a breakdown of what used them: skills, subagents, plugins, MCP servers, and scheduled loops. Press <code>d</code> or <code>w</code> to switch between the last day and the last week.</p>
         <p>Two things to know: the breakdown only counts sessions on this Mac, not claude.ai or other computers, and the dollar figure in the Session block is for API users, not subscribers. If <code>/usage</code> says it's rate limited until a certain time, that's the usage check that's limited, not your work.</p>
         <p>In the VS Code extension, the same numbers are in the Account &amp; usage dialog.</p>"""},
             {"id": "statusline", "html": """
@@ -35,7 +33,7 @@ GUIDES = [
             {"id": "sources", "html": sources(
                 ("Manage costs effectively (Claude Code docs)", COSTS),
                 ("Customize your status line (Claude Code docs)", STATUSLINE),
-                ("What is the Max plan?", MAX))},
+                ("How do usage and length limits work?", USAGE)) + PLAN_NOTE},
         ],
         "faqs": [
             ("Where do I see my Claude usage?", "Settings › Usage on claude.ai shows your usage and when your limits reset. In Claude Code, run /usage."),
@@ -61,10 +59,10 @@ GUIDES = [
         "sections": [
             {"id": "session", "html": """
         <h2>The 5-hour session limit</h2>
-        <p>Every plan, Free included, has a session limit that resets every five hours. It's the limit you hit in the middle of a long working stretch, and it's the one that comes back fastest.</p>
+        <p>Every plan, Free included, has a session limit that resets five hours after your first message. It's the limit you hit in the middle of a long working stretch, and it's the one that comes back fastest. The exception: verified Ultra accounts have no 5-hour limit.</p>
         <h2>The weekly limit</h2>
-        <p>Pro and Max also have a weekly limit. It resets at a fixed time assigned to your account, once a week, and you get the full allowance back each time. Because the time is per account, your friend's reset may not be on the same day as yours.</p>
-        <p>Max has one more: a separate weekly limit for Fable.</p>"""},
+        <p>Pro, Max, Ultra, and Team seats also have a weekly limit. It resets at a fixed time assigned to your account, once a week, and you get the full allowance back each time. Because the time is per account, your friend's reset may not be on the same day as yours.</p>
+        <p>Max and Ultra have one more: Fable can use up to half of the weekly limit. The <a href="/limits/claude-weekly-limit">Claude weekly limit</a> page explains how the two fit together.</p>"""},
             {"id": "find", "lit": True, "html": f"""
         <h2>How to find your reset times</h2>
         <ul>
@@ -75,12 +73,14 @@ GUIDES = [
         </ul>"""},
             {"id": "wait", "html": """
         <h2>If you hit the limit before the reset</h2>
-        <p>Claude Code 2.1.234 and later can wait for the reset and pick the interrupted task back up on its own. You can also turn on usage credits to keep working at extra cost, or upgrade: Pro to Max 5x, or Max 5x to 20x. A new plan's limits apply right away.</p>
+        <p>Claude Code 2.1.234 and later can wait for the reset and pick the interrupted task back up on its own. You can also turn on usage credits to keep working at extra cost, or upgrade: Pro to Max, or Max to Ultra. A new plan's limits apply right away. If Anthropic has given your account a limit reset, "Reset for free" in Settings › Usage refills the window on the spot; your regular reset time doesn't change.</p>
         <p>Better still is seeing it coming. A percentage tells you where you are; <a href="/">Fuel Gauge</a> tells you whether you'll make it to the reset at your current pace, and warns you once if you won't.</p>"""},
             {"id": "sources", "html": sources(
                 ("How do usage and length limits work?", USAGE),
                 ("What is the Max plan?", MAX),
-                ("Manage costs effectively (Claude Code docs)", COSTS))},
+                ("What is the Ultra plan?", ULTRA),
+                ("What is a limit reset?", LIMIT_RESET),
+                ("Manage costs effectively (Claude Code docs)", COSTS)) + PLAN_NOTE},
         ],
         "faqs": [
             ("How long is the Claude usage limit?", "The session limit lasts until it resets, every five hours. The weekly limit resets once a week."),
@@ -91,7 +91,7 @@ GUIDES = [
         "related": [
             ("Check your Claude usage", "Every place to see what's left", "/guides/check-claude-usage"),
             ("Claude Pro limits", "Session and weekly, shared with Claude Code", "/limits/claude-pro"),
-            ("Claude Max limits", "5x or 20x Pro's usage", "/limits/claude-max"),
+            ("The Claude weekly limit", "When it resets and how Fable fits in", "/limits/claude-weekly-limit"),
         ],
     },
     {
@@ -108,7 +108,7 @@ GUIDES = [
             {"id": "how", "html": """
         <h2>How the status line works</h2>
         <p>The status line is a row under Claude Code's prompt. You point it at a command in <code>settings.json</code>; Claude Code runs it when a session starts, after each reply, and at a few other moments, passes it JSON about the session on stdin, and shows what it prints. Colors (ANSI codes) and multiple lines work.</p>
-        <p>The JSON includes the model, the working folder, context window use, cost, and on Pro and Max plans, <code>rate_limits</code>:</p>
+        <p>The JSON includes the model, the working folder, context window use, cost, and on Pro, Max, and Ultra plans, <code>rate_limits</code>:</p>
         <pre><code>"rate_limits": {
   "five_hour": { "used_percentage": 23.5, "resets_at": 1738425600 },
   "seven_day": { "used_percentage": 41.2, "resets_at": 1738857600 }
@@ -141,12 +141,12 @@ echo "$line"</code></pre>
         <p><a href="/alternatives/ccstatusline">ccstatusline</a> is a popular, highly customizable status line with dozens of widgets, including session and weekly usage. It works alongside Fuel Gauge: keep it as your status line and Fuel Gauge adds its line underneath.</p>"""},
             {"id": "sources", "html": sources(
                 ("Customize your status line (Claude Code docs)", STATUSLINE),
-                ("Use Claude Code with your Pro or Max plan", CODE))},
+                ("Use Claude Code with your Pro, Max, or Ultra plan", CODE)) + PLAN_NOTE},
         ],
         "faqs": [
             ("Where is the Claude Code statusline configured?", "In settings.json, usually ~/.claude/settings.json, under statusLine with a type of command and the command to run."),
-            ("Can the status line show my usage limits?", "Yes, on Pro and Max. Claude Code passes rate_limits.five_hour and rate_limits.seven_day, each with used_percentage and resets_at, to the status line command."),
-            ("Why doesn't my status line show rate limits?", "They appear only for Pro and Max subscribers, and only after the first reply in a session. A window drops out once its reset time passes."),
+            ("Can the status line show my usage limits?", "Yes, on Pro, Max, and Ultra. Claude Code passes rate_limits.five_hour and rate_limits.seven_day, each with used_percentage and resets_at, to the status line command."),
+            ("Why doesn't my status line show rate limits?", "They appear only for Pro, Max, and Ultra subscribers (or behind a gateway with a spend limit), and only after the first reply in a session. A window can be missing on its own, such as the 5-hour one on a verified Ultra account, and drops out once its reset time passes."),
             ("Can I use two status line tools?", "Claude Code runs one command. Fuel Gauge's installer wraps your existing one, so both print: yours first, the forecast under it."),
         ],
         "related": [
@@ -160,7 +160,7 @@ echo "$line"</code></pre>
         "short": "Stop hitting Claude limits",
         "card": "What burns through your limit in Claude Code, and what saves it",
         "title": "How to stop hitting Claude usage limits in Claude Code",
-        "description": "Why Claude Code burns through your Pro or Max limit and what actually helps: /clear, the right model and effort, fewer MCP tools, subagents, and a forecast.",
+        "description": "Why Claude Code burns through your Claude plan limit and what actually helps: /clear, the right model and effort, fewer MCP tools, subagents, and a forecast.",
         "eyebrow": "Guide",
         "h1": "How to stop hitting your Claude limits",
         "lede": "Most limit trouble in Claude Code comes from a few habits. Here's what uses your limit fastest, what saves the most, and how to see a wall coming.",
@@ -176,7 +176,7 @@ echo "$line"</code></pre>
           <li><strong>Subagents and agent teams:</strong> each one sends its own requests. Agent teams can use about 7x the tokens of a normal session when teammates run in plan mode.</li>
           <li><strong>Compacting a huge context:</strong> <code>/compact</code> reads everything it summarizes, so it's a big request itself.</li>
         </ul>
-        <p>On Pro and Max, <code>/usage</code> flags any of these that accounts for 10% or more of your recent usage.</p>"""},
+        <p>On a Claude plan, <code>/usage</code> flags any of these that accounts for 10% or more of your recent usage.</p>"""},
             {"id": "fixes", "lit": True, "html": """
         <h2>What saves the most</h2>
         <ol class="steps">
