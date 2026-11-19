@@ -357,3 +357,6 @@ section.tight { padding: clamp(48px, 6vw, 72px) 0 0; }
   .cli-table td:first-child { white-space: normal; overflow-wrap: anywhere; width: 46%; }
   .settings-table .compare th:first-child, .settings-table .compare td:first-child { width: 28%; }
 }
+
+/* Nine sibling apps: three even rows on wide screens instead of an orphaned card */
+@media (min-width: 881px) { #apps .bx-apps { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
